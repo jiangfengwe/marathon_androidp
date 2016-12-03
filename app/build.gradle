@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.tdin360.zjw.marathon"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode  1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+//    xutils3网络框架依赖库
+    compile 'org.xutils:xutils:3.3.38'
+//    支付宝支付依赖库
+    compile files('libs/alipaySdk-20160516.jar')
+//    短信验证码发送依赖库
+    compile files('libs/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar')
+//    极光推送依赖库
+    compile files('libs/jpush-android-2.2.0.jar')
+//    微信支付依赖库
+    compile files('libs/libammsdk.jar')
+}

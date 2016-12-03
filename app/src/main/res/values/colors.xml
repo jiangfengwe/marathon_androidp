@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="ActionBar">#CD5C5C</color>
+    <color name="province_line_border">#C7C7C7</color>
+    <color name="textBlack">#333</color>
+    <color name="red">#e41515</color>
+    <color name="background">#F0F0F0</color>
+    <color name="press">#E8E8E8</color>
+    <color name="white">#fff</color>
+    <color name="lineColor">#CCCCCC</color>
+    <!--导航栏颜色-->
+    <color name="nav_bar_Color">#F5FFFA</color>
+    <!--按钮颜色-->
+    <color name="buttonNColor">#eb7955</color>
+    <color name="buttonPColor">#eb7055</color>
+</resources>

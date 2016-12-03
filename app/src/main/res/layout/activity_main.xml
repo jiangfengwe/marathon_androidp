@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.MainActivity">
+     <FrameLayout
+         android:id="@+id/center"
+         android:layout_weight="1"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+     </FrameLayout>
+    <View
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+    <LinearLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RadioButton
+                android:gravity="center"
+                android:button="@null"
+                android:layout_weight="1"
+                android:id="@+id/tab1"
+                android:drawableTop="@drawable/home_bottom_tab1_selector"
+                android:text="全部赛事"
+                android:textColor="@drawable/tab_selector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/tab2"
+                android:drawableTop="@drawable/home_bottom_tab2_selector"
+                android:text="个人中心"
+                android:textColor="@drawable/tab_selector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

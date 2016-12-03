@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tdin360.zjw.marathon.activity.MyInfoActivity">
+    <RelativeLayout
+        android:background="@color/nav_bar_Color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:onClick="back"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_register_back_selector"
+            />
+        <TextView
+
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的信息"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:shrinkColumns="0"
+        android:layout_weight="1"
+        >
+
+       <TableRow>
+         <TextView
+
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="姓名:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="手机号:"
+             />
+         <EditText
+
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="邮箱:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text=" 出生日期:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="证件号:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="性别:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="所在地:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="现居地址:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="邮政编码:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="紧急联系人:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+        <TableRow>
+
+         <TextView
+
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="15sp"
+             android:text="紧急联系电话:"
+             />
+         <EditText
+             android:layout_weight="1"
+             android:layout_marginLeft="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             />
+       </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+
+
+    </TableLayout>
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

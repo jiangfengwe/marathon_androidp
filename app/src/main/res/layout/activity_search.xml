@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tdin360.zjw.marathon.activity.SearchActivity">
+ <LinearLayout
+     android:background="@color/buttonNColor"
+     android:layout_width="match_parent"
+     android:orientation="horizontal"
+     android:gravity="center_vertical"
+     android:layout_height="50dp">
+     <ImageView
+         android:onClick="back"
+         android:layout_margin="10dp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/nav_back_selector"
+         />
+     <EditText
+         android:layout_weight="1"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:drawableLeft="@drawable/search"
+         android:background="@drawable/edittext_background"
+         android:padding="5dp"
+         android:hint="搜索"
+         />
+     <TextView
+         android:onClick="search"
+         android:layout_margin="10dp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/white"
+         android:background="@color/buttonNColor"
+         android:textSize="16sp"
+         android:text="搜索"
+         />
+ </LinearLayout>
+
+</RelativeLayout>

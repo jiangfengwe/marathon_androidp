@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_register_bg"
+    tools:context="com.tdin360.zjw.marathon.activity.RegisterActivity">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:onClick="back"
+        android:layout_margin="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/login_register_back_selector"
+        />
+    <TextView
+
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        />
+</RelativeLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="wrap_content">
+
+
+
+        <EditText
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/username"
+            android:id="@+id/tel"
+            android:text="15761628423"
+            android:padding="10dp"
+           android:background="@drawable/edittext_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入手机号"
+            />
+        <LinearLayout
+            android:background="@drawable/edittext_background"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <EditText
+                android:drawableLeft="@drawable/code"
+                android:id="@+id/code"
+                android:padding="8dp"
+                android:layout_weight="1.5"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入验证码"
+                />
+            <CheckBox
+                android:button="@null"
+                android:layout_marginLeft="5dp"
+                android:onClick="getCode"
+                android:layout_weight="2"
+                android:padding="14dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/getcode_button_selector"
+                android:text="获取验证码"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+        <EditText
+            android:inputType="textPassword"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/password"
+            android:id="@+id/password1"
+            android:padding="10dp"
+            android:background="@drawable/edittext_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入6位数密码"
+            />
+        <EditText
+
+            android:inputType="textPassword"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/password"
+            android:id="@+id/password2"
+            android:padding="10dp"
+            android:background="@drawable/edittext_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="确认密码"
+            />
+
+        <Button
+            android:onClick="submit"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/oval_red_button_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="立即注册"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            />
+        <CheckBox
+            android:checked="true"
+            android:button="@null"
+            android:drawableLeft="@drawable/gander_checked_selector"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:drawablePadding="5dp"
+            android:textColor="#f1f1f1"
+            android:layout_height="wrap_content"
+            android:text="我已阅读并同意赛事系统的注册协议"
+            />
+    </LinearLayout>
+
+</LinearLayout>

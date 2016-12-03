@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="220dp">
+      <ImageView
+          android:id="@+id/imageView"
+          android:scaleType="fitXY"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:src="@drawable/item"
+      />
+
+      <LinearLayout
+          android:padding="5dp"
+          android:layout_alignParentBottom="true"
+          android:background="#7f000000"
+          android:orientation="vertical"
+          android:gravity="center_vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@android:color/white"
+              android:text="2016贵阳国际马拉松"
+              android:textSize="20sp"
+              android:gravity="center"
+              />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:gravity="center"
+              android:layout_height="wrap_content">
+              <TextView
+                  android:gravity="center"
+                  android:layout_weight="1"
+                  android:textColor="@android:color/white"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="竞赛时间:10月10日"
+                  />
+              <TextView
+                  android:layout_weight="1"
+                  android:id="@+id/time"
+                  android:gravity="center"
+                  android:textColor="@android:color/white"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="倒计时"
+                  />
+          </LinearLayout>
+
+      </LinearLayout>
+  </RelativeLayout>
+</LinearLayout>

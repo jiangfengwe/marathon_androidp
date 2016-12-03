@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.tdin360.zjw.marathon.activity.MarathonDetailActivity">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <ImageView
+        android:onClick="back"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/nav_back_selector"
+        />
+    <TextView
+        android:id="@+id/title"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="标题"
+        android:textColor="#666"
+        />
+</RelativeLayout>
+    <View
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+    <!--tab内容-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabIndicatorColor="@color/ActionBar"
+        app:tabSelectedTextColor="@color/ActionBar"
+        app:tabMode="scrollable">
+
+    </android.support.design.widget.TabLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_height="0.5dp"></View>
+    <android.support.v4.view.ViewPager
+        android:layout_weight="1"
+        android:id="@+id/containerViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </android.support.v4.view.ViewPager>
+ <Button
+     android:onClick="signUp"
+     android:background="@drawable/rect_red_button_selector"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:textColor="#fff"
+     android:textSize="18sp"
+     android:text="立即报名"
+     />
+</LinearLayout>
