@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.activity.MarathonDetailActivity;
@@ -31,6 +33,7 @@ public class MarathonFragment extends Fragment implements RefreshListView.OnRefr
     private List<MarathonInfo>list = new ArrayList<>();
     private RefreshListView listView;
     private MarathonListViewAdapter marathonListViewAdapter;
+
     public static MarathonFragment newInstance(){
         if(marathonFragment==null){
             marathonFragment=new MarathonFragment();
@@ -48,6 +51,8 @@ public class MarathonFragment extends Fragment implements RefreshListView.OnRefr
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
 
         for(int i=0;i<5;i++){

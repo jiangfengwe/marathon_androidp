@@ -2,7 +2,6 @@ package com.tdin360.zjw.marathon.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,12 +17,9 @@ import com.alipay.sdk.app.PayTask;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.alipay.PayResult;
 import com.tdin360.zjw.marathon.model.SignUpInfo;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.model.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.weight.SelectPayPopupWindow;
 import com.tdin360.zjw.marathon.wxapi.Constants;
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -38,7 +34,7 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * 报名查询详情
  */
-public class SignUpSearchResultActivity extends Activity   {
+public class SignUpSearchResultActivity extends BaseActivity {
 
 
     private TextView title;//导航栏标题
@@ -75,8 +71,10 @@ public class SignUpSearchResultActivity extends Activity   {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_search_result);
 
+         setToolBarTitle("报名信息确认");
+
+         showBackButton();
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         this.api = WXAPIFactory.createWXAPI(this,null);
 
@@ -98,6 +96,11 @@ public class SignUpSearchResultActivity extends Activity   {
                 menuWindow.showAtLocation(SignUpSearchResultActivity.this.findViewById(R.id.main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
             }
         });
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_sign_up_search_result;
     }
 
     //为弹出窗口实现事件监听
@@ -126,7 +129,7 @@ public class SignUpSearchResultActivity extends Activity   {
      */
     private void initView() {
 
-        this.title= (TextView) this.findViewById(R.id.detailName);
+
         this.name = (TextView) this.findViewById(R.id.name);
         this.phone = (TextView) this.findViewById(R.id.phone);
         this.idNumber = (TextView) this.findViewById(R.id.IDNumber);

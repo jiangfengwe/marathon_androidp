@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,13 +26,22 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
  *
  * 搜索
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends AppCompatActivity {
 
-
+    private Toolbar mToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        this.mToolBar= (Toolbar) this.findViewById(R.id.mToolBar);
+        this.setSupportActionBar(this.mToolBar);
+        this.mToolBar.setNavigationIcon(R.drawable.nav_back_selector);
+        this.mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

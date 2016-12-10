@@ -1,15 +1,13 @@
 package com.tdin360.zjw.marathon.fragment;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,14 +15,12 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.activity.AboutUsActivity;
 import com.tdin360.zjw.marathon.activity.LoginActivity;
 import com.tdin360.zjw.marathon.activity.MyInfoActivity;
-import com.tdin360.zjw.marathon.activity.RegisterActivity;
 import com.tdin360.zjw.marathon.activity.RestPassWordActivity;
 import com.tdin360.zjw.marathon.activity.SettingActivity;
 import com.tdin360.zjw.marathon.activity.SignUpSearchResultActivity;
 import com.tdin360.zjw.marathon.model.SignUpInfo;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-import com.tdin360.zjw.marathon.utils.NetWorkStateUtils;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.model.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.model.utils.SharedPreferencesManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +53,7 @@ public class PersonalCenterFragment extends Fragment implements SettingActivity.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SettingActivity.setOnIsDataListener(this);
+
         userName  = (TextView) view.findViewById(R.id.userName);
         userName.setText(SharedPreferencesManager.getUserName(getActivity()));
         userName.setOnClickListener(new View.OnClickListener() {

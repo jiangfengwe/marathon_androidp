@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.utils;
+package com.tdin360.zjw.marathon.model.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

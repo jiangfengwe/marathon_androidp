@@ -19,10 +19,9 @@ import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
 
 import org.xutils.x;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity{
 
     public static boolean isForeground = false;
-    private int count=0;
     private static final String TAB1="tab1";
     private static final String TAB2="tab2";
     private MarathonFragment marathonFragment;

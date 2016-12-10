@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -13,18 +12,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.utils.UpdateManger;
-import com.tdin360.zjw.marathon.utils.VersionManager;
+import com.tdin360.zjw.marathon.model.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.model.utils.UpdateManger;
+import com.tdin360.zjw.marathon.model.utils.VersionManager;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends BaseActivity {
 
     private CheckBox switchBtn;
     private static OnIsClearDataListener onIsClearDataListener1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+
+          setToolBarTitle("系统设置");
+          showBackButton();
         TextView version = (TextView) this.findViewById(R.id.version);
         version.setText("检查更新("+ VersionManager.getVersion(this)+")");
         //是否接收推送通知
@@ -85,6 +86,11 @@ public class SettingActivity extends Activity {
                 builder.show();
             }
         });
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_setting;
     }
 
     /**

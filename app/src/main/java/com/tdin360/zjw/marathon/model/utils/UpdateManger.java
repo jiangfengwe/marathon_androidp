@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.utils;
+package com.tdin360.zjw.marathon.model.utils;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;

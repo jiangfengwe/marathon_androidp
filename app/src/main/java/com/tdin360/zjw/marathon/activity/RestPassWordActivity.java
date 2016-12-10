@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.utils.SendSMSUtils;
+import com.tdin360.zjw.marathon.model.utils.SendSMSUtils;
 
 /***
  *

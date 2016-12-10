@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.utils;
+package com.tdin360.zjw.marathon.model.utils;
 
 import android.app.Activity;
 import android.content.Context;

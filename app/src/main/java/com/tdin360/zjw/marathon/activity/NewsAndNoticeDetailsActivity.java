@@ -15,32 +15,40 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NewsItem;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.model.utils.HttpUrlUtils;
 
-public class NewsAndNoticeDetailsActivity extends Activity {
+public class NewsAndNoticeDetailsActivity extends BaseActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
     private LinearLayout loadingView;
-    private TextView detailName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_or_notice_details);
+
+
+
         this.webView= (WebView) this.findViewById(R.id.webView);
         this.progressBar= (ProgressBar) this.findViewById(R.id.progressBar);
         this.loadingView= (LinearLayout) this.findViewById(R.id.loadingView);
-        this.detailName= (TextView) this.findViewById(R.id.detailName);
+
         Intent intent = this.getIntent();
         String url = intent.getStringExtra("url");
         String type = intent.getStringExtra("type");
-        this.detailName.setText(type);
+        setToolBarTitle(type);
+        showBackButton();
         if(url!=null){
            loading(HttpUrlUtils.MAIN_HTTP_URL+url);
         }
     }
-     private void loading(String url){
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_news_or_notice_details;
+    }
+
+    private void loading(String url){
 
          this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
          this.webView.getSettings().setJavaScriptEnabled(true);

@@ -9,11 +9,9 @@ import android.widget.LinearLayout;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.activity.NewsAndNoticeDetailsActivity;
-import com.tdin360.zjw.marathon.adapter.NewsListViewAdapter;
 import com.tdin360.zjw.marathon.adapter.NoticeListViewAdapter;
-import com.tdin360.zjw.marathon.model.NewsItem;
 import com.tdin360.zjw.marathon.model.NoticeItem;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.model.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
 
 import org.json.JSONArray;

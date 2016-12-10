@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.utils.SendSMSUtils;
+import com.tdin360.zjw.marathon.model.utils.SendSMSUtils;
 
 /**
  * 用户手机号注册获取验证码验证
  */
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends Activity {
 
     private int totalTime=10;
     private CheckBox button;
@@ -40,7 +40,8 @@ public class RegisterActivity extends BaseActivity {
 
     //返回
     public void back(View view) {
-        exit();
+
+        finish();
     }
 
 

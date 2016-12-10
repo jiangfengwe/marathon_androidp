@@ -8,15 +8,22 @@ import android.webkit.WebView;
 
 import com.tdin360.zjw.marathon.R;
 
-public class AboutUsActivity extends Activity {
+public class AboutUsActivity extends BaseActivity {
 
     private WebView webView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+
+        setToolBarTitle("关于我们");
+        showBackButton();
         this.webView= (WebView) findViewById(R.id.webView);
         this.webView.loadUrl("file:///android_asset/about.html");
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_about_us;
     }
 
     public void back(View view) {

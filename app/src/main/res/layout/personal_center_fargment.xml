@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
     android:background="@color/background"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:background="@color/nav_bar_Color"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TextView
-            android:layout_centerInParent="true"
-            android:textSize="20sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="个人中心"
-            />
+   <android.support.v7.widget.Toolbar
+       android:layout_width="match_parent"
+       android:background="@color/colorPrimary"
+       android:layout_height="wrap_content">
 
-    </RelativeLayout>
-    <View
-        android:background="@android:color/darker_gray"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"></View>
+       <TextView
+           android:id="@+id/toolbar_title"
+           style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:lines="1"
+           android:ellipsize="end"
+           android:text="个人中心"
+           android:scrollHorizontally="true"
+           android:textColor="@color/white"
+           android:layout_gravity="center" />
+   </android.support.v7.widget.Toolbar>
+
 
     <ScrollView
         android:layout_width="match_parent"

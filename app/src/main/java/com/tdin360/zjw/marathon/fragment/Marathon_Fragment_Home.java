@@ -16,7 +16,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
 import com.tdin360.zjw.marathon.adapter.ViewPagerAdapter;
 import com.tdin360.zjw.marathon.model.CarouselItem;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.model.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.weight.MyGridView;
 import org.json.JSONArray;
 import org.json.JSONException;
