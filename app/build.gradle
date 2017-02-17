@@ -25,14 +25,26 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-//    xutils3网络框架依赖库
-    compile 'org.xutils:xutils:3.3.38'
-//    支付宝支付依赖库
+    //    xutils3网络框架依赖库 https://github.com/wyouflf/xUtils3
+    compile 'org.xutils:xutils:3.3.40'
+    //    支付宝支付依赖库
     compile files('libs/alipaySdk-20160516.jar')
-//    短信验证码发送依赖库
+    //    短信验证码发送依赖库
     compile files('libs/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar')
-//    极光推送依赖库
+    //    极光推送依赖库
     compile files('libs/jpush-android-2.2.0.jar')
-//    微信支付依赖库
+    //    微信支付依赖库
     compile files('libs/libammsdk.jar')
+//    银联支付依赖库
+    compile files('libs/UPPayAssistEx.jar')
+    compile files('libs/UPPayPluginExPro.jar')
+
+//    加载动画库 https://github.com/ybq/Android-SpinKit?utm_source=tuicool&utm_medium=referral
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+
+    //标签库 https://github.com/2dxgujun/AndroidTagGroup
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
+//    圆角图片库 https://github.com/vinc3m1/RoundedImageView
+    compile 'com.makeramen:roundedimageview:2.3.0'
 }
+

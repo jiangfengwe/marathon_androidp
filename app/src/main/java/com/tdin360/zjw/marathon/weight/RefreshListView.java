@@ -269,6 +269,8 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         isLoadingMore = false;
     }
 
+
+
     public interface OnRefreshListener {
 
         /**

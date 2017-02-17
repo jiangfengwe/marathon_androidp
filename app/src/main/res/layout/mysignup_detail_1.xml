@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow android:padding="10dp">
+            <TextView
+                android:text="手机号码:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="157******"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                />
+        </TableRow>
+        <View android:layout_width="wrap_content"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="国        籍:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="中国"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="省        份:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="贵州省"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow   android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="城        市:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="贵阳市"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow   android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="区        县:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="花溪区"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow   android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="现居地址:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="地址"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="邮政编码:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="550025"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="紧急联系人:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="张三"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="紧急联系电话:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="138*＊＊＊＊＊"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+    </TableLayout>
+</LinearLayout>

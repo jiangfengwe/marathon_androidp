@@ -7,25 +7,6 @@
     android:background="@color/background"
     android:layout_height="match_parent">
 
-   <android.support.v7.widget.Toolbar
-       android:layout_width="match_parent"
-       android:background="@color/colorPrimary"
-       android:layout_height="wrap_content">
-
-       <TextView
-           android:id="@+id/toolbar_title"
-           style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:lines="1"
-           android:ellipsize="end"
-           android:text="个人中心"
-           android:scrollHorizontally="true"
-           android:textColor="@color/white"
-           android:layout_gravity="center" />
-   </android.support.v7.widget.Toolbar>
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,17 +17,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@drawable/my_top_bg"
-        android:layout_height="150dp">
+        android:layout_height="160dp">
         <LinearLayout
+            android:id="@+id/myHeader"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+           <com.tdin360.zjw.marathon.weight.CircleImageView
+               android:id="@+id/myImage"
+               android:layout_width="100dp"
+               android:layout_height="100dp"
+               android:src="@drawable/signup_photo"
+               />
 
             <TextView
                 android:drawablePadding="5dp"
-                android:drawableTop="@drawable/signup_photo"
                 android:id="@+id/userName"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
@@ -137,10 +124,34 @@
         />
     </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/myNotice"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:textSize="18dp"
+                    android:drawableLeft="@drawable/my_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="通知消息"
+                    />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/arrow_right_nor"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/editPass"
         android:background="@drawable/personal_center_item_selector"
         android:padding="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -165,7 +176,7 @@
                 android:id="@+id/setting"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="10dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -188,7 +199,7 @@
                 android:id="@+id/about"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="10dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView

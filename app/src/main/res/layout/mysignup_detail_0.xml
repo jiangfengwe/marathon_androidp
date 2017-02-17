@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow android:padding="10dp">
+            <TextView
+                android:text="真实姓名:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="张三"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                />
+        </TableRow>
+        <View android:layout_width="wrap_content"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="性        别:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="男"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="出生日期:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="1993年8月12日"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow   android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="证件类型:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="身份证"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow   android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="证件号码:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="88888"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="赛事名称:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="贵阳国际马拉松赛"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="参赛项目:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="男子马拉松全程"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textBlack"
+                android:text="服装尺码:"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:text="xxl"
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+    </TableLayout>
+
+</LinearLayout>

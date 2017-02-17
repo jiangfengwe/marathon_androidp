@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.CarouselItem;
+import com.tdin360.zjw.marathon.model.CarouselModel;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -15,14 +15,15 @@ import java.util.List;
 
 
 /**
+ * 赞助商列表
  * Created by Administrator on 2016/6/15.
  */
 public class MarathonHomeMyGridViewAdapter extends BaseAdapter {
 
-    private List<CarouselItem>list ;
+    private List<CarouselModel>list ;
     private Context context;
 
-    public MarathonHomeMyGridViewAdapter(List<CarouselItem> list, Context context) {
+    public MarathonHomeMyGridViewAdapter(List<CarouselModel> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -44,7 +45,7 @@ public class MarathonHomeMyGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        CarouselItem carouselItem = list.get(position);
+        CarouselModel carouselModel = list.get(position);
         ViewHolder viewHolder=null;
         if(convertView==null){
             viewHolder=new ViewHolder();
@@ -63,7 +64,7 @@ public class MarathonHomeMyGridViewAdapter extends BaseAdapter {
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.mipmap.ic_launcher)//加载失败后默认显示图片
                 .build();
-        x.image().bind(viewHolder.imageView,carouselItem.getPicUrl(),imageOptions);
+        x.image().bind(viewHolder.imageView, carouselModel.getPicUrl(),imageOptions);
         return convertView;
     }
 

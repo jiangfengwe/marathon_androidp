@@ -9,11 +9,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
+        android:layout_centerInParent="true"
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:src="@drawable/item"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         />
 </RelativeLayout>
 </LinearLayout>

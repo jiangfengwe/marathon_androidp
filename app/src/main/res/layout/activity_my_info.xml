@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.tdin360.zjw.marathon.activity.MyInfoActivity">
+    tools:context="com.tdin360.zjw.marathon.ui.activity.MyInfoActivity">
     <RelativeLayout
-        android:background="@color/nav_bar_Color"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -16,17 +16,53 @@
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_register_back_selector"
+            android:src="@drawable/nav_back"
             />
         <TextView
-
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我的信息"
+            android:textColor="@color/white"
             android:textSize="20sp"
             />
+        <TextView
+            android:id="@+id/edit"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编辑"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            />
     </RelativeLayout>
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/my_top_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.tdin360.zjw.marathon.weight.CircleImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/signup_photo"
+            />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/tip"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="点击头像更换"
+            />
+    </LinearLayout>
     <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -38,6 +74,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
     <TableLayout
         android:layout_margin="10dp"
         android:layout_width="match_parent"
@@ -45,16 +83,45 @@
         android:shrinkColumns="0"
         android:layout_weight="1"
         >
+        <TableRow
+            android:padding="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="帐号:"
+                />
+            <EditText
+                android:enabled="false"
+                android:id="@+id/tel"
+                android:background="@android:color/transparent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-       <TableRow>
+                />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+       <TableRow
+           android:padding="10dp"
+           >
          <TextView
-
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:textSize="15sp"
+             android:textColor="@color/textBlack"
              android:text="姓名:"
              />
          <EditText
+             android:id="@+id/name"
+             android:background="@android:color/transparent"
              android:layout_weight="1"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
@@ -68,30 +135,97 @@
             android:background="@android:color/darker_gray"
             ></View>
 
-        <TableRow>
+        <TableRow
+            android:padding="10dp"
+            >
 
-         <TextView
+            <TextView
 
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="手机号:"
-             />
-         <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="性别:"
+                android:textColor="@color/textBlack"
+                />
+            <RadioGroup
 
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
-             />
-       </TableRow>
+                <RadioButton
+                    android:clickable="false"
+                    android:id="@+id/radio1"
+                    android:drawableLeft="@drawable/gander_checked_selector"
+                    android:button="@null"
+                    android:drawablePadding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="男"
+                    android:checked="true"
+
+                    />
+                <RadioButton
+                    android:clickable="false"
+                    android:id="@+id/radio2"
+                    android:drawablePadding="5dp"
+                    android:layout_marginLeft="30dp"
+                    android:drawableLeft="@drawable/gander_checked_selector"
+                    android:button="@null"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="女"
+
+                    />
+            </RadioGroup>
+        </TableRow>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@android:color/darker_gray"
             ></View>
-        <TableRow>
+        <TableRow
+            android:id="@+id/birthdayBtn"
+            android:padding="10dp"
+            >
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="出生日期:"
+                android:textColor="@color/textBlack"
+                />
+            <TextView
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                android:id="@+id/birthday"
+                android:background="@android:color/transparent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dro"
+
+                />
+        </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            ></View>
+
+        <TableRow
+            android:padding="10dp"
+            >
 
          <TextView
 
@@ -99,8 +233,11 @@
              android:layout_height="wrap_content"
              android:textSize="15sp"
              android:text="邮箱:"
+             android:textColor="@color/textBlack"
              />
          <EditText
+             android:id="@+id/email"
+             android:background="@android:color/transparent"
              android:layout_weight="1"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
@@ -113,185 +250,6 @@
             android:layout_height="0.5dp"
             android:background="@android:color/darker_gray"
             ></View>
-
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text=" 出生日期:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="证件号:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="性别:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="所在地:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="现居地址:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="邮政编码:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="紧急联系人:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-        <TableRow>
-
-         <TextView
-
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15sp"
-             android:text="紧急联系电话:"
-             />
-         <EditText
-             android:layout_weight="1"
-             android:layout_marginLeft="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
-       </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"
-            ></View>
-
 
     </TableLayout>
 

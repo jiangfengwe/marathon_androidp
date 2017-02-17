@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NewsItem;
+import com.tdin360.zjw.marathon.model.NewsModel;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -20,10 +20,10 @@ import java.util.List;
  */
 public class NewsListViewAdapter extends BaseAdapter {
 
-    private List<NewsItem>list ;
+    private List<NewsModel>list ;
     private Context context;
 
-    public NewsListViewAdapter(List<NewsItem> list, Context context) {
+    public NewsListViewAdapter(List<NewsModel> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -33,7 +33,7 @@ public class NewsListViewAdapter extends BaseAdapter {
     }
 
     //更新数据列表
-    public void updateListView(List<NewsItem>list){
+    public void updateListView(List<NewsModel>list){
                 this.list=list;
          notifyDataSetChanged();
     }
@@ -51,7 +51,7 @@ public class NewsListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder=null;
-            NewsItem newsItem = list.get(position);
+            NewsModel newsModel = list.get(position);
 
         if(convertView==null){
             viewHolder  =new ViewHolder();
@@ -64,15 +64,15 @@ public class NewsListViewAdapter extends BaseAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
-        viewHolder.title.setText(newsItem.getTitle());
-        viewHolder.time.setText(newsItem.getTime());
+        viewHolder.title.setText(newsModel.getTitle());
+        viewHolder.time.setText(newsModel.getTime());
         ImageOptions imageOptions = new ImageOptions.Builder()
               //  .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(60))//图片大小
                 .setLoadingDrawableId(R.mipmap.ic_launcher)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.search_nodata)//加载失败后默认显示图片
                 .build();
-        x.image().bind(viewHolder.imageView,newsItem.getPicUrl(),imageOptions);
+        x.image().bind(viewHolder.imageView, newsModel.getPicUrl(),imageOptions);
 
         return convertView;
     }

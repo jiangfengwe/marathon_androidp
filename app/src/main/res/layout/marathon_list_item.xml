@@ -7,7 +7,7 @@
       android:layout_height="220dp">
       <ImageView
           android:id="@+id/imageView"
-          android:scaleType="fitXY"
+          android:scaleType="centerCrop"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:src="@drawable/item"
@@ -22,6 +22,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content">
           <TextView
+              android:id="@+id/eventName"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:textColor="@android:color/white"
@@ -29,30 +30,41 @@
               android:textSize="20sp"
               android:gravity="center"
               />
+
           <LinearLayout
-              android:layout_width="match_parent"
-              android:orientation="horizontal"
-              android:gravity="center"
+              android:layout_gravity="center"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content">
+
               <TextView
-                  android:gravity="center"
-                  android:layout_weight="1"
+                  android:id="@+id/signUpTime"
+                  android:textColor="@color/white"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="报名时间:"
+                  />
+              <TextView
+
+                  android:id="@+id/startDate"
                   android:textColor="@android:color/white"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="竞赛时间:10月10日"
+                  android:text="竞赛时间:"
                   />
-              <TextView
-                  android:layout_weight="1"
-                  android:id="@+id/time"
-                  android:gravity="center"
-                  android:textColor="@android:color/white"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="倒计时"
-                  />
+
           </LinearLayout>
 
+
+          <TextView
+
+              android:id="@+id/time"
+              android:gravity="center"
+              android:textColor="@android:color/white"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="倒计时"
+              />
       </LinearLayout>
   </RelativeLayout>
 </LinearLayout>

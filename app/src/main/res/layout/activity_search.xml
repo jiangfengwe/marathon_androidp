@@ -1,42 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tdin360.zjw.marathon.activity.SearchActivity">
- <android.support.v7.widget.Toolbar
-     android:id="@+id/mToolBar"
-     android:background="@color/colorPrimary"
-     android:layout_width="match_parent"
-     android:orientation="horizontal"
-     android:gravity="center_vertical"
-     android:layout_height="wrap_content">
-     <LinearLayout
-         android:gravity="center_vertical"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content">
+    tools:context="com.tdin360.zjw.marathon.ui.activity.SearchActivity">
 
-     <EditText
-         android:layout_weight="1"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:drawableLeft="@drawable/search"
-         android:background="@drawable/edittext_background"
-         android:padding="5dp"
-         android:hint="搜索"
-         />
-     <TextView
-         android:onClick="search"
-         android:layout_margin="10dp"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textColor="@color/white"
-         android:background="@color/colorPrimary"
-         android:textSize="16sp"
-         android:text="搜索"
-         />
-     </LinearLayout>
- </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mToolBar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:background="@android:color/transparent"
+            android:singleLine="true"
+            android:drawableLeft="@drawable/search"
+            android:padding="3dp"
+            android:drawablePadding="5dp"
+            android:textColorHint="@color/lineColor"
+            android:hint="搜索"
+            />
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/clear"
+                android:onClick="clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clear"
+                />
+        </LinearLayout>
+            <TextView
+            android:onClick="search"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:textSize="16sp"
+            android:text="搜索"
+            />
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <me.gujun.android.taggroup.TagGroup
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tag_group"
+        style="@style/TagGroup.Large" />
+</LinearLayout>

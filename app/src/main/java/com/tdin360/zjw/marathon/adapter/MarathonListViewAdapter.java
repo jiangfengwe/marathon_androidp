@@ -2,32 +2,42 @@ package com.tdin360.zjw.marathon.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.MarathonInfo;
+import com.tdin360.zjw.marathon.model.MarathonEventModel;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
+ * 马拉松赛列表
  * Created by Administrator on 2016/8/10.
  */
 public class MarathonListViewAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<MarathonInfo>list;
 
-    public MarathonListViewAdapter(Context context, List<MarathonInfo> list) {
-        this.context = context;
+    private List<MarathonEventModel>list;
+
+    private LayoutInflater inflater;
+    public MarathonListViewAdapter(Context context, List<MarathonEventModel> list) {
+
+        this.inflater=LayoutInflater.from(context);
         this.list = list;
-        handlerTimer.sendEmptyMessage(1);
+
     }
 
+public void updateList( List<MarathonEventModel> list){
+
+    this.list=list;
+    notifyDataSetChanged();
+    handlerTimer.removeMessages(1);
+    handlerTimer.sendEmptyMessage(1);
+}
     @Override
     public int getCount() {
         return list==null?0:list.size();
@@ -50,29 +60,60 @@ public class MarathonListViewAdapter extends BaseAdapter {
 
         if(convertView==null){
              viewHolder = new ViewHolder();
-             convertView =View.inflate(context, R.layout.marathon_list_item,null);
+             convertView =inflater.inflate(R.layout.marathon_list_item,parent,false);
+             viewHolder.eventName = (TextView) convertView.findViewById(R.id.eventName);
+             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
+             viewHolder.signUpTime = (TextView) convertView.findViewById(R.id.signUpTime);
+             viewHolder.startDate = (TextView) convertView.findViewById(R.id.startDate);
              viewHolder.time= (TextView) convertView.findViewById(R.id.time);
              convertView.setTag(viewHolder);
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
-          viewHolder.time.setText(getTimeInfo(list.get(position).getTime()));
+
+        MarathonEventModel marathonEventModel = list.get(position);
+        viewHolder.eventName.setText(marathonEventModel.getName());
+        viewHolder.signUpTime.setText("报名时间:"+ marathonEventModel.getStartDate());
+        viewHolder.startDate.setText("竞赛时间:"+ marathonEventModel.getStartDate()+" 08:00");
+        viewHolder.time.setText("距离比赛时间还有："+formatTime(marathonEventModel.getTime()));
          return convertView;
     }
     class ViewHolder{
 
-        TextView time;
+        private TextView eventName;
+        private ImageView imageView;
+        private TextView signUpTime;
+        private TextView startDate;
+        private TextView time;
     }
 
     /**
-    格式化倒计时格式
-     **/
-    private String getTimeInfo(long time){
-        long mDay=time/(1000*60*60*24);//计算天数
-        Date d = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("HH 时 mm 分 ss 秒");
-        return mDay+" 天 "+format.format(d);
+     *  毫秒转化  格式化倒计时格式
+     * @param ms 毫秒
+     * @return
+     */
 
+    private static String formatTime(long ms) {
+
+        int ss = 1000;
+        int mi = ss * 60;
+        int hh = mi * 60;
+        int dd = hh * 24;
+
+        long day = ms / dd;
+        long hour = (ms - day * dd) / hh;
+        long minute = (ms - day * dd - hour * hh) / mi;
+        long second = (ms - day * dd - hour * hh - minute * mi) / ss;
+        long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
+
+        String strDay = day < 10 ? "0" + day : "" + day; //天
+        String strHour = hour < 10 ? "0" + hour : "" + hour;//小时
+        String strMinute = minute < 10 ? "0" + minute : "" + minute;//分钟
+        String strSecond = second < 10 ? "0" + second : "" + second;//秒
+        String strMilliSecond = milliSecond < 10 ? "0" + milliSecond : "" + milliSecond;//毫秒
+        strMilliSecond = milliSecond < 100 ? "0" + strMilliSecond : "" + strMilliSecond;
+
+        return strDay+" 天 "+strHour+" 时 "+strMinute + " 分 " + strSecond + " 秒";
     }
     /**
      * 倒计时
@@ -86,13 +127,16 @@ public class MarathonListViewAdapter extends BaseAdapter {
                     //①：其实在这块需要精确计算当前时间
                     for(int index =0;index<list.size();index++){
 
-                        MarathonInfo marathonInfo = list.get(index);
-                        long time = marathonInfo.getTime();
+
+
+                        MarathonEventModel marathonEventModel = list.get(index);
+                        long time = marathonEventModel.getTime();
+
                         if(time>1000){//判断是否还有条目能够倒计时，如果能够倒计时的话，延迟一秒，让它接着倒计时
                             isNeedCountTime = true;
-                            marathonInfo.setTime(time-1000);
+                            marathonEventModel.setTime(time-1000);
                         }else{
-                            marathonInfo.setTime(0);
+                            marathonEventModel.setTime(0);
                         }
 
                     }
@@ -101,6 +145,7 @@ public class MarathonListViewAdapter extends BaseAdapter {
                     if(isNeedCountTime){
                         //TODO 然后用1000-（②-①），就赢延迟的时间
                         handlerTimer.sendEmptyMessageDelayed(1,1000);
+
                     }
                     break;
             }

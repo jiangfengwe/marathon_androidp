@@ -21,4 +21,11 @@
         <item name="android:windowExitAnimation">@anim/pop_window_exit</item>
         <!-- 指定消失的动画xml -->
     </style>
+    <style name="text_tag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/tag_shape</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
 </resources>

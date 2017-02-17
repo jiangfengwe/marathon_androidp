@@ -14,26 +14,12 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
-      <RelativeLayout
+      <com.tdin360.zjw.marathon.weight.Carousel
+          android:id="@+id/mCarousel"
           android:layout_width="match_parent"
-          android:layout_height="200dp">
-        <android.support.v4.view.ViewPager
-            android:id="@+id/homeViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </android.support.v4.view.ViewPager>
-        <RadioGroup
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="#5f000000"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-        </RadioGroup>
-      </RelativeLayout>
+          android:layout_height="180dp">
+
+      </com.tdin360.zjw.marathon.weight.Carousel>
       <LinearLayout
           android:background="@android:color/white"
           android:padding="10dp"
@@ -50,8 +36,6 @@
 
       <com.tdin360.zjw.marathon.weight.MyGridView
           android:layout_marginTop="10dp"
-          android:layout_marginRight="9dp"
-          android:layout_marginLeft="10dp"
           android:focusable="false"
           android:id="@+id/myGridView"
           android:numColumns="3"

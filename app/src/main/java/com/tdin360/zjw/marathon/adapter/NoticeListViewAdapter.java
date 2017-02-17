@@ -7,8 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NewsItem;
-import com.tdin360.zjw.marathon.model.NoticeItem;
+import com.tdin360.zjw.marathon.model.NoticeModel;
 
 import java.util.List;
 
@@ -17,10 +16,10 @@ import java.util.List;
  */
 public class NoticeListViewAdapter extends BaseAdapter {
 
-    private List<NoticeItem>list ;
+    private List<NoticeModel>list ;
     private Context context;
 
-    public NoticeListViewAdapter(List<NoticeItem> list, Context context) {
+    public NoticeListViewAdapter(List<NoticeModel> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -30,7 +29,7 @@ public class NoticeListViewAdapter extends BaseAdapter {
     }
 
     //更新数据列表
-    public void updateListView(List<NoticeItem>list){
+    public void updateListView(List<NoticeModel>list){
                 this.list=list;
          notifyDataSetChanged();
     }
@@ -47,8 +46,8 @@ public class NoticeListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder=null;
-        NoticeItem noticeItem = list.get(position);
+        ViewHolder viewHolder;
+        NoticeModel noticeModel = list.get(position);
 
         if(convertView==null){
             viewHolder  =new ViewHolder();
@@ -60,9 +59,9 @@ public class NoticeListViewAdapter extends BaseAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
-        viewHolder.title.setText(noticeItem.getTitle());
-        viewHolder.date.setText(noticeItem.getDate());
-        viewHolder.day.setText(noticeItem.getDay());
+        viewHolder.title.setText(noticeModel.getTitle());
+        viewHolder.date.setText(noticeModel.getDate());
+        viewHolder.day.setText(noticeModel.getDay());
 
 
         return convertView;

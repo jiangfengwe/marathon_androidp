@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -30,15 +30,27 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
+    <!-- 银联支付权限配置 -->
+    <uses-permission android:name="org.simalliance.openmobileapi.SMARTCARD" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc.hce" />
+
     <application
         android:name=".myappliction.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppToolBar">
+
+        <!-- 银联支付 -->
+        <uses-library
+            android:name="org.simalliance.openmobileapi"
+            android:required="false" />
+
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".ui.activity.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -54,27 +66,40 @@
                 <data android:scheme="wx56d6dadff22bbf5e" />
             </intent-filter>
         </activity>
+        <!-- 银联支付 -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.unionpay.uppay.PayActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MarathonDetailActivity" />
-        <activity android:name=".activity.NewsAndNoticeDetailsActivity" />
-        <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.SignUpSearchResultActivity" />
-        <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.FeedbackActivity" />
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.RegisterActivity" />
         <activity
-            android:name=".wxapi.WXPayEntryActivity"
+            android:name="com.unionpay.UPPayWapActivity"
+            android:configChanges="orientation|keyboardHidden|fontScale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".ui.activity.MarathonDetailActivity" />
+        <activity android:name=".ui.activity.NewsAndNoticeDetailsActivity" />
+        <activity android:name=".ui.activity.SignUpActivity" />
+        <activity android:name=".ui.activity.SignUpSearchResultActivity" />
+        <activity android:name=".ui.activity.AboutUsActivity" />
+        <activity android:name=".ui.activity.FeedbackActivity" />
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity android:name=".ui.activity.ChangePasswordActivity"/>
+        <activity
+            android:name=".pay.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
         <activity
-            android:name=".activity.GuideActivity"
+            android:name=".ui.activity.GuideActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
 
-        <receiver android:name=".wxapi.AppRegister">
+        <receiver android:name=".pay.wxapi.AppRegister">
             <intent-filter>
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
@@ -182,11 +207,23 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="d6ed2e9879ba71c863ff6541" /> <!-- </>值来自开发者平台取得的AppKey -->
-        <activity android:name=".activity.RestPassWordActivity" />
-        <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.MyInfoActivity" />
-        <activity android:name=".wxapi.WXEntryActivity" />
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".ui.activity.RestPassWordActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.MyInfoActivity" />
+        <activity android:name=".pay.wxapi.WXEntryActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="wx56d6dadff22bbf5e" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.AchievementActivity" />
+        <activity android:name=".ui.activity.MySignUpActivity" />
+        <activity android:name=".ui.activity.MySigUpDetailActivity" />
+        <activity android:name=".ui.activity.PayActivity" />
+        <activity android:name=".ui.activity.NoticeMessageActivity" android:launchMode="singleTask"></activity>
     </application>
 
 </manifest>

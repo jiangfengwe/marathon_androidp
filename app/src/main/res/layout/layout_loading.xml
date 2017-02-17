@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
     android:background="#e0000000"
     android:gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <ProgressBar
+    <com.github.ybq.android.spinkit.SpinKitView
+        style="@style/SpinKitView.Wave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.Light.ProgressBar"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/white"
         />
     <TextView
         android:textColor="@android:color/white"

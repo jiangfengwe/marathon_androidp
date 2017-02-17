@@ -1,14 +1,8 @@
 <resources>
-    <string name="app_name">马拉松</string>
-    <string-array name="IdCardType">
-        <item>身份证</item>
-        <item>军官证</item>
-        <item>港澳通行证</item>
-    </string-array>
+    <string name="app_name">佰家运动</string>
+
     <string-array name="CountryList">
         <item>中国</item>
-        <item>台湾</item>
-        <item>澳门特别行政区</item>
         <item>阿尔巴尼亚</item>
         <item>阿尔及利亚</item>
         <item>阿富汗</item>
@@ -256,13 +250,5 @@
         <item>智利</item>
         <item>中非共和国</item>
     </string-array>
-    <string-array name="clothesSize">
-        <item>S</item>
-        <item>M</item>
-        <item>L</item>
-        <item>XL</item>
-        <item>XXL</item>
-        <item>XXXL</item>
-    </string-array>
-    <string name="tip">温馨提示:为了能够顺利报名，请您正确填写您的报名信息。如您在报名过程中有什么问题，请及时与我们联系。谢谢！</string>
+
 </resources>

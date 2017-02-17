@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.tdin360.zjw.marathon.R;
@@ -17,16 +18,18 @@ import com.tdin360.zjw.marathon.R;
  */
 public class SelectPayPopupWindow extends PopupWindow{
 
-    private Button btn_aliPay, btn_wXPay, btn_cancel;
+    private LinearLayout btn_aliPay, btn_wXPay,btn_yLianPay;
+    private Button btn_cancel;
     private View mMenuView;
     public SelectPayPopupWindow(Context context, View.OnClickListener itemsOnClick) {
         super(context);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.layout_select_pay_dialog, null);
-        btn_aliPay = (Button) mMenuView.findViewById(R.id.btn_aliPay);
-        btn_wXPay = (Button) mMenuView.findViewById(R.id.btn_wXPay);
-        btn_cancel = (Button) mMenuView.findViewById(R.id.btn_cancel);
+        this.mMenuView = inflater.inflate(R.layout.popwindow_select_pay, null);
+        this.btn_aliPay = (LinearLayout) mMenuView.findViewById(R.id.btn_aliPay);
+        this.btn_wXPay = (LinearLayout) mMenuView.findViewById(R.id.btn_wXPay);
+        this.btn_yLianPay= (LinearLayout) mMenuView.findViewById(R.id.btn_yLianPLAY);
+        this.btn_cancel = (Button) mMenuView.findViewById(R.id.btn_cancel);
         //取消按钮
         btn_cancel.setOnClickListener(new View.OnClickListener() {
 
@@ -38,6 +41,7 @@ public class SelectPayPopupWindow extends PopupWindow{
         //设置按钮监听
         btn_aliPay.setOnClickListener(itemsOnClick);
         btn_wXPay.setOnClickListener(itemsOnClick);
+        btn_yLianPay.setOnClickListener(itemsOnClick);
 
         //设置SelectPicPopupWindow的View
         this.setContentView(mMenuView);

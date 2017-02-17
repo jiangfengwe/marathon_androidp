@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="com.tdin360.zjw.marathon.activity.SignUpActivity">
+    tools:context="com.tdin360.zjw.marathon.ui.activity.SignUpActivity">
    <include layout="@layout/toolbar_layout"></include>
 
 <com.tdin360.zjw.marathon.weight.AutoText
@@ -68,7 +68,7 @@
                     android:text="手机号:"
                     />
                 <EditText
-                    android:text="12345678911"
+                    android:text="15761638423"
                     android:id="@+id/phone"
                     android:maxLength="11"
                     android:inputType="phone"
@@ -115,6 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
+                android:id="@+id/dateSelectBtn"
                  android:padding="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -127,14 +128,13 @@
                     android:layout_height="wrap_content"
                     android:text="出生日期:"
                     />
-                <EditText
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                <TextView
+
                     android:id="@+id/dateSelect"
-                    android:inputType="date"
                     android:layout_weight="1"
-                    android:hint="选择出生日期"
+                    android:text="请选择出生日期"
+                    android:textSize="16sp"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -142,7 +142,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
             <View
@@ -152,7 +152,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
-                android:padding="10dp"
+
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -170,13 +172,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:entries="@array/IdCardType"
                     style="@android:style/Widget.Spinner"
                     />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
             <View
@@ -239,6 +240,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/gander_checked_selector"
                         android:text="男"
+                        android:drawablePadding="5dp"
                         android:checked="true"
                         android:textSize="16sp"
                         />
@@ -246,7 +248,8 @@
                         android:id="@+id/radio2"
                         android:button="@null"
                         android:drawableLeft="@drawable/gander_checked_selector"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="30dp"
+                        android:drawablePadding="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
@@ -285,7 +288,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
 
@@ -296,6 +299,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
+                android:id="@+id/areaAddressBtn"
                android:padding="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -308,14 +312,12 @@
                     android:layout_height="wrap_content"
                     android:text="所在地:"
                     />
-                <EditText
-
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                <TextView
                     android:id="@+id/areaAddress"
-                    android:hint="选择所在地"
+                    android:text="请选择所在地"
                     android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -323,7 +325,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
             <View
@@ -358,7 +360,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
             <View
@@ -368,7 +370,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
-                android:padding="10dp"
+
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -387,12 +391,12 @@
                     android:layout_height="wrap_content"
                     style="@android:style/Widget.Spinner"
                     android:background="@android:color/transparent"
-                    android:entries="@array/clothesSize"
+
                     />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/spinner_down_normal_holo_light"
+                    android:src="@drawable/dro"
                     />
             </LinearLayout>
             <View
@@ -501,7 +505,7 @@
                     android:text="紧急联系电话:"
                     />
                 <EditText
-                    android:text="12345678911"
+                    android:text="15761618432"
                     android:id="@+id/linkPhone"
                     android:inputType="phone"
                     android:layout_weight="1"

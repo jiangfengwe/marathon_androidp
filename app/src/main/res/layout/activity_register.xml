@@ -1,48 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/login_register_bg"
-    tools:context="com.tdin360.zjw.marathon.activity.RegisterActivity">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    tools:context="com.tdin360.zjw.marathon.ui.activity.RegisterActivity">
     <ImageView
-        android:onClick="back"
-        android:layout_margin="10dp"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/login_register_back_selector"
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
         />
-    <TextView
+  <include layout="@layout/toolbar_layout"></include>
 
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="注册"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        />
-</RelativeLayout>
+
     <LinearLayout
+
         android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="80dp"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:focusable="true"
+        android:padding="10dp"
         android:focusableInTouchMode="true"
         android:layout_height="wrap_content">
 
-
-
+        <LinearLayout
+            android:padding="2dp"
+            android:background="@drawable/login_input_border_bg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <EditText
-            android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/username"
             android:id="@+id/tel"
             android:text="15761628423"
@@ -54,7 +45,7 @@
             />
         <LinearLayout
             android:background="@drawable/edittext_background"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
@@ -69,12 +60,12 @@
                 android:layout_height="wrap_content"
                 android:hint="请输入验证码"
                 />
-            <CheckBox
-                android:button="@null"
+            <Button
+
                 android:layout_marginLeft="5dp"
                 android:onClick="getCode"
                 android:layout_weight="2"
-                android:padding="14dp"
+                android:padding="10dp"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,21 +74,23 @@
                 android:textColor="@color/white"
                 />
         </LinearLayout>
+
+
         <EditText
+            android:layout_marginTop="1dp"
             android:inputType="textPassword"
-            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/password"
             android:id="@+id/password1"
             android:padding="10dp"
             android:background="@drawable/edittext_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="请输入6位数密码"
+            android:hint="请输入密码"
             />
         <EditText
 
             android:inputType="textPassword"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:drawableLeft="@drawable/password"
             android:id="@+id/password2"
             android:padding="10dp"
@@ -107,6 +100,7 @@
             android:hint="确认密码"
             />
 
+        </LinearLayout>
         <Button
             android:onClick="submit"
             android:layout_marginTop="30dp"
@@ -117,6 +111,7 @@
             android:textSize="18sp"
             android:textColor="@color/white"
             />
+
         <CheckBox
             android:checked="true"
             android:button="@null"
@@ -130,4 +125,4 @@
             />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

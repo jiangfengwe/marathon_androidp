@@ -17,7 +17,15 @@ public class SQLHelper extends SQLiteOpenHelper {
 //    马拉松详情首页
     public static final String HOME_TABLE="home_table";
 
+    //通知消息表
+    public static final String NOTICE_TABLE="Notice";
 
+
+    public SQLHelper(Context context){
+
+        super(context,DB_NAME,null,1);
+
+    }
 
     public SQLHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -25,6 +33,17 @@ public class SQLHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+
+        String create_Notice_Sql="CREATE TABLE  "+NOTICE_TABLE+" (\n" +
+                "    id      INTEGER      NOT NULL\n" +
+                "                         PRIMARY KEY AUTOINCREMENT,\n" +
+                "    forName VARCHAR (20),\n" +
+                "    forTime VARCHAR (20),\n" +
+                "    content VARCHAR\n" +
+                ");";
+
+        db.execSQL(create_Notice_Sql);
 
     }
 

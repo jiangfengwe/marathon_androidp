@@ -4,31 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.tdin360.zjw.marathon.activity.FeedbackActivity">
-    <RelativeLayout
-        android:background="@color/nav_bar_Color"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <ImageView
-            android:onClick="back"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/nav_back_selector"
-            />
-        <TextView
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="意见反馈"
-            />
-    </RelativeLayout>
-    <View
-        android:background="@android:color/darker_gray"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"></View>
+    tools:context="com.tdin360.zjw.marathon.ui.activity.FeedbackActivity">
+    <include layout="@layout/toolbar_layout"></include>
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
