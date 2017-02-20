@@ -10,16 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.ui.activity.MarathonDetailActivity;
+import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.MarathonEventModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,8 +119,8 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
         MarathonEventModel eventInfo = list.get(position-1);
         //为单例成员赋值
         MarathonDataUtils.init().setEventId(eventInfo.getId()+"");
-        Intent intent = new Intent(getActivity(), MarathonDetailActivity.class);
-        intent.putExtra("eventId",eventInfo.getId());
+        Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
+        intent.putExtra("eventId",eventInfo.getId()+"");
         intent.putExtra("eventName",eventInfo.getName());
         startActivity(intent);
     }

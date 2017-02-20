@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_marathon_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+
+    <!--轮播图区-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+        <com.tdin360.zjw.marathon.weight.Carousel
+            android:id="@+id/mCarousel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.tdin360.zjw.marathon.weight.Carousel>
+
+        <android.support.v7.widget.Toolbar
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:overScrollMode="never"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+
+                     android:onClick="back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/nav_back"
+                    />
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
+                    android:text="标题"
+                    />
+
+                <ImageView
+                    android:layout_marginRight="15dp"
+                    android:onClick="share"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/share"
+
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+    <!--分类菜单区-->
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/menuLayout"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+    </LinearLayout>
+    <!--赞助商列表-->
+
+        <TextView
+            android:background="@color/white"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:text="赞助商"
+            />
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+    <com.tdin360.zjw.marathon.weight.MyGridView
+        android:layout_marginTop="1dp"
+        android:id="@+id/myGridView"
+        android:focusable="false"
+        android:numColumns="3"
+        android:scrollbars="none"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:listSelector="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.tdin360.zjw.marathon.weight.MyGridView>
+
+          <!--提示文本-->
+             <TextView
+                 android:id="@+id/notData"
+                 android:visibility="gone"
+                android:layout_marginTop="50dp"
+                 android:layout_centerInParent="true"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="18sp"
+                 android:text="暂无赞助商!"
+                 />
+
+
+     </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

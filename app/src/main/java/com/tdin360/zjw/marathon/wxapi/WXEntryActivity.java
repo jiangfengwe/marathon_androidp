@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.pay.wxapi;
+package com.tdin360.zjw.marathon.wxapi;
 
 
 import android.app.Activity;

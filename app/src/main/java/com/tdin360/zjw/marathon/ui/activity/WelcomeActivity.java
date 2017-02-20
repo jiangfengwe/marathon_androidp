@@ -11,7 +11,7 @@ import com.tdin360.zjw.marathon.R;
 import cn.jpush.android.api.JPushInterface;
 
 /**
- * 马拉松启动页
+ * 启动页
  */
 public class WelcomeActivity extends Activity {
 
@@ -26,7 +26,7 @@ public class WelcomeActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = null;
+                Intent intent;
 
                 //如果已经引导过了就直接跳转到主界面否则就进入引导页
                 if (!isGuide) {

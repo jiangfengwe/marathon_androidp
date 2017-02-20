@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * 自定义轮播图
+ * @author zhangzhijun
  * Created by admin on 17/1/15.
  */
 

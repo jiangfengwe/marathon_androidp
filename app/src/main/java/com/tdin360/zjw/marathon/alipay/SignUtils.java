@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.pay.alipay;
+package com.tdin360.zjw.marathon.alipay;
 
 import java.security.KeyFactory;
 import java.security.PrivateKey;

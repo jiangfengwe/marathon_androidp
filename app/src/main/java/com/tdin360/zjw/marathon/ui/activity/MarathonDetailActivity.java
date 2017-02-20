@@ -50,7 +50,7 @@ public class MarathonDetailActivity extends BaseActivity {
     //报名
     public void signUp(View view) {
 
-        Intent intent = new Intent(MarathonDetailActivity.this,SignUpActivity.class);
+        Intent intent = new Intent(MarathonDetailActivity.this,PayActivity.class);
         startActivity(intent);
     }
 

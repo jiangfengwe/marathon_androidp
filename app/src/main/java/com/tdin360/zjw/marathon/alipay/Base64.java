@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.pay.alipay;
+package com.tdin360.zjw.marathon.alipay;
 
 public final class Base64 {
 

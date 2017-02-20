@@ -1,4 +1,4 @@
-package com.tdin360.zjw.marathon.pay.wxapi;
+package com.tdin360.zjw.marathon.wxapi;
 
 import com.tdin360.zjw.marathon.R;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
@@ -47,6 +48,8 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 			builder.setTitle("支付结果");
 			builder.setMessage("支付结果"+String.valueOf(resp.errCode));
 			builder.show();
+
+			Log.d("-----wxPay------->>>", "onResp: ");
 		}
 	}
 }

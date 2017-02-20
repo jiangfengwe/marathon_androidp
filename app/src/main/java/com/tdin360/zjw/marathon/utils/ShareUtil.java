@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.model.ShareInfo;
-import com.tdin360.zjw.marathon.pay.wxapi.Constants;
+import com.tdin360.zjw.marathon.wxapi.Constants;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
