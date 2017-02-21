@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:text="分享"
+        android:text="分享到"
         />
     <View
         android:layout_width="match_parent"

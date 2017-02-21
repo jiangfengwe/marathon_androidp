@@ -20,6 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
 }
 
 dependencies {
@@ -46,6 +49,6 @@ dependencies {
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     //    圆角图片库 https://github.com/vinc3m1/RoundedImageView
     compile 'com.makeramen:roundedimageview:2.3.0'
-
+    compile files('libs/Android_Map3D_SDK_V4.1.3_20161208.jar')
 }
 

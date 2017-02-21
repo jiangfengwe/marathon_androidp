@@ -88,7 +88,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.MarathonDetailActivity" />
-        <activity android:name=".ui.activity.NewsAndNoticeDetailsActivity" />
+        <activity android:name=".ui.activity.ShowHtmlActivity" />
         <activity android:name=".ui.activity.SignUpActivity" />
         <activity android:name=".ui.activity.SignUpSearchResultActivity" />
         <activity android:name=".ui.activity.AboutUsActivity" />

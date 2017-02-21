@@ -46,7 +46,6 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
 
         setToolBarTitle("赛事公告");
         showBackButton();
-        showShareButton(null);
         initView();
 
     }
@@ -189,9 +188,9 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             NoticeModel noticeModel = noticeModelList.get(position-1);
-            Intent intent = new Intent(x.app(), NewsAndNoticeDetailsActivity.class);
-            intent.putExtra("noticeModel", noticeModel);
-            intent.putExtra("type","1");
+            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
+            intent.putExtra("title","赛事公告");
+            intent.putExtra("url",noticeModel.getUrl());
             startActivity(intent);
 
         }

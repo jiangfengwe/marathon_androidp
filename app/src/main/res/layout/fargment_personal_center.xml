@@ -16,8 +16,13 @@
             android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@drawable/my_top_bg"
         android:layout_height="160dp">
+        <ImageView
+            android:id="@+id/topBg"
+            android:scaleType="fitXY"
+            android:background="@drawable/my_top_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
         <LinearLayout
             android:id="@+id/myHeader"
             android:layout_centerInParent="true"

@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity">
-
+     <include layout="@layout/toolbar_layout"></include>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -30,48 +30,6 @@
 
         </com.tdin360.zjw.marathon.weight.Carousel>
 
-        <android.support.v7.widget.Toolbar
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:overScrollMode="never"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-
-                     android:onClick="back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/nav_back"
-                    />
-                <TextView
-                    android:layout_weight="1"
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:ellipsize="end"
-                    android:textColor="@color/white"
-                    android:layout_centerVertical="true"
-                    android:text="标题"
-                    />
-
-                <ImageView
-                    android:layout_marginRight="15dp"
-                    android:onClick="share"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/share"
-
-                    />
-            </LinearLayout>
-        </android.support.v7.widget.Toolbar>
     </RelativeLayout>
     <!--分类菜单区-->
     <LinearLayout

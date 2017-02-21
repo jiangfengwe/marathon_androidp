@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.NewsModel;
-import com.tdin360.zjw.marathon.ui.activity.NewsAndNoticeDetailsActivity;
+import com.tdin360.zjw.marathon.ui.activity.ShowHtmlActivity;
 import com.tdin360.zjw.marathon.adapter.NewsListViewAdapter;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
@@ -213,7 +213,7 @@ public class Marathon_Fragment_News extends BaseFragment implements RefreshListV
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             NewsModel newsModel = newsModelList.get(position-1);
-            Intent intent = new Intent(x.app(), NewsAndNoticeDetailsActivity.class);
+            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
              intent.putExtra("newsModel", newsModel);
              intent.putExtra("type","1");
              startActivity(intent);

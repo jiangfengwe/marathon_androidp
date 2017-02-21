@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.ui.activity.NewsAndNoticeDetailsActivity;
+import com.tdin360.zjw.marathon.ui.activity.ShowHtmlActivity;
 import com.tdin360.zjw.marathon.adapter.NoticeListViewAdapter;
 import com.tdin360.zjw.marathon.model.NoticeModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -213,7 +213,7 @@ public class Marathon_Fragment_Notice extends BaseFragment implements RefreshLis
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             NoticeModel noticeModel = noticeModelList.get(position-1);
-            Intent intent = new Intent(x.app(), NewsAndNoticeDetailsActivity.class);
+            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
             intent.putExtra("noticeModel", noticeModel);
             intent.putExtra("type","2");
             startActivity(intent);

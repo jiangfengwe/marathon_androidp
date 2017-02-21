@@ -4,13 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +24,10 @@ import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
 import com.tdin360.zjw.marathon.ui.activity.MySignUpActivity;
 import com.tdin360.zjw.marathon.ui.activity.NoticeMessageActivity;
-import com.tdin360.zjw.marathon.ui.activity.RestPassWordActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.ui.activity.SignUpSearchResultActivity;
 import com.tdin360.zjw.marathon.model.SignUpInfo;
+import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.weight.CircleImageView;
@@ -45,6 +47,7 @@ public class Personal_CenterFragment extends Fragment {
     public static final String ACTION="LOGIN_STATUS";//广播action
 
     private  TextView userName;
+    private ImageView topBg;
     public static Personal_CenterFragment newInstance(){
 
         return   new Personal_CenterFragment();
@@ -52,7 +55,7 @@ public class Personal_CenterFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.personal_center_fargment,container,false);
+        return  inflater.inflate(R.layout.fargment_personal_center,container,false);
     }
 
     @Override
@@ -61,6 +64,8 @@ public class Personal_CenterFragment extends Fragment {
 
 
         userName  = (TextView) view.findViewById(R.id.userName);
+        this.topBg = (ImageView) view.findViewById(R.id.topBg);
+        this.topBg.setImageBitmap(FastBlurUtils.getBlurBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.my_top_bg)));
         userName.setText(SharedPreferencesManager.getLoginInfo(getActivity()).getName());
         CircleImageView myImageView = (CircleImageView) view.findViewById(R.id.myImage);
         myImageView.setBorderColor(R.color.white);

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.NewsAndNoticeDetailsActivity">
+    tools:context=".ui.activity.ShowHtmlActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -24,11 +24,23 @@
             android:layout_height="2dp" />
 
          <WebView
+             android:layout_weight="1"
              android:id="@+id/webView"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
          </WebView>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/signBtn"
+            android:textColor="@color/white"
+            android:text="立即报名"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_red_button_selector"
+            />
     </LinearLayout>
+
     </LinearLayout>
     <LinearLayout
         android:layout_centerInParent="true"
@@ -40,5 +52,7 @@
         <include
             layout="@layout/layout_loading"
             ></include>
+
+
     </LinearLayout>
 </RelativeLayout>

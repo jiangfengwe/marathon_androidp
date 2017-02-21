@@ -19,7 +19,7 @@ public class MenuDataUtils {
 
 
 
-    private static String[]menuTitles = {"赛事报名","赛事简介","赛事新闻","赛事公告","参赛路线"};
+    private static String[]menuTitles = {"赛事报名","赛事简介","赛事新闻","赛事公告","赛事路线"};
     private static int[]ids = {R.drawable.menu_icon,R.drawable.menu_icon1,R.drawable.menu_icon2,R.drawable.menu_icon3,R.drawable.meun_icon4};
 
 

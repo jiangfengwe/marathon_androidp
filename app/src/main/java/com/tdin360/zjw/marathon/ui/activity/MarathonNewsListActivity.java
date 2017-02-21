@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * 赛事新闻
+ * @author zhangzhijun
  */
 public class MarathonNewsListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
 
@@ -45,7 +46,6 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
         setToolBarTitle("赛事新闻");
         showBackButton();
-        showShareButton(null);
         initView();
 
     }
@@ -188,9 +188,9 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             NewsModel newsModel = newsModelList.get(position-1);
-            Intent intent = new Intent(x.app(), NewsAndNoticeDetailsActivity.class);
-            intent.putExtra("newsModel", newsModel);
-            intent.putExtra("type","1");
+            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
+            intent.putExtra("title","赛事新闻");
+            intent.putExtra("url",newsModel.getDetailUrl());
             startActivity(intent);
 
         }

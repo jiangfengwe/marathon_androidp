@@ -2,6 +2,7 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -9,51 +10,63 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NewsModel;
-import com.tdin360.zjw.marathon.model.NoticeModel;
 import com.tdin360.zjw.marathon.model.ShareInfo;
-import com.tdin360.zjw.marathon.utils.ShareGetImageUtils;
 
-public class NewsAndNoticeDetailsActivity extends BaseActivity {
+/**
+ * 用于显示网页的界面
+ * @author zhangzhijun
+ */
+public class ShowHtmlActivity extends BaseActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
     private LinearLayout loadingView;
+    private Button signUpBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.webView = (WebView) this.findViewById(R.id.webView);
+        this.signUpBtn = (Button) this.findViewById(R.id.signBtn);
         this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
         this.loadingView = (LinearLayout) this.findViewById(R.id.loadingView);
         showBackButton();
-
+        //处理其他界面传过来的数据
         Intent intent = this.getIntent();
-        String type = intent.getStringExtra("type");
-        if (type.equals("1")) {//新闻详情
-            setToolBarTitle("新闻详情");
-            NewsModel newsModel = (NewsModel) intent.getSerializableExtra("newsModel");
-            showShareButton(new ShareInfo(newsModel.getTitle(), newsModel.getDetailUrl(), "", ShareGetImageUtils.getBitmapByCance(newsModel.getPicUrl())));
 
-             loading(newsModel.getDetailUrl());
+        if (intent!=null){
 
-        } else {//公告详情
-            setToolBarTitle("公告详情");
-            NoticeModel noticeModel = (NoticeModel) intent.getSerializableExtra("noticeModel");
-            showShareButton(new ShareInfo(noticeModel.getTitle(), noticeModel.getUrl(), "",null));
-            loading(noticeModel.getUrl());
+            boolean isSign = intent.getBooleanExtra("isSign", false);
+            if(isSign){
+                this.signUpBtn.setVisibility(View.VISIBLE);
+                this.signUpBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ShowHtmlActivity.this,SignUpActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+            String title = intent.getStringExtra("title");
+            setToolBarTitle(title);
+            String url = intent.getStringExtra("url");
+            ShareInfo s = new ShareInfo("佰家运动",url,"", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
+            showShareButton(s);
 
-
+            loading(url);
 
         }
+
+
     }
     @Override
     public int getLayout() {
-        return R.layout.activity_news_or_notice_details;
+        return R.layout.activity_show_html;
     }
 
     private void loading(String url){
