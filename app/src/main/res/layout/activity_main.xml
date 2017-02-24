@@ -12,9 +12,9 @@
          android:layout_height="match_parent">
      </FrameLayout>
     <View
-        android:background="@android:color/darker_gray"
+        android:background="@color/lineColor"
         android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
+        android:layout_height="0.5dp"></View>
     <LinearLayout
         android:background="#fff"
         android:layout_width="match_parent"

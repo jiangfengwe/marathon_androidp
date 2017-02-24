@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 
 /**
- * 成绩查询
+ * 我的成绩
  */
-public class AchievementActivity extends BaseActivity {
+public class MyAchievementActivity extends BaseActivity {
 
     private ListView listView;
     @Override
@@ -57,10 +57,10 @@ public class AchievementActivity extends BaseActivity {
                 if(convertView==null){
 
                     viewHolder = new ViewHolder();
-                    convertView=View.inflate(AchievementActivity.this,R.layout.achievement_list_item,null);
-                    viewHolder.matchTime= (TextView) convertView.findViewById(R.id.matchTime);
+                    convertView=View.inflate(MyAchievementActivity.this,R.layout.achievement_list_item,null);
+                    viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
                     viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
-                    viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.matchAchievement);
+                    viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
                     convertView.setTag(viewHolder);
                 }else {
 

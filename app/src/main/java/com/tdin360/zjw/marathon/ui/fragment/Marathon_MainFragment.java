@@ -1,5 +1,8 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
@@ -17,6 +21,7 @@ import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.MarathonEventModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,21 +38,18 @@ import java.util.List;
  * Created by Administrator on 2016/8/9.
  */
 public class Marathon_MainFragment extends Fragment implements RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener {
-    private static Marathon_MainFragment marathonFragment;
+
     private List<MarathonEventModel>list = new ArrayList<>();
     private RefreshListView listView;
     private MarathonListViewAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
-    private boolean isLoadMore;
-    private boolean isRefresh;
-    private LinearLayout loadView,failView;
+    private LinearLayout loading;
+    private TextView loadFile;
 
     public static Marathon_MainFragment newInstance(){
-        if(marathonFragment==null){
-            marathonFragment=new Marathon_MainFragment();
-        }
-        return marathonFragment;
+
+        return new Marathon_MainFragment();
     }
 
     @Nullable
@@ -61,24 +63,13 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
          this.listView= (RefreshListView) view.findViewById(R.id.listView);
-         this.loadView = (LinearLayout) view.findViewById(R.id.loadView);
-         this.failView = (LinearLayout) view.findViewById(R.id.failView);
+         this.loading = (LinearLayout) view.findViewById(R.id.loading);
+         this.loadFile = (TextView) view.findViewById(R.id.loadFail);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
          this.listView.setAdapter(marathonListViewAdapter);
          this.listView.setOnRefreshListener(this);
          this.listView.setOnItemClickListener(this);
-        //加载失败点击重加载
-          view.findViewById(R.id.loadFail).setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  loadData();
-              }
-          });
-
-        //加载数据
-          loadData();
         //搜索
         view.findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,14 +80,16 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
         });
 
 
+        //加载数据
+         loadData();
     }
 
     @Override
     public void onDownPullRefresh() {
-         isRefresh=true;
+
          pageNumber=1;
          list.clear();
-          loadData();
+          httpRequest();
     }
 
     @Override
@@ -105,12 +98,59 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
         if(pageNumber<pageCount){
 
             pageNumber++;
-            isLoadMore=true;
-            loadData();
+
+             httpRequest();
         }else {
             listView.hideFooterView();
            Toast.makeText(getContext(),"亲,到底了~",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //加载数据(包括缓存数据和网络数据)
+    private void loadData(){
+
+        /**
+         * 判断网络是否处于可用状态
+         */
+        if(NetWorkUtils.isNetworkAvailable(getActivity())){
+
+            //加载网络数据
+            loading.setVisibility(View.VISIBLE);
+            httpRequest();
+        }else {
+
+            Toast.makeText(getActivity(), "当前网络不可用", Toast.LENGTH_SHORT).show();
+            loadFile.setVisibility(View.VISIBLE);
+            //1获取缓存数据
+            //如果获取得到缓存数据则加载本地数据
+            loading.setVisibility(View.GONE);
+
+            //2.如果缓存数据不存在则需要用户打开网络设置
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            alert.setMessage("网络不可用，是否打开网络设置");
+            alert.setCancelable(false);
+            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //打开网络设置
+                    startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+        }
+
+
     }
 
     @Override
@@ -126,11 +166,11 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
     }
 
 
-    //加载网路数据
-    private void loadData(){
+    //加载网络数据
 
-        failView.setVisibility(View.GONE);
-        loadView.setVisibility(View.VISIBLE);
+    private void httpRequest(){
+
+        loadFile.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.Marath_ALL_Envent);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
         params.setConnectTimeout(5*1000);
@@ -158,20 +198,19 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
                     }
 
 
+                    loadFile.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    failView.setVisibility(View.VISIBLE);
+                    loadFile.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onError(Throwable throwable, boolean b) {
 
-                if(throwable instanceof HttpException){
+                  Toast.makeText(getActivity(),"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
+                  loadFile.setVisibility(View.VISIBLE);
 
-                  Toast.makeText(getActivity(),"网路连接失败!",Toast.LENGTH_SHORT).show();
-                }
-                failView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -181,21 +220,11 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
 
             @Override
             public void onFinished() {
-
-                loadView.setVisibility(View.GONE);
+             loading.setVisibility(View.GONE);
                 //加载更多
-                if(isLoadMore){
-                    listView.hideFooterView();
-                    isLoadMore=false;
-
-                }
-//                刷新
-                if(isRefresh){
-
-                    listView.hideHeaderView();
-                    isRefresh=false;
-                }
-              marathonListViewAdapter.updateList(list);
+            listView.hideFooterView();
+            listView.hideHeaderView();
+             marathonListViewAdapter.updateList(list);
             }
         });
     }

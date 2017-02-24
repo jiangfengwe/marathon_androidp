@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 通知消息
  */
-public class NoticeMessageActivity extends BaseActivity {
+public class MyNoticeMessageActivity extends BaseActivity {
 
     private List<NoticeMessageModel> list = new ArrayList<>();
     private LinearLayout tip;
@@ -86,7 +86,7 @@ public class NoticeMessageActivity extends BaseActivity {
 
         @Override
         public MyHolderView onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyHolderView(LayoutInflater.from(NoticeMessageActivity.this).inflate(R.layout.my_notice_mesage_list_item,parent,false));
+            return new MyHolderView(LayoutInflater.from(MyNoticeMessageActivity.this).inflate(R.layout.my_notice_mesage_list_item,parent,false));
         }
 
         @Override
@@ -122,7 +122,7 @@ public class NoticeMessageActivity extends BaseActivity {
                     @Override
                     public boolean onLongClick(View v) {
 
-                        AlertDialog.Builder alert = new AlertDialog.Builder(NoticeMessageActivity.this);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(MyNoticeMessageActivity.this);
                         alert.setTitle("操作");
                         alert.setMessage("确定删除这条消息吗?");
                          alert.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -133,9 +133,9 @@ public class NoticeMessageActivity extends BaseActivity {
                                  if(success) {
                                      list.remove(model);
                                      notifyDataSetChanged();
-                                     Toast.makeText(NoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
+                                     Toast.makeText(MyNoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
                                  }else {
-                                     Toast.makeText(NoticeMessageActivity.this,"删除失败!"+model.getId(),Toast.LENGTH_SHORT).show();
+                                     Toast.makeText(MyNoticeMessageActivity.this,"删除失败!"+model.getId(),Toast.LENGTH_SHORT).show();
                                  }
                              }
                          });
@@ -147,9 +147,9 @@ public class NoticeMessageActivity extends BaseActivity {
                                 if(success) {
                                     list.clear();
                                     notifyDataSetChanged();
-                                    Toast.makeText(NoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MyNoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
                                 }else {
-                                    Toast.makeText(NoticeMessageActivity.this,"删除失败!",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MyNoticeMessageActivity.this,"删除失败!",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

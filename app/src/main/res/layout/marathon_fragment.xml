@@ -50,17 +50,15 @@
   </com.tdin360.zjw.marathon.weight.RefreshListView>
 
     </LinearLayout>
+    <!--加载时显示-->
     <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/loadView"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <include layout="@layout/layout_loading"></include>
     </LinearLayout>
+    <!--加载失败时显示-->
     <LinearLayout
-         android:id="@+id/failView"
-        android:visibility="gone"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

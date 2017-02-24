@@ -1,37 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/matchTime"
-        android:layout_weight="1"
+        android:padding="5dp"
         android:gravity="center"
-        android:layout_width="match_parent"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:textColor="@color/textBlack"
-        android:text="时间"
+        android:text="2016"
         />
-    <TextView
-        android:id="@+id/matchName"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <View
+
+            android:layout_centerInParent="true"
+            android:background="@color/lineColor"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"></View>
+        <View
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_point"
+            android:layout_width="8dp"
+            android:layout_height="8dp"></View>
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_weight="1"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:textColor="@color/textBlack"
-        android:text="赛事名称"
-        />
-    <TextView
-        android:id="@+id/matchAchievement"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:textColor="@color/textBlack"
-        android:text="成绩"
-        />
+        android:layout_height="wrap_content">
+
+      <RelativeLayout
+          android:padding="5dp"
+          android:layout_width="match_parent"
+          android:layout_height="150dp">
+          <ImageView
+
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:scaleType="centerCrop"
+              android:src="@drawable/item"
+              />
+          <LinearLayout
+
+              android:gravity="center"
+              android:orientation="vertical"
+              android:background="#9f000000"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+             <LinearLayout
+                 android:gravity="center"
+                 android:padding="10dp"
+                 android:orientation="vertical"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+                 <TextView
+                     android:gravity="center"
+                     android:textColor="@color/white"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:maxLines="2"
+                     android:ellipsize="end"
+                     android:textSize="20sp"
+                     android:text="赛事名称"
+                     />
+                 <TableLayout
+                     android:layout_marginTop="5dp"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content">
+                     <TableRow android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         >
+                         <TextView
+                             android:textColor="@color/white"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:text="参赛项目:"
+                             />
+                         <TextView
+                             android:layout_marginLeft="5dp"
+                             android:textColor="#E78618"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:textStyle="bold"
+                             android:text="男子马拉松全程"
+                             />
+                     </TableRow>
+                     <TableRow android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_marginTop="2dp"
+                         >
+                         <TextView
+                             android:textColor="@color/white"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:text="比赛成绩:"
+                             />
+                         <TextView
+                             android:layout_marginLeft="5dp"
+                             android:textColor="#E78618"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:textStyle="bold"
+                             android:text="03:50:00:23"
+                             />
+                     </TableRow>
+                     <TableRow android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_marginTop="2dp"
+                         >
+                         <TextView
+                             android:textColor="@color/white"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:text="净成绩:"
+                             />
+                         <TextView
+                             android:layout_marginLeft="5dp"
+                             android:textColor="#E78618"
+                             android:textStyle="bold"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="15sp"
+                             android:text="03:48:50:10"
+                             />
+                     </TableRow>
+                 </TableLayout>
+
+             </LinearLayout>
+          </LinearLayout>
+      </RelativeLayout>
+
+<View
+    android:visibility="gone"
+    android:background="@color/lineColor"
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"></View>
+
+
+    </LinearLayout>
 </LinearLayout>

@@ -18,28 +18,21 @@
         android:layout_height="match_parent">
     </com.tdin360.zjw.marathon.weight.RefreshListView>
     </LinearLayout>
-    <!--正在加载中-->
+
+    <!--开始加载时提示-->
     <LinearLayout
-        android:visibility="gone"
         android:layout_centerInParent="true"
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <include layout="@layout/layout_loading"></include>
     </LinearLayout>
-    <!--获取数据失败-->
+
+    <!--加载失败时显示提示-->
     <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/fail"
         android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_height="match_parent">
-        <include
-            layout="@layout/layout_loadingfail"></include>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_loadingfail"></include>
     </LinearLayout>
     <!--没有数据-->
     <LinearLayout

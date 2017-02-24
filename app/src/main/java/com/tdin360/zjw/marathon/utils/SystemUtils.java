@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.tdin360.zjw.marathon.ui.activity.NoticeMessageActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class SystemUtils {
     //启动显示通知消息
     public static void startNoticeMessageActivity(Context context, Bundle bundle
                                             ){
-        Intent intent = new Intent(context, NoticeMessageActivity.class);
+        Intent intent = new Intent(context, MyNoticeMessageActivity.class);
          intent.putExtras(bundle);
         context.startActivity(intent);
     }

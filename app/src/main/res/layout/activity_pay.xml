@@ -41,6 +41,9 @@
                 android:text="马拉松报名费用"
                 />
         </LinearLayout>
+
+
+
     </LinearLayout>
 
 
@@ -53,6 +56,8 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:onClick="onSelect"
+                    android:id="@+id/select1"
                     android:padding="15dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -83,7 +88,7 @@
                         />
                 </LinearLayout>
                 <RadioButton
-
+                    android:clickable="false"
                     android:id="@+id/zhifubao"
                     android:background="@drawable/pay_checkbox_selector"
                     android:button="@null"
@@ -96,11 +101,14 @@
 
     </LinearLayout>
 
+
+
     <LinearLayout
         android:layout_marginTop="1dp"
         android:background="@color/white"
         android:orientation="horizontal"
-
+        android:id="@+id/select2"
+        android:onClick="onSelect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -135,6 +143,7 @@
                     />
             </LinearLayout>
             <RadioButton
+                android:clickable="false"
                 android:id="@+id/weixin"
                 android:background="@drawable/pay_checkbox_selector"
                 android:button="@null"
@@ -146,6 +155,9 @@
     </LinearLayout>
 
     <LinearLayout
+
+        android:onClick="onSelect"
+        android:id="@+id/select3"
         android:layout_marginTop="1dp"
         android:background="@color/white"
         android:orientation="horizontal"
@@ -184,7 +196,7 @@
                     />
             </LinearLayout>
             <RadioButton
-
+                android:clickable="false"
                 android:id="@+id/yinlian"
                 android:background="@drawable/pay_checkbox_selector"
                 android:button="@null"

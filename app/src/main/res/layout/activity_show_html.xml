@@ -10,10 +10,6 @@
         android:orientation="vertical"
         android:layout_height="match_parent">
    <include layout="@layout/toolbar_layout"></include>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
 
         <ProgressBar
 
@@ -21,7 +17,14 @@
             android:id="@+id/progressBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="match_parent"
+            android:progressDrawable="@drawable/my_progressbar"
             android:layout_height="2dp" />
+    <LinearLayout
+        android:id="@+id/main"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
          <WebView
              android:layout_weight="1"
@@ -42,17 +45,24 @@
     </LinearLayout>
 
     </LinearLayout>
+
+
+    <!--开始加载时提示-->
     <LinearLayout
+
         android:layout_centerInParent="true"
-        android:id="@+id/loadingView"
-        android:orientation="vertical"
-        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <include
-            layout="@layout/layout_loading"
-            ></include>
-
-
+        <include layout="@layout/layout_loading"></include>
     </LinearLayout>
+
+    <!--加载失败时显示提示-->
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <include layout="@layout/layout_loadingfail"></include>
+   </LinearLayout>
+
 </RelativeLayout>

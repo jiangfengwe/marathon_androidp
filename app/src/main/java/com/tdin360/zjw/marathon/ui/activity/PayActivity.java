@@ -27,6 +27,7 @@ import org.xutils.x;
 
 /**
  * 支付中心
+ * @author zhangzhijun
  */
 public class PayActivity extends BaseActivity {
     private IWXAPI api;
@@ -52,35 +53,6 @@ public class PayActivity extends BaseActivity {
         this.zhifubao = (RadioButton) this.findViewById(R.id.zhifubao);
         this.weixin = (RadioButton) this.findViewById(R.id.weixin);
         this.yinlian = (RadioButton) this.findViewById(R.id.yinlian);
-
-        //设置支付选择方式
-        this.zhifubao.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    weixin.setChecked(false);
-                    yinlian.setChecked(false);
-                }
-            }
-        });
-        this.weixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    zhifubao.setChecked(false);
-                    yinlian.setChecked(false);
-                }
-            }
-        });
-        this.yinlian.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    zhifubao.setChecked(false);
-                    weixin.setChecked(false);
-                }
-            }
-        });
 
 
     }
@@ -561,6 +533,35 @@ public class PayActivity extends BaseActivity {
         }else if(yinlian.isChecked()){
             Toast.makeText(this,"银联",Toast.LENGTH_SHORT).show();
            toUnionpay();
+        }
+    }
+
+    /**
+     * 选择支付方式
+     * @param view
+     */
+    public void onSelect(View view) {
+
+
+        switch (view.getId()){
+
+            case R.id.select1:
+
+                zhifubao.setChecked(true);
+                weixin.setChecked(false);
+                yinlian.setChecked(false);
+                break;
+            case R.id.select2:
+                zhifubao.setChecked(false);
+                weixin.setChecked(true);
+                yinlian.setChecked(false);
+                break;
+
+            case R.id.select3:
+                zhifubao.setChecked(false);
+                weixin.setChecked(false);
+                yinlian.setChecked(true);
+                break;
         }
     }
 }

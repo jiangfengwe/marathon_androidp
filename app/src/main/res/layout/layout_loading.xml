@@ -3,22 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="#e0000000"
     android:gravity="center"
-    android:layout_width="wrap_content"
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.github.ybq.android.spinkit.SpinKitView
-        style="@style/SpinKitView.Wave"
+        style="@style/SpinKitView.Circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:SpinKit_Color="@color/white"
+        app:SpinKit_Color="@color/colorPrimary"
         />
     <TextView
-        android:textColor="@android:color/white"
+        android:id="@+id/msg"
+        android:textColor="@android:color/black"
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="正在加载..."
+        android:text="加载中..."
         />
 </LinearLayout>

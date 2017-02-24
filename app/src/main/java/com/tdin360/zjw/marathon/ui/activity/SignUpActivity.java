@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ import com.tdin360.zjw.marathon.model.SpinnerModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
+import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.service.XmlParserHandler;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
@@ -151,6 +154,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
      */
     protected String mCurrentZipCode ="";
 
+
+    //加载控件
+
+    private LinearLayout loading;
+    private TextView loadFail;
+    //主布局
+    private LinearLayout main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,6 +263,17 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextPost= (EditText) this.findViewById(R.id.post);
          this.editTextLinkName= (EditText) this.findViewById(R.id.linkName);
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
+         this.loading = (LinearLayout) this.findViewById(R.id.loading);
+         this.main = (LinearLayout) this.findViewById(R.id.main);
+         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+
+        //加载失败点击重新获取
+        this.loadFail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                httpRequest();
+            }
+        });
 
 
         //出生日期选择部分
@@ -381,15 +403,61 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
            });
 
 
-          requestInit();
+             loadData();
+    }
+    //加载数据(包括缓存数据和网络数据)
+    private void loadData() {
+
+        /**
+         * 判断网络是否处于可用状态
+         */
+        if (NetWorkUtils.isNetworkAvailable(this)) {
+
+            //加载网络数据
+            httpRequest();
+        } else {
+
+            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
+            loadFail.setText("点击重新加载");
+            loadFail.setVisibility(View.VISIBLE);
+            //获取缓存数据
+            //如果获取得到缓存数据则加载本地数据
+            loading.setVisibility(View.GONE);
+
+            //如果缓存数据不存在则需要用户打开网络设置
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setMessage("网络不可用，是否打开网络设置");
+            alert.setCancelable(false);
+            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //打开网络设置
+
+                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+        }
     }
 
-
     /**
-     * 请求注册界面的相关数据
+     * 请求报名相关数据
      */
-    private void requestInit(){
+    private void httpRequest(){
 
+        loadFail.setVisibility(View.GONE);
+        loading.setVisibility(View.VISIBLE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
 
@@ -438,9 +506,13 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                          projectList.add(new SpinnerModel(key,value));
                     }
 
+                    loadFail.setVisibility(View.GONE);
+                    //加载成功显示界面
+                    main.setVisibility(View.VISIBLE);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    loadFail.setVisibility(View.VISIBLE);
                 }
 
 
@@ -449,6 +521,11 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             @Override
             public void onError(Throwable throwable, boolean b) {
 
+
+                 Toast.makeText(SignUpActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
+
+                loadFail.setText("点击重新加载");
+                loadFail.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -458,8 +535,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             @Override
             public void onFinished() {
-
-
+                 loading.setVisibility(View.GONE);
                 idCardType.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,idTypeList));
                 clothesSize.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,clothesSizeList));
                 projectSpinner.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,projectList));
@@ -667,9 +743,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             editTextLinkPhone.requestFocus();
             return;
         }
-        //提交到服务器
-        showProgressDialog(true);
 
+
+        //提交到服务器
 
         //设置提交参数
         RequestParams param = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
@@ -716,9 +792,10 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         //报名来源
         param.addQueryStringParameter("RegistratorSource","Android 客户端");
         param.setMaxRetryCount(0);//最大重复请求次数
-        param.setConnectTimeout(10*1000);
+        param.setConnectTimeout(5*1000);
 
         //向服务器提交数据
+           MyProgressDialogUtils.getUtils(SignUpActivity.this).showDialog("提交中...");
            x.http().post(param, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -750,30 +827,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             public void onError(Throwable ex, boolean isOnCallback) {
 
 
-                if(ex instanceof HttpException){
-                 Toast.makeText(SignUpActivity.this,"网络异常或服务器错误!",Toast.LENGTH_SHORT).show();
+              Toast.makeText(SignUpActivity.this,"网络异常或服务器错误!",Toast.LENGTH_SHORT).show();
 
-                }
-                showProgressDialog(false);
-                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                builder.setTitle(ex.getMessage());
-                builder.setMessage("提交失败了,请点击重试!");
-                builder.setCancelable(false);
-                builder.setPositiveButton("重试", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                         submit();
-
-                    }
-                });
-
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                          dialog.dismiss();
-                    }
-                });
-                builder.show();
             }
 
             @Override
@@ -783,26 +838,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             @Override
             public void onFinished() {
-               showProgressDialog(false);
+
+                MyProgressDialogUtils.getUtils(SignUpActivity.this).closeDialog();
             }
 
         });
 
-    }
-
-//提交表单是显示提示对话框
-    private ProgressDialog progressDialog;
-    private void showProgressDialog(boolean isShow){
-        if(isShow) {
-            progressDialog = new ProgressDialog(SignUpActivity.this);
-            progressDialog.setMessage("提交中,请稍后...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }else {
-
-            if(progressDialog!=null)
-            progressDialog.dismiss();
-        }
     }
 
 

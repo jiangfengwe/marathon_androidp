@@ -1,26 +1,21 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
 import com.tdin360.zjw.marathon.utils.SendSMSUtils;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -150,7 +145,7 @@ public class RegisterActivity extends BaseActivity {
 
             if(pass1.length()<6){
 
-                Toast.makeText(this,"密码长度必须为六位数!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"密码长度不能小于六位数!",Toast.LENGTH_SHORT).show();
                 this.editTextPass1.requestFocus();
                 return;
             }
@@ -188,6 +183,7 @@ public class RegisterActivity extends BaseActivity {
      */
     private void register(){
 
+        MyProgressDialogUtils.getUtils(this).showDialog("提交中...");
         this.tel = this.editTextTel.getText().toString().trim();
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_REGISTER);
         params.addQueryStringParameter("phone",tel);
@@ -235,7 +231,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onFinished() {
 
-
+                MyProgressDialogUtils.getUtils(RegisterActivity.this).closeDialog();
             }
         });
     }

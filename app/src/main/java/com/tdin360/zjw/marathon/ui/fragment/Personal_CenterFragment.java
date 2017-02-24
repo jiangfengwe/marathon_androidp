@@ -12,18 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
-import com.tdin360.zjw.marathon.ui.activity.AchievementActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity;
 import com.tdin360.zjw.marathon.ui.activity.ChangePasswordActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
 import com.tdin360.zjw.marathon.ui.activity.MySignUpActivity;
-import com.tdin360.zjw.marathon.ui.activity.NoticeMessageActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.ui.activity.SignUpSearchResultActivity;
 import com.tdin360.zjw.marathon.model.SignUpInfo;
@@ -111,7 +110,7 @@ public class Personal_CenterFragment extends Fragment {
              @Override
              public void onClick(View v) {
 
-                 Intent intent = new Intent(getContext(), AchievementActivity.class);
+                 Intent intent = new Intent(getContext(), MyAchievementActivity.class);
                  startActivity(intent);
 
              }
@@ -146,7 +145,7 @@ public class Personal_CenterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(), NoticeMessageActivity.class);
+                Intent intent = new Intent(getActivity(), MyNoticeMessageActivity.class);
                 startActivity(intent);
             }
         });

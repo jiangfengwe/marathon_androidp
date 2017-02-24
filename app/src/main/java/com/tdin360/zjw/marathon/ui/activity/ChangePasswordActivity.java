@@ -16,6 +16,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
 import com.tdin360.zjw.marathon.utils.SendSMSUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
@@ -74,7 +75,7 @@ public class ChangePasswordActivity extends BaseActivity {
         //验证原密码输入
              String oldPass = editTextOldPass.getText().toString().trim();
 
-             if(oldPass.length()<0){
+             if(oldPass.length()<6){
 
                  Toast.makeText(this,"密码长度不能少小于六位数!",Toast.LENGTH_SHORT).show();
                  this.editTextOldPass.requestFocus();
@@ -108,7 +109,7 @@ public class ChangePasswordActivity extends BaseActivity {
             }
 
             //验证成功
-
+        MyProgressDialogUtils.getUtils(this).showDialog("提交中...");
         RequestParams params = new RequestParams(HttpUrlUtils.CHANGE_PASSWORD);
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(this).getName());
         params.addQueryStringParameter("oldPassword",oldPass);
@@ -157,7 +158,7 @@ public class ChangePasswordActivity extends BaseActivity {
 
                  @Override
                  public void onFinished() {
-
+                     MyProgressDialogUtils.getUtils(ChangePasswordActivity.this).closeDialog();
                  }
              });
 

@@ -1,35 +1,20 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.jiguan.MyReceiver;
-import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.ui.fragment.Marathon_MainFragment;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
-import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
-import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
 
-import org.xutils.x;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends FragmentActivity{
 
-    public static boolean isForeground = false;
     private static final String TAB1="tab1";
     private static final String TAB2="tab2";
     private Marathon_MainFragment marathonFragment;
@@ -42,7 +27,7 @@ public class MainActivity extends FragmentActivity{
         setContentView(R.layout.activity_main);
 
 
-         registerMessageReceiver();
+
           //防止旋转屏幕时重叠
           if(savedInstanceState!=null){
               marathonFragment= (Marathon_MainFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
@@ -97,47 +82,6 @@ public class MainActivity extends FragmentActivity{
         }
     }
 
-    //极光推送(自定义通知内容接收)
-    //for receive customer msg from jpush server
-    private MessageReceiver mMessageReceiver;
-    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_MESSAGE = "message";
-    public static final String KEY_EXTRAS = "extras";
-
-    public void registerMessageReceiver() {
-        mMessageReceiver = new MessageReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
-        filter.addAction(MESSAGE_RECEIVED_ACTION);
-        registerReceiver(mMessageReceiver, filter);
-    }
-
-    //接收极光推送自定义消息
-    public class MessageReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-
-
-                       if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
-                           String message = intent.getStringExtra(KEY_MESSAGE);
-                           String extras = intent.getStringExtra(KEY_EXTRAS);
-                           StringBuilder showMsg = new StringBuilder();
-                           showMsg.append(KEY_MESSAGE + " : " + message + "\n");
-                           if (!ExampleUtil.isEmpty(extras)) {
-                               showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
-                           }
-
-                          //处理自定义消息
-
-
-               }
-
-        }
-    }
-
 
     //连续按两次退出
 
@@ -166,26 +110,5 @@ public class MainActivity extends FragmentActivity{
             clickCount=0;
         }
     };
-
-    @Override
-    protected void onResume() {
-        isForeground=true;
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onPause() {
-        isForeground=false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        unregisterReceiver(mMessageReceiver);
-        super.onDestroy();
-    }
-
 
 }

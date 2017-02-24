@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_my_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyInfoActivity">
+
     <RelativeLayout
+        android:id="@+id/top"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -38,6 +39,16 @@
             android:textColor="@color/white"
             />
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/top"
+        android:id="@+id/main"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <LinearLayout
         android:padding="10dp"
         android:orientation="vertical"
@@ -89,12 +100,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
                 android:text="帐号:"
                 />
             <EditText
                 android:enabled="false"
                 android:id="@+id/tel"
+                android:textSize="15sp"
                 android:background="@android:color/transparent"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
@@ -115,7 +128,7 @@
          <TextView
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:textSize="15sp"
+             android:textSize="16sp"
              android:textColor="@color/textBlack"
              android:text="姓名:"
              />
@@ -123,6 +136,7 @@
              android:id="@+id/name"
              android:background="@android:color/transparent"
              android:layout_weight="1"
+             android:textSize="15sp"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -143,7 +157,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:text="性别:"
                 android:textColor="@color/textBlack"
                 />
@@ -194,12 +208,12 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:text="生日:"
                 android:textColor="@color/textBlack"
                 />
             <TextView
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textColor="@color/textBlack"
                 android:id="@+id/birthday"
                 android:background="@android:color/transparent"
@@ -231,7 +245,7 @@
 
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:textSize="15sp"
+             android:textSize="16sp"
              android:text="邮箱:"
              android:textColor="@color/textBlack"
              />
@@ -239,6 +253,7 @@
              android:id="@+id/email"
              android:background="@android:color/transparent"
              android:layout_weight="1"
+             android:textSize="15sp"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -256,3 +271,21 @@
     </LinearLayout>
     </ScrollView>
 </LinearLayout>
+
+    <!--开始加载时提示-->
+    <LinearLayout
+
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_loading"></include>
+    </LinearLayout>
+
+    <!--加载失败时显示提示-->
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_loadingfail"></include>
+    </LinearLayout>
+</RelativeLayout>

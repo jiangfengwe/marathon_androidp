@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
-import com.tdin360.zjw.marathon.ui.activity.NoticeMessageActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.utils.SystemUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
 
@@ -52,7 +52,7 @@ public class MyReceiver extends BroadcastReceiver {
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
         	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-        	processCustomMessage(context, bundle);
+        	//processCustomMessage(context, bundle);
 			String content =  bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			saveMessage(context,content);
 
@@ -69,7 +69,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 			//打开自定义的Activity
 			if(SystemUtils.isAppAlive(context,context.getPackageName())){
-				Intent notice = new Intent(context,NoticeMessageActivity.class);
+				Intent notice = new Intent(context,MyNoticeMessageActivity.class);
 				Intent main = new Intent(context,MainActivity.class);
 				main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivities(new Intent[]{main,notice});
@@ -130,29 +130,29 @@ public class MyReceiver extends BroadcastReceiver {
 	}
 	
 	//send msg to MainActivity
-	private void processCustomMessage(Context context, Bundle bundle) {
-		if (MainActivity.isForeground) {
-			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra("type",CustomMessage);
-			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-			if (!ExampleUtil.isEmpty(extras)) {
-				try {
-					JSONObject extraJson = new JSONObject(extras);
-
-					Log.d(TAG, "processCustomMessage: ---->"+extraJson);
-					if (null != extraJson && extraJson.length() > 0) {
-						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
-					}
-				} catch (JSONException e) {
-
-				}
-
-			}
-			context.sendBroadcast(msgIntent);
-		}
-	}
+//	private void processCustomMessage(Context context, Bundle bundle) {
+//		if (MainActivity.isForeground) {
+//			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+//			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+//			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
+//			msgIntent.putExtra("type",CustomMessage);
+//			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+//			if (!ExampleUtil.isEmpty(extras)) {
+//				try {
+//					JSONObject extraJson = new JSONObject(extras);
+//
+//					Log.d(TAG, "processCustomMessage: ---->"+extraJson);
+//					if (null != extraJson && extraJson.length() > 0) {
+//						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+//					}
+//				} catch (JSONException e) {
+//
+//				}
+//
+//			}
+//			context.sendBroadcast(msgIntent);
+//		}
+	//}
 
 	//普通通知消息发送到MainActivity
 	private void saveMessage(Context context, String msg){

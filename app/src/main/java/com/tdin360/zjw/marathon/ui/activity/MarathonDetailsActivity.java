@@ -1,17 +1,16 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
@@ -19,10 +18,13 @@ import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.MenuModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MenuDataUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.weight.Carousel;
-import com.tdin360.zjw.marathon.weight.LoadProgressDialog;
 import com.tdin360.zjw.marathon.weight.MenuView;
 import com.tdin360.zjw.marathon.weight.MyGridView;
+import com.umeng.socialize.UMShareAPI;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +48,9 @@ public class MarathonDetailsActivity extends BaseActivity {
     private MarathonHomeMyGridViewAdapter adapter;
     private String eventId;
     private TextView notData;
+    private LinearLayout main;
+    private LinearLayout loading;
+    private TextView loadFail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,19 @@ public class MarathonDetailsActivity extends BaseActivity {
         initMenu();
     }
 
+    /**
+     * 分享需要配置确保回调成功
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+    }
+
+
     @Override
     public int getLayout() {
         return R.layout.activity_marathon_details;
@@ -79,21 +97,83 @@ public class MarathonDetailsActivity extends BaseActivity {
         this.eventId = this.getIntent().getStringExtra("eventId");
         String eventName = this.getIntent().getStringExtra("eventName");
         setToolBarTitle(eventName);
-         showBackButton();
-        showShareButton(null);
+        showBackButton();
+        /**
+         * 构建分享内容
+         */
+        ShareInfoManager manager = new ShareInfoManager(this);
+         manager.buildShareBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.guide3));
+       // ShareInfoManager.getManager(this).setShareWebLink(eventName,"http://www.baidu.com","来自赛事详情的分享", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
+        showShareButton(manager);
+
+         this.main = (LinearLayout) this.findViewById(R.id.main);
+         this.loading = (LinearLayout) this.findViewById(R.id.loading);
+         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
          this.notData = (TextView) this.findViewById(R.id.notData);
          this.mCarousel = (Carousel) this.findViewById(R.id.mCarousel);
          this.mGridView  = (MyGridView) this.findViewById(R.id.myGridView);
          this.adapter = new MarathonHomeMyGridViewAdapter(sponsorList,this);
          this.mGridView.setAdapter(adapter);
 
+         this.loadFail.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 httpRequest();
+             }
+         });
 
-         httpGetList();
+         loadData();
 
 
     }
 
+    //加载数据(包括缓存数据和网络数据)
+    private void loadData(){
 
+        /**
+         * 判断网络是否处于可用状态
+         */
+        if(NetWorkUtils.isNetworkAvailable(this)){
+
+            //加载网络数据
+            httpRequest();
+        }else {
+
+            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
+            loadFail.setText("点击重新加载");
+            loadFail.setVisibility(View.VISIBLE);
+            //获取缓存数据
+            //如果获取得到缓存数据则加载本地数据
+            loading.setVisibility(View.GONE);
+
+            //如果缓存数据不存在则需要用户打开网络设置
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setMessage("网络不可用，是否打开网络设置");
+            alert.setCancelable(false);
+            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //打开网络设置
+
+                    startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+        }
+
+
+    }
     /**
      * 初始化菜单选项
      */
@@ -107,6 +187,7 @@ public class MarathonDetailsActivity extends BaseActivity {
          menu.setMenuContent(menuModel.getId(),menuModel.getIcon(),menuModel.getTitle());
 
          menuLayout.addView(menu);
+         //菜单点击事件
          menu.setMenuOnItemClickListener(new MenuView.MenuOnItemClickListener() {
              @Override
              public void onMenuClick(MenuView itemView) {
@@ -152,7 +233,7 @@ public class MarathonDetailsActivity extends BaseActivity {
     /**
      * 请求网络数据
      */
-    private void httpGetList(){
+    private void httpRequest(){
 
         /**
          * 清空旧数据
@@ -161,6 +242,8 @@ public class MarathonDetailsActivity extends BaseActivity {
             carouselList.clear();
             sponsorList.clear();
         }
+        loading.setVisibility(View.VISIBLE);
+        loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("eventId", eventId);
         x.http().get(params,new Callback.CommonCallback<String>() {
@@ -190,8 +273,6 @@ public class MarathonDetailsActivity extends BaseActivity {
                      * 获取赞助商数据
                      */
 
-
-
                     JSONArray array2  =json.getJSONArray("Sponsors");
                     for(int i=0;i<array2.length();i++){
 
@@ -205,16 +286,21 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                     }
 
+//                    加载成功显示界面
+                    main.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
 
+                    loadFail.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-
+                Toast.makeText(MarathonDetailsActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
+                loadFail.setText("点击重新加载");
+                loadFail.setVisibility(View.VISIBLE);
 
             }
 
@@ -225,6 +311,7 @@ public class MarathonDetailsActivity extends BaseActivity {
             @Override
             public void onFinished() {
 
+                loading.setVisibility(View.GONE);
                 showCarousel();
                 if(sponsorList.size()>0) {
                     //更新赞助商数据
@@ -232,6 +319,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                 }else {
                     notData.setVisibility(View.VISIBLE);
                 }
+
 
             }
         });
@@ -261,4 +349,14 @@ public class MarathonDetailsActivity extends BaseActivity {
     }
 
 
+    /**
+     * 立即报名
+     * @param view
+     */
+    public void toSignUp(View view) {
+
+        Intent intent = new Intent(this,PayActivity.class);
+        startActivity(intent);
+
+    }
 }

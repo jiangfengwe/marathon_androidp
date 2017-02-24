@@ -9,7 +9,6 @@
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <!-- Required  一些系统要求的权限，如访问网络等 -->
     <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
@@ -39,8 +38,7 @@
     <uses-feature android:name="android.hardware.nfc.hce" />
 
     <application
-
-        android:name=".myappliction.MyApplication"
+        android:name=".app.App"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
@@ -112,13 +110,13 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <!-- alipay sdk end -->
-        <!-- 微信支付 -->
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
+        <!-- 微信支付 回调 -->
+
         <activity
             android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -246,12 +244,12 @@
         <activity android:name=".ui.activity.RestPassWordActivity" />
         <activity android:name=".ui.activity.SearchActivity" />
         <activity android:name=".ui.activity.MyInfoActivity" />
-        <activity android:name=".ui.activity.AchievementActivity" />
+        <activity android:name=".ui.activity.MyAchievementActivity" />
         <activity android:name=".ui.activity.MySignUpActivity" />
         <activity android:name=".ui.activity.MySigUpDetailActivity" />
         <activity android:name=".ui.activity.PayActivity" />
         <activity
-            android:name=".ui.activity.NoticeMessageActivity"
+            android:name=".ui.activity.MyNoticeMessageActivity"
             android:launchMode="singleTask" />
         <!-- 用于监听网络状态的广播 -->
         <receiver android:name=".utils.NetWorkStateBroadcastReceiver">
@@ -266,6 +264,37 @@
         <activity android:name=".ui.activity.MarathonNewsListActivity" />
         <activity android:name=".ui.activity.MarathonNoticeListActivity" />
         <activity android:name=".ui.activity.MarathonMapActivity"></activity>
+
+        <!--友盟分享集成-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="58ad39b89f06fd36410004df" >
+        </meta-data>
+        <!--只有精简版新浪和豆瓣需要此配置-->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:theme="@style/Theme.UMDefault"
+            android:excludeFromRecents="true"
+            />
+        <!--QQ精简版分享配置-->
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tencent1105925323" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
     </application>
 
 </manifest>

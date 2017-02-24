@@ -98,7 +98,7 @@ public class SharedPreferencesManager {
         edit.commit();
     }
 
-    //保存设置状态
+    //保存设置是否接受推送消息状态
     public static void isOpen(Context context,boolean isOpen){
         //实例化SharedPreferences对象（第一步）
         SharedPreferences mySharedPreferences= context.getSharedPreferences("my_setting",
@@ -107,11 +107,11 @@ public class SharedPreferencesManager {
         edit.putBoolean("isOpen",isOpen);
         edit.commit();
     }
-    //获取设置状态
+    //获取是否接受推送消息设置状态
     public static boolean getOpen(Context context){
         SharedPreferences mySharedPreferences= context.getSharedPreferences("my_setting",
                 Activity.MODE_PRIVATE);
-        return mySharedPreferences.getBoolean("isOpen",false);
+        return mySharedPreferences.getBoolean("isOpen",true);
     }
 
     //保存登录信息

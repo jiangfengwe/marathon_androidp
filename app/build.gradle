@@ -49,6 +49,16 @@ dependencies {
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     //    圆角图片库 https://github.com/vinc3m1/RoundedImageView
     compile 'com.makeramen:roundedimageview:2.3.0'
+
+    //友盟分享集成库
     compile files('libs/Android_Map3D_SDK_V4.1.3_20161208.jar')
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    compile files('libs/SocialSDK_WeChat_Simplify.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_tool.jar')
+    compile files('libs/umeng_social_shareboard.jar')
+    compile files('libs/umeng_social_shareview.jar')
 }
 

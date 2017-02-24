@@ -1,25 +1,20 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.app.Activity;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.model.UserModel;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -63,8 +58,7 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()){
 
             case R.id.loginBtn://登录
-
-               this.login();
+              this.login();
 
                 break;
             case R.id.registerBtn://注册
@@ -104,7 +98,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         //提交到服务器验证
-
+        MyProgressDialogUtils.getUtils(LoginActivity.this).showDialog("登录中...");
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
         params.addQueryStringParameter("phone",tel);
         params.addQueryStringParameter("password",pass);
@@ -156,7 +150,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                MyProgressDialogUtils.getUtils(LoginActivity.this).closeDialog();
             }
         });
 

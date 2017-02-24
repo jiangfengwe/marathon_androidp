@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,6 +212,8 @@ public class RestPassWordActivity extends BaseActivity {
 
             //验证成功
 
+        MyProgressDialogUtils.getUtils(this).showDialog("提交中...");
+
         RequestParams params = new RequestParams(HttpUrlUtils.FIND_PASSWORD);
         params.addQueryStringParameter("phone",tel);
          params.addQueryStringParameter("token",inCode);//验证码
@@ -251,7 +254,7 @@ public class RestPassWordActivity extends BaseActivity {
 
                  @Override
                  public void onFinished() {
-
+                     MyProgressDialogUtils.getUtils(RestPassWordActivity.this).closeDialog();
                  }
              });
 

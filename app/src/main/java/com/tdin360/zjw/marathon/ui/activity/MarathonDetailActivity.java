@@ -21,7 +21,7 @@ public class MarathonDetailActivity extends BaseActivity {
 
 
         showBackButton();
-        showShareButton(new ShareInfo("分享测试","http://www.baidu.com","描述",BitmapFactory.decodeResource(getResources(),R.mipmap.logo)));
+
         init();
     }
 
