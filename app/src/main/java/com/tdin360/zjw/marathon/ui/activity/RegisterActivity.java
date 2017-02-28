@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SendSMSUtils;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
 import org.json.JSONException;
@@ -33,16 +35,13 @@ public class RegisterActivity extends BaseActivity {
     private EditText editTextCode;
     private EditText editTextPass1;
     private EditText editTextPass2;
-    private SendSMSUtils smsUtils;
-    private String tel;
-    private String password;
     private ImageView bg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showBackButton();
         setToolBarTitle("注册");
-        this.smsUtils = SendSMSUtils.instance(this);
+
         this.editTextTel= (EditText) this.findViewById(R.id.tel);
         this.editTextCode= (EditText) this.findViewById(R.id.code);
         this.editTextPass1= (EditText) this.findViewById(R.id.password1);
@@ -66,7 +65,7 @@ public class RegisterActivity extends BaseActivity {
     public void getCode(View view) {
         button=(Button) view;
 
-         this.tel = this.editTextTel.getText().toString().trim();
+         String tel = this.editTextTel.getText().toString().trim();
 
         //验证手机号码是否符合规范
         if(tel.length()<11||!ValidateUtil.isMobileNO(tel)){
@@ -75,14 +74,72 @@ public class RegisterActivity extends BaseActivity {
             editTextTel.requestFocus();
             return;
         }
+
+        if(!NetWorkUtils.isNetworkAvailable(this)){
+            Toast.makeText(this,"发送短信需要联网!",Toast.LENGTH_SHORT).show();
+
+            return;
+
+        }
+
+
         totalTime=60;
         button.setEnabled(false);
         button.setBackgroundResource(R.drawable.getcode_button_checked);
         handler.sendEmptyMessage(0);
 
 
+        RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
+        params.addQueryStringParameter("tel",tel);
+        params.addQueryStringParameter("type","zc");
+        params.setConnectTimeout(5*1000);
+        params.setCacheSize(0);
 
-         //smsUtils.sendSMSCode(tel,"1");
+       x.http().post(params, new Callback.CommonCallback<String>() {
+           @Override
+           public void onSuccess(String result) {
+
+
+               Log.d("--------->>>", "onSuccess: "+result);
+               try {
+                   JSONObject json = new JSONObject(result);
+
+                   boolean success = json.getBoolean("isSuccess");
+                   if(success){
+                       Toast.makeText(RegisterActivity.this,"验证码已成功发送",Toast.LENGTH_SHORT).show();
+
+                   }else {
+
+                       Toast.makeText(RegisterActivity.this,"验证码发送失败",Toast.LENGTH_SHORT).show();
+                   }
+
+
+
+               } catch (JSONException e) {
+                   e.printStackTrace();
+               }
+
+
+
+
+
+           }
+
+           @Override
+           public void onError(Throwable ex, boolean isOnCallback) {
+               Toast.makeText(RegisterActivity.this,"验证码发送失败",Toast.LENGTH_SHORT).show();
+           }
+
+           @Override
+           public void onCancelled(CancelledException cex) {
+
+           }
+
+           @Override
+           public void onFinished() {
+
+           }
+       });
 
 
     }
@@ -116,32 +173,22 @@ public class RegisterActivity extends BaseActivity {
     //验证验证码
     public void submit(View view) {
 
-//        获取用户输入的验证码
-        String inCode=editTextCode.getText().toString().trim();
-
-
-
-//        if (inCode.length()==0){
-//
-//            Toast.makeText(this,"验证码不能为空!",Toast.LENGTH_SHORT).show();
-//            editTextCode.requestFocus();
-//            return;
-//        }
-
-        //获取验证码
-      //  String code = smsUtils.getCurrentCode();
-
-       // if (inCode.equals(code)){
-           // Toast.makeText(this,"验证码正确!",Toast.LENGTH_SHORT).show();
-
-
 
 
             //验证用户输入密码
-
+            String tel = this.editTextTel.getText().toString().trim();
+            String code = this.editTextCode.getText().toString().trim();
             String pass1  =this.editTextPass1.getText().toString().trim();
             String pass2 = this.editTextPass2.getText().toString().trim();
-            this.password=pass2;
+
+
+             if(code.length()==0){
+
+                 Toast.makeText(this,"验证码不能为空!",Toast.LENGTH_SHORT).show();
+
+                 this.editTextCode.requestFocus();
+                 return;
+             }
 
             if(pass1.length()<6){
 
@@ -166,14 +213,8 @@ public class RegisterActivity extends BaseActivity {
 
            //向服务器提交注册数据
 
-            register();
+            register(code,tel,pass2);
 
-
-       // }else {
-
-
-           // Toast.makeText(this,"验证码错误!",Toast.LENGTH_SHORT).show();
-      //  }
 
 
     }
@@ -181,14 +222,15 @@ public class RegisterActivity extends BaseActivity {
     /**
      * 向服务器提交数据
      */
-    private void register(){
+    private void register(String code,String tel,String password){
 
         MyProgressDialogUtils.getUtils(this).showDialog("提交中...");
-        this.tel = this.editTextTel.getText().toString().trim();
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_REGISTER);
+        params.addQueryStringParameter("validCode",code);
         params.addQueryStringParameter("phone",tel);
         params.addQueryStringParameter("password",password);
-
+        params.setConnectTimeout(5*1000);
+        params.setCacheSize(0);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * 引导页
- *
+ * @author  zhangzhijun
  */
 public class GuideActivity extends Activity implements ViewPager.OnPageChangeListener{
     private ViewPager mViewPager;

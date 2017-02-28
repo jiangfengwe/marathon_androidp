@@ -1,26 +1,25 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.os.Bundle;
 
+import android.os.Bundle;
 import com.tdin360.zjw.marathon.R;
 
 /**
- * 意见反馈
+ *成绩详情
  * @author zhangzhijun
  */
-public class FeedbackActivity extends BaseActivity {
+public class MyAchievementDetailsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showBackButton();
-        setToolBarTitle("意见反馈");
+
+        setToolBarTitle("成绩详情");
+         showBackButton();
     }
 
     @Override
     public int getLayout() {
-        return R.layout.activity_feedback;
+        return R.layout.activity_my_achievement_details ;
     }
-
-
 }

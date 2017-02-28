@@ -15,6 +15,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ public class RestPassWordActivity extends BaseActivity {
     private EditText editTextCode;
     private EditText editTextPass1;
     private EditText editTextPass2;
-    private int totalTime=10;
+    private int totalTime;
     private Button button;
     private ImageView bg;
 
@@ -83,9 +84,17 @@ public class RestPassWordActivity extends BaseActivity {
         }
 
 
+        if(!NetWorkUtils.isNetworkAvailable(this)){
+
+            Toast.makeText(this,"获取验证码需要联网",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
        //发起验证码
         final RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
-        params.addQueryStringParameter("phone",tel);
+        params.addQueryStringParameter("tel",tel);
+        params.addQueryStringParameter("type","zhmm");
          params.setConnectTimeout(5*1000);
           params.setMaxRetryCount(0);
            x.http().post(params, new Callback.CommonCallback<String>() {

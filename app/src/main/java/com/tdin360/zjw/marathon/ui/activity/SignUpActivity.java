@@ -247,7 +247,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         //滚动内容部分
         this.autoText= (AutoText) this.findViewById(R.id.autoText);
-        this.autoText.initScrollTextView(this.getWindowManager(),"为了您能够正常报名,请正确填写您的报名信息,如有问题请及时与我们联系!");
+        this.autoText.initScrollTextView(this.getWindowManager(),"为了能够快速报名,请正确填写您的报名信息,如有问题请及时与我们联系!");
         this.autoText.setSpeed(1);
         this.autoText.starScroll();
            //表单控件初始化

@@ -114,6 +114,7 @@
         <TextView
             android:gravity="center"
             android:textSize="18dp"
+            android:drawablePadding="2dp"
             android:drawableLeft="@drawable/my_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,9 +137,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:drawablePadding="2dp"
                     android:gravity="center"
                     android:textSize="18dp"
-                    android:drawableLeft="@drawable/my_info"
+                    android:drawableLeft="@drawable/my_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="通知消息"
@@ -160,8 +162,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:drawablePadding="2dp"
             android:gravity="center"
-            android:drawableLeft="@drawable/my_pass"
+            android:drawableLeft="@drawable/my_password"
             android:textSize="18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -185,6 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:drawablePadding="2dp"
                     android:gravity="center"
                     android:drawableLeft="@drawable/my_setting"
                     android:textSize="18dp"
@@ -208,6 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:drawablePadding="2dp"
                     android:gravity="center"
                     android:drawableLeft="@drawable/my_about"
                     android:textSize="18dp"

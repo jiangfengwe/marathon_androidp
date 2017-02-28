@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_achievement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <include layout="@layout/toolbar_layout"></include>
 
-    <ListView
+    <com.tdin360.zjw.marathon.weight.RefreshListView
         android:listSelector="@android:color/transparent"
         android:divider="@android:color/transparent"
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
-</LinearLayout>
+    </com.tdin360.zjw.marathon.weight.RefreshListView>
+    </LinearLayout>
+    <!--开始加载时提示-->
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_loading"></include>
+    </LinearLayout>
+
+    <!--加载失败时显示提示-->
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_loadingfail"></include>
+    </LinearLayout>
+    <!--没有数据-->
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/tipNotData"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无数据!"
+            />
+    </LinearLayout>
+</RelativeLayout>

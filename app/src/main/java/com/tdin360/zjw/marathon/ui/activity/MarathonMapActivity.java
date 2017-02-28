@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 显示地图（参赛路线）
+ * 比赛地图（参赛路线）
+ * @author zhangzhijun
+ *
  */
 public class MarathonMapActivity extends BaseActivity {
 

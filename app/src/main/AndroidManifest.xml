@@ -4,7 +4,6 @@
     android:versionCode="220"
     android:versionName="2.2.0">
 
-
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
@@ -44,9 +43,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppToolBar">
-        <!--高德地图配置-->
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="47b527023c8cf9a76fedc94d47f47436">
-            <!--开发者申请的key-->
+
+        <!-- 高德地图配置 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="47b527023c8cf9a76fedc94d47f47436">
+
+            <!-- 开发者申请的key -->
         </meta-data>
 
         <!-- 银联支付 -->
@@ -115,9 +118,9 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="true">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -263,38 +266,43 @@
         <activity android:name=".ui.activity.MarathonDetailsActivity" />
         <activity android:name=".ui.activity.MarathonNewsListActivity" />
         <activity android:name=".ui.activity.MarathonNoticeListActivity" />
-        <activity android:name=".ui.activity.MarathonMapActivity"></activity>
+        <activity android:name=".ui.activity.MarathonMapActivity" />
 
-        <!--友盟分享集成-->
+        <!-- 友盟分享集成 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58ad39b89f06fd36410004df" >
-        </meta-data>
-        <!--只有精简版新浪和豆瓣需要此配置-->
+            android:value="58ad39b89f06fd36410004df"></meta-data>
+        <!-- 只有精简版新浪和豆瓣需要此配置 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:theme="@style/Theme.UMDefault"
             android:excludeFromRecents="true"
-            />
-        <!--QQ精简版分享配置-->
+            android:theme="@style/Theme.UMDefault" />
+        <!-- QQ精简版分享配置 -->
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
-
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent1105925323" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ui.activity.MyAchievementDetailsActivity"></activity>
 
+        <receiver android:name=".utils.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

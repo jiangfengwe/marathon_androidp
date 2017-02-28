@@ -13,21 +13,22 @@ import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.UpdateManger;
-import com.tdin360.zjw.marathon.utils.VersionManager;
 
 public class SettingActivity extends BaseActivity {
 
     private CheckBox switchBtn;
-
+    private UpdateManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
           setToolBarTitle("系统设置");
           showBackButton();
+        this.manager = new UpdateManager(this,false);
         TextView version = (TextView) this.findViewById(R.id.version);
-        version.setText("检查更新("+ VersionManager.getVersion(this)+")");
+        version.setText("检查更新("+ manager.getVersionName()+")");
         //是否接收推送通知
           switchBtn = (CheckBox) this.findViewById(R.id.switchBtn);
           switchBtn.setChecked(SharedPreferencesManager.getOpen(this));
@@ -44,8 +45,8 @@ public class SettingActivity extends BaseActivity {
                  //向服务器发起版本匹配请求
                  //不是最新版本更新当前版本
                  //否则就是最新版本
-                 new UpdateManger(SettingActivity.this).checkUpdateInfo();
-                // Toast.makeText(SettingActivity.this,"已是最新版本!",Toast.LENGTH_SHORT).show();
+                  manager.checkVersion();
+
              }
          });
 

@@ -83,8 +83,7 @@ public class ShowHtmlActivity extends BaseActivity {
                 }
             });
 
-
-           loading("http://www.baidu.com");
+           loading(url);
 
         }
 
