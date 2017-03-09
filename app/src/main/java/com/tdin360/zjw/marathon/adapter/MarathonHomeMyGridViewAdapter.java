@@ -28,6 +28,16 @@ public class MarathonHomeMyGridViewAdapter extends BaseAdapter {
         this.context = context;
     }
 
+    /**
+     * 更新数据列表
+     * @param list
+     */
+    public void updateList(List<CarouselModel> list){
+
+          this.list=list;
+           notifyDataSetChanged();
+
+    }
     @Override
     public int getCount() {
         return list==null?0:list.size();

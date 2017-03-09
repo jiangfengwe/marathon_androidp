@@ -17,25 +17,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+        <RelativeLayout
 
-        <LinearLayout
-            android:id="@+id/search"
-            android:background="@drawable/edittext_background"
             android:layout_width="match_parent"
-            android:layout_marginRight="15dp"
             android:gravity="center"
             android:layout_height="wrap_content">
 
             <TextView
                 android:gravity="center"
-                android:drawableLeft="@drawable/search"
-                android:textSize="12sp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_tab_title1"
+                android:textColor="@color/white"
+                />
+            <ImageView
+                android:id="@+id/search"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="搜索"
-                android:textColor="#bfbfbf"
+                android:src="@drawable/big_search"
                 />
-        </LinearLayout>
+        </RelativeLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
@@ -50,13 +54,7 @@
   </com.tdin360.zjw.marathon.weight.RefreshListView>
 
     </LinearLayout>
-    <!--加载时显示-->
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loading"></include>
-    </LinearLayout>
+
     <!--加载失败时显示-->
     <LinearLayout
         android:layout_centerInParent="true"

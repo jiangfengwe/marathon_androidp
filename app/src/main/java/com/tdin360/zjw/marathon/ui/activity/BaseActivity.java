@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.ShareInfo;
+import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.umeng.socialize.ShareAction;
@@ -25,6 +27,10 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
+
+import java.security.Permission;
+
+import static com.tdin360.zjw.marathon.utils.Constants.*;
 
 /**
  * 母版界面
@@ -47,10 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.toolBarTitle= (TextView) this.findViewById(R.id.toolbar_title);
         this.shareImage= (ImageView) this.findViewById(R.id.share);
         this.btnBack= (ImageView) this.findViewById(R.id.btn_Back);
-        setSupportActionBar(this.mToolBar);
-        //设置默认标题不显示
-        this.getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
 
     }
@@ -220,23 +222,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     return;
                 }
-                //android 6.0需要申请权限才能操作
-                if(Build.VERSION.SDK_INT>=23){
-                    String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
 
-                    //检查权限是否拥有某一权限
-                    if(ActivityCompat.checkSelfPermission(BaseActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(BaseActivity.this,"部分分享需要权限才能分享哦!",Toast.LENGTH_SHORT).show();
-                        //申请权限
-                        ActivityCompat.requestPermissions(BaseActivity.this,mPermissionList,123);
-
-                    }else {
-
-                        action.open();
-                    }
-                }else {
+                if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
 
                     action.open();
+
+                }else {
+
+                    requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 }
 
             }
@@ -244,18 +237,79 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
+
+
+    /**
+     * 检查是否拥有权限
+     * @param permissions
+     * @return
+     */
+      public boolean hasPermission(String...permissions){
+
+          for (String permission:permissions
+               ) {
+
+              if(ContextCompat.checkSelfPermission(this,permission)!= PackageManager.PERMISSION_GRANTED){
+
+                  return false;
+              }
+
+          }
+
+          return true;
+
+      }
+
+    /**
+     * 申请权限
+     * @param code
+     * @param permissions
+     */
+
+    public void requestPermission(int code,String...permissions){
+
+
+        ActivityCompat.requestPermissions(this,permissions,code);
+
+    }
+
+    /**
+     * 申请权限的回调
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode){
 
-        if(grantResults.length==0){
+            case Constants.WRITE_EXTERNAL_CODE:
 
-            return;
+               doSDCardPermission();
+
+                break;
+
+            case Constants.CAMERA_CODE:
+               doCameraPermission();
+                break;
+
         }
-         if(requestCode == 123&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-
-             action.open();
-         }
     }
+
+
+    /**
+     * sd卡读取权限授权成功后默认执行改方法供给子类来调用
+     */
+    public void doSDCardPermission(){
+
+         action.open();
+    }
+    /**
+     * 打开相机权限授权成功后默认执行改方法供给子类来调用
+     */
+    public void doCameraPermission(){}
+
+
 }

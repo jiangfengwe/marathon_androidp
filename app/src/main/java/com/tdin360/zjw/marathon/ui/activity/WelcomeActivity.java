@@ -55,4 +55,6 @@ public class WelcomeActivity extends Activity {
         super.onPause();
         JPushInterface.onPause(this);
     }
+
+
 }

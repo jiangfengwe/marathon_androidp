@@ -61,6 +61,7 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent(MyAchievementActivity.this,MyAchievementDetailsActivity.class);
                 startActivity(intent);
             }
@@ -179,7 +180,7 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
     private void httpRequest(){
 
 
-        RequestParams requestParams = new RequestParams(HttpUrlUtils.Marath_ALL_Envent);
+        RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_HOME);
 
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {

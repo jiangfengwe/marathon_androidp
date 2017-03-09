@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.SignUpInfo;
+import com.tdin360.zjw.marathon.model.SignUpInfoModel;
 import com.tdin360.zjw.marathon.weight.SelectPayPopupWindow;
 
 import cn.jpush.android.api.JPushInterface;
@@ -46,7 +46,7 @@ public class SignUpSearchResultActivity extends BaseActivity {
     //自定义的弹出框类
     private SelectPayPopupWindow menuWindow;
     //提交表单信息模型
-    private SignUpInfo signUpInfo;
+    private SignUpInfoModel signUpInfoModel;
 
 
 
@@ -144,39 +144,37 @@ public class SignUpSearchResultActivity extends BaseActivity {
         Intent intent = this.getIntent();
   //      String title = intent.getStringExtra("title");
 //        this.title.setText(title);
-        this.signUpInfo = (SignUpInfo) intent.getSerializableExtra("signUpInfo");
-        if(signUpInfo==null){
+        this.signUpInfoModel = (SignUpInfoModel) intent.getSerializableExtra("signUpInfoModel");
+        if(signUpInfoModel ==null){
             return;
         }
         /**
          * 绑定显示数据
          */
 
-        this.name.setText(signUpInfo.getName());
-        this.phone.setText(signUpInfo.getPhone());
-        this.idNumber.setText(signUpInfo.getIdNumber());
-        this.birthday.setText(signUpInfo.getBirthday());
-        this.certificateType.setText(signUpInfo.getCertificateType());
-        this.gender.setText(signUpInfo.getGender());
-        this.nationality.setText(signUpInfo.getNationality());
-        this.province.setText(signUpInfo.getProvince());
-        this.city.setText(signUpInfo.getCity());
-        this.county.setText(signUpInfo.getCounty());
-        this.attendProject.setText(signUpInfo.getAttendProject());
-        this.clothingSize.setText(signUpInfo.getClothingSize());
-        this.address.setText(signUpInfo.getAddress());
-        this.postcode.setText(signUpInfo.getPostcode());
-        this.urgencyLinkman.setText(signUpInfo.getUrgencyLinkman());
-        this.urgencyLinkmanPhone.setText(signUpInfo.getUrgencyLinkmanPhone());
-        this.attendNumber.setText(signUpInfo.getAttendNumber());
-        this.createTime.setText(signUpInfo.getCreateTime());
-        this.money.setText(signUpInfo.getTotal_fee());
-        this.applyNature.setText(signUpInfo.getApplyNature().equals("")? "个人":signUpInfo.getApplyNature());
-        this.orderNumber.setText(signUpInfo.getOut_trade_no());
-        if(signUpInfo.isPayed()){//已支付
+        this.name.setText(signUpInfoModel.getName());
+        this.phone.setText(signUpInfoModel.getPhone());
+        this.idNumber.setText(signUpInfoModel.getIdNumber());
+        this.birthday.setText(signUpInfoModel.getBirthday());
+        this.certificateType.setText(signUpInfoModel.getCertificateType());
+        this.gender.setText(signUpInfoModel.getGender()+"");
+        this.nationality.setText(signUpInfoModel.getNationality());
+        this.province.setText(signUpInfoModel.getProvince());
+        this.city.setText(signUpInfoModel.getCity());
+        this.county.setText(signUpInfoModel.getCounty());
+        this.attendProject.setText(signUpInfoModel.getAttendProject());
+        this.clothingSize.setText(signUpInfoModel.getClothingSize());
+        this.address.setText(signUpInfoModel.getAddress());
+        this.postcode.setText(signUpInfoModel.getPostcode());
+        this.urgencyLinkman.setText(signUpInfoModel.getUrgencyLinkman());
+        this.urgencyLinkmanPhone.setText(signUpInfoModel.getUrgencyLinkmanPhone());
+        this.attendNumber.setText(signUpInfoModel.getAttendNumber());
+        this.createTime.setText(signUpInfoModel.getCreateTime());
+
+        if(signUpInfoModel.isPayed()){//已支付
             payBtn.setText("已支付");
             payBtn.setEnabled(false);
-            payBtn.setBackgroundResource(R.drawable.oval_enable_button);
+
         }
     }
 

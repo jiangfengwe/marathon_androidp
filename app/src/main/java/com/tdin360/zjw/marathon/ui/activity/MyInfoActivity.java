@@ -1,7 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -18,64 +16,70 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.UserModel;
-import com.tdin360.zjw.marathon.utils.FileManager;
+import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.utils.Constants;
+import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.CircleImageView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
-import org.xutils.http.app.ParamsBuilder;
 import org.xutils.x;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 
 /**
  *
- * 我的信息
+ * 我的个人资料
  */
-public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyDatePickerChangeListener{
+public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.OnMyDatePickerChangeListener{
 
     private TextView edit;
-    private CircleImageView imageView;
+    private RoundedImageView imageView;
     private EditText editName;
     private EditText editTel;
     private EditText editEmail;
     private RadioButton gender1,gender2;
     private boolean isCanEdit;
-    private TextView tip;
     private LinearLayout main;
-    private LinearLayout loading;
     private TextView loadFail;
     //出生日期选择相关
     private TextView editBirth;
+    //用于存储用户选择裁剪后的头像
+    private KProgressHUD hud;
+    private HeadImageUtils utils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_info);
 
+        this.utils = new HeadImageUtils(this,SharedPreferencesManager.getLoginInfo(this).getName());
         initView();
 
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_my_info;
     }
 
     private void initView() {
 
         this.edit = (TextView) this.findViewById(R.id.edit);
-        this.imageView = (CircleImageView) this.findViewById(R.id.imageView);
-        this.imageView.setBorderColor(R.color.white);
-        this.tip = (TextView) this.findViewById(R.id.tip);
-        this.imageView.setBorderWidth(15);
+        this.imageView = (RoundedImageView) this.findViewById(R.id.imageView);
         this.editName = (EditText) this.findViewById(R.id.name);
         this.editTel = (EditText) this.findViewById(R.id.tel);
         this.editEmail = (EditText) this.findViewById(R.id.email);
@@ -83,8 +87,10 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
         this.gender1 = (RadioButton) this.findViewById(R.id.radio1);
         this.gender2 = (RadioButton) this.findViewById(R.id.radio2);
         this.main = (LinearLayout) this.findViewById(R.id.main);
-        this.loading = (LinearLayout) this.findViewById(R.id.loading);
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+
+        initHUD();
+
         //加载失败点击重新加载
         this.loadFail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +124,7 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
                 @Override
                 public void onClick(View v) {
 
-                    if (isCanEdit) {//编辑状态下才能进行编辑
+
                         AlertDialog.Builder alert = new AlertDialog.Builder(MyInfoActivity.this);
 
                         alert.setTitle("更改头像");
@@ -131,15 +137,23 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
 
                                     case 0:
                                         //android 6.0 判断是否拥有打开照相机的权限
-                                        if (ActivityCompat.shouldShowRequestPermissionRationale(MyInfoActivity.this, Manifest.permission.CAMERA)) {
+                                        if(hasPermission(Manifest.permission.CAMERA)){
+
                                             openCamera();
-                                        } else {
-//                                       android 6.0申请照相机和读写内存的权限
-                                            ActivityCompat.requestPermissions(MyInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                                        }else {
+
+                                            requestPermission(Constants.CAMERA_CODE,Manifest.permission.CAMERA);
                                         }
                                         break;
                                     case 1:
-                                        selectPic();
+                                        //检查sd卡读取权限
+                                        if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+                                            selectPic();
+                                        }else {
+
+                                            requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                        }
                                         break;
                                     case 2:
                                         dialog.dismiss();
@@ -150,7 +164,7 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
                         });
                         alert.show();
 
-                    }
+
                 }
             });
 
@@ -167,16 +181,40 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
             });
 
 
+        showHeadImage();
 
         //加载用户信息
         loadData();
 
+        }
+    /**
+     * 初始化提示框
+     */
+    private void initHUD(){
+
+        //显示提示框
+        this.hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.setCancellable(true);
+        hud.setAnimationSpeed(1);
+        hud.setDimAmount(0.5f);
+
+    }
+    /**
+     * 显示头像
+     */
+    private void showHeadImage(){
+
+
+        Bitmap image = utils.getImage();
+        if(image!=null){
+            imageView.setImageBitmap(image);
 
         }
-
-
+    }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
+
 
         /**
          * 判断网络是否处于可用状态
@@ -192,8 +230,6 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
-
             //如果缓存数据不存在则需要用户打开网络设置
 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -226,7 +262,8 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
      */
     private void httpRequest(){
          loadFail.setVisibility(View.GONE);
-         loading.setVisibility(View.VISIBLE);
+
+         hud.show();
         RequestParams params = new RequestParams(HttpUrlUtils.GET_MYINFO);
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -237,6 +274,7 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
                     JSONObject json = new JSONObject(s);
 
                     String name = json.getString("Name");
+
                     String email = json.getString("Email");
                     String birthDate = json.getString("BirthDate");
                     boolean gender = json.getBoolean("Gender");
@@ -272,7 +310,9 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
             @Override
             public void onFinished() {
 
-                loading.setVisibility(View.GONE);
+                hud.dismiss();
+
+
 
             }
         });
@@ -302,8 +342,8 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
     private void openCamera(){
 
             try {
-             File file = FileManager.getFileManager().saveFilePath("user.jpg");
-                Uri u = Uri.fromFile(file);
+
+                Uri u = Uri.fromFile(new File(utils.getFilePath()));
                 //调用照相机
                 Intent intent=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.Images.Media.ORIENTATION,OpenCameraRequestCode);
@@ -330,51 +370,121 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(resultCode!=Activity.RESULT_OK){
+        if(resultCode!= RESULT_OK){
 
             return;
         }
 
-        //照相
-        if(requestCode==OpenCameraRequestCode){
+//通过照相或者选择本地相册返回这里调用系统图片裁剪
+        if(requestCode==SelectRequestCode)
 
-            try {
-                File file = FileManager.getFileManager().getFile();
-
-                Uri u = Uri.fromFile(file);
-               Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(u));
-                imageView.setImageBitmap(bitmap);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(MyInfoActivity.this,"获取照片失败",Toast.LENGTH_SHORT).show();
-            }
-
-
-            //从相册选择
-        }else if(requestCode==SelectRequestCode&&data!=null){
-
+        {
+            //将选择回来的照片进行裁剪
             Uri uri = data.getData();
-            try {
-              Bitmap bitmap  = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                if(bitmap!=null)
-              imageView.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            startPhotoZoom(uri);
+        }else if(requestCode==OpenCameraRequestCode){
+
+            Uri uri = Uri.fromFile(new File(utils.getFilePath()));
+
+            startPhotoZoom(uri);
+        }
+
+        //图片裁剪后返回这里
+        if(requestCode==Constants.EDIT_IMAGE_CODE){
+
+         upLoadFile(new File(utils.getFilePath()));
         }
 
     }
 
-    //获得权限后执行
+
+    /**
+     * 打开相机权限授权成功
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void doCameraPermission() {
 
-        if(requestCode==0){
+        openCamera();
+    }
 
-            openCamera();
+    /**
+     * sd卡读取权限授权成功
+      */
+    @Override
+    public void doSDCardPermission() {
+
+         selectPic();
+    }
+
+    /**
+     * 上传文件
+     * @param file 文件路径
+     */
+    private void upLoadFile(File file){
+
+
+        hud.show();
+        RequestParams params = new RequestParams(HttpUrlUtils.UPLOAD_IMAGE);
+        LoginModel info = SharedPreferencesManager.getLoginInfo(this);
+        params.addQueryStringParameter("phone",info.getName());
+        params.addQueryStringParameter("password",info.getPassword());
+        params.setMultipart(true);
+        try {
+            params.addBodyParameter("uploadedFile",file,null);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+                    JSONObject json  = new JSONObject(result);
+                    JSONObject message = json.getJSONObject("EventMobileMessage");
+                    boolean success = message.getBoolean("Success");
+                    String reason = message.getString("Reason");
+                    String url = json.getString("AvatarUrl");
+
+                    if(success){
+                        Toast.makeText(MyInfoActivity.this,"头像上传成功",Toast.LENGTH_SHORT).show();
+                        //显示上传的头像
+                        showHeadImage();
+
+                        /**
+                         * 通知个人中心更新头像
+                         */
+                         Intent intent = new Intent(Personal_CenterFragment.ACTION);
+                         sendBroadcast(intent);
+
+                    }else {
+
+                        Toast.makeText(MyInfoActivity.this,reason,Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            Toast.makeText(MyInfoActivity.this,"头像上传失败",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+                hud.dismiss();
+
+            }
+        });
+
     }
 
     //保存更改信息
@@ -393,21 +503,20 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
          boolean gender;
 
          if(gender1.isChecked()){
-             gender=true;
+             gender=true;//男
          }else {
-
-             gender=false;
+             gender=false;//女
          }
 
-
+         hud.show();
 
         RequestParams params = new RequestParams(HttpUrlUtils.CHANGE_MYINFO);
-        params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
-        params.addQueryStringParameter("Email",email);
-        params.addQueryStringParameter("name",name);
-        params.addQueryStringParameter("Gender",gender+"");
-        params.addQueryStringParameter("BirthDate",birthday);
-        params.addQueryStringParameter("Password",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getPassword());
+        params.addBodyParameter("phone", SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
+        params.addBodyParameter("Email",email);
+        params.addBodyParameter("name",name=="未设置"?"":name);
+        params.addBodyParameter("Gender",gender+"");
+        params.addBodyParameter("BirthDate",birthday=="未设置"?"":birthday);
+        params.addBodyParameter("Password",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getPassword());
 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -415,6 +524,7 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
 
                 try {
                     JSONObject json = new JSONObject(s);
+
 
 
                     boolean success = json.getBoolean("Success");
@@ -445,6 +555,8 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
 
             @Override
             public void onFinished() {
+
+                hud.dismiss();
 
             }
         });
@@ -505,12 +617,12 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
 
 
            edit.setText("保存");
-           tip.setVisibility(View.VISIBLE);
+
 
        }else {
 
            edit.setText("编辑");
-           tip.setVisibility(View.INVISIBLE);
+
 
        }
        this.gender1.setClickable(isEdit);
@@ -576,4 +688,36 @@ public class MyInfoActivity extends Activity implements MyDatePickerDialog.OnMyD
             finish();
         }
     }
+
+
+    /**
+     * 裁剪图片方法实现
+     * @param uri
+     */
+    public void startPhotoZoom(Uri uri) {
+
+
+        /*
+         * 至于下面这个Intent的ACTION是怎么知道的，大家可以看下自己路径下的如下网页
+         * yourself_sdk_path/docs/reference/android/content/Intent.html
+         * 直接在里面Ctrl+F搜：CROP ，之前小马没仔细看过，其实安卓系统早已经有自带图片裁剪功能,
+         * 是直接调本地库的，小马不懂C C++  这个不做详细了解去了，有轮子就用轮子，不再研究轮子是怎么
+         * 制做的了...吼吼
+         */
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
+        intent.putExtra("return-data", true);
+        intent.putExtra("output", Uri.fromFile(new File("")));
+        intent.putExtra("outputFormat", "JPEG");
+        startActivityForResult(intent,Constants.EDIT_IMAGE_CODE);
+    }
+
 }

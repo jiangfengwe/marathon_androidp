@@ -113,14 +113,6 @@
      </LinearLayout>
 
 
-    <!--开始加载时提示-->
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loading"></include>
-    </LinearLayout>
-
     <!--加载失败时显示提示-->
     <LinearLayout
         android:layout_centerInParent="true"

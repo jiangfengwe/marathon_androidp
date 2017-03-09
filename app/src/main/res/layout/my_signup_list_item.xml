@@ -75,6 +75,7 @@
                             android:text="参赛项目:"
                             />
                         <TextView
+                             android:id="@+id/projectName"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/white"
                             android:layout_width="match_parent"
@@ -96,6 +97,7 @@
                             android:text="是否支付:"
                             />
                         <TextView
+                            android:id="@+id/isPay"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/white"
                             android:layout_width="match_parent"
@@ -117,6 +119,7 @@
                             android:text="报名时间:"
                             />
                         <TextView
+                            android:id="@+id/time"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/white"
                             android:textStyle="bold"

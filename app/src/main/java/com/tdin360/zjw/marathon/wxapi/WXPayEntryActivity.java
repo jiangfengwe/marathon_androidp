@@ -1,6 +1,7 @@
 package com.tdin360.zjw.marathon.wxapi;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.ui.activity.PayResultActivity;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -13,13 +14,23 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
 	
     private IWXAPI api;
-	
-    @Override
+
+	/**
+	 * 微信支付回调成功
+	 */
+	public static WXPAYResultListener listener;
+	public interface WXPAYResultListener{
+
+		void onWXPaySuccess();
+	}
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_result);
@@ -43,13 +54,24 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 	public void onResp(BaseResp resp) {
 
 
-		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("支付结果");
-			builder.setMessage("支付结果"+String.valueOf(resp.errCode));
-			builder.show();
 
-			Log.d("-----wxPay------->>>", "onResp: ");
+		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+
+			//支付成功
+			if(resp.errCode==0){
+
+				Intent intent = new Intent(this, PayResultActivity.class);
+				startActivity(intent);
+				finish();
+
+				if(listener!=null){
+					listener.onWXPaySuccess();
+				}
+
+			}else {
+
+				Toast.makeText(this,resp.errStr,Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 }

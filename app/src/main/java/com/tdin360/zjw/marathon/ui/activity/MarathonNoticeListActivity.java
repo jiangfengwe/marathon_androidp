@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.NoticeListViewAdapter;
 import com.tdin360.zjw.marathon.model.NoticeModel;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class MarathonNoticeListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
 
-    private LinearLayout loading;
+
     private TextView loadFail;
     private RefreshListView refreshListView;
     private List<NoticeModel> noticeModelList=new ArrayList<>();
@@ -44,6 +45,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
     private int pageNumber=1;
     private int totalPages;
     private LinearLayout tipNotData;
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
 
     private void initView() {
 
-        this.loading = (LinearLayout) this.findViewById(R.id.loading);
+
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnRefreshListener(this);
@@ -66,9 +68,23 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
         this.noticeListViewAdapter  =new NoticeListViewAdapter(noticeModelList,this);
         this.refreshListView.setAdapter(this.noticeListViewAdapter);
 
+        initHUD();
           loadData();
 
 
+
+    }
+    /**
+     * 初始化提示框
+     */
+    private void initHUD(){
+
+        //显示提示框
+        this.hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.setCancellable(true);
+        hud.setAnimationSpeed(1);
+        hud.setDimAmount(0.5f);
 
     }
     //加载数据(包括缓存数据和网络数据)
@@ -79,15 +95,17 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
+            hud.show();
             //加载网络数据
             httpRequest();
         } else {
 
+            hud.dismiss();
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //如果缓存数据不存在则需要用户打开网络设置
 
@@ -188,15 +206,15 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
                 if(noticeModelList.size()>0){
 
                     tipNotData.setVisibility(View.GONE);
-                    noticeListViewAdapter.updateListView(noticeModelList);
+
                 }else {
                     tipNotData.setVisibility(View.VISIBLE);
                 }
 
-                loading.setVisibility(View.GONE);
+                hud.dismiss();
                 refreshListView.hideHeaderView();
                 refreshListView.hideFooterView();
-
+                noticeListViewAdapter.updateListView(noticeModelList);
 
             }
         });
@@ -235,11 +253,16 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            NoticeModel noticeModel = noticeModelList.get(position-1);
-            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
-            intent.putExtra("title","赛事公告");
-            intent.putExtra("url",noticeModel.getUrl());
-            startActivity(intent);
+
+            if(noticeModelList.size()>0) {
+                NoticeModel noticeModel = (NoticeModel) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
+                intent.putExtra("title", "赛事公告");
+                intent.putExtra("url", noticeModel.getUrl());
+                startActivity(intent);
+
+            }
+
 
         }
     }

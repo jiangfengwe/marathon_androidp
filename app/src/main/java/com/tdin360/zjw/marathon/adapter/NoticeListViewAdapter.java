@@ -35,7 +35,7 @@ public class NoticeListViewAdapter extends BaseAdapter {
     }
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return  list.get(position);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class MenuView extends LinearLayout {
         this.setOrientation(LinearLayout.VERTICAL);
         this.icon = new ImageView(context);
         this.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        this.iconParams = new LayoutParams(120,120);
+        this.iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         this.iconParams.gravity=Gravity.CENTER;
         this.icon.setLayoutParams(iconParams);
         this.titleView = new TextView(context);

@@ -1,8 +1,11 @@
 package com.tdin360.zjw.marathon.app;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 
+import com.squareup.leakcanary.LeakCanary;
+import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -30,7 +33,27 @@ public class App extends Application {
         Config.DEBUG=false;
         UMShareAPI.get(this);
 
+        //创建数据库
+        new NoticeServiceImpl(this);
 
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        enabledStrictMode();
+        LeakCanary.install(this);
+        // Normal app init code...
+
+
+    }
+    private static void enabledStrictMode() {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
+                .detectAll() //
+                .penaltyLog() //
+                .penaltyDeath() //
+                .build());
     }
 
 //    分享平台配置

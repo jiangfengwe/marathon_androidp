@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:text="测试"
+
                     />
             </LinearLayout>
             <View
@@ -79,7 +79,7 @@
                     android:text="手机号:"
                     />
                 <EditText
-                    android:text="15761638423"
+
                     android:id="@+id/phone"
                     android:maxLength="11"
                     android:inputType="phone"
@@ -110,7 +110,7 @@
                     android:text="邮箱:"
                     />
                 <EditText
-                    android:text="123@qq.com"
+
                     android:id="@+id/email"
                     android:inputType="textEmailAddress"
                     android:layout_weight="1"
@@ -150,11 +150,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -185,11 +181,7 @@
                     android:background="@android:color/transparent"
                     style="@android:style/Widget.Spinner"
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -211,7 +203,7 @@
                     android:text="证件号码:"
                     />
                 <EditText
-                     android:text="8888888888"
+
                     android:id="@+id/idCardNumber"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -296,11 +288,7 @@
                     android:entries="@array/CountryList"
                     style="@android:style/Widget.Spinner"
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
 
             <View
@@ -333,11 +321,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -368,11 +352,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -404,11 +384,7 @@
                     android:background="@android:color/transparent"
 
                     />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dro"
-                    />
+
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -430,7 +406,7 @@
                     android:text="现居地址:"
                     />
                 <EditText
-                    android:text="address123"
+
                     android:id="@+id/address"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -458,7 +434,7 @@
                     android:text="邮政编码:"
                     />
                 <EditText
-                    android:text="550025"
+
                     android:id="@+id/post"
                     android:layout_weight="1"
                     android:inputType="number"
@@ -488,7 +464,7 @@
                     android:text="紧急联系人:"
                     />
                 <EditText
-                    android:text="abc"
+
                     android:id="@+id/linkName"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -516,7 +492,7 @@
                     android:text="紧急联系电话:"
                     />
                 <EditText
-                    android:text="15761618432"
+
                     android:id="@+id/linkPhone"
                     android:inputType="phone"
                     android:layout_weight="1"
@@ -553,13 +529,6 @@
         </LinearLayout>
     </ScrollView>
   </LinearLayout>
-    </LinearLayout>
-    <!--开始加载时提示-->
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loading"></include>
     </LinearLayout>
 
     <!--加载失败时显示提示-->

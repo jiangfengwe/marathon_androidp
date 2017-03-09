@@ -7,9 +7,29 @@
     android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonMapActivity">
    <include layout="@layout/toolbar_layout"></include>
-   <RelativeLayout
+   <LinearLayout
+       android:id="@+id/bar"
+       android:gravity="center"
+       android:orientation="vertical"
+       android:background="@color/white"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="wrap_content">
+
+      <CheckBox
+          android:button="@null"
+          android:padding="10dp"
+          android:id="@+id/tv"
+          android:clickable="false"
+          android:textSize="16sp"
+          android:gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="当前赛事"
+          android:drawableRight="@drawable/marathon_map_popwindw_selector"
+          android:drawablePadding="5dp"
+          />
+
+   </LinearLayout>
       <com.amap.api.maps.MapView
 
           android:id="@+id/map"
@@ -17,33 +37,7 @@
           android:layout_width="match_parent"
 
           android:layout_height="match_parent"/>
-      <LinearLayout
-          android:id="@+id/bar"
-          android:gravity="center"
-          android:orientation="vertical"
-          android:background="@color/white"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-
-            <TextView
-                android:padding="10dp"
-                android:id="@+id/tv"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前赛事"
-                android:drawableRight="@drawable/gc_comment_arrow_down"
-                android:drawablePadding="5dp"
-                />
 
 
-         <View
-             android:background="@color/lineColor"
-             android:layout_width="match_parent"
-             android:layout_height="0.5dp"></View>
-      </LinearLayout>
-
-   </RelativeLayout>
 
 </LinearLayout>

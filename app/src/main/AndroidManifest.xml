@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tdin360.zjw.marathon"
     android:versionCode="220"
-    android:versionName="2.2.0">
+    android:versionName="2.2.0"
+
+    >
 
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
@@ -37,12 +39,13 @@
     <uses-feature android:name="android.hardware.nfc.hce" />
 
     <application
+
         android:name=".app.App"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppToolBar">
+        android:theme="@style/AppTheme">
 
         <!-- 高德地图配置 -->
         <meta-data
@@ -52,10 +55,6 @@
             <!-- 开发者申请的key -->
         </meta-data>
 
-        <!-- 银联支付 -->
-        <uses-library
-            android:name="org.simalliance.openmobileapi"
-            android:required="false" />
 
         <activity
             android:name=".ui.activity.WelcomeActivity"
@@ -66,15 +65,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="wx56d6dadff22bbf5e" />
-            </intent-filter>
         </activity>
         <!-- 银联支付 -->
+        <uses-library
+            android:name="org.simalliance.openmobileapi"
+            android:required="false" />
         <activity
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
@@ -88,15 +83,31 @@
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.MarathonDetailActivity" />
-        <activity android:name=".ui.activity.ShowHtmlActivity" />
-        <activity android:name=".ui.activity.SignUpActivity" />
-        <activity android:name=".ui.activity.SignUpSearchResultActivity" />
-        <activity android:name=".ui.activity.AboutUsActivity" />
-        <activity android:name=".ui.activity.FeedbackActivity" />
-        <activity android:name=".ui.activity.SettingActivity" />
-        <activity android:name=".ui.activity.RegisterActivity" />
-        <activity android:name=".ui.activity.ChangePasswordActivity" />
+        <activity android:name=".ui.activity.ShowHtmlActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".ui.activity.SignUpActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.SignUpSearchResultActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.AboutUsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.FeedbackActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.SettingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.RegisterActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            />
         <!-- alipay sdk begin -->
 
         <activity
@@ -104,6 +115,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
+
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
@@ -129,6 +141,12 @@
                 <data android:scheme="wx56d6dadff22bbf5e" />
             </intent-filter>
         </activity>
+        <!-- 支付回调 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTop" />
 
         <receiver android:name=".wxapi.AppRegister">
             <intent-filter>
@@ -242,36 +260,60 @@
         <!-- 引导界面 -->
         <activity
             android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.RestPassWordActivity" />
-        <activity android:name=".ui.activity.SearchActivity" />
-        <activity android:name=".ui.activity.MyInfoActivity" />
-        <activity android:name=".ui.activity.MyAchievementActivity" />
-        <activity android:name=".ui.activity.MySignUpActivity" />
-        <activity android:name=".ui.activity.MySigUpDetailActivity" />
-        <activity android:name=".ui.activity.PayActivity" />
+        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.RestPassWordActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.SearchActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MyInfoActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MyAchievementActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MySignUpActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MySigUpDetailActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.PayActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activity.MyNoticeMessageActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
-        <!-- 用于监听网络状态的广播 -->
-        <receiver android:name=".utils.NetWorkStateBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.NET.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.Net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
 
-        <activity android:name=".ui.activity.MarathonDetailsActivity" />
-        <activity android:name=".ui.activity.MarathonNewsListActivity" />
-        <activity android:name=".ui.activity.MarathonNoticeListActivity" />
-        <activity android:name=".ui.activity.MarathonMapActivity" />
+        <activity android:name=".ui.activity.MarathonDetailsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MarathonNewsListActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MarathonNoticeListActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MarathonMapActivity"
+            android:screenOrientation="portrait"
+            />
 
         <!-- 友盟分享集成 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58ad39b89f06fd36410004df"></meta-data>
+            android:value="58ad39b89f06fd36410004df" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng" >
+        </meta-data>
+        <!-- 友盟 -->
         <!-- 只有精简版新浪和豆瓣需要此配置 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -296,13 +338,22 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ui.activity.MyAchievementDetailsActivity"></activity>
-
-        <receiver android:name=".utils.DownloadReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"></action>
-            </intent-filter>
-        </receiver>
+        <activity android:name=".ui.activity.MyAchievementDetailsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.PayResultActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MyGoodsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.MyGoodsDetailsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.ExpressActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <service android:name=".service.DownloadAPKService"></service>
     </application>
 
 </manifest>

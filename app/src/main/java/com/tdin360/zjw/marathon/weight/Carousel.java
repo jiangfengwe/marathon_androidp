@@ -30,7 +30,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     /**
      * handler消息标识
      */
-    private static final int WHAT=1;
+    private final int WHAT=1;
     /**
      * 默认轮播图切换时间
      */
@@ -44,7 +44,6 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
      * 轮播图容器
      */
     private List<View>views;
-    private Context context;
     /**
      * 记录上一个轮播图的索引
      */
@@ -57,16 +56,17 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
      *     底部指示器背景颜色
      */
 
+
     private int pageBarColor=android.R.color.transparent;
 
     public Carousel(Context context) {
         super(context);
-        initView(context);
+        initView(getContext());
     }
 
     public Carousel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+        initView(getContext());
     }
 
 
@@ -76,7 +76,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
      * @param context
      */
     private void initView(Context context) {
-        this.context=context;
+
         //初始化viewPager
         this.viewPager = new ViewPager(context);
         this.page  =new LinearLayout(context);
@@ -132,7 +132,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
             for (int i = 0; i < views.size(); i++) {
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30);
-                ImageView item = new ImageView(context);
+                ImageView item = new ImageView(getContext());
                 params.leftMargin = 5;
                 item.setLayoutParams(params);
                 item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
@@ -177,7 +177,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
         for(int i=0;i<views.size();i++){
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10,10);
-            ImageView item = new ImageView(context);
+            ImageView item = new ImageView(getContext());
             params.leftMargin=5;
             item.setLayoutParams(params);
             item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
@@ -221,7 +221,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
         for(int i=0;i<views.size();i++){
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10,10);
-            ImageView item = new ImageView(context);
+            ImageView item = new ImageView(getContext());
             params.leftMargin=5;
             item.setLayoutParams(params);
             item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
@@ -331,6 +331,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     public void onPageScrollStateChanged(int state) {
 
     }
+
 
 
 }

@@ -1,25 +1,21 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
-import com.tdin360.zjw.marathon.utils.FastBlurUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
-import com.tdin360.zjw.marathon.utils.SendSMSUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.utils.ValidateUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +35,8 @@ public class ChangePasswordActivity extends BaseActivity {
     private EditText editTextOldPass;
     private EditText editTextPass1;
     private EditText editTextPass2;
-    private ImageView bg;
+    private CheckBox checkBox1,checkBox2,checkBox3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +48,76 @@ public class ChangePasswordActivity extends BaseActivity {
         this.editTextOldPass = (EditText) this.findViewById(R.id.oldPassword);
         this.editTextPass1= (EditText) this.findViewById(R.id.password1);
         this.editTextPass2= (EditText) this.findViewById(R.id.password2);
+        //初始化控制密码显示以隐藏的checkbox
+        this.checkBox1 = (CheckBox) this.findViewById(R.id.showPass1);
+        this.checkBox2 = (CheckBox) this.findViewById(R.id.showPass2);
+        this.checkBox3 = (CheckBox) this.findViewById(R.id.showPass3);
 
-         initBlur();
+          showOrHidePassword();
+
     }
 
-    //处理背景毛玻璃效果
-    private void initBlur(){
 
-        this.bg = (ImageView) this.findViewById(R.id.bg);
-        this. bg.setImageBitmap(FastBlurUtils.getBlurBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.login_register_bg)));
+    /**
+     * 控制显示或者隐藏密码的方法
+     */
+    private void showOrHidePassword(){
+
+
+        this.checkBox1.setOnCheckedChangeListener(new MyCheckBoxListener());
+        this.checkBox2.setOnCheckedChangeListener(new MyCheckBoxListener());
+        this.checkBox3.setOnCheckedChangeListener(new MyCheckBoxListener());
+    }
+    /**
+     * 控制密码的显示与隐藏
+     */
+    private class MyCheckBoxListener implements CompoundButton.OnCheckedChangeListener{
+
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            switch (buttonView.getId()){
+
+                case R.id.showPass1:
+                    if(isChecked){
+
+                        //显示密码
+                        editTextOldPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        editTextOldPass.setSelection(editTextOldPass.getText().length());
+                    }else {
+                        //隐藏密码
+
+                        editTextOldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        editTextOldPass.setSelection(editTextOldPass.getText().length());
+                    }
+
+                    break;
+                case R.id.showPass2:
+                    if(isChecked){
+
+                        editTextPass1.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        editTextPass1.setSelection(editTextPass1.getText().length());
+                    }else {
+
+                        editTextPass1.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        editTextPass1.setSelection(editTextPass1.getText().length());
+                    }
+                    break;
+
+                case R.id.showPass3:
+                    if(isChecked){
+
+                        editTextPass2.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        editTextPass2.setSelection(editTextPass2.getText().length());
+                    }else {
+
+                        editTextPass2.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        editTextPass2.setSelection(editTextPass2.getText().length());
+                    }
+                    break;
+            }
+        }
     }
 
     @Override
@@ -109,7 +167,13 @@ public class ChangePasswordActivity extends BaseActivity {
             }
 
             //验证成功
-        MyProgressDialogUtils.getUtils(this).showDialog("提交中...");
+        //显示提示框
+        final KProgressHUD hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
         RequestParams params = new RequestParams(HttpUrlUtils.CHANGE_PASSWORD);
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(this).getName());
         params.addQueryStringParameter("oldPassword",oldPass);
@@ -158,7 +222,8 @@ public class ChangePasswordActivity extends BaseActivity {
 
                  @Override
                  public void onFinished() {
-                     MyProgressDialogUtils.getUtils(ChangePasswordActivity.this).closeDialog();
+
+                     hud.dismiss();
                  }
              });
 

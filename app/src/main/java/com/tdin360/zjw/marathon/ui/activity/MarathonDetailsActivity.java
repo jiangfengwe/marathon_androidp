@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
 import com.tdin360.zjw.marathon.model.CarouselModel;
@@ -20,6 +21,7 @@ import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MenuDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.weight.Carousel;
 import com.tdin360.zjw.marathon.weight.MenuView;
 import com.tdin360.zjw.marathon.weight.MyGridView;
@@ -49,7 +51,6 @@ public class MarathonDetailsActivity extends BaseActivity {
     private String eventId;
     private TextView notData;
     private LinearLayout main;
-    private LinearLayout loading;
     private TextView loadFail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class MarathonDetailsActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+        UMShareAPI.get(getApplication()).onActivityResult(requestCode,resultCode,data);
     }
 
 
@@ -94,9 +95,11 @@ public class MarathonDetailsActivity extends BaseActivity {
     private void initView() {
 
 
-        this.eventId = this.getIntent().getStringExtra("eventId");
-        String eventName = this.getIntent().getStringExtra("eventName");
-        setToolBarTitle(eventName);
+        if(this.getIntent()!=null) {
+            this.eventId = this.getIntent().getStringExtra("eventId");
+            String eventName = this.getIntent().getStringExtra("eventName");
+            setToolBarTitle(eventName);
+        }
         showBackButton();
         /**
          * 构建分享内容
@@ -107,12 +110,11 @@ public class MarathonDetailsActivity extends BaseActivity {
         showShareButton(manager);
 
          this.main = (LinearLayout) this.findViewById(R.id.main);
-         this.loading = (LinearLayout) this.findViewById(R.id.loading);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
          this.notData = (TextView) this.findViewById(R.id.notData);
          this.mCarousel = (Carousel) this.findViewById(R.id.mCarousel);
          this.mGridView  = (MyGridView) this.findViewById(R.id.myGridView);
-         this.adapter = new MarathonHomeMyGridViewAdapter(sponsorList,this);
+         this.adapter = new MarathonHomeMyGridViewAdapter(sponsorList,getApplicationContext());
          this.mGridView.setAdapter(adapter);
 
          this.loadFail.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +129,16 @@ public class MarathonDetailsActivity extends BaseActivity {
 
     }
 
+    private KProgressHUD hud;
     //加载数据(包括缓存数据和网络数据)
     private void loadData(){
+
+        hud = KProgressHUD.create(this);
+                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
 
         /**
          * 判断网络是否处于可用状态
@@ -139,12 +149,13 @@ public class MarathonDetailsActivity extends BaseActivity {
             httpRequest();
         }else {
 
+            hud.dismiss();
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setText("点击重新加载");
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //如果缓存数据不存在则需要用户打开网络设置
 
@@ -157,7 +168,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     //打开网络设置
 
-                    startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+            startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
 
                 }
             });
@@ -195,26 +206,22 @@ public class MarathonDetailsActivity extends BaseActivity {
                  Intent intent=null;
                  switch ((int)itemView.getMenuId()){
 
-                     case 0://赛事报名
-                         intent = new Intent(MarathonDetailsActivity.this,SignUpActivity.class);
-
-                         break;
-                     case 1://赛事简介
+                     case 0://赛事简介
 
                          intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
                          intent.putExtra("isSign",true);
                          intent.putExtra("title","赛事简介");
-                         intent.putExtra("url","http://byydtk.oicp.net:26211/EventInfo/EventInfoDetail?eventId="+eventId+"&categoryName=赛事简介");
+                         intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+eventId+"&categoryName=赛事简介");
                          break;
-                     case 2: //赛事新闻
+                     case 1: //赛事新闻
                          intent = new Intent(MarathonDetailsActivity.this,MarathonNewsListActivity.class);
 
                          break;
-                     case 3://赛事公告
+                     case 2://赛事公告
                          intent = new Intent(MarathonDetailsActivity.this,MarathonNoticeListActivity.class);
 
                          break;
-                     case 4://参赛路线
+                     case 3://参赛路线
                          intent = new Intent(MarathonDetailsActivity.this,MarathonMapActivity.class);
 
 
@@ -242,9 +249,9 @@ public class MarathonDetailsActivity extends BaseActivity {
             carouselList.clear();
             sponsorList.clear();
         }
-        loading.setVisibility(View.VISIBLE);
+
         loadFail.setVisibility(View.GONE);
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
+        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", eventId);
         x.http().get(params,new Callback.CommonCallback<String>() {
 
@@ -265,7 +272,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                         String picUrl = jsonObject.getString("PictureUrl");
 
                         carouselList.add(new CarouselModel(picUrl,""));
-                        carouselList.add(new CarouselModel(picUrl,""));
+
 
                         Log.d("-------->>>", "onSuccess: "+result);
                     }
@@ -281,8 +288,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
 
                         sponsorList.add(new CarouselModel(pictureUrl,""));
-                        sponsorList.add(new CarouselModel(pictureUrl,""));
-                        sponsorList.add(new CarouselModel(pictureUrl,""));
+
 
                     }
 
@@ -311,16 +317,17 @@ public class MarathonDetailsActivity extends BaseActivity {
             @Override
             public void onFinished() {
 
-                loading.setVisibility(View.GONE);
+                hud.dismiss();
+
                 showCarousel();
                 if(sponsorList.size()>0) {
-                    //更新赞助商数据
-                    adapter.notifyDataSetChanged();
+                  notData.setVisibility(View.GONE);
                 }else {
                     notData.setVisibility(View.VISIBLE);
                 }
 
-
+                //更新赞助商数据
+                adapter.updateList(sponsorList);
             }
         });
     }
@@ -355,8 +362,18 @@ public class MarathonDetailsActivity extends BaseActivity {
      */
     public void toSignUp(View view) {
 
-        Intent intent = new Intent(this,PayActivity.class);
-        startActivity(intent);
+
+        //检查用户是否登录登录后才能报名
+        if(SharedPreferencesManager.isLogin(getApplicationContext())){
+
+            Intent intent = new Intent(MarathonDetailsActivity.this,SignUpActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
+            startActivity(intent);
+
+        }
+
 
     }
 }

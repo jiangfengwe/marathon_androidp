@@ -16,6 +16,7 @@
                 android:textColor="@color/textBlack"
                 />
             <TextView
+                android:id="@+id/tel"
                 android:layout_marginLeft="10dp"
                 android:text="157******"
                 android:textSize="16sp"
@@ -33,6 +34,7 @@
                 android:text="国        籍:"
                 />
             <TextView
+                android:id="@+id/country"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -50,6 +52,7 @@
                 android:text="省        份:"
                 />
             <TextView
+                android:id="@+id/province"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -67,6 +70,7 @@
                 android:text="城        市:"
                 />
             <TextView
+                android:id="@+id/city"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -84,6 +88,7 @@
                 android:text="区        县:"
                 />
             <TextView
+                android:id="@+id/area"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -101,6 +106,7 @@
                 android:text="现居地址:"
                 />
             <TextView
+                android:id="@+id/address"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -118,6 +124,7 @@
                 android:text="邮政编码:"
                 />
             <TextView
+                android:id="@+id/postCode"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -135,6 +142,7 @@
                 android:text="紧急联系人:"
                 />
             <TextView
+                android:id="@+id/linkName"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -152,6 +160,7 @@
                 android:text="紧急联系电话:"
                 />
             <TextView
+                android:id="@+id/linkPhone"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"

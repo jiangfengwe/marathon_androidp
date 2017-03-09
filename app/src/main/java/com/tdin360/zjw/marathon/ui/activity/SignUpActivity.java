@@ -2,7 +2,6 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -18,18 +18,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.CityModel;
 import com.tdin360.zjw.marathon.model.DistrictModel;
 import com.tdin360.zjw.marathon.model.ProvinceModel;
-import com.tdin360.zjw.marathon.model.SignUpInfo;
 import com.tdin360.zjw.marathon.model.SpinnerModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
-import com.tdin360.zjw.marathon.utils.MyProgressDialogUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.service.XmlParserHandler;
 import com.tdin360.zjw.marathon.utils.ValidateUtil;
 import com.tdin360.zjw.marathon.weight.AutoText;
@@ -41,19 +39,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -157,7 +150,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
     //加载控件
 
-    private LinearLayout loading;
+
     private TextView loadFail;
     //主布局
     private LinearLayout main;
@@ -263,9 +256,10 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextPost= (EditText) this.findViewById(R.id.post);
          this.editTextLinkName= (EditText) this.findViewById(R.id.linkName);
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
-         this.loading = (LinearLayout) this.findViewById(R.id.loading);
+
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+
 
         //加载失败点击重新获取
         this.loadFail.setOnClickListener(new View.OnClickListener() {
@@ -422,7 +416,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //如果缓存数据不存在则需要用户打开网络设置
 
@@ -451,15 +445,22 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         }
     }
 
+    private KProgressHUD hud;
     /**
      * 请求报名相关数据
      */
     private void httpRequest(){
 
         loadFail.setVisibility(View.GONE);
-        loading.setVisibility(View.VISIBLE);
+        hud = KProgressHUD.create(SignUpActivity.this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
+
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
-        params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
+        params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId()+"");
 
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -535,7 +536,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             @Override
             public void onFinished() {
-                 loading.setVisibility(View.GONE);
+
+                hud.dismiss();
                 idCardType.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,idTypeList));
                 clothesSize.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,clothesSizeList));
                 projectSpinner.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,projectList));
@@ -593,7 +595,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         if (areas == null) {
             areas = new String[] { "" };
         }
-        mViewDistrict.setViewAdapter(new ArrayWheelAdapter<String>(this, areas));
+        mViewDistrict.setViewAdapter(new ArrayWheelAdapter<>(this, areas));
         mViewDistrict.setCurrentItem(0);
     }
 
@@ -750,70 +752,92 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         //设置提交参数
         RequestParams param = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         //赛事id
-         param.addQueryStringParameter("EventId", MarathonDataUtils.init().getEventId());
+         param.addBodyParameter("EventId", MarathonDataUtils.init().getEventId()+"");
         //姓名
-        param.addQueryStringParameter("RegistratorName",editTextName.getText().toString().trim());
+        param.addBodyParameter("RegistratorName",editTextName.getText().toString().trim());
 //        邮箱
-        param.addParameter("RegistratorEmail",editTextEmail.getText().toString().trim());
+        param.addBodyParameter("RegistratorEmail",editTextEmail.getText().toString().trim());
 //        手机号码
-        param.addQueryStringParameter("RegistratorPhone",editTextPhone.getText().toString().trim());
+        param.addBodyParameter("RegistratorPhone",editTextPhone.getText().toString().trim());
 //        出生年
-        param.addQueryStringParameter("DateOfBirthYear",mYear+"");
+        param.addBodyParameter("DateOfBirthYear",mYear+"");
 //        月
-        param.addQueryStringParameter("DateOfBirthMonth",mMonth+"");
+        param.addBodyParameter("DateOfBirthMonth",mMonth+"");
 //        日
-        param.addQueryStringParameter("DateOfBirthDay",mDay+"");
+        param.addBodyParameter("DateOfBirthDay",mDay+"");
 //        身份证号码
-        param.addQueryStringParameter("RegistratorDocumentNumber",idCardNumber.getText().toString().trim());
+        param.addBodyParameter("RegistratorDocumentNumber",idCardNumber.getText().toString().trim());
 //        证件类型
-        param.addQueryStringParameter("RegistratorDocumentType",idCardTypeString);
+        param.addBodyParameter("RegistratorDocumentType",idCardTypeString);
 //        性别
-        param.addQueryStringParameter("RegistratorSex",gander+"");
+        param.addBodyParameter("RegistratorSex",gander+"");
 //        国家
-        param.addQueryStringParameter("Country",country);
+        param.addBodyParameter("Country",country);
 //        省份
-        param.addQueryStringParameter("Province",mCurrentProviceName);
+        param.addBodyParameter("Province",mCurrentProviceName);
 //        城市
-        param.addQueryStringParameter("City",mCurrentCityName);
+        param.addBodyParameter("City",mCurrentCityName);
 //        地区
-        param.addQueryStringParameter("County",mCurrentDistrictName);
+        param.addBodyParameter("County",mCurrentDistrictName);
 //        参赛项目
-        param.addQueryStringParameter("RegistratorCompeteType",projectName);
+        param.addBodyParameter("RegistratorCompeteType",projectName);
 //        服装尺码
-        param.addQueryStringParameter("RegistratorSize",clothesSizeString);
+        param.addBodyParameter("RegistratorSize",clothesSizeString);
 //        现居地址
-        param.addQueryStringParameter("RegistratorPlace",editTextAddress.getText().toString().trim());
+        param.addBodyParameter("RegistratorPlace",editTextAddress.getText().toString().trim());
 //        邮政编码
-        param.addQueryStringParameter("RegisterPostCode",editTextPost.getText().toString().trim());
+        param.addBodyParameter("RegisterPostCode",editTextPost.getText().toString().trim());
 //        紧急联系人姓名
-        param.addQueryStringParameter("EmergencyContactName",editTextLinkName.getText().toString().trim());
+        param.addBodyParameter("EmergencyContactName",editTextLinkName.getText().toString().trim());
 //        紧急联系电话
-        param.addQueryStringParameter("EmergencyContactPhone",editTextLinkPhone.getText().toString().trim());
+        param.addBodyParameter("EmergencyContactPhone",editTextLinkPhone.getText().toString().trim());
         //报名来源
-        param.addQueryStringParameter("RegistratorSource","Android 客户端");
+        param.addBodyParameter("RegistratorSource","Android 客户端");
         param.setMaxRetryCount(0);//最大重复请求次数
         param.setConnectTimeout(5*1000);
 
         //向服务器提交数据
-           MyProgressDialogUtils.getUtils(SignUpActivity.this).showDialog("提交中...");
+
+        //显示提示框
+        final KProgressHUD hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
+
            x.http().post(param, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+
+
                 try {
-                    JSONObject obj = new JSONObject(result);
+                   JSONObject json = new JSONObject(result);
 
+                    Log.d("------->>", "onSuccess: "+result);
 
-                    Log.d("----报名----->", "onSuccess: "+obj);
-                    boolean success = obj.getBoolean("Success");
-                    String reason=obj.getString("Reason");
-                    //提示信息
-                    Toast.makeText(x.app(),reason,Toast.LENGTH_SHORT).show();
+                    boolean success = json.getBoolean("Success");
+                    String reason=json.getString("Reason");
+
                     //报名成功
                     if(success) {
 
+                        //获取订单号去支付界面支付
+                        String orderNo = json.getString("OrderNo");
+                        String subject = json.getString("Subject");
+                        String money = json.getString("Money");
+
                         //报名成功则跳转到支付界面
-                       Intent intent = new Intent(SignUpActivity.this, PayActivity.class);
+                        Intent intent = new Intent(SignUpActivity.this, PayActivity.class);
+                        intent.putExtra("order",orderNo);
+                        intent.putExtra("subject",subject);
+                        intent.putExtra("money",money);
                        startActivity(intent);
+                        finish();
+                    }else {
+
+                        //提示信息
+                        Toast.makeText(x.app(),reason,Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -821,7 +845,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
                 }
 
-            }
+          }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
@@ -839,7 +863,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             @Override
             public void onFinished() {
 
-                MyProgressDialogUtils.getUtils(SignUpActivity.this).closeDialog();
+                hud.dismiss();
+
             }
 
         });

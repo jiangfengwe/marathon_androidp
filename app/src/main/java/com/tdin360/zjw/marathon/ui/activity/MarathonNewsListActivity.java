@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.NewsListViewAdapter;
 import com.tdin360.zjw.marathon.model.NewsModel;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class MarathonNewsListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
 
-    private LinearLayout loading;
+
     private TextView loadFail;
     private RefreshListView refreshListView;
     private List<NewsModel> newsModelList=new ArrayList<>();
@@ -43,6 +44,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
     private int pageNumber=1;
     private int totalPages;
     private LinearLayout tipNotData;
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
     private void initView() {
 
-        this.loading = (LinearLayout) this.findViewById(R.id.loading);
+
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnRefreshListener(this);
@@ -64,14 +66,29 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
         this.tipNotData = (LinearLayout) this.findViewById(R.id.tipNotData);
         this.newsListViewAdapter  =new NewsListViewAdapter(newsModelList,this);
         this.refreshListView.setAdapter(this.newsListViewAdapter);
-
+         initHUD();
          //加载数据
         loadData();
 
 
     }
+    /**
+     * 初始化提示框
+     */
+    private void initHUD(){
+
+        //显示提示框
+        this.hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.setCancellable(true);
+        hud.setAnimationSpeed(1);
+        hud.setDimAmount(0.5f);
+
+    }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
+
+        hud.show();
 
         /**
          * 判断网络是否处于可用状态
@@ -82,11 +99,12 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             httpRequest();
         } else {
 
+            hud.dismiss();
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //如果缓存数据不存在则需要用户打开网络设置
 
@@ -183,7 +201,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             @Override
             public void onFinished() {
 
-
+                hud.dismiss();
                 //判断是否有数据
                 if(newsModelList.size()>0){
 
@@ -192,7 +210,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
                     tipNotData.setVisibility(View.VISIBLE);
                 }
 
-                loading.setVisibility(View.GONE);
+
                 refreshListView.hideHeaderView();
                 refreshListView.hideFooterView();
                 newsListViewAdapter.updateListView(newsModelList);
@@ -233,11 +251,13 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            NewsModel newsModel = newsModelList.get(position-1);
-            Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
-            intent.putExtra("title","赛事新闻");
-            intent.putExtra("url",newsModel.getDetailUrl());
-            startActivity(intent);
+
+                NewsModel newsModel = (NewsModel) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(MarathonNewsListActivity.this, ShowHtmlActivity.class);
+                intent.putExtra("title", "赛事新闻");
+                intent.putExtra("url", newsModel.getDetailUrl());
+                startActivity(intent);
+
 
         }
     }

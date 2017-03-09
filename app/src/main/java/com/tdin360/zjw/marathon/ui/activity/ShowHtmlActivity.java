@@ -19,10 +19,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.ShareInfo;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.umeng.socialize.UMShareAPI;
 
 /**
@@ -33,20 +35,25 @@ public class ShowHtmlActivity extends BaseActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
-    private LinearLayout loading;
-    private TextView loadFail;
     private Button signUpBtn;
-    private LinearLayout main;
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.webView = (WebView) this.findViewById(R.id.webView);
+        this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.webView.getSettings().setAllowFileAccess(true);
+        this.webView.setWebChromeClient(new MyWebViewChromeClient());
+        this.webView.setWebViewClient(new MyWebViewClient());
+
         this.signUpBtn = (Button) this.findViewById(R.id.signBtn);
         this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
-        this.loading= (LinearLayout) this.findViewById(R.id.loading);
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.main= (LinearLayout) this.findViewById(R.id.main);
+
+        initHUD();
+
 
         showBackButton();
         //处理其他界面传过来的数据
@@ -60,8 +67,16 @@ public class ShowHtmlActivity extends BaseActivity {
                 this.signUpBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ShowHtmlActivity.this,SignUpActivity.class);
-                        startActivity(intent);
+                        //检查用户是否登录登录后才能报名
+                        if(SharedPreferencesManager.isLogin(ShowHtmlActivity.this)){
+
+                            Intent intent = new Intent(ShowHtmlActivity.this,SignUpActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(ShowHtmlActivity.this,LoginActivity.class);
+                            startActivity(intent);
+
+                        }
                     }
                 });
             }
@@ -75,13 +90,6 @@ public class ShowHtmlActivity extends BaseActivity {
             manager.buildShareWebLink(title,"http://www.baidu.com","来自网页详情的分享", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
             showShareButton(manager);
 
-            //加载失败点击重新加载
-            this.loadFail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loading(url);
-                }
-            });
 
            loading(url);
 
@@ -111,20 +119,26 @@ public class ShowHtmlActivity extends BaseActivity {
 
         if(!NetWorkUtils.isNetworkAvailable(this)){
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setText("检查网络后重新打开!");
-            loadFail.setVisibility(View.VISIBLE);
+
             return;
         }
+        this.webView.loadUrl(url);
 
-         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-         this.webView.getSettings().setJavaScriptEnabled(true);
-         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-         this.webView.getSettings().setAllowFileAccess(true);
-         this.webView.setWebChromeClient(new MyWebViewChromeClient());
-         this.webView.setWebViewClient(new MyWebViewClient());
-         this.webView.loadUrl(url);
      }
 
+    /**
+     * 初始化提示框
+     */
+    private void initHUD(){
+
+        //显示提示框
+        hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+                hud.setCancellable(true);
+                hud.setAnimationSpeed(1);
+                hud.setDimAmount(0.5f);
+
+    }
 
     private class MyWebViewChromeClient extends WebChromeClient{
 
@@ -145,8 +159,8 @@ public class ShowHtmlActivity extends BaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             progressBar.setVisibility(View.VISIBLE);
-            loading.setVisibility(View.VISIBLE);
-            main.setVisibility(View.INVISIBLE);
+            hud.show();
+
 
         }
         @Override
@@ -160,18 +174,15 @@ public class ShowHtmlActivity extends BaseActivity {
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
+            Toast.makeText(ShowHtmlActivity.this, "加载失败了", Toast.LENGTH_SHORT).show();
 
-            loadFail.setText("加载失败了,点击重新加载!");
-            loadFail.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
-            loading.setVisibility(View.GONE);
-            main.setVisibility(View.VISIBLE);
-
+            hud.dismiss();
 
 
         }

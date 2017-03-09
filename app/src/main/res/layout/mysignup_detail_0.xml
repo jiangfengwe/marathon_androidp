@@ -18,6 +18,7 @@
                 android:textColor="@color/textBlack"
                 />
             <TextView
+                android:id="@+id/name"
                 android:layout_marginLeft="10dp"
                 android:text="张三"
                 android:textSize="16sp"
@@ -35,6 +36,7 @@
                 android:text="性        别:"
                 />
             <TextView
+                android:id="@+id/gander"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -52,6 +54,7 @@
                 android:text="出生日期:"
                 />
             <TextView
+                android:id="@+id/birthday"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -69,6 +72,7 @@
                 android:text="证件类型:"
                 />
             <TextView
+                android:id="@+id/idCardType"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -86,6 +90,7 @@
                 android:text="证件号码:"
                 />
             <TextView
+                android:id="@+id/iDNumber"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -103,6 +108,7 @@
                 android:text="赛事名称:"
                 />
             <TextView
+                android:id="@+id/eventName"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -120,6 +126,7 @@
                 android:text="参赛项目:"
                 />
             <TextView
+                android:id="@+id/projectName"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
@@ -137,6 +144,7 @@
                 android:text="服装尺码:"
                 />
             <TextView
+                android:id="@+id/clothesSize"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"

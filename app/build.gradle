@@ -31,7 +31,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     //    xutils3网络框架依赖库 https://github.com/wyouflf/xUtils3
-    compile 'org.xutils:xutils:3.3.40'
+    compile 'org.xutils:xutils:3.3.42'
     //    支付宝支付依赖库
     compile files('libs/alipaySdk-20161222.jar')
     //    短信验证码发送依赖库
@@ -50,6 +50,9 @@ dependencies {
     //    圆角图片库 https://github.com/vinc3m1/RoundedImageView
     compile 'com.makeramen:roundedimageview:2.3.0'
 
+    //hud加载提示框 https://github.com/Kaopiz/KProgressHUD
+    compile 'com.kaopiz:kprogresshud:1.0.5'
+
     //友盟分享集成库
     compile files('libs/Android_Map3D_SDK_V4.1.3_20161208.jar')
     compile files('libs/SocialSDK_QQ_Simplify.jar')
@@ -60,5 +63,9 @@ dependencies {
     compile files('libs/umeng_social_tool.jar')
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 

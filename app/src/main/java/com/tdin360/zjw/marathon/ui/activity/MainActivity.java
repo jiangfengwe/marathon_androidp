@@ -12,7 +12,12 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.fragment.Marathon_MainFragment;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
 
+import org.xutils.x;
 
+/**
+ * 程序主界面
+ * @author zhangzhijun
+ */
 public class MainActivity extends FragmentActivity{
 
     private static final String TAB1="tab1";
@@ -25,8 +30,6 @@ public class MainActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
           //防止旋转屏幕时重叠
           if(savedInstanceState!=null){
@@ -86,19 +89,20 @@ public class MainActivity extends FragmentActivity{
     //连续按两次退出
 
     private int clickCount=0;
+    private int WHAT=0x05;
 
     @Override
     public void onBackPressed() {
         clickCount++;
         if(clickCount==1){
 
-            Toast.makeText(this,"再按一次退出~",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"再按一次退出~",Toast.LENGTH_SHORT).show();
         }else if(clickCount==2){
-
+            handler.removeMessages(WHAT);
             finish();
         }
 
-        handler.sendEmptyMessageDelayed(0,5000);
+        handler.sendEmptyMessageDelayed(WHAT,5000);
 
     }
 
@@ -110,5 +114,7 @@ public class MainActivity extends FragmentActivity{
             clickCount=0;
         }
     };
+
+
 
 }

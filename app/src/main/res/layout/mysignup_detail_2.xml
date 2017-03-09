@@ -4,7 +4,6 @@
     android:layout_height="match_parent">
 
    <TableLayout
-
        android:padding="10dp"
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
@@ -16,9 +15,29 @@
                android:textStyle="bold"
                />
            <TextView android:text="888888"
-               android:layout_marginLeft="10dp"
+               android:layout_marginLeft="5dp"
                android:textColor="@color/textBlack"
                android:textSize="16sp"
+               android:id="@+id/orderNumber"
+               />
+       </TableRow>
+       <View android:layout_width="match_parent"
+           android:layout_height="0.5dp"
+           android:background="@color/lineColor"
+           ></View>
+
+       <TableRow android:padding="10dp">
+           <TextView
+               android:text="支付金额:"
+               android:textSize="16sp"
+               android:textColor="@color/textBlack"
+               android:textStyle="bold"
+               />
+           <TextView android:text="120元"
+               android:layout_marginLeft="5dp"
+               android:textColor="@color/textBlack"
+               android:textSize="16sp"
+               android:id="@+id/price"
                />
        </TableRow>
        <View android:layout_width="match_parent"
@@ -35,53 +54,21 @@
                android:textColor="@color/textBlack"
                />
            <TextView android:text="已支付"
-               android:layout_marginLeft="10dp"
+               android:layout_marginLeft="5dp"
                android:textSize="16sp"
                android:textColor="@color/textBlack"
+               android:id="@+id/isPay"
                />
        </TableRow>
+       <View android:layout_width="match_parent"
+           android:layout_height="0.5dp"
+           android:background="@color/lineColor"
+           ></View>
 
-       <View android:layout_width="match_parent"
-           android:layout_height="0.5dp"
-           android:background="@color/lineColor"
-           ></View>
-       <TableRow android:padding="10dp">
-           <TextView
-               android:text="支付金额:"
-               android:textSize="16sp"
-               android:textColor="@color/textBlack"
-               android:textStyle="bold"
-               />
-           <TextView android:text="120元"
-               android:layout_marginLeft="10dp"
-               android:textColor="@color/textBlack"
-               android:textSize="16sp"
-               />
-       </TableRow>
-       <View android:layout_width="match_parent"
-           android:layout_height="0.5dp"
-           android:background="@color/lineColor"
-           ></View>
-       <TableRow android:padding="10dp">
-           <TextView
-               android:text="支付时间:"
-               android:textSize="16sp"
-               android:textColor="@color/textBlack"
-               android:textStyle="bold"
-               />
-           <TextView android:text="2017年1月5日 10:20:33"
-               android:layout_marginLeft="10dp"
-               android:textColor="@color/textBlack"
-               android:textSize="16sp"
-               />
-       </TableRow>
-       <View android:layout_width="match_parent"
-           android:layout_height="0.5dp"
-           android:background="@color/lineColor"
-           ></View>
    </TableLayout>
 
     <Button
+        android:id="@+id/payBtn"
         android:onClick="toPay"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"

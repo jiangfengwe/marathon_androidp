@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:id="@+id/tab1"
                 android:drawableTop="@drawable/home_bottom_tab1_selector"
-                android:text="全部赛事"
+                android:text="@string/home_tab_title1"
                 android:textColor="@drawable/home_tab_text_selector"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -40,7 +40,7 @@
                 android:layout_weight="1"
                 android:id="@+id/tab2"
                 android:drawableTop="@drawable/home_bottom_tab2_selector"
-                android:text="个人中心"
+                android:text="@string/home_tab_title2"
                 android:textColor="@drawable/home_tab_text_selector"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -1,9 +1,14 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -11,24 +16,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
-import com.tdin360.zjw.marathon.utils.UpdateManger;
 
 public class SettingActivity extends BaseActivity {
 
     private CheckBox switchBtn;
-    private UpdateManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
           setToolBarTitle("系统设置");
           showBackButton();
-        this.manager = new UpdateManager(this,false);
+
         TextView version = (TextView) this.findViewById(R.id.version);
-        version.setText("检查更新("+ manager.getVersionName()+")");
+        version.setText("检查更新("+ UpdateManager.getVersionName(this)+")");
         //是否接收推送通知
           switchBtn = (CheckBox) this.findViewById(R.id.switchBtn);
           switchBtn.setChecked(SharedPreferencesManager.getOpen(this));
@@ -42,10 +48,8 @@ public class SettingActivity extends BaseActivity {
          this.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 //向服务器发起版本匹配请求
-                 //不是最新版本更新当前版本
-                 //否则就是最新版本
-                  manager.checkVersion();
+
+              checkUpdate();
 
              }
          });
@@ -88,14 +92,84 @@ public class SettingActivity extends BaseActivity {
             }
         });
     }
+    /**
+     * 检查安装包是否有更新
+     */
+    private void checkUpdate(){
 
+        boolean isNewVersion = UpdateManager.checkVersion(this);
+
+        if(isNewVersion){//发现新版本
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("版本更新");
+            alert.setMessage("发现新版本，是否下载更新?");
+            alert.setCancelable(false);
+
+            alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //判断权限
+                    if(ContextCompat.checkSelfPermission(SettingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+
+                        ActivityCompat.requestPermissions(SettingActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_CODE);
+                    }else {
+
+                        //启动下载器下载安装包
+                        startService(new Intent(SettingActivity.this,DownloadAPKService.class));
+                    }
+
+                }
+            });
+
+            alert.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+
+            alert.show();
+
+        }else {//已是最新版本
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(SettingActivity.this);
+
+            alert.setTitle("版本检查");
+            alert.setMessage("当前已是最新版本!");
+            alert.setCancelable(false);
+
+            alert.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+
+                }
+            });
+
+            alert.show();
+        }
+
+    }
     @Override
     public int getLayout() {
         return R.layout.activity_setting;
     }
 
 
-    public void back(View view) {
-        finish();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode==Constants.WRITE_EXTERNAL_CODE){
+
+            //启动下载器下载安装包
+             startService(new Intent(SettingActivity.this,DownloadAPKService.class));
+        }
     }
 }

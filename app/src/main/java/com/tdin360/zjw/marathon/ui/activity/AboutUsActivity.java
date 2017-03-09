@@ -24,7 +24,5 @@ public class AboutUsActivity extends BaseActivity {
         return R.layout.activity_about_us;
     }
 
-    public void back(View view) {
-        finish();
-    }
+
 }

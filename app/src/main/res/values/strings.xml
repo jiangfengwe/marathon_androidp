@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">佰家运动</string>
+    <string name="home_tab_title2">我的</string>
+    <string name="home_tab_title1">赛事</string>
 
     <string-array name="CountryList">
         <item>中国</item>

@@ -1,33 +1,42 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.MarathonEventModel;
+import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -44,7 +53,6 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
     private MarathonListViewAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
-    private LinearLayout loading;
     private TextView loadFile;
 
     public static Marathon_MainFragment newInstance(){
@@ -64,12 +72,13 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
         super.onViewCreated(view, savedInstanceState);
 
          this.listView= (RefreshListView) view.findViewById(R.id.listView);
-         this.loading = (LinearLayout) view.findViewById(R.id.loading);
          this.loadFile = (TextView) view.findViewById(R.id.loadFail);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
          this.listView.setAdapter(marathonListViewAdapter);
          this.listView.setOnRefreshListener(this);
          this.listView.setOnItemClickListener(this);
+
+
         //搜索
         view.findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,9 +88,59 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
             }
         });
 
+        //检查更新
+        checkUpdate();
+
 
         //加载数据
          loadData();
+    }
+
+    /**
+     * 检查安装包是否有更新
+     */
+    private void checkUpdate(){
+
+
+        boolean isNewVersion = UpdateManager.checkVersion(getActivity());
+
+        if(isNewVersion){//发现新版本
+
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            alert.setTitle("版本更新");
+            alert.setMessage("发现新版本，是否下载更新?");
+            alert.setCancelable(false);
+
+            alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //判断权限
+                    if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_CODE);
+                    }else {
+
+                        //启动下载器下载安装包
+                        getContext().startService(new Intent(getActivity(),DownloadAPKService.class));
+                    }
+
+                }
+            });
+
+            alert.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+        }
+
     }
 
     @Override
@@ -102,28 +161,39 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
              httpRequest();
         }else {
             listView.hideFooterView();
-           Toast.makeText(getContext(),"亲,到底了~",Toast.LENGTH_SHORT).show();
+           Toast.makeText(getActivity(),"亲,到底了~",Toast.LENGTH_SHORT).show();
         }
     }
 
+
+    private KProgressHUD hud;
     //加载数据(包括缓存数据和网络数据)
     private void loadData(){
 
+        //显示加载
+       hud = KProgressHUD.create(getActivity());
+
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
         /**
          * 判断网络是否处于可用状态
          */
         if(NetWorkUtils.isNetworkAvailable(getActivity())){
 
             //加载网络数据
-            loading.setVisibility(View.VISIBLE);
+
             httpRequest();
         }else {
 
+            hud.dismiss();
             Toast.makeText(getActivity(), "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFile.setVisibility(View.VISIBLE);
             //1获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //2.如果缓存数据不存在则需要用户打开网络设置
 
@@ -135,7 +205,7 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //打开网络设置
-                    startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+             startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
 
                 }
             });
@@ -156,13 +226,14 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        MarathonEventModel eventInfo = list.get(position-1);
-        //为单例成员赋值
-        MarathonDataUtils.init().setEventId(eventInfo.getId()+"");
-        Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
-        intent.putExtra("eventId",eventInfo.getId()+"");
-        intent.putExtra("eventName",eventInfo.getName());
-        startActivity(intent);
+            MarathonEventModel eventInfo = (MarathonEventModel) parent.getAdapter().getItem(position);
+            //为单例成员赋值
+            MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
+            Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
+            intent.putExtra("eventId", eventInfo.getId() + "");
+            intent.putExtra("eventName", eventInfo.getName());
+            startActivity(intent);
+
     }
 
 
@@ -170,8 +241,10 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
 
     private void httpRequest(){
 
+
+
         loadFile.setVisibility(View.GONE);
-        RequestParams params = new RequestParams(HttpUrlUtils.Marath_ALL_Envent);
+        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
         params.setConnectTimeout(5*1000);
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -187,7 +260,6 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
                     for(int i=0;i<array.length();i++){
 
                         JSONObject object = array.getJSONObject(i);
-
                         int id = object.getInt("Id");
                         String eventName = object.getString("EventName");
                         String status = object.getString("Status");
@@ -220,12 +292,26 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
 
             @Override
             public void onFinished() {
-             loading.setVisibility(View.GONE);
+
+                hud.dismiss();
                 //加载更多
             listView.hideFooterView();
             listView.hideHeaderView();
              marathonListViewAdapter.updateList(list);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+           if (requestCode==Constants.WRITE_EXTERNAL_CODE){
+
+               //启动下载器下载安装包
+                getContext().startService(new Intent(getActivity(),DownloadAPKService.class));
+
+
+           }
     }
 }

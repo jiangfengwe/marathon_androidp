@@ -4,19 +4,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyGoodsActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity;
 import com.tdin360.zjw.marathon.ui.activity.ChangePasswordActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
@@ -24,19 +25,10 @@ import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
 import com.tdin360.zjw.marathon.ui.activity.MySignUpActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
-import com.tdin360.zjw.marathon.ui.activity.SignUpSearchResultActivity;
-import com.tdin360.zjw.marathon.model.SignUpInfo;
-import com.tdin360.zjw.marathon.utils.FastBlurUtils;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.CircleImageView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
+import java.io.File;
 
 /**个人中心
  * Created by Administrator on 2016/8/9.
@@ -46,7 +38,9 @@ public class Personal_CenterFragment extends Fragment {
     public static final String ACTION="LOGIN_STATUS";//广播action
 
     private  TextView userName;
-    private ImageView topBg;
+    private RoundedImageView myImageView;
+
+     private HeadImageUtils utils;
     public static Personal_CenterFragment newInstance(){
 
         return   new Personal_CenterFragment();
@@ -62,13 +56,14 @@ public class Personal_CenterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+        this.utils = new HeadImageUtils(getActivity(),SharedPreferencesManager.getLoginInfo(getActivity()).getName());
         userName  = (TextView) view.findViewById(R.id.userName);
-        this.topBg = (ImageView) view.findViewById(R.id.topBg);
-        this.topBg.setImageBitmap(FastBlurUtils.getBlurBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.my_top_bg)));
-        userName.setText(SharedPreferencesManager.getLoginInfo(getActivity()).getName());
-        CircleImageView myImageView = (CircleImageView) view.findViewById(R.id.myImage);
-        myImageView.setBorderColor(R.color.white);
-        myImageView.setBorderWidth(15);
+        myImageView = (RoundedImageView) view.findViewById(R.id.myImage);
+
+        //显示头像
+        showHeadImage();
+        userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
+
         //注册广播
          register();
 
@@ -78,7 +73,7 @@ public class Personal_CenterFragment extends Fragment {
 
 
                 //判断用户是否登录
-                if(SharedPreferencesManager.isLogin(getActivity())){
+                if(SharedPreferencesManager.isLogin(getContext())){
 
                     //若登录则显示用户信息
                     toMyInfo();
@@ -94,28 +89,64 @@ public class Personal_CenterFragment extends Fragment {
             }
         });
 
-      //报名查询
+      //我的报名
        view.findViewById(R.id.signUpSearch).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               if(SharedPreferencesManager.isLogin(getActivity())){}
+               if(SharedPreferencesManager.isLogin(getContext())){
 
-               Intent intent = new Intent(getContext(), MySignUpActivity.class);
-               startActivity(intent);
+                   Intent intent = new Intent(getContext(), MySignUpActivity.class);
+                   startActivity(intent);
+               }else {
+                   Intent intent = new Intent(getContext(), LoginActivity.class);
+                   startActivity(intent);
+               }
+
+
            }
        });
 
-        //成绩查询
+        /**
+         * 我的物资
+         */
+        view.findViewById(R.id.myGoods).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(SharedPreferencesManager.isLogin(getContext())){
+
+                    Intent intent = new Intent(getContext(), MyGoodsActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+
+
+
+            }
+        });
+        //我的成绩
          view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
 
-                 Intent intent = new Intent(getContext(), MyAchievementActivity.class);
-                 startActivity(intent);
+                 if(SharedPreferencesManager.isLogin(getContext())){
+
+                     Intent intent = new Intent(getContext(), MyAchievementActivity.class);
+                     startActivity(intent);
+                 }else {
+                     Intent intent = new Intent(getContext(), LoginActivity.class);
+                     startActivity(intent);
+                 }
+
 
              }
          });
-        //我的信息
+
+
+
+        //我的资料
 
         view.findViewById(R.id.mySignUp).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,13 +155,13 @@ public class Personal_CenterFragment extends Fragment {
 
                 //判断是否登录
 
-                if(SharedPreferencesManager.isLogin(getActivity())){
+                if(SharedPreferencesManager.isLogin(getContext())){
                     //跳转到我的信息界面
                     toMyInfo();
                 }else {
                     //未登录跳转到登录界面
 
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
 
                 }
@@ -145,7 +176,7 @@ public class Personal_CenterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(), MyNoticeMessageActivity.class);
+                Intent intent = new Intent(getContext(), MyNoticeMessageActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,14 +187,14 @@ public class Personal_CenterFragment extends Fragment {
 
                 //判断是否登录
 
-                if(SharedPreferencesManager.isLogin(getActivity())){
+                if(SharedPreferencesManager.isLogin(getContext())){
                     //跳转到我的信息界面
-                    Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+                    Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
                     startActivity(intent);
                 }else {
                     //未登录跳转到登录界面
 
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
 
                 }
@@ -174,7 +205,7 @@ public class Personal_CenterFragment extends Fragment {
         view.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-         Intent intent = new Intent(getActivity(), AboutUsActivity.class);
+         Intent intent = new Intent(getContext(), AboutUsActivity.class);
                 startActivity(intent);
             }
         });
@@ -183,133 +214,43 @@ public class Personal_CenterFragment extends Fragment {
         view.findViewById(R.id.setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                Intent intent = new Intent(getContext(), SettingActivity.class);
                 startActivity(intent);
             }
         });
     }
 
 
+    /**
+     * 显示头像
+     */
+    private void showHeadImage(){
+
+
+        //不登陆不显示头像
+        if(!SharedPreferencesManager.isLogin(getContext())){
+
+            return;
+        }
+//         获取用户头像
+        String imageUrl = SharedPreferencesManager.getLoginInfo(getContext()).getImageUrl();
+        Bitmap bitmap =  utils.getImage();
+
+        if(bitmap!=null){
+            myImageView.setImageBitmap(bitmap);
+
+        }else {
+            utils.download(imageUrl);
+
+        }
+
+    }
+
 //    跳转到我的信息界面
     private void toMyInfo(){
 
-        Intent intent = new Intent(getActivity(), MyInfoActivity.class);
+        Intent intent = new Intent(getContext(), MyInfoActivity.class);
         startActivity(intent);
-
-    }
-    /**
-     * 报名查询
-     * 姓名
-     * @param name
-     *证件号
-     * @param idNumber
-     * 是否的报名
-     * @param isSelf
-     */
-    public void searchSignUpInfo(String name, String idNumber, final boolean isSelf){
-
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SignUpInfoSEARCH);
-        params.addParameter("Name",name);
-        params.addParameter("IDNumber",idNumber);
-        params.setConnectTimeout(10*1000);
-        params.setMaxRetryCount(1);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-
-                try {
-                    JSONObject obj = new JSONObject(result);
-
-                    if(obj.getBoolean("Success")){
-
-                        //获取报名信息
-                        JSONObject registrationInformation = obj.getJSONObject("RegistrationInformation");
-
-                        String name = registrationInformation.getString("Name");
-                        String phone = registrationInformation.getString("Phone");
-                        String brithdayStr = registrationInformation.getString("BrithdayStr");
-                        String idNumber = registrationInformation.getString("IDNumber");
-                        String certificateType = registrationInformation.getString("CertificateType");
-                        String genderStr = registrationInformation.getString("GenderStr");
-                        String nationality = registrationInformation.getString("Nationality");
-                        String province = registrationInformation.getString("Province");
-                        String city = registrationInformation.getString("City");
-                        String county = registrationInformation.getString("County");
-                        String attendProject = registrationInformation.getString("AttendProject");
-                        String clothingSize = registrationInformation.getString("ClothingSize");
-                        String address = registrationInformation.getString("Address");
-                        String postcode = registrationInformation.getString("Postcode");
-                        String urgencyLinkman = registrationInformation.getString("UrgencyLinkman");
-                        String urgencyLinkmanPhone = registrationInformation.getString("UrgencyLinkmanPhone");
-                        String createTime = registrationInformation.getString("CreateTimeStr");
-                        boolean isPayed = registrationInformation.getBoolean("IsPayed");
-                        String attendNumber = registrationInformation.getString("AttendNumber");
-                        String applyNature = registrationInformation.getString("ApplyNature");
-
-                        //获取订单信息
-                        JSONObject requestData = obj.getJSONObject("RequestData");
-                        String service = requestData.getString("Service");
-                        String partner = requestData.getString("Partner");
-                        String input_charset = requestData.getString("_input_charset");
-                        String sign_type = requestData.getString("Sign_type");
-                        String notify_url = requestData.getString("Notify_url");
-                        String out_trade_no = requestData.getString("Out_trade_no");
-                        String subject = requestData.getString("Subject");
-                        String payment_type = requestData.getString("Payment_type");
-                        String seller_id = requestData.getString("Seller_id");
-                        String total_fee = requestData.getString("Total_fee");
-                        String body = requestData.getString("Body");
-                        String sign = requestData.getString("Sgin");
-
-                        //组装数据
-                       SignUpInfo signUpInfo = new SignUpInfo( name,phone,brithdayStr ,
-                                idNumber,certificateType ,genderStr,nationality,province,city,county,attendProject
-                                ,clothingSize,address,postcode,urgencyLinkman,urgencyLinkmanPhone,createTime,isPayed,attendNumber,applyNature,service,partner,input_charset,sign_type,notify_url,out_trade_no,subject,payment_type,seller_id,total_fee,body,sign);
-
-                        //更新本地报名信息
-                        if(isSelf){
-                            SharedPreferencesManager.insertValue(getActivity(),signUpInfo);
-
-                        }
-
-
-                        Intent intent = new Intent(getActivity(), SignUpSearchResultActivity.class);
-                        intent.putExtra("signUpInfo",signUpInfo);
-                        intent.putExtra("title","报名查询");
-                        startActivity(intent);
-                    }else {
-                        Toast.makeText(getActivity(),obj.getString("Reason"),Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-                if(ex instanceof HttpException){
-                    Toast.makeText(getActivity(),"网络不给力!",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(getActivity(),"查询出错!",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-
-        });
-
 
     }
 
@@ -335,6 +276,9 @@ public class Personal_CenterFragment extends Fragment {
         getActivity().unregisterReceiver(receiver);
 
     }
+
+
+
     /**
      * 用于监听登录信息变话化的广播
      */
@@ -344,10 +288,9 @@ public class Personal_CenterFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-           String name = SharedPreferencesManager.getLoginInfo(getActivity()).getName();
-            userName.setText(name);
-
-
+            myImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.signup_photo));
+            userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
+            showHeadImage();
 
         }
     }

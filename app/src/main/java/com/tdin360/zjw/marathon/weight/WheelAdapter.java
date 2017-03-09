@@ -19,7 +19,7 @@ package com.tdin360.zjw.marathon.weight;
 /**
  * Wheel adapter interface
  * 
- * @deprecated Use WheelViewAdapter
+ * Use WheelViewAdapter
  */
 public interface WheelAdapter {
 	/**

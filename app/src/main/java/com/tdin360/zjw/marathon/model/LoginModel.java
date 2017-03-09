@@ -7,24 +7,23 @@ package com.tdin360.zjw.marathon.model;
 
 public class LoginModel {
 
-    private final String nameKEY="name";
-    private final String passKey="password";
+    public static final String nameKEY="name";
+    public static final String passKey="password";
+    public static final String imageKey="image";
+
     private String name;
     private String password;
+    private String imageUrl;
 
 
-    public LoginModel(String name, String password) {
+
+    public LoginModel(String name, String password,String imageUrl) {
         this.name = name;
         this.password = password;
+        this.imageUrl = imageUrl;
+
     }
 
-    public String getNameKEY() {
-        return nameKEY;
-    }
-
-    public String getPassKey() {
-        return passKey;
-    }
 
     public String getName() {
         return name;
@@ -40,5 +39,13 @@ public class LoginModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

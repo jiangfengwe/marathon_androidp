@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.activity.ShowHtmlActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+
    <include layout="@layout/toolbar_layout"></include>
 
         <ProgressBar
@@ -19,13 +16,6 @@
             android:layout_width="match_parent"
             android:progressDrawable="@drawable/my_progressbar"
             android:layout_height="2dp" />
-    <LinearLayout
-        android:id="@+id/main"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-
          <WebView
              android:layout_weight="1"
              android:id="@+id/webView"
@@ -42,27 +32,4 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rect_red_button_selector"
             />
-    </LinearLayout>
-
-    </LinearLayout>
-
-
-    <!--开始加载时提示-->
-    <LinearLayout
-
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loading"></include>
-    </LinearLayout>
-
-    <!--加载失败时显示提示-->
-    <LinearLayout
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <include layout="@layout/layout_loadingfail"></include>
-   </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
