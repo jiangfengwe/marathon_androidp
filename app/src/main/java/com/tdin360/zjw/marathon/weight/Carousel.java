@@ -61,12 +61,12 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
 
     public Carousel(Context context) {
         super(context);
-        initView(getContext());
+        initView(context);
     }
 
     public Carousel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(getContext());
+        initView(context);
     }
 
 
@@ -76,6 +76,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
      * @param context
      */
     private void initView(Context context) {
+
 
         //初始化viewPager
         this.viewPager = new ViewPager(context);
@@ -256,7 +257,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     /**
      * 控制自动轮播
      */
-    private Handler handler = new Handler(){
+    private  Handler handler = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
@@ -332,6 +333,12 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
 
     }
 
+    /**
+     * 释放handler防止内存溢出
+     */
+    public void onDestroy() {
 
+        handler.removeMessages(WHAT);
+    }
 
 }

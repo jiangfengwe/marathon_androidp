@@ -5,7 +5,7 @@
    <TextView
        android:gravity="center"
        android:padding="10dp"
-       android:background="@color/colorPrimary"
+       android:background="@color/body_color"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:textSize="18sp"
@@ -27,7 +27,7 @@
         <Button
             android:id="@+id/cancel"
             android:textSize="16sp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/rect_red_button_selector"
             android:gravity="center"
             android:layout_weight="1"
             android:textColor="@color/white"
@@ -36,9 +36,10 @@
             android:text="取消"
             />
         <Button
+
             android:id="@+id/ok"
-            android:background="@color/colorPrimary"
-            android:layout_marginLeft="1dp"
+            android:background="@drawable/rect_red_button_selector"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
             android:textSize="16sp"
             android:layout_weight="1"

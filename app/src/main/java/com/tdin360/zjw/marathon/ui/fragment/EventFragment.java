@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ import java.util.List;
 /**马拉松赛事列表
  * Created by Administrator on 2016/8/9.
  */
-public class Marathon_MainFragment extends Fragment implements RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener {
+public class EventFragment extends Fragment implements RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener {
 
     private List<MarathonEventModel>list = new ArrayList<>();
     private RefreshListView listView;
@@ -55,16 +54,16 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
     private int pageCount;
     private TextView loadFile;
 
-    public static Marathon_MainFragment newInstance(){
+    public static EventFragment newInstance(){
 
-        return new Marathon_MainFragment();
+        return new EventFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return  inflater.inflate(R.layout.marathon_fragment,container,false);
+        return  inflater.inflate(R.layout.fragment_event,container,false);
     }
 
     @Override
@@ -229,9 +228,8 @@ public class Marathon_MainFragment extends Fragment implements RefreshListView.O
             MarathonEventModel eventInfo = (MarathonEventModel) parent.getAdapter().getItem(position);
             //为单例成员赋值
             MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
+            MarathonDataUtils.init().setEventName(eventInfo.getName());
             Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
-            intent.putExtra("eventId", eventInfo.getId() + "");
-            intent.putExtra("eventName", eventInfo.getName());
             startActivity(intent);
 
     }

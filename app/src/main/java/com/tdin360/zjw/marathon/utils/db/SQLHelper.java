@@ -20,6 +20,9 @@ public class SQLHelper extends SQLiteOpenHelper {
     //通知消息表
     public static final String NOTICE_TABLE="Notice";
 
+    //计步历史
+    public static final String STEP="Step";
+
 
     public SQLHelper(Context context){
 
@@ -43,7 +46,18 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    content VARCHAR\n" +
                 ");";
 
+        String create_Step_Sql="CREATE TABLE "+STEP+" (\n" +
+                "    id            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "                          NOT NULL,\n" +
+                "    userId        INTEGER NOT NULL,\n" +
+                "    totalStep     INTEGER NOT NULL,\n" +
+                "    totalDistance DOUBLE  NOT NULL,\n" +
+                "    totalKcal     DOUBLE  NOT NULL,\n" +
+                "    date          DATE    NOT NULL\n" +
+                ");";
+
         db.execSQL(create_Notice_Sql);
+        db.execSQL(create_Step_Sql);
 
     }
 

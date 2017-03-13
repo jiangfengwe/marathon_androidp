@@ -1,33 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="10dp"
+    android:background="@color/body_color"
     android:orientation="vertical"
     android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <View
-            android:layout_weight="1"
-            android:background="@color/lineColor"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"></View>
-        <TextView
-             android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="待开赛"
-            />
-        <View
-            android:layout_weight="1"
-            android:background="@color/lineColor"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"></View>
-    </LinearLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp">
@@ -39,10 +15,11 @@
             android:src="@drawable/item"
             />
         <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
             android:background="#5f000000"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:gravity="center"
                 android:padding="10dp"
@@ -51,19 +28,24 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/matchName"
-                    android:gravity="center"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:text="赛事名称"
                     />
-                <TableLayout
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <TableLayout
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
                     <TableRow android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         >
@@ -71,79 +53,67 @@
                             android:textColor="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:text="参赛项目:"
                             />
                         <TextView
-                             android:id="@+id/projectName"
+                            android:id="@+id/projectName"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
+                            android:textSize="14sp"
                             android:text="男子马拉松全程"
                             />
                     </TableRow>
-                    <TableRow android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        >
-                        <TextView
-                            android:textColor="@color/white"
-                            android:layout_width="match_parent"
+                        <TableRow android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="是否支付:"
-                            />
-                        <TextView
-                            android:id="@+id/isPay"
-                            android:layout_marginLeft="5dp"
-                            android:textColor="@color/white"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:text="已支付"
-                            />
-                    </TableRow>
-                    <TableRow android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        >
-                        <TextView
-                            android:textColor="@color/white"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="报名时间:"
-                            />
-                        <TextView
-                            android:id="@+id/time"
-                            android:layout_marginLeft="5dp"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="报名时间"
-                            />
-                    </TableRow>
-                </TableLayout>
+                            android:layout_marginTop="2dp"
+                            >
 
+                        </TableRow>
+                        <TableRow android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            >
+                            <TextView
+                                android:textColor="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="报名时间:"
+                                />
+                            <TextView
+                                android:id="@+id/time"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="报名时间"
+                                />
+                            <TextView
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="是否支付:"
+                                />
+                            <TextView
+                                android:id="@+id/isPay"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="已支付"
+                                />
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/arrow"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/arrow"
-            />
     </RelativeLayout>
 
 </LinearLayout>

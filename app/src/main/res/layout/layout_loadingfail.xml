@@ -8,6 +8,7 @@
         android:id="@+id/loadFail"
         android:visibility="gone"
         android:drawablePadding="10dp"
+        android:textColor="@color/dark"
         android:drawableTop="@drawable/search_nodata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

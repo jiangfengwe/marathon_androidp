@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import com.tdin360.zjw.marathon.R;
 
+import java.lang.ref.SoftReference;
+
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -15,33 +17,39 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class WelcomeActivity extends Activity {
 
-    private Handler handler = new Handler();
+    private Handler handler ;
+    private Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        handler = new Handler();
         SharedPreferences share = this.getSharedPreferences("GuideData",Activity.MODE_PRIVATE);
         final boolean isGuide = share.getBoolean("isGuide", false);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
+         runnable = new Runnable() {
+             @Override
+             public void run() {
 
-                //如果已经引导过了就直接跳转到主界面否则就进入引导页
-                if (!isGuide) {
+                 Intent intent;
 
-                    intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                }else {
+                 //如果已经引导过了就直接跳转到主界面否则就进入引导页
+                 if (!isGuide) {
 
-                    intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+                     intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                 }else {
 
-                }
+                     intent = new Intent(WelcomeActivity.this, GuideActivity.class);
 
-                startActivity(intent);
-                finish();
-            }
-        },2000);
+                 }
+
+                 startActivity(intent);
+                 finish();
+             }
+         };
+
+        handler.postDelayed(runnable,2000);
+
     }
 
     @Override
@@ -57,4 +65,10 @@ public class WelcomeActivity extends Activity {
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacks(runnable);
+    }
 }

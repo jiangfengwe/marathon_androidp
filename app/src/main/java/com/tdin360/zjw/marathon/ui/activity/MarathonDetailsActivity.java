@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
 import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.MenuModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MenuDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
@@ -43,12 +45,12 @@ import java.util.List;
  */
 public class MarathonDetailsActivity extends BaseActivity {
 
+
     private Carousel mCarousel;
     private MyGridView mGridView;
     private List<CarouselModel>carouselList=new ArrayList<>();
     private List<CarouselModel>sponsorList= new ArrayList<>();
     private MarathonHomeMyGridViewAdapter adapter;
-    private String eventId;
     private TextView notData;
     private LinearLayout main;
     private TextView loadFail;
@@ -83,6 +85,8 @@ public class MarathonDetailsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(getApplication()).onActivityResult(requestCode,resultCode,data);
+
+
     }
 
 
@@ -94,12 +98,8 @@ public class MarathonDetailsActivity extends BaseActivity {
     //初始化
     private void initView() {
 
+        setToolBarTitle(MarathonDataUtils.init().getEventName());
 
-        if(this.getIntent()!=null) {
-            this.eventId = this.getIntent().getStringExtra("eventId");
-            String eventName = this.getIntent().getStringExtra("eventName");
-            setToolBarTitle(eventName);
-        }
         showBackButton();
         /**
          * 构建分享内容
@@ -193,8 +193,9 @@ public class MarathonDetailsActivity extends BaseActivity {
       LinearLayout menuLayout = (LinearLayout) this.findViewById(R.id.menuLayout);
      for(int i=0;i<list.size();i++){
 
-          MenuModel menuModel = list.get(i);
+         MenuModel menuModel = list.get(i);
          MenuView menu = new MenuView(this);
+         menu.setMenuTitleColor(Color.WHITE);
          menu.setMenuContent(menuModel.getId(),menuModel.getIcon(),menuModel.getTitle());
 
          menuLayout.addView(menu);
@@ -211,7 +212,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                          intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
                          intent.putExtra("isSign",true);
                          intent.putExtra("title","赛事简介");
-                         intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+eventId+"&categoryName=赛事简介");
+                         intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+MarathonDataUtils.init().getEventId()+"&categoryName=赛事简介");
                          break;
                      case 1: //赛事新闻
                          intent = new Intent(MarathonDetailsActivity.this,MarathonNewsListActivity.class);
@@ -252,7 +253,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
-        params.addQueryStringParameter("eventId", eventId);
+        params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         x.http().get(params,new Callback.CommonCallback<String>() {
 
             @Override
@@ -368,6 +369,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
             Intent intent = new Intent(MarathonDetailsActivity.this,SignUpActivity.class);
             startActivity(intent);
+
         }else {
             Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
             startActivity(intent);
@@ -375,5 +377,12 @@ public class MarathonDetailsActivity extends BaseActivity {
         }
 
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCarousel.onDestroy();
     }
 }

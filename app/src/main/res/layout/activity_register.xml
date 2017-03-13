@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.RegisterActivity">
   <include layout="@layout/toolbar_layout"></include>
 
@@ -24,7 +24,7 @@
 
 
         <LinearLayout
-            android:background="#f8f8f8"
+            android:background="@color/body_color"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -35,7 +35,9 @@
             android:id="@+id/tel"
             android:padding="15dp"
             android:maxLength="11"
+            android:textColor="@color/white"
             android:maxLines="1"
+            android:textColorHint="@color/dark"
             android:background="@android:color/transparent"
             android:drawablePadding="5dp"
 
@@ -64,9 +66,11 @@
                 android:drawableLeft="@drawable/register_code"
                 android:id="@+id/code"
                 android:padding="12dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/dark"
                 android:drawablePadding="5dp"
                 android:layout_weight="1.5"
-                android:background="#f8f8f8"
+                android:background="@color/body_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="验证码"
@@ -88,7 +92,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="#f8f8f8"
+            android:background="@color/body_color"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -98,12 +102,13 @@
             <EditText
                 android:layout_weight="1"
                 android:inputType="textPassword"
-
+                android:textColor="@color/white"
                 android:drawableLeft="@drawable/register_user_password"
                 android:id="@+id/password1"
                 android:padding="15dp"
+                android:textColorHint="@color/dark"
                 android:drawablePadding="5dp"
-                android:background="#f8f8f8"
+                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="新密码"
@@ -118,7 +123,7 @@
                 />
         </LinearLayout>
         <LinearLayout
-            android:background="#f8f8f8"
+            android:background="@color/body_color"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -129,10 +134,12 @@
                 android:drawableLeft="@drawable/register_user_password"
                 android:id="@+id/password2"
                 android:padding="15dp"
+                android:textColor="@color/white"
                 android:drawablePadding="5dp"
-                android:background="#f8f8f8"
+                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/dark"
                 android:hint="确认密码"
                 />
             <CheckBox
@@ -171,7 +178,7 @@
             android:layout_width="wrap_content"
             android:drawablePadding="5dp"
             android:textSize="15sp"
-            android:textColor="@color/textBlack"
+            android:textColor="@color/dark"
             android:layout_height="wrap_content"
             android:text="已阅读并同意"
             />

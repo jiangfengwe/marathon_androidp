@@ -12,18 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:background="@drawable/personal_center_item_selector"
-                android:padding="10dp"
+                android:padding="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="接收推送通知"
@@ -40,13 +42,14 @@
             <RelativeLayout
                 android:id="@+id/update"
                 android:background="@drawable/personal_center_item_selector"
-                android:padding="10dp"
-                android:layout_marginTop="5dp"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/version"
                     android:textSize="18dp"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="检查更新"
@@ -56,19 +59,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_nor"
+                    android:src="@drawable/arrow_right"
                     />
             </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/feedback"
         android:background="@drawable/personal_center_item_selector"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
+        android:padding="15dp"
+        android:layout_marginTop="1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="意见反馈"
@@ -78,7 +82,7 @@
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_right_nor"
+            android:src="@drawable/arrow_right"
             />
     </RelativeLayout>
 

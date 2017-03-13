@@ -103,8 +103,6 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
                 viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
                 viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
                 viewHolder.isPay = (TextView) convertView.findViewById(R.id.isPay);
-                viewHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
-                viewHolder.arrow.setAnimation(AnimationUtils.loadAnimation(MySignUpActivity.this,R.anim.arrow));
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -125,7 +123,7 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
             private TextView matchName;
             private TextView matchAchievement;
             private TextView isPay;
-            private ImageView arrow;
+
         }
     }
     /**
@@ -178,6 +176,7 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
     }
     @Override
     public void onDownPullRefresh() {
+        list.clear();
         httpRequest();
     }
     @Override
@@ -217,7 +216,7 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
 
                              Log.d("---------->>>", "onSuccess: "+object.getString("RegistratorName"));
 
-
+                             String id = object.getString("Id");
                              //赛事名称
                              String eventName = object.getString("EventName");
 
@@ -281,7 +280,8 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
                              String orderNo = object.getString("OrderNo");
 
 
-                             list.add(new SignUpInfoModel(eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+                             list.add(new SignUpInfoModel(id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+                             list.add(new SignUpInfoModel(id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
 
                          }
 

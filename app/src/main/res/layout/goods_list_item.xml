@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:padding="10dp"
+    android:background="@color/body_color"
     android:gravity="center_vertical"
     android:layout_height="wrap_content">
 
@@ -14,12 +15,13 @@
         <TextView
             android:id="@+id/eventName"
             android:textSize="18sp"
-            android:textColor="@color/textBlack"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="赛事名称"
             />
         <TextView
+            android:textColor="@color/dark"
             android:id="@+id/intro"
             android:layout_marginTop="2dp"
             android:layout_width="match_parent"
@@ -32,8 +34,8 @@
         android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-       android:background="@drawable/oval_red_button_selector"
-        android:textColor="@color/white"
+       android:background="@drawable/yellow_rect_selector"
+        android:textColor="@drawable/text_yellow_white_selector"
         android:textSize="15sp"
         android:text="查看物资"
         />

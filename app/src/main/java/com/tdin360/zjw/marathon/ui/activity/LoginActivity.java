@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import org.json.JSONException;
@@ -204,7 +204,7 @@ public class LoginActivity extends BaseActivity {
                         SharedPreferencesManager.saveLoginInfo(LoginActivity.this,new LoginModel(tel,pass,avatarUrl));
                         Toast.makeText(LoginActivity.this,"登录成功!",Toast.LENGTH_SHORT).show();
                         //通知个人中心修改登录状态
-                        Intent intent  =new Intent(Personal_CenterFragment.ACTION);
+                        Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
 
                         hud.dismiss();

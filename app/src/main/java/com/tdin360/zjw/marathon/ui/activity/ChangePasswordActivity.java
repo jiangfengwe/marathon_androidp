@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
@@ -194,7 +194,7 @@ public class ChangePasswordActivity extends BaseActivity {
                              //修改成功后清空原有的登录信息并跳转到登录界面
                              SharedPreferencesManager.clearLogin(ChangePasswordActivity.this);
                              //更新登录信息
-                             Intent i = new Intent(Personal_CenterFragment.ACTION);
+                             Intent i = new Intent(MyFragment.ACTION);
                              sendBroadcast(i);
                              finish();
                              //跳转到登录界面

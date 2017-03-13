@@ -76,7 +76,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     private EditText idCardNumber;
     //性别
     private RadioGroup radioGroup;
-    private boolean gander;
+    private boolean gander=true;// 默认是男
     //国家
     private Spinner spinnerCountry;
     private String country;
@@ -260,7 +260,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
 
-
         //加载失败点击重新获取
         this.loadFail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -396,12 +395,13 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                }
            });
 
+             initHUD();
 
              loadData();
     }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
-
+        hud.show();
         /**
          * 判断网络是否处于可用状态
          */
@@ -411,6 +411,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             httpRequest();
         } else {
 
+            hud.dismiss();
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setText("点击重新加载");
             loadFail.setVisibility(View.VISIBLE);
@@ -446,19 +447,25 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     }
 
     private KProgressHUD hud;
+
+
+    private void initHUD(){
+
+        //显示提示框
+        hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+                hud.setCancellable(true);
+                hud.setAnimationSpeed(1);
+                hud.setDimAmount(0.5f);
+
+
+    }
     /**
      * 请求报名相关数据
      */
     private void httpRequest(){
 
         loadFail.setVisibility(View.GONE);
-        hud = KProgressHUD.create(SignUpActivity.this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();
-
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId()+"");
 
@@ -536,7 +543,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             @Override
             public void onFinished() {
-
                 hud.dismiss();
                 idCardType.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,idTypeList));
                 clothesSize.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,clothesSizeList));
@@ -746,13 +752,43 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             return;
         }
 
+//        验证通过提示用户检查报名信息
 
-        //提交到服务器
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+        dialog.setTitle("温馨提示");
+        dialog.setMessage("提交成功将无法更改，您确定填写的信息无误，并立即提交吗?");
+        dialog.setPositiveButton("确定提交", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //执行提交
+                submit2Server();
+            }
+        });
+        dialog.setNegativeButton("仔细检查", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
+
+
+    }
+    //提交到服务器
+    private void submit2Server(){
+
+        hud.show();
 
         //设置提交参数
         RequestParams param = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         //赛事id
-         param.addBodyParameter("EventId", MarathonDataUtils.init().getEventId()+"");
+        param.addBodyParameter("EventId", MarathonDataUtils.init().getEventId()+"");
         //姓名
         param.addBodyParameter("RegistratorName",editTextName.getText().toString().trim());
 //        邮箱
@@ -796,25 +832,16 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.setMaxRetryCount(0);//最大重复请求次数
         param.setConnectTimeout(5*1000);
 
-        //向服务器提交数据
 
-        //显示提示框
-        final KProgressHUD hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();
-
-           x.http().post(param, new Callback.CommonCallback<String>() {
+        x.http().post(param, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
 
 
                 try {
-                   JSONObject json = new JSONObject(result);
+                    JSONObject json = new JSONObject(result);
 
-                    Log.d("------->>", "onSuccess: "+result);
+                   // Log.d("------->>", "onSuccess: "+result);
 
                     boolean success = json.getBoolean("Success");
                     String reason=json.getString("Reason");
@@ -829,10 +856,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
                         //报名成功则跳转到支付界面
                         Intent intent = new Intent(SignUpActivity.this, PayActivity.class);
+                        intent.putExtra("eventId",MarathonDataUtils.init().getEventId()+"");
                         intent.putExtra("order",orderNo);
                         intent.putExtra("subject",subject);
                         intent.putExtra("money",money);
-                       startActivity(intent);
+                        intent.putExtra("from","signUp");
+                        startActivity(intent);
                         finish();
                     }else {
 
@@ -845,13 +874,13 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
                 }
 
-          }
+            }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
 
-              Toast.makeText(SignUpActivity.this,"网络异常或服务器错误!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this,"网络异常或服务器错误!",Toast.LENGTH_SHORT).show();
 
             }
 
@@ -868,8 +897,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             }
 
         });
-
     }
-
 
 }

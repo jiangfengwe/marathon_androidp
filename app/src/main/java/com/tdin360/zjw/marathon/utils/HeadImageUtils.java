@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Path;
 
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,11 +25,10 @@ public class HeadImageUtils {
 
     private String root;
     private Context context;
-    private String fileName;
-    public HeadImageUtils(Context context,String fileName){
+    public HeadImageUtils(Context context){
 
         this.context=context;
-        this.fileName=fileName;
+
         this.root=  context.getExternalFilesDir("images").toString();
     }
 
@@ -38,7 +36,7 @@ public class HeadImageUtils {
      * 获取头像保存目录
      * @return
      */
-    public synchronized String getFilePath(){
+    public synchronized String getFilePath(String fileName){
 
         File file = new File(root,fileName+".jpg");
 
@@ -56,8 +54,8 @@ public class HeadImageUtils {
     /**
      * 获取头像
      */
-    public Bitmap getImage(){
-            Bitmap bitmap = BitmapFactory.decodeFile(getFilePath());
+    public Bitmap getImage(String fileName){
+            Bitmap bitmap = BitmapFactory.decodeFile(getFilePath(fileName));
 
             return bitmap;
 
@@ -66,7 +64,7 @@ public class HeadImageUtils {
     /**
      * 下载头像图片
      */
-    public void download(final String url)  {
+    public void download(final String url, final String fileName)  {
 
 
 
@@ -85,7 +83,7 @@ public class HeadImageUtils {
                     connection.setRequestMethod("GET");
                     connection.connect();
 
-                    FileOutputStream os = new FileOutputStream(getFilePath());
+                    FileOutputStream os = new FileOutputStream(getFilePath(fileName));
                     InputStream stream = null;
                     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
@@ -122,7 +120,7 @@ public class HeadImageUtils {
 
     //更新个人中心头像
     private void sendNotify(){
-        Intent intent = new Intent(Personal_CenterFragment.ACTION);
+        Intent intent = new Intent(MyFragment.ACTION);
         context.sendBroadcast(intent);
     }
 }

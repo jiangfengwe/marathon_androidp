@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,7 +18,8 @@ import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
+import com.tdin360.zjw.marathon.utils.CacheFileManager;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
@@ -58,8 +60,14 @@ public class SettingActivity extends BaseActivity {
         this.findViewById(R.id.feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingActivity.this,FeedbackActivity.class);
-                startActivity(intent);
+
+
+                String cacheSize = CacheFileManager.getCacheSize(getExternalCacheDir().getPath());
+
+                Log.d("缓存大小＝＝＝＝＝＝＝＝", "onClick: "+cacheSize);
+
+//                CacheFileManager.clearCache(getExternalCacheDir().getPath());
+
             }
         });
 
@@ -74,10 +82,10 @@ public class SettingActivity extends BaseActivity {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       String  msg = SharedPreferencesManager.clearLogin(SettingActivity.this);
+                       String  msg = SharedPreferencesManager.clearLogin(getApplicationContext());
                         Toast.makeText(SettingActivity.this,msg,Toast.LENGTH_SHORT).show();
                         //通知个人中心修改登录状态
-                        Intent intent  =new Intent(Personal_CenterFragment.ACTION);
+                        Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
                         finish();
                     }

@@ -9,6 +9,7 @@ import java.io.StringReader;
  */
 public class SignUpInfoModel implements Serializable {
 
+    private String eventId;//赛事id
     private String eventName;//赛事名称
     private String name;//姓名
     private String phone;//电话
@@ -34,7 +35,8 @@ public class SignUpInfoModel implements Serializable {
     private String price;//支付金额
 
 
-    public SignUpInfoModel(String eventName,String name, String phone,String email ,String birthday, String idNumber, String certificateType, boolean gender, String nationality, String province, String city, String county, String attendProject, String clothingSize, String address, String postcode, String urgencyLinkman, String urgencyLinkmanPhone, String attendNumber,boolean isPayed, String createTime,String orderNum,String price) {
+    public SignUpInfoModel(String eventId,String eventName,String name, String phone,String email ,String birthday, String idNumber, String certificateType, boolean gender, String nationality, String province, String city, String county, String attendProject, String clothingSize, String address, String postcode, String urgencyLinkman, String urgencyLinkmanPhone, String attendNumber,boolean isPayed, String createTime,String orderNum,String price) {
+        this.eventId=eventId;
         this.eventName=eventName;
         this.name = name;
         this.phone = phone;
@@ -58,6 +60,14 @@ public class SignUpInfoModel implements Serializable {
         this.createTime = createTime;
         this.orderNum=orderNum;
         this.price = price;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getEventName() {

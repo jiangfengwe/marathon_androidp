@@ -13,34 +13,29 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NoticeModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 /**
- * 我的成绩
+ * 我的成绩列表
  */
 public class MyAchievementActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
 
     private RefreshListView listView;
-    private LinearLayout loading;
     private TextView loadFail;
     private int count;
     private MyAdapter adapter;
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +49,6 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
     private void initView() {
         this.listView = (RefreshListView) this.findViewById(R.id.listView);
         this.listView.setOnRefreshListener(this);
-        this.loading = (LinearLayout) this.findViewById(R.id.loading);
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.adapter = new MyAdapter();
         this.listView.setAdapter(adapter);
@@ -67,11 +61,24 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
             }
         });
 
+        initHUD();
 
         loadData();
     }
 
+    /**
+     * 初始化提示框
+     */
+    private void initHUD(){
 
+        //显示提示框
+        this.hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.setCancellable(true);
+        hud.setAnimationSpeed(1);
+        hud.setDimAmount(0.5f);
+
+    }
     private class MyAdapter extends BaseAdapter{
 
 
@@ -98,13 +105,9 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
                 if(convertView==null){
 
                     viewHolder = new ViewHolder();
-                    convertView=View.inflate(MyAchievementActivity.this,R.layout.achievement_list_item,null);
-                    viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
-                    viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
-                    viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
-                    viewHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
-                    Animation animation = AnimationUtils.loadAnimation(MyAchievementActivity.this, R.anim.arrow);
-                    viewHolder.arrow.setAnimation(animation);
+                    convertView=View.inflate(MyAchievementActivity.this,R.layout.my_achievement_list_item,null);
+
+
                     convertView.setTag(viewHolder);
                 }else {
 
@@ -137,15 +140,17 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
+            hud.show();
             //加载网络数据
             httpRequest();
         } else {
 
+            hud.dismiss();
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-            loading.setVisibility(View.GONE);
+
 
             //如果缓存数据不存在则需要用户打开网络设置
 
@@ -211,10 +216,10 @@ public class MyAchievementActivity extends BaseActivity implements RefreshListVi
 
             @Override
             public void onFinished() {
-                loading.setVisibility(View.GONE);
                 listView.hideHeaderView();
                 listView.hideFooterView();
                 adapter.notifyDataSetChanged();
+                hud.dismiss();
 
 
 

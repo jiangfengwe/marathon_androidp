@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.SignUpInfoModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -28,16 +29,15 @@ import java.util.List;
  * 我的报名详情
  */
 public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnPageChangeListener,RadioGroup.OnCheckedChangeListener{
-
+    //用于接收返回状态的请求码
+    public static int REQUEST_CODE=0x05;
     private RadioGroup radioGroup;
     private ViewPager viewPager;
     private View view0;
     private View view1;
     private View view2;
-    private String orderNo;
-    private String subject;
-    private String money;
     private Button payBtn;
+    private SignUpInfoModel model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +45,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         showBackButton();
         initView();
 
-        SignUpInfoModel model = (SignUpInfoModel) getIntent().getSerializableExtra("model");
+        this.model = (SignUpInfoModel) getIntent().getSerializableExtra("model");
         showData(model);
 
     }
@@ -200,12 +200,6 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
     private void showData(SignUpInfoModel model){
 
 
-//        设置用于去支付的参数
-
-         this.orderNo = model.getOrderNum();
-         this.subject="参赛报名费用";
-         this.money=model.getPrice();
-
         /**
          * -------------------- 基本信息部分 -----------------
          */
@@ -330,11 +324,27 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
      */
     public void toPay(View view) {
 
-        Intent intent = new Intent(this,PayActivity.class);
-         intent.putExtra("order",orderNo);
-         intent.putExtra("subject",subject);
-         intent.putExtra("money",money);
-        startActivity(intent);
 
+        MarathonDataUtils.init().setEventId(model.getEventId());
+        MarathonDataUtils.init().setEventName(model.getEventName());
+        Intent intent = new Intent(this,PayActivity.class);
+         intent.putExtra("order",model.getOrderNum());
+         intent.putExtra("subject","报名费用");
+         intent.putExtra("money",model.getPrice());
+         intent.putExtra("from","signUpDetail");
+         startActivityForResult(intent,REQUEST_CODE);
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //在没有支付的情况下，支付成功怎回来刷新支付状态
+        if(requestCode==REQUEST_CODE){
+
+
+            Log.d("支付成功查看详情", "onActivityResult: ");
+        }
     }
 }

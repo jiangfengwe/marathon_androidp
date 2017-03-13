@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:gravity="center_vertical"
+    android:background="@color/body_color"
     android:layout_height="wrap_content">
     <LinearLayout
         android:padding="10dp"
@@ -12,7 +13,7 @@
         android:id="@+id/imageView"
         android:layout_width="80dp"
         android:layout_height="60dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher"
         />
 <LinearLayout
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="标题sefoseom,olgmsolmgol目有且"
-        android:textColor="@android:color/black"
+        android:textColor="@color/white"
 
         />
     <TextView
@@ -37,6 +38,7 @@
         android:textSize="15sp"
         android:id="@+id/time"
         android:maxLines="1"
+        android:textColor="@color/dark"
         android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

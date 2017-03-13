@@ -2,69 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="220dp">
+
       <ImageView
           android:id="@+id/imageView"
           android:scaleType="centerCrop"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="180dp"
           android:src="@drawable/item"
       />
-
       <LinearLayout
-          android:padding="5dp"
+          android:padding="10dp"
           android:layout_alignParentBottom="true"
-          android:background="#7f000000"
-          android:orientation="vertical"
+          android:background="#363636"
+          android:orientation="horizontal"
           android:gravity="center_vertical"
           android:layout_width="match_parent"
           android:layout_height="wrap_content">
-          <TextView
-              android:id="@+id/eventName"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="@android:color/white"
-              android:text="2016贵阳国际马拉松"
-              android:textSize="20sp"
-              android:gravity="center"
-              />
-
           <LinearLayout
-              android:layout_gravity="center"
+              android:layout_weight="1"
               android:orientation="vertical"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
               <TextView
+                  android:ellipsize="end"
+                  android:id="@+id/eventName"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="@android:color/white"
+                  android:text="2016贵阳国际马拉松"
+                  android:textSize="18sp"
+                  />
+              <TextView
+                  android:drawableLeft="@drawable/date_icon"
+                  android:drawablePadding="5dp"
+                  android:textSize="15sp"
                   android:id="@+id/signUpTime"
                   android:textColor="@color/white"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="报名时间:"
+                  android:text="2017年3／10－3／20"
                   />
-              <TextView
-
-                  android:id="@+id/startDate"
-                  android:textColor="@android:color/white"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="竞赛时间:"
-                  />
-
           </LinearLayout>
-
 
           <TextView
 
-              android:id="@+id/time"
-              android:gravity="center"
-              android:textColor="@android:color/white"
-              android:layout_width="match_parent"
+              android:layout_marginLeft="5dp"
+              android:padding="5dp"
+              android:background="@drawable/text_rect_border_selector"
+              android:textColor="@drawable/text_rect_color_selector"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="倒计时"
+              android:text="进行中"
               />
       </LinearLayout>
-  </RelativeLayout>
+
 </LinearLayout>

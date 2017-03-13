@@ -15,11 +15,17 @@ public class Constants {
      * 安卓6.0打开相机权限和相机申请码
      */
     public static final int CAMERA_CODE=0x02;
+    /**
+     * 安卓6.0打电话权限
+     */
+    public static final int CALL_CODE=0x03;
 
     /**
      * 用户选择照片调用系统裁剪头像的申请码
      */
     public static final int EDIT_IMAGE_CODE=10;
+
+
 
 
 }

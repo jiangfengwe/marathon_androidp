@@ -9,7 +9,7 @@ public class MarathonDataUtils {
 
     private static MarathonDataUtils dataUtils;
     private String eventId;
-
+    private String eventName;
 
     private MarathonDataUtils (){}
 
@@ -32,4 +32,11 @@ public class MarathonDataUtils {
         this.eventId = eventId;
     }
 
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
 }

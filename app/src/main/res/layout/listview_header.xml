@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:SpinKit_Color="@color/red"
+            app:SpinKit_Color="@color/white"
             />
         <ImageView
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="下拉刷新"
-            android:textColor="#FF0000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
         </LinearLayout>
         <TextView
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:text="最后刷新时间: 2014-10-10 12:56:12"
-            android:textColor="@android:color/black"
+            android:textColor="@color/dark"
             android:textSize="14sp" />
     </LinearLayout>
 

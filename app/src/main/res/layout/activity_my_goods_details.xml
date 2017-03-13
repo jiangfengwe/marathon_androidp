@@ -4,8 +4,7 @@
     android:id="@+id/activity_goods_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:orientation="vertical"
-    android:background="@color/background"
+    android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyGoodsDetailsActivity">
 
     <include layout="@layout/toolbar_layout"></include>
@@ -157,7 +156,7 @@
             android:layout_height="wrap_content">
             <TableRow
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@color/yellow_color"
                 >
 
                 <TextView

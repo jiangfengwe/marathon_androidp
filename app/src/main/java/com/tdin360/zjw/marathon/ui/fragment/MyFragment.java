@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyGoodsActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity;
@@ -28,12 +29,10 @@ import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
-import java.io.File;
-
 /**个人中心
  * Created by Administrator on 2016/8/9.
  */
-public class Personal_CenterFragment extends Fragment {
+public class MyFragment extends Fragment {
 
     public static final String ACTION="LOGIN_STATUS";//广播action
 
@@ -41,14 +40,14 @@ public class Personal_CenterFragment extends Fragment {
     private RoundedImageView myImageView;
 
      private HeadImageUtils utils;
-    public static Personal_CenterFragment newInstance(){
+    public static MyFragment newInstance(){
 
-        return   new Personal_CenterFragment();
+        return   new MyFragment();
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.fargment_personal_center,container,false);
+        return  inflater.inflate(R.layout.fargment_my,container,false);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class Personal_CenterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        this.utils = new HeadImageUtils(getActivity(),SharedPreferencesManager.getLoginInfo(getActivity()).getName());
+        this.utils = new HeadImageUtils(getActivity());
         userName  = (TextView) view.findViewById(R.id.userName);
         myImageView = (RoundedImageView) view.findViewById(R.id.myImage);
 
@@ -145,30 +144,6 @@ public class Personal_CenterFragment extends Fragment {
          });
 
 
-
-        //我的资料
-
-        view.findViewById(R.id.mySignUp).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                //判断是否登录
-
-                if(SharedPreferencesManager.isLogin(getContext())){
-                    //跳转到我的信息界面
-                    toMyInfo();
-                }else {
-                    //未登录跳转到登录界面
-
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(intent);
-
-                }
-
-
-            }
-        });
         /**
          * 通知消息
          */
@@ -180,28 +155,7 @@ public class Personal_CenterFragment extends Fragment {
                 startActivity(intent);
             }
         });
-//        修改登录密码
-        view.findViewById(R.id.editPass).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //判断是否登录
-
-                if(SharedPreferencesManager.isLogin(getContext())){
-                    //跳转到我的信息界面
-                    Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
-                    startActivity(intent);
-                }else {
-                    //未登录跳转到登录界面
-
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(intent);
-
-                }
-
-            }
-        });
-        //关于我们
+      //关于我们
         view.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,19 +182,21 @@ public class Personal_CenterFragment extends Fragment {
 
 
         //不登陆不显示头像
-        if(!SharedPreferencesManager.isLogin(getContext())){
+        if(SharedPreferencesManager.isLogin(getContext())){
 
-            return;
-        }
-//         获取用户头像
-        String imageUrl = SharedPreferencesManager.getLoginInfo(getContext()).getImageUrl();
-        Bitmap bitmap =  utils.getImage();
+            //         获取用户头像
+            LoginModel model = SharedPreferencesManager.getLoginInfo(getContext());
+            Bitmap bitmap =  utils.getImage(model.getName());
 
-        if(bitmap!=null){
-            myImageView.setImageBitmap(bitmap);
+            if(bitmap!=null){
+                myImageView.setImageBitmap(bitmap);
 
-        }else {
-            utils.download(imageUrl);
+            }else if(!model.getImageUrl().equals("")) {
+                utils.download(model.getImageUrl(),SharedPreferencesManager.getLoginInfo(getActivity()).getName());
+
+                Log.d("下载图片＝＝＝＝＝", "showHeadImage: ");
+
+            }
 
         }
 

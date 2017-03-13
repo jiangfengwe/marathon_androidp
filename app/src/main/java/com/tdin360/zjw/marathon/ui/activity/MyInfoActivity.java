@@ -24,7 +24,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.UserModel;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -38,6 +38,8 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 
 /**
@@ -66,7 +68,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.utils = new HeadImageUtils(this,SharedPreferencesManager.getLoginInfo(this).getName());
+        this.utils = new HeadImageUtils(getApplicationContext());
         initView();
 
     }
@@ -206,7 +208,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private void showHeadImage(){
 
 
-        Bitmap image = utils.getImage();
+        Bitmap image = utils.getImage(SharedPreferencesManager.getLoginInfo(this).getName());
         if(image!=null){
             imageView.setImageBitmap(image);
 
@@ -343,11 +345,12 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
             try {
 
-                Uri u = Uri.fromFile(new File(utils.getFilePath()));
+
+                Uri u = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
                 //调用照相机
                 Intent intent=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.Images.Media.ORIENTATION,OpenCameraRequestCode);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,u);
+                 intent.putExtra(MediaStore.EXTRA_OUTPUT,u);
                 startActivityForResult(intent,OpenCameraRequestCode);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -384,15 +387,15 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             startPhotoZoom(uri);
         }else if(requestCode==OpenCameraRequestCode){
 
-            Uri uri = Uri.fromFile(new File(utils.getFilePath()));
-
+            Uri uri = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
             startPhotoZoom(uri);
         }
 
         //图片裁剪后返回这里
         if(requestCode==Constants.EDIT_IMAGE_CODE){
 
-         upLoadFile(new File(utils.getFilePath()));
+             upLoadFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
+
         }
 
     }
@@ -420,7 +423,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
      * 上传文件
      * @param file 文件路径
      */
-    private void upLoadFile(File file){
+    private void upLoadFile(final File file){
 
 
         hud.show();
@@ -437,6 +440,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.d("------>>>>", "onSuccess: "+result);
 
                 try {
                     JSONObject json  = new JSONObject(result);
@@ -447,13 +451,15 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                     if(success){
                         Toast.makeText(MyInfoActivity.this,"头像上传成功",Toast.LENGTH_SHORT).show();
+                        //上传成功将文件重新命名
+                        file.renameTo(new File(utils.getFilePath(SharedPreferencesManager.getLoginInfo(getApplicationContext()).getName())));
                         //显示上传的头像
                         showHeadImage();
 
                         /**
                          * 通知个人中心更新头像
                          */
-                         Intent intent = new Intent(Personal_CenterFragment.ACTION);
+                         Intent intent = new Intent(MyFragment.ACTION);
                          sendBroadcast(intent);
 
                     }else {
@@ -463,6 +469,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MyInfoActivity.this,"上传失败",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -715,7 +722,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         intent.putExtra("outputX", 200);
         intent.putExtra("outputY", 200);
         intent.putExtra("return-data", true);
-        intent.putExtra("output", Uri.fromFile(new File("")));
+        intent.putExtra("output", Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg")));
         intent.putExtra("outputFormat", "JPEG");
         startActivityForResult(intent,Constants.EDIT_IMAGE_CODE);
     }

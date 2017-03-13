@@ -44,7 +44,7 @@ public class UpdateManager {
 
                 //获取服务器版本
 
-                int serverVersion=3;
+                int serverVersion=1;
                 //获取当前版本
                 int currentVersion = getVersion(context);
 

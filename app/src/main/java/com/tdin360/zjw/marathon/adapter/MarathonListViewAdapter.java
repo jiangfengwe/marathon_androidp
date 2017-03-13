@@ -35,8 +35,7 @@ public void updateList( List<MarathonEventModel> list){
 
     this.list=list;
     notifyDataSetChanged();
-    handlerTimer.removeMessages(1);
-    handlerTimer.sendEmptyMessage(1);
+
 }
     @Override
     public int getCount() {
@@ -64,8 +63,7 @@ public void updateList( List<MarathonEventModel> list){
              viewHolder.eventName = (TextView) convertView.findViewById(R.id.eventName);
              viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
              viewHolder.signUpTime = (TextView) convertView.findViewById(R.id.signUpTime);
-             viewHolder.startDate = (TextView) convertView.findViewById(R.id.startDate);
-             viewHolder.time= (TextView) convertView.findViewById(R.id.time);
+
              convertView.setTag(viewHolder);
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
@@ -73,9 +71,7 @@ public void updateList( List<MarathonEventModel> list){
 
         MarathonEventModel marathonEventModel = list.get(position);
         viewHolder.eventName.setText(marathonEventModel.getName());
-        viewHolder.signUpTime.setText("报名时间:"+ marathonEventModel.getStartDate());
-        viewHolder.startDate.setText("竞赛时间:"+ marathonEventModel.getStartDate()+" 08:00");
-        viewHolder.time.setText("距离比赛时间还有："+formatTime(marathonEventModel.getTime()));
+        viewHolder.signUpTime.setText(marathonEventModel.getStartDate());
          return convertView;
     }
     class ViewHolder{
@@ -83,8 +79,7 @@ public void updateList( List<MarathonEventModel> list){
         private TextView eventName;
         private ImageView imageView;
         private TextView signUpTime;
-        private TextView startDate;
-        private TextView time;
+
     }
 
     /**

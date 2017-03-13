@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity">
     <LinearLayout
         android:orientation="vertical"
@@ -21,14 +22,6 @@
 
     </com.tdin360.zjw.marathon.weight.RefreshListView>
     </LinearLayout>
-    <!--开始加载时提示-->
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loading"></include>
-    </LinearLayout>
-
     <!--加载失败时显示提示-->
     <LinearLayout
         android:layout_centerInParent="true"
@@ -45,6 +38,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:textSize="18sp"
+            android:textColor="@color/dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="暂无数据!"

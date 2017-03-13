@@ -4,6 +4,7 @@
     android:id="@+id/activity_my_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MySignUpActivity">
   <LinearLayout
       android:orientation="vertical"
@@ -15,7 +16,8 @@
 
     <com.tdin360.zjw.marathon.weight.RefreshListView
         android:id="@+id/refreshListView"
-        android:divider="@android:color/transparent"
+        android:divider="@color/background"
+        android:dividerHeight="5dp"
         android:listSelector="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

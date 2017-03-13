@@ -3,13 +3,126 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.AboutUsActivity">
     <include layout="@layout/toolbar_layout"></include>
-    <WebView
-        android:id="@+id/webView"
+    <LinearLayout
+        android:gravity="center"
+        android:padding="10dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/logo"
+            />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="V 1.0"
+            />
+    </LinearLayout>
 
-    </WebView>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="@drawable/personal_center_item_selector"
+            android:onClick="click"
+            android:id="@+id/gw"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="官方网站"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                />
+            <TextView
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark"
+                android:text="www.tdin360.com"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="0.5dp"
+            android:background="@drawable/personal_center_item_selector"
+            android:onClick="click"
+            android:id="@+id/kf"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="客服热线"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                />
+            <TextView
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark"
+                android:text="10086"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:onClick="click"
+            android:id="@+id/xy"
+            android:layout_marginTop="0.5dp"
+            android:background="@drawable/personal_center_item_selector"
+             android:padding="15dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="服务协议"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+             android:drawableRight="@drawable/arrow_right"
+             />
+
+        <TextView
+          android:onClick="click"
+            android:layout_marginTop="0.5dp"
+             android:padding="15dp"
+             android:background="@drawable/personal_center_item_selector"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="问题反馈"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+             android:drawableRight="@drawable/arrow_right"
+            android:id="@+id/quest" />
+
+        <TextView
+            android:onClick="click"
+            android:layout_marginTop="0.5dp"
+             android:padding="15dp"
+             android:background="@drawable/personal_center_item_selector"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="帮助"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+             android:drawableRight="@drawable/arrow_right"
+            android:id="@+id/help" />
+
+    </LinearLayout>
+
 </LinearLayout>

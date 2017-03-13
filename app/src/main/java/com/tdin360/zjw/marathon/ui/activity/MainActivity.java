@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.ui.fragment.Marathon_MainFragment;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
-
-import org.xutils.x;
+import com.tdin360.zjw.marathon.ui.fragment.CircleFragment;
+import com.tdin360.zjw.marathon.ui.fragment.EventFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
+import com.tdin360.zjw.marathon.ui.fragment.StepFragment;
 
 /**
  * 程序主界面
@@ -22,8 +22,12 @@ public class MainActivity extends FragmentActivity{
 
     private static final String TAB1="tab1";
     private static final String TAB2="tab2";
-    private Marathon_MainFragment marathonFragment;
-    private Personal_CenterFragment personalCenterFragment;
+    private static  final String TAB3="tab3";
+    private static  final String TAB4="tab4";
+    private EventFragment marathonFragment;//赛事首页
+    private CircleFragment circleFragment;//圈子
+    private StepFragment stepFragment;//运动
+    private MyFragment personalCenterFragment;//我的
     private RadioGroup radioGroup;
 
     @Override
@@ -33,15 +37,25 @@ public class MainActivity extends FragmentActivity{
 
           //防止旋转屏幕时重叠
           if(savedInstanceState!=null){
-              marathonFragment= (Marathon_MainFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
-              personalCenterFragment= (Personal_CenterFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
+              this.marathonFragment= (EventFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
+              this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
+              this.stepFragment = (StepFragment) this.getSupportFragmentManager().findFragmentByTag(TAB3);
+              this.personalCenterFragment= (MyFragment) this.getSupportFragmentManager().findFragmentByTag(TAB4);
           }
-
+        /**
+         * 初始化tab组
+         */
           this.radioGroup = (RadioGroup) this.findViewById(R.id.radioGroup);
+//          添加tab选择事件
           this.radioGroup.setOnCheckedChangeListener(new MyCheckedItemListener());
-            radioGroup.check(R.id.tab1);
+//        默认选中第一个tab
+          this.radioGroup.check(R.id.tab1);
     }
 
+
+    /**
+     * 点击tab切换界面
+     */
     private class MyCheckedItemListener implements RadioGroup.OnCheckedChangeListener{
 
 
@@ -53,7 +67,7 @@ public class MainActivity extends FragmentActivity{
 
                 case R.id.tab1:
                     if(marathonFragment==null){
-                        marathonFragment =  Marathon_MainFragment.newInstance();
+                        marathonFragment =  EventFragment.newInstance();
                         fragmentTransaction.add(R.id.center,marathonFragment,TAB1);
                     }else {
                         fragmentTransaction.show(marathonFragment);
@@ -61,9 +75,27 @@ public class MainActivity extends FragmentActivity{
 
                     break;
                 case R.id.tab2:
+                    if(circleFragment==null){
+                        circleFragment =  CircleFragment.newInstance();
+                        fragmentTransaction.add(R.id.center,circleFragment,TAB2);
+                    }else {
+                        fragmentTransaction.show(circleFragment);
+                    }
+
+                    break;
+                case R.id.tab3:
+                    if(stepFragment==null){
+                        stepFragment =  StepFragment.newInstance();
+                        fragmentTransaction.add(R.id.center,stepFragment,TAB3);
+                    }else {
+                        fragmentTransaction.show(stepFragment);
+                    }
+
+                    break;
+                case R.id.tab4:
                      if(personalCenterFragment==null){
-                         personalCenterFragment= Personal_CenterFragment.newInstance();
-                         fragmentTransaction.add(R.id.center,personalCenterFragment,TAB2);
+                         personalCenterFragment= MyFragment.newInstance();
+                         fragmentTransaction.add(R.id.center,personalCenterFragment,TAB4);
 
                      }else {
                          fragmentTransaction.show(personalCenterFragment);
@@ -73,11 +105,19 @@ public class MainActivity extends FragmentActivity{
 
             fragmentTransaction.commit();
         }
+
+
         //切换时隐藏界面
         private void hide( FragmentTransaction fragmentTransaction){
 
             if(marathonFragment!=null&&marathonFragment.isAdded()){
                 fragmentTransaction.hide(marathonFragment);
+            }
+            if(circleFragment!=null&&circleFragment.isAdded()){
+                fragmentTransaction.hide(circleFragment);
+            }
+            if(stepFragment!=null&&stepFragment.isAdded()){
+                fragmentTransaction.hide(stepFragment);
             }
             if(personalCenterFragment!=null&&personalCenterFragment.isAdded()){
                 fragmentTransaction.hide(personalCenterFragment);
@@ -89,7 +129,7 @@ public class MainActivity extends FragmentActivity{
     //连续按两次退出
 
     private int clickCount=0;
-    private int WHAT=0x05;
+    private int WHAT=0;
 
     @Override
     public void onBackPressed() {
@@ -106,7 +146,7 @@ public class MainActivity extends FragmentActivity{
 
     }
 
-    private Handler handler = new Handler(){
+    private  Handler handler = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
@@ -114,7 +154,5 @@ public class MainActivity extends FragmentActivity{
             clickCount=0;
         }
     };
-
-
 
 }

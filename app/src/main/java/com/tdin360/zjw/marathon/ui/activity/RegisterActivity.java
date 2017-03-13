@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +20,7 @@ import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.ui.fragment.Personal_CenterFragment;
+import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -193,7 +190,6 @@ public class RegisterActivity extends BaseActivity {
         button.setEnabled(false);
         handler.sendEmptyMessage(0);
 
-
         //发送验证码
         RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
         params.addBodyParameter("tel",tel);
@@ -204,12 +200,11 @@ public class RegisterActivity extends BaseActivity {
            @Override
            public void onSuccess(String result) {
 
-
                try {
                    JSONObject json = new JSONObject(result);
 
                    boolean success = json.getBoolean("isSuccess");
-                   String reason = json.getString("Reason");
+                   String reason = json.getString("content");
                    if(success){
                        Toast.makeText(RegisterActivity.this,"验证码已成功发送",Toast.LENGTH_SHORT).show();
 
@@ -221,6 +216,7 @@ public class RegisterActivity extends BaseActivity {
 
                } catch (JSONException e) {
                    e.printStackTrace();
+                   Toast.makeText(RegisterActivity.this,"验证码发送失败",Toast.LENGTH_SHORT).show();
                }
 
 
@@ -359,7 +355,7 @@ public class RegisterActivity extends BaseActivity {
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(RegisterActivity.this,new LoginModel(tel,password,""));
                         //通知个人中心修改登录状态
-                        Intent intent2  =new Intent(Personal_CenterFragment.ACTION);
+                        Intent intent2  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent2);
                         finish();
 

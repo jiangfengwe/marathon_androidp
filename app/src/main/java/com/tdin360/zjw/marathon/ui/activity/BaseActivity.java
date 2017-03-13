@@ -294,7 +294,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             case Constants.CAMERA_CODE:
                doCameraPermission();
                 break;
-
+            case Constants.CALL_CODE:
+                doCallPermission();
+                break;
         }
     }
 
@@ -312,4 +314,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void doCameraPermission(){}
 
 
+    /**
+     * 打电话权限回调
+     */
+    public void doCallPermission(){}
 }
