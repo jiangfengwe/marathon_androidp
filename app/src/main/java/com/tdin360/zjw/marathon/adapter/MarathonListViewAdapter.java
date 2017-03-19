@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.MarathonEventModel;
 
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
 import java.util.List;
 
 /**
@@ -63,6 +66,7 @@ public void updateList( List<MarathonEventModel> list){
              viewHolder.eventName = (TextView) convertView.findViewById(R.id.eventName);
              viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
              viewHolder.signUpTime = (TextView) convertView.findViewById(R.id.signUpTime);
+             viewHolder.status = (TextView) convertView.findViewById(R.id.status);
 
              convertView.setTag(viewHolder);
         }else {
@@ -72,6 +76,22 @@ public void updateList( List<MarathonEventModel> list){
         MarathonEventModel marathonEventModel = list.get(position);
         viewHolder.eventName.setText(marathonEventModel.getName());
         viewHolder.signUpTime.setText(marathonEventModel.getStartDate());
+        //处理
+        ImageOptions imageOptions = new ImageOptions.Builder()
+                //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
+                .setLoadingDrawableId(R.drawable.carousel_default)//加载中默认显示图片
+                .setUseMemCache(true)//设置使用缓存
+                .setFailureDrawableId(R.drawable.search_nodata)//加载失败后默认显示图片
+                .build();
+        x.image().bind(viewHolder.imageView,marathonEventModel.getPicUrl(),imageOptions);
+
+        viewHolder.status.setText(marathonEventModel.getStatus());
+        if(marathonEventModel.getStatus().equals("已结束")){
+            viewHolder.status.setEnabled(false);
+        }
+
+
+
          return convertView;
     }
     class ViewHolder{
@@ -79,6 +99,7 @@ public void updateList( List<MarathonEventModel> list){
         private TextView eventName;
         private ImageView imageView;
         private TextView signUpTime;
+        private TextView status;
 
     }
 

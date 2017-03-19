@@ -83,7 +83,7 @@ public class MenuView extends LinearLayout {
     /**
      * 设置菜单内容
      * @param menuId 菜单id用于标示菜单选项
-     * @param icon 菜单图标 默认是120*120的大小
+     * @param icon 菜单图标
      * @param title 菜单标题
      */
     public void setMenuContent(Object menuId,Bitmap icon,String title){
@@ -105,7 +105,7 @@ public class MenuView extends LinearLayout {
      * @param menuId 菜单id
      * @param icon 菜单图标
      * @param title 菜单标题
-     * @param iconWidth 菜单图标宽度  默认是120*120的大小
+     * @param iconWidth 菜单图标宽度
      * @param iconHeight 菜单图标高度
      */
     public void setMenuContent(Object menuId,Bitmap icon,String title,int iconWidth,int iconHeight){

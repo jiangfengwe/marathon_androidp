@@ -170,7 +170,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
                         int id = o.getInt("Id");
 
-                        newsModelList.add(new NewsModel(id, o.getString("MessageName"), o.getString("MessagePicture"),HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS+id, o.getString("CreateTimeStr")));
+                        newsModelList.add(new NewsModel(id, o.getString("MessageName"), o.getString("MessagePictureUrl"),HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS+id, o.getString("CreateTimeStr")));
 
                     }
                     //加载成功隐藏

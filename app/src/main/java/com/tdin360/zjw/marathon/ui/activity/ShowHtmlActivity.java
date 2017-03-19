@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.ShareInfo;
+import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -62,7 +63,7 @@ public class ShowHtmlActivity extends BaseActivity {
         if (intent!=null){
 
             boolean isSign = intent.getBooleanExtra("isSign", false);
-            if(isSign){
+            if(isSign&& MarathonDataUtils.init().getStatus().equals("进行中")){
                 this.signUpBtn.setVisibility(View.VISIBLE);
                 this.signUpBtn.setOnClickListener(new View.OnClickListener() {
                     @Override

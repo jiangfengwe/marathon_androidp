@@ -148,42 +148,39 @@
              </View>
          </TableLayout>
 
-        <TableLayout
-            android:shrinkColumns="0"
-            android:padding="10dp"
+          <LinearLayout
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TableRow
-                android:layout_width="match_parent"
-                android:background="@color/yellow_color"
-                >
+              android:padding="10dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <View
+                  android:layout_weight="1"
+                  android:background="@android:color/darker_gray"
+                  android:layout_width="match_parent"
+                  android:layout_height="1dp"></View>
+              <TextView
 
-                <TextView
-                    android:padding="5dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_width="match_parent"
-                    android:text="领取时间"
-                    android:textColor="@color/white"
-                    />
-            </TableRow>
-
-            <TableRow
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <TextView
-                    android:textSize="15sp"
-                    android:padding="5dp"
-                    android:layout_width="match_parent"
-                    android:text="2017年7月20日   9:00－17:00"
-                    />
-            </TableRow>
-        </TableLayout>
+                  android:padding="5dp"
+                  android:textSize="16sp"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="领取时间"
+                  android:textColor="@color/textBlack"
+                  />
+              <View
+                  android:layout_weight="1"
+                  android:background="@android:color/darker_gray"
+                  android:layout_width="match_parent"
+                  android:layout_height="1dp"></View>
+          </LinearLayout>
+         <TextView
+             android:gravity="center"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="2017年7月20日   9:00－17:00"
+             />
           <LinearLayout
               android:padding="10dp"
               android:gravity="center_vertical"
@@ -254,7 +251,7 @@
               <TextView
                   android:layout_height="wrap_content"
                   android:layout_width="match_parent"
-                  android:text="1.xxxxxx，2.xxxxxxxnnnnnni 你你你你你你你你你你你你你你n"
+                  android:text="1.材料1，2.材料二"
                   />
 
           </LinearLayout>
@@ -275,7 +272,7 @@
               <TextView
                   android:layout_height="wrap_content"
                   android:layout_width="match_parent"
-                  android:text="1.xxxxxx，2.xxxxxxxnnnnnni 你你你你你你你你你你你你你你n"
+                  android:text="1.申请快递，2.填写快的单"
                   />
 
           </LinearLayout>

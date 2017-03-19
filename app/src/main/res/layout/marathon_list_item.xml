@@ -46,7 +46,7 @@
           </LinearLayout>
 
           <TextView
-
+              android:id="@+id/status"
               android:layout_marginLeft="5dp"
               android:padding="5dp"
               android:background="@drawable/text_rect_border_selector"

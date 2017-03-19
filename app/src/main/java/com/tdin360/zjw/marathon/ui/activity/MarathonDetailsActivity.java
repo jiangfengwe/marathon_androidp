@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class MarathonDetailsActivity extends BaseActivity {
     private TextView notData;
     private LinearLayout main;
     private TextView loadFail;
+    private Button signBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,14 @@ public class MarathonDetailsActivity extends BaseActivity {
          manager.buildShareBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.guide3));
        // ShareInfoManager.getManager(this).setShareWebLink(eventName,"http://www.baidu.com","来自赛事详情的分享", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
         showShareButton(manager);
+
+        //如果报名已结束就不显示报名按钮
+         this.signBtn = (Button) this.findViewById(R.id.signBtn);
+         if(MarathonDataUtils.init().getStatus().equals("已结束")){
+
+             this.signBtn.setVisibility(View.GONE);
+
+         }
 
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);

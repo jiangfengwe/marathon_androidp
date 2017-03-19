@@ -102,7 +102,8 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
                 viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
                 viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
                 viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
-                viewHolder.isPay = (TextView) convertView.findViewById(R.id.isPay);
+                viewHolder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -110,9 +111,9 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
 
 
             SignUpInfoModel model = list.get(position);
+            x.image().bind(viewHolder.imageView,model.getImageUrl());
             viewHolder.matchName.setText(model.getEventName());
             viewHolder.matchAchievement.setText(model.getAttendProject());
-            viewHolder.isPay.setText(model.isPayed()==true?"已支付":"未支付");
             viewHolder.matchTime.setText(model.getCreateTime()+"");
 
             return convertView;
@@ -122,7 +123,7 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
             private TextView matchTime;
             private TextView matchName;
             private TextView matchAchievement;
-            private TextView isPay;
+
 
         }
     }
@@ -217,6 +218,10 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
                              Log.d("---------->>>", "onSuccess: "+object.getString("RegistratorName"));
 
                              String id = object.getString("Id");
+                             //赛事图片
+                             String pictureUrl = object.getString("CuurentEventPictureUrl");
+
+                             Log.d("------->iiii", "onSuccess: "+pictureUrl);
                              //赛事名称
                              String eventName = object.getString("EventName");
 
@@ -274,14 +279,14 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
                              String emergencyContactPhone = object.getString("EmergencyContactPhone");
 
 //                             报名时间
-                             String createTime = object.getString("CreateTime");
+                             String createTime = object.getString("CreateTimeStr");
 
                              //订单号
                              String orderNo = object.getString("OrderNo");
 
 
-                             list.add(new SignUpInfoModel(id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
-                             list.add(new SignUpInfoModel(id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+                             list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+                             list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
 
                          }
 

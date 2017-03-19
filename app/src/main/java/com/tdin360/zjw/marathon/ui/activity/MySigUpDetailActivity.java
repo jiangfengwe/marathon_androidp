@@ -11,12 +11,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.SignUpInfoModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -49,44 +54,140 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         showData(model);
 
     }
+    /**
+     * 请求网络数据
+     */
+    private void httpRequest() {
 
-    private void httpRequest(String id){
-
-
-        RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
-
-        params.addQueryStringParameter("applyId",id);
-
-        params.setConnectTimeout(5*1000);
-        x.http().get(params, new Callback.CacheCallback<String>() {
+        RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
+        params.addQueryStringParameter("orderNo",model.getOrderNum());
+        x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.d(" -----signup--->>>", "onSuccess: " + result);
 
-                Log.d("----------->>>>", "onSuccess: "+result);
+                try {
+                    JSONObject json = new JSONObject(result);
+
+                    JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
+
+                    boolean success = eventMobileMessage.getBoolean("Success");
+                    String reason = eventMobileMessage.getString("Reason");
+
+                    if(success){
+
+                        JSONArray registratorMessages = json.getJSONArray("RegistratorMessages");
+
+                        for(int i=0;i<registratorMessages.length();i++){
+
+
+                            JSONObject object = registratorMessages.getJSONObject(i);
+
+                            Log.d("---------->>>", "onSuccess: "+object.getString("RegistratorName"));
+
+                            String id = object.getString("Id");
+                            //赛事图片
+                            String pictureUrl = object.getString("CuurentEventPictureUrl");
+
+                            Log.d("------->iiii", "onSuccess: "+pictureUrl);
+                            //赛事名称
+                            String eventName = object.getString("EventName");
+
+                            //真实姓名
+                            String name = object.getString("RegistratorName");
+//                             性别
+                            boolean sex = object.getBoolean("RegistratorSex");
+//                             生日
+                            String birth = object.getString("Birthday");
+
+//                             现居地址
+                            String address = object.getString("RegistratorPlace");
+//                             国家
+                            String country = object.getString("Country");
+
+//                             省份
+                            String province = object.getString("Province");
+//                             城市
+                            String city = object.getString("City");
+//                             地区
+                            String county = object.getString("County");
+//                             手机号码
+                            String phone = object.getString("RegistratorPhone");
+
+//                             邮箱
+                            String email = object.getString("RegistratorEmail");
+
+//                             证件号码
+                            String number = object.getString("RegistratorDocumentNumber");
+
+//                             证件类型
+                            String type = object.getString("RegistratorDocumentType");
+
+//                             服装尺码
+                            String size = object.getString("RegistratorSize");
+
+//                             参赛项目
+                            String projectType = object.getString("RegistratorCompeteType");
+
+//                             是否支付
+                            boolean isPay = object.getBoolean("RegistratorIsPay");
+
+//                              参赛号码
+                            String documentNumber = object.getString("RegistratorDocumentNumber");
+
+//                             邮政编码
+                            String postCode = object.getString("RegisterPostCode");
+
+//                             报名费用
+                            String money = object.getString("Money");
+//                             紧急联系人
+                            String emergencyContactName = object.getString("EmergencyContactName");
+
+//                             紧急联系电话
+                            String emergencyContactPhone = object.getString("EmergencyContactPhone");
+
+//                             报名时间
+                            String createTime = object.getString("CreateTimeStr");
+
+                            //订单号
+                            String orderNo = object.getString("OrderNo");
+
+
+                            SignUpInfoModel model = new SignUpInfoModel(pictureUrl, id, eventName, name, phone, email, birth, number, type, sex, country, province, city, county, projectType, size, address, postCode, emergencyContactName, emergencyContactPhone, documentNumber, isPay, createTime, orderNo, money);
+                            showData(model);
+                        }
+
+                    }else {
+
+                        Toast.makeText(MySigUpDetailActivity.this,reason,Toast.LENGTH_SHORT).show();
+
+                        //没有查询到报名信息
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
-
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(MySigUpDetailActivity.this, "网络错误或访问服务器出错!", Toast.LENGTH_SHORT).show();
 
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onFinished() {
 
-            }
 
-            @Override
-            public boolean onCache(String result) {
-                return false;
+
             }
         });
     }
-
     @Override
     public int getLayout() {
         return R.layout.activity_my_sig_up_detail;
@@ -341,10 +442,9 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //在没有支付的情况下，支付成功怎回来刷新支付状态
-        if(requestCode==REQUEST_CODE){
+        if(requestCode==REQUEST_CODE&&resultCode==RESULT_OK){
 
-
-            Log.d("支付成功查看详情", "onActivityResult: ");
+           httpRequest();
         }
     }
 }

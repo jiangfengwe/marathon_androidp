@@ -209,7 +209,9 @@ public class RegisterActivity extends BaseActivity {
                        Toast.makeText(RegisterActivity.this,"验证码已成功发送",Toast.LENGTH_SHORT).show();
 
                    }else {
-
+                       handler.removeMessages(0);
+                       button.setText("获取验证码");
+                       button.setEnabled(true);
                        Toast.makeText(RegisterActivity.this,reason,Toast.LENGTH_SHORT).show();
                    }
 
@@ -225,6 +227,9 @@ public class RegisterActivity extends BaseActivity {
            @Override
            public void onError(Throwable ex, boolean isOnCallback) {
                Toast.makeText(RegisterActivity.this,"验证码发送失败",Toast.LENGTH_SHORT).show();
+               handler.removeMessages(0);
+               button.setText("获取验证码");
+               button.setEnabled(true);
            }
 
            @Override

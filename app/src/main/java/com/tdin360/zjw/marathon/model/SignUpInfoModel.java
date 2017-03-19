@@ -9,6 +9,7 @@ import java.io.StringReader;
  */
 public class SignUpInfoModel implements Serializable {
 
+    private String imageUrl;//赛事图片
     private String eventId;//赛事id
     private String eventName;//赛事名称
     private String name;//姓名
@@ -35,7 +36,8 @@ public class SignUpInfoModel implements Serializable {
     private String price;//支付金额
 
 
-    public SignUpInfoModel(String eventId,String eventName,String name, String phone,String email ,String birthday, String idNumber, String certificateType, boolean gender, String nationality, String province, String city, String county, String attendProject, String clothingSize, String address, String postcode, String urgencyLinkman, String urgencyLinkmanPhone, String attendNumber,boolean isPayed, String createTime,String orderNum,String price) {
+    public SignUpInfoModel(String imageUrl,String eventId,String eventName,String name, String phone,String email ,String birthday, String idNumber, String certificateType, boolean gender, String nationality, String province, String city, String county, String attendProject, String clothingSize, String address, String postcode, String urgencyLinkman, String urgencyLinkmanPhone, String attendNumber,boolean isPayed, String createTime,String orderNum,String price) {
+        this.imageUrl = imageUrl;
         this.eventId=eventId;
         this.eventName=eventName;
         this.name = name;
@@ -62,6 +64,11 @@ public class SignUpInfoModel implements Serializable {
         this.price = price;
     }
 
+    public String getImageUrl(){
+
+
+        return imageUrl;
+    }
     public String getEventId() {
         return eventId;
     }

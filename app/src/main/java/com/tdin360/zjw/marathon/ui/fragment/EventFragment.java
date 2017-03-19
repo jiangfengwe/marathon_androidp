@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -229,6 +230,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
             //为单例成员赋值
             MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
             MarathonDataUtils.init().setEventName(eventInfo.getName());
+            MarathonDataUtils.init().setStatus(eventInfo.getStatus());
             Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
             startActivity(intent);
 
@@ -252,6 +254,8 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                 try {
                     JSONObject obj = new JSONObject(s);
 
+
+                    Log.d("------>>>>", "onSuccess: "+obj);
                     pageCount = obj.getInt("TotalPages");
                     JSONArray array = obj.getJSONArray("EventSystemMessageList");
 
@@ -263,7 +267,8 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                         String status = object.getString("Status");
                         String eventStartTime = object.getString("EventStartTimeStr");
                         long time = object.getLong("Timestamp");
-                     list.add(new MarathonEventModel(id,eventName,status,"",eventStartTime,time));
+                        String pictureUrl = object.getString("PictureUrl");
+                        list.add(new MarathonEventModel(id,eventName,status,pictureUrl,eventStartTime,time));
 
                     }
 

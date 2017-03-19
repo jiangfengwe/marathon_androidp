@@ -88,6 +88,7 @@
              <TextView
                  android:id="@+id/notData"
                  android:visibility="gone"
+                 android:textColor="@color/dark"
                 android:layout_marginTop="50dp"
                  android:layout_centerInParent="true"
                  android:layout_width="wrap_content"
@@ -101,6 +102,7 @@
         </LinearLayout>
     </ScrollView>
     <Button
+        android:id="@+id/signBtn"
         android:layout_marginTop="5dp"
         android:onClick="toSignUp"
         android:text="立即报名"
