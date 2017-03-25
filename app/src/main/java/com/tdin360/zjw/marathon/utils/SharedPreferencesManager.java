@@ -158,4 +158,30 @@ public class SharedPreferencesManager {
         edit.commit();
 
     }
+
+    //保存当前版本号
+    public static void saveGuideStatus(Context context){
+
+        SharedPreferences shared = context.getSharedPreferences("guide",Activity.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shared.edit();
+        edit.putInt("isGuide",UpdateManager.getVersion(context));
+        edit.commit();
+    }
+
+    //判断是否进行用户引导
+    public static boolean isGuide(Context context){
+
+        SharedPreferences shared = context.getSharedPreferences("guide",Activity.MODE_PRIVATE);
+        //获取历史版本号
+        int isGuide = shared.getInt("isGuide", 0);
+
+//        如果发现新版本就进行引导
+        if(UpdateManager.getVersion(context)>isGuide){
+
+            return true;
+        }
+
+        return false;
+
+    }
 }

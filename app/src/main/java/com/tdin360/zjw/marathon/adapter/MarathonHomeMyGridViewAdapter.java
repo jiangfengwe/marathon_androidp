@@ -69,10 +69,10 @@ public class MarathonHomeMyGridViewAdapter extends BaseAdapter {
         ImageOptions imageOptions = new ImageOptions.Builder()
                 // .setSize(DensityUtil.dip2px(340), DensityUtil.dip2px(300))//图片大小
                 // .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
-                .setImageScaleType(ImageView.ScaleType.FIT_XY)
-                .setLoadingDrawableId(R.mipmap.ic_launcher)//加载中默认显示图片
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setLoadingDrawableId(R.drawable.loading_small_default)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
-                .setFailureDrawableId(R.mipmap.ic_launcher)//加载失败后默认显示图片
+                .setFailureDrawableId(R.drawable.loading_small_error)//加载失败后默认显示图片
                 .build();
         x.image().bind(viewHolder.imageView, carouselModel.getPicUrl(),imageOptions);
         return convertView;

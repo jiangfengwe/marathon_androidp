@@ -89,7 +89,7 @@ public class MarathonMapActivity extends BaseActivity {
         RequestParams params = new RequestParams(HttpUrlUtils.PROJECT_MAP);
 
         params.addBodyParameter("eventid", MarathonDataUtils.init().getEventId());
-
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.setMaxRetryCount(60*1000);
 
         x.http().get(params, new Callback.CacheCallback<String>() {
@@ -116,7 +116,6 @@ public class MarathonMapActivity extends BaseActivity {
                             JSONArray list = jsonObject.getJSONArray("CompetitionRouteList");
 
                             List<MapPointNode>nodes  =new ArrayList<>();
-                            Log.d("----->>name--", "onSuccess: "+projectName);
 
                             MapPointNode startNode=null,endNode=null;
                             for (int j=0;j<list.length();j++){
@@ -126,12 +125,12 @@ public class MarathonMapActivity extends BaseActivity {
 
                                 double longitude = item.getDouble("Longitude");
                                 double latitude = item.getDouble("Latitude");
-                                Log.d("-------->>>", "onSuccess: "+longitude);
+
                                 nodes.add(new MapPointNode(longitude,latitude));
 
                                 String note = item.getString("Note");
 
-                                Log.d("note----->>", "onSuccess: "+note);
+
                                 if(note!=null&&note.equals("起点")){
 
                                     //获取起点

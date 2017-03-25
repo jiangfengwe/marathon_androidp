@@ -182,10 +182,10 @@ public class LoginActivity extends BaseActivity {
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
         params.addQueryStringParameter("phone",tel);
         params.addQueryStringParameter("password",pass);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                Log.d("--------->>>", "onSuccess: "+s);
 
                 try {
                     JSONObject json = new JSONObject(s);

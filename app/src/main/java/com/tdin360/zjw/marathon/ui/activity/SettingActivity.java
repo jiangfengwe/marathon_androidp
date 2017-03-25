@@ -56,20 +56,6 @@ public class SettingActivity extends BaseActivity {
              }
          });
 
-        //意见反馈
-        this.findViewById(R.id.feedback).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String cacheSize = CacheFileManager.getCacheSize(getExternalCacheDir().getPath());
-
-                Log.d("缓存大小＝＝＝＝＝＝＝＝", "onClick: "+cacheSize);
-
-//                CacheFileManager.clearCache(getExternalCacheDir().getPath());
-
-            }
-        });
 
         //清空记录
         this.findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {

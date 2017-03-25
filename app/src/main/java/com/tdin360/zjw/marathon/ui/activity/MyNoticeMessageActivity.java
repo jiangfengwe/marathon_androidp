@@ -94,7 +94,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
 
             NoticeMessageModel messageItem = list.get(position);
             holder.time.setText(messageItem.getForTime());
-            holder.name.setText(messageItem.getForName());
+            holder.name.setText("");
             holder.message.setText(messageItem.getMessage());
 
         }

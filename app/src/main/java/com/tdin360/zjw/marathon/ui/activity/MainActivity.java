@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity{
           //防止旋转屏幕时重叠
           if(savedInstanceState!=null){
               this.marathonFragment= (EventFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
-              this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
+            //  this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
               this.stepFragment = (StepFragment) this.getSupportFragmentManager().findFragmentByTag(TAB3);
               this.personalCenterFragment= (MyFragment) this.getSupportFragmentManager().findFragmentByTag(TAB4);
           }

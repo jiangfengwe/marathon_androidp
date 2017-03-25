@@ -4,7 +4,7 @@ package com.tdin360.zjw.marathon.model;
  * 赛事列表模型
  * Created by Administrator on 2016/8/24.
  */
-public class MarathonEventModel {
+public class EventModel {
 
     //赛事id
     private int id;
@@ -20,14 +20,26 @@ public class MarathonEventModel {
     //倒计时时间戳
     private long time;
 
+    private String shardUrl;
 
-    public MarathonEventModel(int id, String name, String status, String picUrl, String startDate, long time) {
+
+    public EventModel(int id, String name, String status, String picUrl, String startDate,String shardUrl) {
+        this.id=id;
+        this.name = name;
+        this.status = status;
+        this.picUrl = picUrl;
+        this.startDate = startDate;
+        this.shardUrl=shardUrl;
+
+    }
+    public EventModel(int id, String name, String status, String picUrl, String startDate, long time,String shardUrl) {
        this.id=id;
         this.name = name;
         this.status = status;
         this.picUrl = picUrl;
         this.startDate = startDate;
         this.time = time;
+        this.shardUrl=shardUrl;
     }
 
 
@@ -78,5 +90,9 @@ public class MarathonEventModel {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getShardUrl() {
+        return shardUrl;
     }
 }

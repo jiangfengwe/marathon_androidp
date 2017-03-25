@@ -7,9 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:src="@drawable/item"
+        android:src="@drawable/loading_banner_default"
         android:scaleType="centerCrop"
         />
     <LinearLayout
@@ -19,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/eventName"
             android:gravity="center"
             android:textSize="18sp"
             android:textColor="@color/white"
@@ -27,6 +29,15 @@
             android:text="2017贵阳国际马拉松"
             />
     </LinearLayout>
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow"
+            />
     </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -34,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="85dp">
         <TextView
+            android:id="@+id/projectName"
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textSize="16sp"
@@ -66,6 +78,7 @@
                    android:text="枪声成绩"
                    />
                <TextView
+                   android:id="@+id/qiang"
                    android:textSize="20sp"
                    android:textStyle="bold"
                    android:layout_width="wrap_content"
@@ -98,6 +111,7 @@
                     android:text="净成绩"
                     />
                 <TextView
+                    android:id="@+id/jing"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"

@@ -55,16 +55,17 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
     }
     /**
-     * 请求网络数据
+     * 请求网络数据(支付成功后根据订单号更新支付结果)
      */
     private void httpRequest() {
 
-        RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
+        RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
         params.addQueryStringParameter("orderNo",model.getOrderNum());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(" -----signup--->>>", "onSuccess: " + result);
+
+
 
                 try {
                     JSONObject json = new JSONObject(result);
@@ -76,20 +77,14 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
                     if(success){
 
-                        JSONArray registratorMessages = json.getJSONArray("RegistratorMessages");
+                        JSONObject object = json.getJSONObject("RegistratorMessageModel");
 
-                        for(int i=0;i<registratorMessages.length();i++){
-
-
-                            JSONObject object = registratorMessages.getJSONObject(i);
-
-                            Log.d("---------->>>", "onSuccess: "+object.getString("RegistratorName"));
 
                             String id = object.getString("Id");
                             //赛事图片
                             String pictureUrl = object.getString("CuurentEventPictureUrl");
 
-                            Log.d("------->iiii", "onSuccess: "+pictureUrl);
+
                             //赛事名称
                             String eventName = object.getString("EventName");
 
@@ -155,7 +150,6 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
                             SignUpInfoModel model = new SignUpInfoModel(pictureUrl, id, eventName, name, phone, email, birth, number, type, sex, country, province, city, county, projectType, size, address, postCode, emergencyContactName, emergencyContactPhone, documentNumber, isPay, createTime, orderNo, money);
                             showData(model);
-                        }
 
                     }else {
 
@@ -300,6 +294,11 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
     private void showData(SignUpInfoModel model){
 
+        if(model==null){
+
+            return;
+        }
+
 
         /**
          * -------------------- 基本信息部分 -----------------
@@ -339,6 +338,10 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         //服装尺码
         TextView  clothesSize = (TextView) view0.findViewById(R.id.clothesSize);
         clothesSize.setText(model.getClothingSize());
+
+        //报名时间
+        TextView date = (TextView) view0.findViewById(R.id.dateTime);
+        date.setText(model.getCreateTime());
 
         /**
          *  -------------------- 联系方式部分 -----------------
@@ -442,9 +445,14 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //在没有支付的情况下，支付成功怎回来刷新支付状态
-        if(requestCode==REQUEST_CODE&&resultCode==RESULT_OK){
+        if(requestCode==REQUEST_CODE){
 
-           httpRequest();
+            if(data!=null&&data.getBooleanExtra("isOk",false)){
+                httpRequest();
+
+            }
+
+
         }
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  * Created by admin on 17/2/16.
  */
 
-public interface INoticeService {
+public interface NoticeService {
 
 
     void addNotice(NoticeMessageModel model);

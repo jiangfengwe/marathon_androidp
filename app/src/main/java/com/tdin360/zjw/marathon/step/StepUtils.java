@@ -1,5 +1,7 @@
 package com.tdin360.zjw.marathon.step;
 
+import android.util.Log;
+
 import java.text.DecimalFormat;
 
 /**
@@ -32,10 +34,9 @@ public class StepUtils {
      *
      */
     public static String formatDouble(Double doubles) {
-        DecimalFormat format = new DecimalFormat("####.##");
+        DecimalFormat format = new DecimalFormat("#0.0");
         String distanceStr = format.format(doubles);
-        return distanceStr.equals("0") ? "0.0"
-                : distanceStr;
+        return distanceStr;
     }
 
     /**

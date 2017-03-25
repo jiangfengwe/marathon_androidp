@@ -43,8 +43,9 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
     private NewsListViewAdapter newsListViewAdapter;
     private int pageNumber=1;
     private int totalPages;
-    private LinearLayout tipNotData;
+    private TextView not_found;
     private KProgressHUD hud;
+    private boolean isLoadFail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
         this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnRefreshListener(this);
         this.refreshListView.setOnItemClickListener(new MyListener());
-        this.tipNotData = (LinearLayout) this.findViewById(R.id.tipNotData);
+        this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.newsListViewAdapter  =new NewsListViewAdapter(newsModelList,this);
         this.refreshListView.setAdapter(this.newsListViewAdapter);
          initHUD();
@@ -149,7 +150,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
         requestParams.addQueryStringParameter("eventId","1");
         requestParams.addQueryStringParameter("newsOrNoticeName","赛事新闻");
         requestParams.addQueryStringParameter("PageNumber",pageNumber+"");
-
+        requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
 
 
@@ -178,6 +179,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
                 } catch (JSONException e) {
                     e.printStackTrace();
 
+                    isLoadFail=true;
                     loadFail.setVisibility(View.VISIBLE);
                 }
 
@@ -186,11 +188,9 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-                if(ex instanceof HttpException){
-
-                    Toast.makeText(MarathonNewsListActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
-                }
+                isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
+                not_found.setVisibility(View.GONE);
             }
 
             @Override
@@ -202,15 +202,16 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             public void onFinished() {
 
                 hud.dismiss();
-                //判断是否有数据
-                if(newsModelList.size()>0){
+                if(!isLoadFail) {
+                    //判断是否有数据
+                    if (newsModelList.size() > 0) {
 
-                    tipNotData.setVisibility(View.GONE);
-                }else {
-                    tipNotData.setVisibility(View.VISIBLE);
+                        not_found.setVisibility(View.GONE);
+                    } else {
+                        not_found.setVisibility(View.VISIBLE);
+                    }
+
                 }
-
-
                 refreshListView.hideHeaderView();
                 refreshListView.hideFooterView();
                 newsListViewAdapter.updateListView(newsModelList);
@@ -238,8 +239,6 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             httpRequest();
         }else {
 
-
-            Toast.makeText(this, "亲，到底了~", Toast.LENGTH_SHORT).show();
             refreshListView.hideFooterView();
         }
     }

@@ -34,6 +34,7 @@
                      android:text="姓名:"
                      />
                  <TextView
+                     android:id="@+id/name"
                      android:textColor="@color/textBlack"
                      android:textSize="15sp"
                      android:layout_marginLeft="5dp"
@@ -58,6 +59,7 @@
                      android:text="性别:"
                      />
                  <TextView
+                     android:id="@+id/sex"
                      android:textColor="@color/textBlack"
                      android:layout_marginLeft="5dp"
                      android:textSize="15sp"
@@ -76,19 +78,20 @@
              <TableRow android:padding="5dp">
 
                  <TextView
-                     android:textSize="16sp"
 
+                     android:textSize="16sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="参赛项目:"
+                     android:text="证件号码:"
                      />
                  <TextView
+                     android:id="@+id/iDNumber"
                      android:textColor="@color/textBlack"
                      android:layout_marginLeft="5dp"
                      android:textSize="15sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="男子马拉松半程"
+                     android:text="xxxx"
                      />
 
              </TableRow>
@@ -107,6 +110,7 @@
                      android:text="参赛号码:"
                      />
                  <TextView
+                     android:id="@+id/numBer"
                      android:layout_marginLeft="5dp"
                      android:textSize="15sp"
                      android:textColor="@color/textBlack"
@@ -131,6 +135,7 @@
                      android:text="服装尺码:"
                      />
                  <TextView
+                     android:id="@+id/clothesSize"
                      android:layout_marginLeft="5dp"
                      android:textColor="@color/textBlack"
                      android:textSize="15sp"
@@ -147,70 +152,35 @@
 
              </View>
          </TableLayout>
-
-          <LinearLayout
-
-              android:padding="10dp"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
+          <TextView
+              android:layout_marginLeft="10dp"
+              android:textStyle="bold"
+              android:textColor="@color/textBlack"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <View
-                  android:layout_weight="1"
-                  android:background="@android:color/darker_gray"
-                  android:layout_width="match_parent"
-                  android:layout_height="1dp"></View>
-              <TextView
+              android:layout_height="wrap_content"
+              android:text="领取时间:"
+              />
+            <TextView
+                android:id="@+id/time"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2017-04-30  9:00 － 18:00"
+                />
 
-                  android:padding="5dp"
-                  android:textSize="16sp"
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content"
-                  android:text="领取时间"
-                  android:textColor="@color/textBlack"
-                  />
-              <View
-                  android:layout_weight="1"
-                  android:background="@android:color/darker_gray"
-                  android:layout_width="match_parent"
-                  android:layout_height="1dp"></View>
-          </LinearLayout>
-         <TextView
-             android:gravity="center"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text="2017年7月20日   9:00－17:00"
-             />
-          <LinearLayout
-              android:padding="10dp"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
+          <TextView
+              android:layout_marginTop="15dp"
+              android:layout_marginLeft="10dp"
+              android:textStyle="bold"
+              android:textColor="@color/textBlack"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <View
-                  android:layout_weight="1"
-                  android:background="@android:color/darker_gray"
-                  android:layout_width="match_parent"
-                  android:layout_height="1dp"></View>
-              <TextView
+              android:layout_height="wrap_content"
+              android:text="领取方式:"
+              />
 
-                  android:padding="5dp"
-                  android:textSize="16sp"
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content"
-                  android:text="领取方式"
-                  android:textColor="@color/textBlack"
-                  />
-              <View
-                  android:layout_weight="1"
-                  android:background="@android:color/darker_gray"
-                  android:layout_width="match_parent"
-                  android:layout_height="1dp"></View>
-          </LinearLayout>
           <TableLayout
               android:shrinkColumns="0"
-              android:padding="10dp"
-
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
               <TableRow
@@ -220,7 +190,7 @@
 
                   <TextView
                       android:textColor="@color/textBlack"
-                      android:textSize="15sp"
+                      android:textSize="14sp"
                       android:padding="5dp"
                       android:layout_width="match_parent"
                       android:text="1.现场领取:"
@@ -257,7 +227,7 @@
           </LinearLayout>
           <LinearLayout
               android:layout_marginTop="20dp"
-              android:layout_marginLeft="15dp"
+              android:layout_marginLeft="10dp"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
@@ -266,13 +236,13 @@
                   android:layout_height="wrap_content"
                   android:layout_width="wrap_content"
                   android:textColor="@color/textBlack"
-                  android:textSize="16sp"
+                  android:textSize="14sp"
                   android:text="2.快递领取:"
                   />
               <TextView
                   android:layout_height="wrap_content"
                   android:layout_width="match_parent"
-                  android:text="1.申请快递，2.填写快的单"
+                  android:text="1.填写快递申请单，2.支付快递费用"
                   />
 
           </LinearLayout>

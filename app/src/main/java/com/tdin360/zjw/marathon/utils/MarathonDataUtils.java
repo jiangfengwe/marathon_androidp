@@ -11,7 +11,7 @@ public class MarathonDataUtils {
     private String eventId;
     private String eventName;
     private String status;
-
+    private String shareUrl;
     private MarathonDataUtils (){}
 
 
@@ -24,6 +24,8 @@ public class MarathonDataUtils {
 
         return dataUtils;
     }
+
+
 
     public String getEventId() {
         return eventId;
@@ -48,5 +50,14 @@ public class MarathonDataUtils {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 }

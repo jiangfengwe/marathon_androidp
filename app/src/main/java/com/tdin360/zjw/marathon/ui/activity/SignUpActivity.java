@@ -264,7 +264,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         this.loadFail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                httpRequest();
+
+                loadData();
             }
         });
 
@@ -412,7 +413,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         } else {
 
             hud.dismiss();
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setText("点击重新加载");
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
@@ -468,7 +468,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId()+"");
-
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
@@ -831,6 +831,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.addBodyParameter("RegistratorSource","Android 客户端");
         param.setMaxRetryCount(0);//最大重复请求次数
         param.setConnectTimeout(5*1000);
+        param.addBodyParameter("appKey",HttpUrlUtils.appKey);
 
 
         x.http().post(param, new Callback.CommonCallback<String>() {

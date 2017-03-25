@@ -4,20 +4,150 @@
     android:id="@+id/activity_my_achievement_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/chengjibeijing"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyAchievementDetailsActivity">
 
-     <LinearLayout
+    <LinearLayout
         android:orientation="vertical"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
-       <include layout="@layout/toolbar_layout"></include>
-     </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"></include>
 
-  <TextView
-      android:textSize="18sp"
-      android:layout_centerInParent="true"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="成绩详情开发中..."
-      />
+    <LinearLayout
+
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/jiangbei"
+            />
+    <TextView
+        android:id="@+id/ranking"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/yellow_color"
+        android:text="第10名"
+        />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:shrinkColumns="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+           android:id="@+id/eventName"
+          android:textSize="18sp"
+            android:textStyle="bold"
+          android:layout_marginLeft="5dp"
+          android:textColor="@color/yellow_color"
+          android:text="2017贵阳国际马拉松赛"
+        />
+        <TableRow  android:layout_marginTop="10dp">
+
+            <TextView
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="姓        名:"
+                />
+            <TextView
+                android:id="@+id/name"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="张三"
+                />
+
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="性        别:"
+                />
+            <TextView
+                android:id="@+id/gander"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="男"
+                />
+
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="参赛号码:"
+                />
+            <TextView
+                android:id="@+id/numBer"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/yellow_color"
+                android:textSize="16sp"
+                android:text="00000"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:textSize="16sp"
+                android:textColor="@color/yellow_color"
+                android:text="参赛项目:"
+                />
+            <TextView
+                android:id="@+id/projectName"
+                android:layout_marginLeft="5dp"
+                android:textSize="15sp"
+                android:textColor="@color/yellow_color"
+                android:text="男子马拉松全程"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:textSize="16sp"
+                android:textColor="@color/yellow_color"
+                android:text="比赛成绩:"
+                />
+            <TextView
+                android:id="@+id/mark"
+                android:layout_marginLeft="5dp"
+                android:textSize="15sp"
+                android:textColor="@color/yellow_color"
+                android:text="00:00:00"
+                />
+        </TableRow>
+
+    </TableLayout>
+    </LinearLayout>
+<TextView
+    android:id="@+id/organizer"
+     android:gravity="center"
+    android:textSize="12sp"
+    android:layout_marginBottom="20dp"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="贵阳国际马拉松赛事主委会"
+    android:textColor="#7e7e7e"
+    />
 </RelativeLayout>

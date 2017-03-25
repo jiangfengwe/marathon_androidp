@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,11 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
-import com.tdin360.zjw.marathon.ui.activity.MyGoodsActivity;
-import com.tdin360.zjw.marathon.ui.activity.MyAchievementActivity;
-import com.tdin360.zjw.marathon.ui.activity.ChangePasswordActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyGoodsListActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyAchievementListActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
-import com.tdin360.zjw.marathon.ui.activity.MySignUpActivity;
+import com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.HeadImageUtils;
@@ -59,8 +57,8 @@ public class MyFragment extends Fragment {
         userName  = (TextView) view.findViewById(R.id.userName);
         myImageView = (RoundedImageView) view.findViewById(R.id.myImage);
 
-        //显示头像
-        showHeadImage();
+        //显示信息
+        showInfo();
         userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
 
         //注册广播
@@ -94,7 +92,7 @@ public class MyFragment extends Fragment {
            public void onClick(View v) {
                if(SharedPreferencesManager.isLogin(getContext())){
 
-                   Intent intent = new Intent(getContext(), MySignUpActivity.class);
+                   Intent intent = new Intent(getContext(), MySignUpListActivity.class);
                    startActivity(intent);
                }else {
                    Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -114,7 +112,7 @@ public class MyFragment extends Fragment {
 
                 if(SharedPreferencesManager.isLogin(getContext())){
 
-                    Intent intent = new Intent(getContext(), MyGoodsActivity.class);
+                    Intent intent = new Intent(getContext(), MyGoodsListActivity.class);
                     startActivity(intent);
                 }else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -132,7 +130,7 @@ public class MyFragment extends Fragment {
 
                  if(SharedPreferencesManager.isLogin(getContext())){
 
-                     Intent intent = new Intent(getContext(), MyAchievementActivity.class);
+                     Intent intent = new Intent(getContext(), MyAchievementListActivity.class);
                      startActivity(intent);
                  }else {
                      Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -176,11 +174,11 @@ public class MyFragment extends Fragment {
 
 
     /**
-     * 显示头像
+     * 显示个人信息
      */
-    private void showHeadImage(){
+    private void showInfo(){
 
-
+        userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getContext())){
 
@@ -191,12 +189,15 @@ public class MyFragment extends Fragment {
             if(bitmap!=null){
                 myImageView.setImageBitmap(bitmap);
 
-            }else if(!model.getImageUrl().equals("")) {
+            }else if(!model.getImageUrl().equals("")) {//从网络中获取头像图片
                 utils.download(model.getImageUrl(),SharedPreferencesManager.getLoginInfo(getActivity()).getName());
 
-                Log.d("下载图片＝＝＝＝＝", "showHeadImage: ");
 
             }
+
+        }else {
+
+            myImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.signup_photo));
 
         }
 
@@ -244,9 +245,7 @@ public class MyFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            myImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.signup_photo));
-            userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
-            showHeadImage();
+            showInfo();
 
         }
     }

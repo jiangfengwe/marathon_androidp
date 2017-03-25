@@ -6,12 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.Constants;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
 public class AboutUsActivity extends BaseActivity {
 
@@ -87,8 +86,15 @@ public class AboutUsActivity extends BaseActivity {
 
            case R.id.quest:
 
-                intent = new Intent(AboutUsActivity.this,FeedbackActivity.class);
-               startActivity(intent);
+               if(SharedPreferencesManager.isLogin(getApplicationContext())){
+
+                   intent = new Intent(AboutUsActivity.this,FeedbackListActivity.class);
+                   startActivity(intent);
+               }else {
+                   intent = new Intent(AboutUsActivity.this,LoginActivity.class);
+                   startActivity(intent);
+               }
+
 
                break;
            case R.id.help:

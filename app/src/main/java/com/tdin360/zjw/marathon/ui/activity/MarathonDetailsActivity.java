@@ -25,6 +25,8 @@ import com.tdin360.zjw.marathon.utils.MenuDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.db.impl.EventDetailsServiceImpl;
+import com.tdin360.zjw.marathon.utils.db.service.EventDetailService;
 import com.tdin360.zjw.marathon.weight.Carousel;
 import com.tdin360.zjw.marathon.weight.MenuView;
 import com.tdin360.zjw.marathon.weight.MyGridView;
@@ -52,10 +54,11 @@ public class MarathonDetailsActivity extends BaseActivity {
     private List<CarouselModel>carouselList=new ArrayList<>();
     private List<CarouselModel>sponsorList= new ArrayList<>();
     private MarathonHomeMyGridViewAdapter adapter;
-    private TextView notData;
+    private TextView not_found;
     private LinearLayout main;
     private TextView loadFail;
     private Button signBtn;
+    private EventDetailsServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +103,7 @@ public class MarathonDetailsActivity extends BaseActivity {
     //初始化
     private void initView() {
 
+        this.service = new EventDetailsServiceImpl(this);
         setToolBarTitle(MarathonDataUtils.init().getEventName());
 
         showBackButton();
@@ -107,8 +111,7 @@ public class MarathonDetailsActivity extends BaseActivity {
          * 构建分享内容
          */
         ShareInfoManager manager = new ShareInfoManager(this);
-         manager.buildShareBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.guide3));
-       // ShareInfoManager.getManager(this).setShareWebLink(eventName,"http://www.baidu.com","来自赛事详情的分享", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
+         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家运动分享",BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
         showShareButton(manager);
 
         //如果报名已结束就不显示报名按钮
@@ -121,7 +124,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-         this.notData = (TextView) this.findViewById(R.id.notData);
+         this.not_found = (TextView) this.findViewById(R.id.not_found);
          this.mCarousel = (Carousel) this.findViewById(R.id.mCarousel);
          this.mGridView  = (MyGridView) this.findViewById(R.id.myGridView);
          this.adapter = new MarathonHomeMyGridViewAdapter(sponsorList,getApplicationContext());
@@ -130,7 +133,7 @@ public class MarathonDetailsActivity extends BaseActivity {
          this.loadFail.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 httpRequest();
+                loadData();
              }
          });
 
@@ -160,37 +163,48 @@ public class MarathonDetailsActivity extends BaseActivity {
         }else {
 
             hud.dismiss();
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setText("点击重新加载");
-            loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
+
+            this.carouselList = this.service.getAllEventDetail(MarathonDataUtils.init().getEventId(),"0");
+            this.sponsorList = this.service.getAllEventDetail(MarathonDataUtils.init().getEventId(),"1");
+
+
             //如果获取得到缓存数据则加载本地数据
+            if(carouselList.size()==0&&sponsorList.size()==0){
 
+                loadFail.setText("点击重新加载");
+                loadFail.setVisibility(View.VISIBLE);
+                //如果缓存数据不存在则需要用户打开网络设置
 
-            //如果缓存数据不存在则需要用户打开网络设置
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setMessage("网络不可用，是否打开网络设置");
+                alert.setCancelable(false);
+                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //打开网络设置
 
-            alert.setMessage("网络不可用，是否打开网络设置");
-            alert.setCancelable(false);
-            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //打开网络设置
+                        startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
 
-            startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+                    }
+                });
+                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
-                    dialog.dismiss();
-                }
-            });
+                alert.show();
+            }else {//显示本地数据
 
-            alert.show();
+                showCarousel();
+                adapter.updateList(sponsorList);
+                main.setVisibility(View.VISIBLE);
+            }
+
         }
 
 
@@ -253,6 +267,8 @@ public class MarathonDetailsActivity extends BaseActivity {
      */
     private void httpRequest(){
 
+        service.deleteAll();
+
         /**
          * 清空旧数据
          */
@@ -264,6 +280,7 @@ public class MarathonDetailsActivity extends BaseActivity {
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params,new Callback.CommonCallback<String>() {
 
             @Override
@@ -281,11 +298,10 @@ public class MarathonDetailsActivity extends BaseActivity {
                         JSONObject jsonObject = array1.getJSONObject(i);
 
                         String picUrl = jsonObject.getString("PictureUrl");
+                        CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),picUrl, "","0");
+                        carouselList.add(model);
+                        service.addEventDetail(model);
 
-                        carouselList.add(new CarouselModel(picUrl,""));
-
-
-                        Log.d("-------->>>", "onSuccess: "+result);
                     }
                     /**
                      * 获取赞助商数据
@@ -297,8 +313,9 @@ public class MarathonDetailsActivity extends BaseActivity {
                         JSONObject jsonObject = array2.getJSONObject(i);
                         String pictureUrl = jsonObject.getString("PictureUrl");
 
-
-                        sponsorList.add(new CarouselModel(pictureUrl,""));
+                        CarouselModel carouselModel = new CarouselModel(MarathonDataUtils.init().getEventId(), pictureUrl, "","1");
+                        sponsorList.add(carouselModel);
+                        service.addEventDetail(carouselModel);
 
 
                     }
@@ -329,12 +346,11 @@ public class MarathonDetailsActivity extends BaseActivity {
             public void onFinished() {
 
                 hud.dismiss();
-
                 showCarousel();
                 if(sponsorList.size()>0) {
-                  notData.setVisibility(View.GONE);
+                  not_found.setVisibility(View.GONE);
                 }else {
-                    notData.setVisibility(View.VISIBLE);
+                    not_found.setVisibility(View.VISIBLE);
                 }
 
                 //更新赞助商数据
@@ -354,9 +370,9 @@ public class MarathonDetailsActivity extends BaseActivity {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageOptions imageOptions = new ImageOptions.Builder()
                     //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
-                    .setLoadingDrawableId(R.drawable.carousel_default)//加载中默认显示图片
+                    .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
-                    .setFailureDrawableId(R.drawable.search_nodata)//加载失败后默认显示图片
+                    .setFailureDrawableId(R.drawable.loading_banner_error)//加载失败后默认显示图片
                     .build();
             x.image().bind(imageView, carouselModel.getPicUrl(),imageOptions);
             views.add(imageView);

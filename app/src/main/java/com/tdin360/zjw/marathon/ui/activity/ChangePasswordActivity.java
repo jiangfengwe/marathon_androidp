@@ -178,6 +178,7 @@ public class ChangePasswordActivity extends BaseActivity {
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(this).getName());
         params.addQueryStringParameter("oldPassword",oldPass);
         params.addQueryStringParameter("newPassword",pass2);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
           
              x.http().post(params, new Callback.CommonCallback<String>() {
                  @Override
@@ -186,7 +187,6 @@ public class ChangePasswordActivity extends BaseActivity {
                      try {
                          JSONObject  json = new JSONObject(s);
 
-                         Log.d("=====更改登录密码======>", "onSuccess: "+s);
                          boolean success = json.getBoolean("Success");
                          String reason = json.getString("Reason");
                          Toast.makeText(ChangePasswordActivity.this,reason,Toast.LENGTH_SHORT).show();

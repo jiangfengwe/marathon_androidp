@@ -7,26 +7,43 @@
     android:background="@android:color/white"
     tools:context=".ui.activity.GuideActivity">
 
+  <android.support.v4.view.ViewPager
+      android:layout_weight="1"
+      android:id="@+id/guideViewPager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+     >
+
+  </android.support.v4.view.ViewPager>
+  <RadioGroup
+      android:layout_centerInParent="true"
+      android:layout_marginBottom="30dp"
+      android:layout_alignParentBottom="true"
+      android:id="@+id/radioGroup"
+      android:orientation="horizontal"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+  </RadioGroup>
+  <TextView
 
 
-<android.support.v4.view.ViewPager
-    android:layout_weight="1"
-    android:id="@+id/guideViewPager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</android.support.v4.view.ViewPager>
-
-  <ImageView
       android:visibility="gone"
       android:id="@+id/btn"
-      android:background="@drawable/go"
+      android:background="@drawable/guide_start_btn_shape"
       android:layout_centerHorizontal="true"
       android:layout_alignParentBottom="true"
-      android:layout_marginBottom="50dp"
+      android:layout_marginBottom="30dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:gravity="center"
+      android:textSize="16dp"
+      android:padding="8dp"
+      android:textColor="@drawable/guide_text_selector"
+      android:text="立即体验"
 
 
       />
-    </RelativeLayout>
+
+</RelativeLayout>

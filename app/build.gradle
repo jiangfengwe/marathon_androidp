@@ -9,7 +9,10 @@ android {
         minSdkVersion 15
         targetSdkVersion 23
         versionCode  1
-        versionName "1.0"
+        versionName "1.0.0"
+        multiDexEnabled true //突破应用方法数的65535的限制
+        //不指定渠道时默认添加友盟渠道
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE:"Umeng"]
 
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -22,13 +25,41 @@ android {
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
+    //配置签名文件
+    signingConfigs{
 
+        release{
+            keyAlias="aaa"
+            storePassword="zhangzhijun"
+            storeFile file("zzj.jks")
+            keyPassword="zhangzhijun"
+        }
+    }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false;//是否启用混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+
+
+    }
+
+    // 友盟多渠道打包配置
+    productFlavors {
+
+//        wandoujia {}
+//        baidu{}
+//        xiaomi{}
+          //huawei{}
+//        yingyongbao{}
+
+          baijar{}
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
     }
 
 }
@@ -42,8 +73,6 @@ dependencies {
     compile 'org.xutils:xutils:3.3.42'
     //    支付宝支付依赖库
     compile files('libs/alipaySdk-20161222.jar')
-    //    短信验证码发送依赖库
-    compile files('libs/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar')
     //    极光推送依赖库
     compile 'cn.jiguang.sdk:jpush:3.0.0'
     compile 'cn.jiguang.sdk:jcore:1.0.0'
@@ -72,6 +101,9 @@ dependencies {
     compile files('libs/umeng_social_tool.jar')
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
+
+    //友盟统计
+    compile 'com.umeng.analytics:analytics:latest.integration'
 
 }
 

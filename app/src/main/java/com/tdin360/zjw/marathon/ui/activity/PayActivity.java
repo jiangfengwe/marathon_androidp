@@ -46,8 +46,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         super.onCreate(savedInstanceState);
         setToolBarTitle("支付中心");
         showBackButton();
-        initView();
+         initView();
          WXPayEntryActivity.listener=this;
+
 
     }
 
@@ -72,7 +73,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         this.money = intent.getStringExtra("money");
         this.from = intent.getStringExtra("from");
 
-        //显示支付费用及说明
+        //显示支付费用及描述
         priceView.setText("¥ "+money);
         subjectView.setText(subject);
 
@@ -88,9 +89,10 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private void toAliPay(){
 
 
+        Toast.makeText(PayActivity.this,"获取订单中...",Toast.LENGTH_SHORT).show();
         //获取支付订单
          RequestParams params = new RequestParams(HttpUrlUtils.PAY);
-
+         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
          params.addQueryStringParameter("orderNomber",orderNo);
          params.addQueryStringParameter("payMethod","zfb");
          x.http().get(params, new Callback.CommonCallback<String>() {
@@ -102,9 +104,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                      JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
                      boolean success = eventMobileMessage.getBoolean("Success");
 
-                final String reason = eventMobileMessage.getString("Reason");
-
-                 Toast.makeText(PayActivity.this,reason,Toast.LENGTH_SHORT).show();
+               // final String reason = eventMobileMessage.getString("Reason");
 
                     if(success){
 
@@ -176,7 +176,8 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
 
-                        showPaySuccessDialog();
+                        //向服务检查是否支付成功
+                         checkedPayStatus();
 //                        Intent intent = new Intent(PayActivity.this, PayResultActivity.class);
 //                        startActivity(intent);
 //                        finish();
@@ -214,14 +215,13 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         params.setMaxRetryCount(1);
         params.addQueryStringParameter("orderNomber",orderNo);
         params.addQueryStringParameter("payMethod","wx");
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
 
 
             @Override
             public void onSuccess(String s) {
 
-
-                Log.d("------->>>>", "onSuccess: "+s);
 
                 if(s!=null&&!s.equals("")){
 
@@ -303,7 +303,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onSuccess(String s) {
 
-                Log.d("银联支付＝＝＝＝＝＝》》", "onSuccess: "+s);
+
                 if ( s == null || s.length() == 0) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
                     builder.setTitle("错误提示");
@@ -442,21 +442,22 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         if(aliPay.isChecked()){
 
             toAliPay();
-            Toast.makeText(this,"支付宝",Toast.LENGTH_SHORT).show();
+
 
           /**
            * 微信支付
           */
         }else if(wXPay.isChecked()){
 
-            Toast.makeText(this,"微信支付",Toast.LENGTH_SHORT).show();
+
             toWxPay();
           /**
            * 银联支付
            */
         }else if(yLPay.isChecked()){
-            Toast.makeText(this,"银联",Toast.LENGTH_SHORT).show();
-           toUnionpay();
+
+            Toast.makeText(PayActivity.this,"开发中...",Toast.LENGTH_SHORT).show();
+           //toUnionpay();
         }
     }
 
@@ -495,7 +496,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     @Override
     public void onWXPaySuccess() {
 
-        showPaySuccessDialog();
+        checkedPayStatus();
     }
 
 
@@ -505,15 +506,28 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private void showPaySuccessDialog(){
 
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-        alert.setTitle("支付结果");
-        alert.setMessage("已成功支付");
+        final AlertDialog alert = new AlertDialog.Builder(this).create();
+        View view = View.inflate(PayActivity.this, R.layout.pay_result_dialog, null);
+        alert.setView(view);
         alert.setCancelable(false);
+        TextView freeView = (TextView) view.findViewById(R.id.free);
+        freeView.setText("¥ "+money);
 
-        alert.setPositiveButton("查看详情", new DialogInterface.OnClickListener() {
+        //返回主页
+        view.findViewById(R.id.home).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                Intent intent = new Intent(PayActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                alert.dismiss();
+            }
+        });
+
+        //查看详情
+        view.findViewById(R.id.details).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
                 if(from.equals("signUp")){//来源于报名界面的支付
 
@@ -523,23 +537,70 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 }else {
 
                     //返回更新
+                    intent.putExtra("isOk",true);
                     setResult(MySigUpDetailActivity.REQUEST_CODE,intent);
                     finish();
                 }
 
+                alert.dismiss();
             }
+
         });
 
-        alert.setNegativeButton("返回主页", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(PayActivity.this,MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
 
         alert.show();
+
+    }
+
+
+    /***
+     * 向服务器检查支付是否成功
+     */
+    private void checkedPayStatus(){
+
+        RequestParams params = new RequestParams(HttpUrlUtils.CHECKED_PAY_STATUS);
+        params.setConnectTimeout(5*1000);
+        params.addBodyParameter("orderNo",orderNo);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+
+                try {
+                    JSONObject obj = new JSONObject(result);
+
+                    boolean isPay = obj.getBoolean("isPay");
+
+                    //支付成功
+                    if(isPay){
+
+                   showPaySuccessDialog();
+
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 }

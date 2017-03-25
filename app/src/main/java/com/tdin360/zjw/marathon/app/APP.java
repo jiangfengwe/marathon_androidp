@@ -3,6 +3,7 @@ package com.tdin360.zjw.marathon.app;
 import android.app.Application;
 
 import com.tdin360.zjw.marathon.utils.db.DbManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -32,6 +33,7 @@ public class App extends Application {
         //友盟分享
         UMShareAPI.get(this);
         Log.LOG=false;
+        MobclickAgent.setDebugMode(false);
 
         //创建数据库
         DbManager.init(this);

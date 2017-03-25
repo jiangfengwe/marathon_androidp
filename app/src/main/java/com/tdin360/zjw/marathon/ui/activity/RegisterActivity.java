@@ -194,6 +194,7 @@ public class RegisterActivity extends BaseActivity {
         RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
         params.addBodyParameter("tel",tel);
         params.addBodyParameter("type","zc");
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.setConnectTimeout(5*1000);
         params.setMaxRetryCount(0);
        x.http().post(params, new Callback.CommonCallback<String>() {
@@ -342,6 +343,7 @@ public class RegisterActivity extends BaseActivity {
         params.addBodyParameter("validCode",code);
         params.addBodyParameter("phone",tel);
         params.addBodyParameter("password",password);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.setConnectTimeout(5*1000);
         params.setMaxRetryCount(0);
         x.http().post(params, new Callback.CommonCallback<String>() {

@@ -281,13 +281,18 @@ public class StepFragment extends BaseFragment{
         //停止计步
         Intent intent = new Intent(getActivity(), StepCounterService.class);
         getActivity().stopService(intent);
-        //保存计步数据
-        StepServiceImpl stepService = new StepServiceImpl(getContext());
-        stepService.addStep(new StepModel(0,step,distance,calories,getTime()));
+        if(step>0) {
+            //保存计步数据
+            StepServiceImpl stepService = new StepServiceImpl(getContext());
+            stepService.addStep(new StepModel(0, step, distance, calories, getTime()));
 
-        Log.d("-----------", "onDestroy: ");
+        }
     }
 
+    /**
+     * 获取指定格式的当前时间
+     * @return
+     */
     private String getTime(){
 
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");

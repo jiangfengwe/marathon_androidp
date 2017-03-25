@@ -44,8 +44,9 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
     private NoticeListViewAdapter noticeListViewAdapter;
     private int pageNumber=1;
     private int totalPages;
-    private LinearLayout tipNotData;
+    private TextView not_found;
     private KProgressHUD hud;
+    private boolean isLoadFail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
         this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnRefreshListener(this);
         this.refreshListView.setOnItemClickListener(new MyListener());
-        this.tipNotData = (LinearLayout) this.findViewById(R.id.tipNotData);
+        this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.noticeListViewAdapter  =new NoticeListViewAdapter(noticeModelList,this);
         this.refreshListView.setAdapter(this.noticeListViewAdapter);
 
@@ -149,7 +150,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
         requestParams.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         requestParams.addQueryStringParameter("newsOrNoticeName","赛事新闻");
         requestParams.addQueryStringParameter("PageNumber",pageNumber+"");
-
+        requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
 
 
@@ -180,6 +181,8 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
                 } catch (JSONException e) {
                     e.printStackTrace();
 
+                    isLoadFail=true;
+                    not_found.setVisibility(View.GONE);
                     loadFail.setVisibility(View.VISIBLE);
                 }
 
@@ -189,9 +192,9 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
             public void onError(Throwable ex, boolean isOnCallback) {
 
 
-              Toast.makeText(MarathonNoticeListActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
-
+               isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
+                not_found.setVisibility(View.GONE);
             }
 
             @Override
@@ -202,15 +205,16 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
             @Override
             public void onFinished() {
 
-                //判断是否有数据
-                if(noticeModelList.size()>0){
+                if(!isLoadFail) {
+                    //判断是否有数据
+                    if (noticeModelList.size() > 0) {
 
-                    tipNotData.setVisibility(View.GONE);
+                        not_found.setVisibility(View.GONE);
 
-                }else {
-                    tipNotData.setVisibility(View.VISIBLE);
+                    } else {
+                        not_found.setVisibility(View.VISIBLE);
+                    }
                 }
-
                 hud.dismiss();
                 refreshListView.hideHeaderView();
                 refreshListView.hideFooterView();
@@ -240,8 +244,6 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
             httpRequest();
         }else {
 
-
-            Toast.makeText(this, "亲，到底了~", Toast.LENGTH_SHORT).show();
             refreshListView.hideFooterView();
         }
     }

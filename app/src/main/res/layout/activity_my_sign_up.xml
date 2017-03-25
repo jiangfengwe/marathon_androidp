@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.tdin360.zjw.marathon.ui.activity.MySignUpActivity">
+    tools:context="com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity">
   <LinearLayout
       android:orientation="vertical"
       android:layout_width="match_parent"
@@ -33,17 +33,10 @@
   </LinearLayout>
   <!--没有数据-->
   <LinearLayout
-      android:visibility="gone"
-      android:id="@+id/tipNotData"
+
       android:layout_centerInParent="true"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
-    <TextView
-        android:textSize="18sp"
-        android:textColor="@color/dark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="暂无数据!"
-        />
+    <include layout="@layout/not_found_layout"></include>
   </LinearLayout>
 </RelativeLayout>

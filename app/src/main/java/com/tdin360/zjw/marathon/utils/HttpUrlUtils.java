@@ -8,6 +8,7 @@ public class HttpUrlUtils {
 
 
     private static final String BASE="http://www.baijar.com:1004/";
+    public static final String appKey="eventkeyfdsfds520tdzh123456";
 
     //用户注册接口
     public static final String MARATHON_REGISTER= BASE+"EventInfo/Register";
@@ -38,20 +39,27 @@ public class HttpUrlUtils {
     //我的报名列表
     public static final String MY_SIGNUP_SEARCH=BASE+"eventinfo/AttendCompetitionList";
     //报名详情
-    public static final String MY_SIGN_UP_DETAILS=BASE+"eventinfo/AttendCompetitionDetail?applyId=3233";
+    public static final String MY_SIGN_UP_DETAILS=BASE+"eventinfo/AttendCompetitionDetail";
+    //成绩查询
+    public static final String MARK_SEARCH=BASE+"eventinfo/CompetitionGrade";
     //支付订单接口
     public static final String PAY=BASE+"eventInfo/Pay";
-
     //参赛路线数据接口
     public static final String PROJECT_MAP=BASE+"eventinfo/map";
     //我的物资数据接口
     public static final String MY_GOODS=BASE+"eventinfo/Goods";
     //我的物资详情
     public static  final String MY_GOODS_DETAIL=BASE+"eventinfo/GoodsDetail";
-    // 搜索
+    //搜索
     public static final String SEARCH=BASE+"eventinfo/Search";
     //头像上传
     public static final String UPLOAD_IMAGE=BASE+"eventinfo/UploadAvatar";
+    //支付验证接口
+    public static final String CHECKED_PAY_STATUS=BASE+"eventinfo/ConfirmPay";
+    //获取意见反馈列表
+    public static final String FEED_LIST=BASE+"eventinfo/FeedbackList";
+    //提交反馈
+    public static final String ADDFEED_INFO=BASE+"eventinfo/FeedBackContent";
 
 
     //安装包更新下载地址

@@ -7,8 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,7 +21,7 @@ import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
-import com.tdin360.zjw.marathon.model.MarathonEventModel;
+import com.tdin360.zjw.marathon.model.EventModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 
@@ -45,8 +48,8 @@ public class SearchActivity extends AppCompatActivity {
     private ImageView clearBtn;
     private ListView listView;
     private TextView resultCount;
-    private MarathonListViewAdapter marathonListViewAdapter;
-    private List<MarathonEventModel> list = new ArrayList<>();
+    private MyAdapter adapter;
+    private List<EventModel> list = new ArrayList<>();
     private TagGroup mTagGroup;
 
     @Override
@@ -67,9 +70,9 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         this.mTagGroup = (TagGroup) findViewById(R.id.tag_group);
-        mTagGroup.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
+        this.mTagGroup.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
 
-        mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+        this.mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
             public void onTagClick(String tag) {
 
@@ -106,18 +109,20 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        this.marathonListViewAdapter = new MarathonListViewAdapter(this,list);
-        this.listView.setAdapter(marathonListViewAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.adapter = new MyAdapter();
+        this.listView.setAdapter(adapter);
+        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                MarathonEventModel eventInfo = list.get(position);
+                EventModel eventInfo = list.get(position);
                 //为单例成员赋值
                 MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
+                MarathonDataUtils.init().setEventName(eventInfo.getName());
+                MarathonDataUtils.init().setStatus(eventInfo.getStatus());
+                MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
                 Intent intent = new Intent(SearchActivity.this, MarathonDetailsActivity.class);
-                intent.putExtra("eventId", eventInfo.getId() + "");
-                intent.putExtra("eventName", eventInfo.getName());
+
                 startActivity(intent);
             }
         });
@@ -136,6 +141,13 @@ public class SearchActivity extends AppCompatActivity {
         //   1.获取输入的搜索关键词
 
       String key = editText.getText().toString().trim();
+
+        if(key.equals("")){
+
+            Toast.makeText(this,"请输入关键字",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         httpRequest(key);
 
     }
@@ -159,11 +171,12 @@ public class SearchActivity extends AppCompatActivity {
                 .show();
         RequestParams params = new RequestParams(HttpUrlUtils.SEARCH);
         params.addQueryStringParameter("key",key);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CacheCallback<String>() {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("-------->>>", "onSuccess: "+result);
+
                 try {
                     JSONObject obj = new JSONObject(result);
 
@@ -178,13 +191,12 @@ public class SearchActivity extends AppCompatActivity {
                         String eventName = object.getString("EventName");
                         String status = object.getString("Status");
                         String eventStartTime = object.getString("EventStartTimeStr");
+                        String shareUrl = object.getString("EventSiteUrl");
                         long time = object.getLong("Timestamp");
-                        list.add(new MarathonEventModel(id,eventName,status,"",eventStartTime,time));
+                        list.add(new EventModel(id,eventName,status,"",eventStartTime,time,shareUrl));
 
 
                     }
-
-                    marathonListViewAdapter.notifyDataSetChanged();
 
 
                 } catch (JSONException e) {
@@ -205,7 +217,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFinished() {
-
+                adapter.notifyDataSetChanged();
                 hud.dismiss();
                 resultCount.setVisibility(View.VISIBLE);
                 resultCount.setText("共搜到"+list.size()+"条结果");
@@ -219,9 +231,64 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    private void saveKey(){
+    /**
+     * 数据适配器
+     */
+    private class MyAdapter extends BaseAdapter{
 
 
+        @Override
+        public int getCount() {
+            return list==null?0:list.size();
+        }
 
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder viewHolder=null;
+
+            if(convertView==null){
+
+               viewHolder = new ViewHolder();
+
+                convertView = LayoutInflater.from(SearchActivity.this).inflate(R.layout.search_list_item,null);
+                viewHolder.status = (TextView) convertView.findViewById(R.id.status);
+                viewHolder.title = (TextView) convertView.findViewById(R.id.title);
+
+                convertView.setTag(viewHolder);
+            }else {
+
+                viewHolder= (ViewHolder) convertView.getTag();
+            }
+
+            EventModel model = list.get(position);
+
+            viewHolder.title.setText(model.getName());
+            viewHolder.status.setText(model.getStatus());
+            if(model.getStatus().equals("已结束")){
+
+                viewHolder.status.setEnabled(false);
+            }
+
+            return convertView;
+        }
+
+
+        class ViewHolder{
+
+            TextView title;
+            TextView status;
+        }
     }
+
 }

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.MarathonEventModel;
+import com.tdin360.zjw.marathon.model.EventModel;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -24,17 +24,17 @@ import java.util.List;
 public class MarathonListViewAdapter extends BaseAdapter {
 
 
-    private List<MarathonEventModel>list;
+    private List<EventModel>list;
 
     private LayoutInflater inflater;
-    public MarathonListViewAdapter(Context context, List<MarathonEventModel> list) {
+    public MarathonListViewAdapter(Context context, List<EventModel> list) {
 
         this.inflater=LayoutInflater.from(context);
         this.list = list;
 
     }
 
-public void updateList( List<MarathonEventModel> list){
+public void updateList( List<EventModel> list){
 
     this.list=list;
     notifyDataSetChanged();
@@ -73,20 +73,21 @@ public void updateList( List<MarathonEventModel> list){
             viewHolder= (ViewHolder) convertView.getTag();
         }
 
-        MarathonEventModel marathonEventModel = list.get(position);
-        viewHolder.eventName.setText(marathonEventModel.getName());
-        viewHolder.signUpTime.setText(marathonEventModel.getStartDate());
-        //处理
+        EventModel eventModel = list.get(position);
+        viewHolder.eventName.setText(eventModel.getName());
+        viewHolder.signUpTime.setText(eventModel.getStartDate());
+        //处理图片
         ImageOptions imageOptions = new ImageOptions.Builder()
                 //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
-                .setLoadingDrawableId(R.drawable.carousel_default)//加载中默认显示图片
+                .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
-                .setFailureDrawableId(R.drawable.search_nodata)//加载失败后默认显示图片
+                .setFailureDrawableId(R.drawable.loading_banner_error)//加载失败后默认显示图片
                 .build();
-        x.image().bind(viewHolder.imageView,marathonEventModel.getPicUrl(),imageOptions);
+        x.image().bind(viewHolder.imageView, eventModel.getPicUrl(),imageOptions);
 
-        viewHolder.status.setText(marathonEventModel.getStatus());
-        if(marathonEventModel.getStatus().equals("已结束")){
+        viewHolder.status.setText(eventModel.getStatus());
+
+        if(eventModel.getStatus().equals("已结束")){
             viewHolder.status.setEnabled(false);
         }
 
@@ -145,14 +146,14 @@ public void updateList( List<MarathonEventModel> list){
 
 
 
-                        MarathonEventModel marathonEventModel = list.get(index);
-                        long time = marathonEventModel.getTime();
+                        EventModel eventModel = list.get(index);
+                        long time = eventModel.getTime();
 
                         if(time>1000){//判断是否还有条目能够倒计时，如果能够倒计时的话，延迟一秒，让它接着倒计时
                             isNeedCountTime = true;
-                            marathonEventModel.setTime(time-1000);
+                            eventModel.setTime(time-1000);
                         }else{
-                            marathonEventModel.setTime(0);
+                            eventModel.setTime(0);
                         }
 
                     }

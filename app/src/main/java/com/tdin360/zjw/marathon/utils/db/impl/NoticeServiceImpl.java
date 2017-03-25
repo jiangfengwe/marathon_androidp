@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
-import com.tdin360.zjw.marathon.utils.db.service.INoticeService;
+import com.tdin360.zjw.marathon.utils.db.service.NoticeService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  * Created by admin on 17/2/16.
  */
 
-public class NoticeServiceImpl implements INoticeService {
+public class NoticeServiceImpl implements NoticeService {
 
     private SQLHelper sqlHelper;
     public NoticeServiceImpl(Context context){

@@ -1,36 +1,28 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.ShareInfo;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
-
-import java.security.Permission;
-
-import static com.tdin360.zjw.marathon.utils.Constants.*;
 
 /**
  * 母版界面
@@ -76,7 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if(manager.getShareType()== ShareInfoManager.ShareType.IMAGE){
 
 
-                    new ShareAction(BaseActivity.this).withText("百家运动图片分享")
+                    new ShareAction(BaseActivity.this).withText("佰家运动分享")
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())
                             .withMedia(manager.ShareImage())
@@ -84,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 }else {
 
-                    new ShareAction(BaseActivity.this).withText("百家运动链接分享")
+                    new ShareAction(BaseActivity.this).withText("佰家运动分享")
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())
                             .withMedia(manager.shareLink())
@@ -116,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-            Toast.makeText(BaseActivity.this,"正在分享请稍后...",Toast.LENGTH_SHORT).show();
+            Toast.makeText(BaseActivity.this,"正在打开分享...",Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -237,8 +229,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-
-
     /**
      * 检查是否拥有权限
      * @param permissions
@@ -318,4 +308,17 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 打电话权限回调
      */
     public void doCallPermission(){}
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

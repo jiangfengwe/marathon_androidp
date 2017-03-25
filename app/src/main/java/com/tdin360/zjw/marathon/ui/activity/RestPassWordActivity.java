@@ -172,7 +172,8 @@ public class RestPassWordActivity extends BaseActivity {
         final RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
         params.addBodyParameter("tel",tel);
         params.addBodyParameter("type","zhmm");
-         params.setConnectTimeout(5*1000);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.setConnectTimeout(5*1000);
         params.setMaxRetryCount(0);
 
            x.http().post(params, new Callback.CommonCallback<String>() {
@@ -323,6 +324,7 @@ public class RestPassWordActivity extends BaseActivity {
          params.addBodyParameter("phone",tel);
          params.addBodyParameter("token",inCode);//验证码
          params.addBodyParameter("newPassword",pass2);
+         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
          params.setConnectTimeout(5*1000);
          params.setMaxRetryCount(0);
 

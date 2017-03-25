@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.tdin360.zjw.marathon.model.StepModel;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
-import com.tdin360.zjw.marathon.utils.db.service.IStepService;
+import com.tdin360.zjw.marathon.utils.db.service.StepService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by admin on 17/3/12.
  */
 
-public class StepServiceImpl implements IStepService {
+public class StepServiceImpl implements StepService {
 
     private SQLHelper helper;
 
@@ -52,8 +52,20 @@ public class StepServiceImpl implements IStepService {
     }
 
     @Override
-    public void deleteStepById(int id) {
+    public boolean deleteStepById(int id) {
+        SQLiteDatabase database = helper.getReadableDatabase();
 
+        int count = database.delete(SQLHelper.STEP, "id=?", new String[]{id + ""});
+        database.close();
+
+        if(count>0){//删除成功
+
+
+            return true;
+        }
+
+
+        return false;
     }
 
 
@@ -77,8 +89,22 @@ public class StepServiceImpl implements IStepService {
     }
 
     @Override
-    public void deleteAll() {
+    public boolean deleteAll() {
 
+        SQLiteDatabase database = helper.getReadableDatabase();
+
+        try{
+            database.delete(SQLHelper.STEP,null,null);
+
+         return true;
+
+        }catch (Exception e){
+
+
+        }
+        database.close();
+
+        return false;
     }
 
     @Override

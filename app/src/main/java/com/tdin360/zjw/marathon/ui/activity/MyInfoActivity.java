@@ -31,6 +31,7 @@ import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.db.impl.MyInfoServiceImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,9 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private KProgressHUD hud;
     private HeadImageUtils utils;
 
+    private MyInfoServiceImpl service;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
     private void initView() {
 
+        this.service = new MyInfoServiceImpl(this);
         this.edit = (TextView) this.findViewById(R.id.edit);
         this.imageView = (RoundedImageView) this.findViewById(R.id.imageView);
         this.editName = (EditText) this.findViewById(R.id.name);
@@ -227,35 +232,48 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             httpRequest();
         } else {
 
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setText("点击重新加载");
-            loadFail.setVisibility(View.VISIBLE);
+
+
             //获取缓存数据
-            //如果获取得到缓存数据则加载本地数据
-            //如果缓存数据不存在则需要用户打开网络设置
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            UserModel userModel = service.getUserModel(SharedPreferencesManager.getLoginInfo(this).getName());
+            if(userModel==null){
+                loadFail.setText("点击重新加载");
+                loadFail.setVisibility(View.VISIBLE);
 
-            alert.setMessage("网络不可用，是否打开网络设置");
-            alert.setCancelable(false);
-            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //打开网络设置
+                //如果获取得到缓存数据则加载本地数据
+                //如果缓存数据不存在则需要用户打开网络设置
 
-                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                alert.setMessage("网络不可用，是否打开网络设置");
+                alert.setCancelable(false);
+                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //打开网络设置
 
-                    dialog.dismiss();
-                }
-            });
+                        startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 
-            alert.show();
+                    }
+                });
+                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+
+            }else {
+
+                showUserData(userModel);
+            }
+
+
+
         }
     }
 
@@ -263,11 +281,14 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
      * 获取网络数据
      */
     private void httpRequest(){
+
+        service.delete();
          loadFail.setVisibility(View.GONE);
 
          hud.show();
         RequestParams params = new RequestParams(HttpUrlUtils.GET_MYINFO);
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
@@ -283,10 +304,10 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                     UserModel model = new UserModel("",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName(),name,email,birthDate,gender);
                       showUserData(model);
+                      service.addInfo(model);
 
                     //设置信息不可编辑
                     setIsEdit(false);
-                     main.setVisibility(View.VISIBLE);
                     loadFail.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -336,7 +357,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
           gender2.setChecked(true);
         }
 
-
+        main.setVisibility(View.VISIBLE);
     }
 
     //打开相机
@@ -431,6 +452,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         LoginModel info = SharedPreferencesManager.getLoginInfo(this);
         params.addQueryStringParameter("phone",info.getName());
         params.addQueryStringParameter("password",info.getPassword());
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.setMultipart(true);
         try {
             params.addBodyParameter("uploadedFile",file,null);
@@ -440,7 +462,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d("------>>>>", "onSuccess: "+result);
+
 
                 try {
                     JSONObject json  = new JSONObject(result);
@@ -523,6 +545,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         params.addBodyParameter("name",name=="未设置"?"":name);
         params.addBodyParameter("Gender",gender+"");
         params.addBodyParameter("BirthDate",birthday=="未设置"?"":birthday);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("Password",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getPassword());
 
         x.http().post(params, new Callback.CommonCallback<String>() {

@@ -26,12 +26,13 @@ import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
-import com.tdin360.zjw.marathon.model.MarathonEventModel;
+import com.tdin360.zjw.marathon.model.EventModel;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
+import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
 import com.tdin360.zjw.marathon.weight.RefreshListView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,12 +49,13 @@ import java.util.List;
  */
 public class EventFragment extends Fragment implements RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener {
 
-    private List<MarathonEventModel>list = new ArrayList<>();
+    private List<EventModel>list = new ArrayList<>();
     private RefreshListView listView;
     private MarathonListViewAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
     private TextView loadFile;
+    private EventServiceImpl impl;
 
     public static EventFragment newInstance(){
 
@@ -70,7 +72,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+         this.impl  = new EventServiceImpl(getContext());
          this.listView= (RefreshListView) view.findViewById(R.id.listView);
          this.loadFile = (TextView) view.findViewById(R.id.loadFail);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
@@ -146,22 +148,34 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     @Override
     public void onDownPullRefresh() {
 
-         pageNumber=1;
-         list.clear();
-          httpRequest();
+        if(NetWorkUtils.isNetworkAvailable(getContext())){
+
+            pageNumber=1;
+            list.clear();
+            httpRequest();
+        }else {
+
+            listView.hideHeaderView();
+        }
+
     }
 
     @Override
     public void onLoadingMore() {
 
-        if(pageNumber<pageCount){
+        if(NetWorkUtils.isNetworkAvailable(getContext())) {
+            if (pageNumber < pageCount) {
 
-            pageNumber++;
+                pageNumber++;
 
-             httpRequest();
+                httpRequest();
+            } else {
+                listView.hideFooterView();
+
+            }
         }else {
+
             listView.hideFooterView();
-           Toast.makeText(getActivity(),"亲,到底了~",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -186,38 +200,48 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
             //加载网络数据
 
             httpRequest();
+
+
         }else {
 
             hud.dismiss();
-            Toast.makeText(getActivity(), "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFile.setVisibility(View.VISIBLE);
+
             //1获取缓存数据
+            list  = impl.getAllEvent();
+            marathonListViewAdapter.updateList(list);
             //如果获取得到缓存数据则加载本地数据
+            if(list.size()==0){
+                loadFile.setVisibility(View.VISIBLE);
+                //2.如果缓存数据不存在则需要用户打开网络设置
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+                alert.setMessage("网络不可用，是否打开网络设置");
+                alert.setCancelable(false);
+                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //打开网络设置
+                        startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+
+                    }
+                });
+                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+
+            }
 
 
-            //2.如果缓存数据不存在则需要用户打开网络设置
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
-            alert.setMessage("网络不可用，是否打开网络设置");
-            alert.setCancelable(false);
-            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //打开网络设置
-             startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
 
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.dismiss();
-                }
-            });
-
-            alert.show();
         }
 
 
@@ -226,11 +250,12 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            MarathonEventModel eventInfo = (MarathonEventModel) parent.getAdapter().getItem(position);
+            EventModel eventInfo = (EventModel) parent.getAdapter().getItem(position);
             //为单例成员赋值
             MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
             MarathonDataUtils.init().setEventName(eventInfo.getName());
             MarathonDataUtils.init().setStatus(eventInfo.getStatus());
+            MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
             Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
             startActivity(intent);
 
@@ -242,10 +267,11 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     private void httpRequest(){
 
 
-
+        impl.deleteAll();
         loadFile.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
+        params.addBodyParameter("appKey","eventkeyfdsfds520tdzh123456");
         params.setConnectTimeout(5*1000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -255,7 +281,6 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                     JSONObject obj = new JSONObject(s);
 
 
-                    Log.d("------>>>>", "onSuccess: "+obj);
                     pageCount = obj.getInt("TotalPages");
                     JSONArray array = obj.getJSONArray("EventSystemMessageList");
 
@@ -266,13 +291,15 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                         String eventName = object.getString("EventName");
                         String status = object.getString("Status");
                         String eventStartTime = object.getString("EventStartTimeStr");
-                        long time = object.getLong("Timestamp");
+
                         String pictureUrl = object.getString("PictureUrl");
-                        list.add(new MarathonEventModel(id,eventName,status,pictureUrl,eventStartTime,time));
+
+                        String shareUrl = object.getString("EventSiteUrl");
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl);
+                        list.add(eventModel);
+                        impl.addEvent(eventModel);
 
                     }
-
-
                     loadFile.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -295,6 +322,10 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
             @Override
             public void onFinished() {
+
+                if(list.size()>0){
+                    loadFile.setVisibility(View.GONE);
+                }
 
                 hud.dismiss();
                 //加载更多

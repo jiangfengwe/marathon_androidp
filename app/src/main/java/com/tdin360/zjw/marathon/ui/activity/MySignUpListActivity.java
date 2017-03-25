@@ -3,16 +3,15 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,15 +36,17 @@ import java.util.List;
 /**
  * 我的报名列表
  */
-public class MySignUpActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MySignUpListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
 
     private RefreshListView listView;
     private TextView loadFail;
     private List<SignUpInfoModel> list = new ArrayList<>();
     private  MyAdapter myAdapter;
-
-    private LinearLayout tip;
+    private TextView not_found;
     private KProgressHUD hud;
+    private boolean isLoadFail;
+    private int pageNumber=1;
+    private int totalPages;
 
 
     @Override
@@ -64,13 +65,13 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
         this.listView.setOnRefreshListener(this);
 
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.tip = (LinearLayout) this.findViewById(R.id.tipNotData);
+        this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 SignUpInfoModel model = (SignUpInfoModel) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(MySignUpActivity.this,MySigUpDetailActivity.class);
+                Intent intent = new Intent(MySignUpListActivity.this,MySigUpDetailActivity.class);
                 intent.putExtra("model", model);
                 startActivity(intent);
             }
@@ -98,11 +99,15 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
             ViewHolder viewHolder;
             if(convertView==null){
                 viewHolder = new ViewHolder();
-                convertView=View.inflate(MySignUpActivity.this,R.layout.my_signup_list_item,null);
+                convertView=View.inflate(MySignUpListActivity.this,R.layout.my_signup_list_item,null);
                 viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
                 viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
                 viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
                 viewHolder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+                viewHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
+                Animation animation = AnimationUtils.loadAnimation(MySignUpListActivity.this, R.anim.arrow);
+                viewHolder.arrow.startAnimation(animation);
+
 
                 convertView.setTag(viewHolder);
             }else {
@@ -123,6 +128,7 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
             private TextView matchTime;
             private TextView matchName;
             private TextView matchAchievement;
+            private ImageView arrow;
 
 
         }
@@ -182,7 +188,15 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
     }
     @Override
     public void onLoadingMore() {
-        httpRequest();
+        //下拉加载更多
+        if(pageNumber<totalPages){
+
+            pageNumber++;
+            httpRequest();
+        }else {
+
+            listView.hideFooterView();
+        }
     }
     /**
      * 请求网络数据
@@ -191,16 +205,14 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(" -----signup--->>>", "onSuccess: " + result);
-
-
 
                 try {
                     JSONObject json = new JSONObject(result);
-
+                    totalPages = json.getInt("TotalPages");
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
 
                     boolean success = eventMobileMessage.getBoolean("Success");
@@ -212,16 +224,12 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
 
                          for(int i=0;i<registratorMessages.length();i++){
 
-
                              JSONObject object = registratorMessages.getJSONObject(i);
-
-                             Log.d("---------->>>", "onSuccess: "+object.getString("RegistratorName"));
 
                              String id = object.getString("Id");
                              //赛事图片
                              String pictureUrl = object.getString("CuurentEventPictureUrl");
 
-                             Log.d("------->iiii", "onSuccess: "+pictureUrl);
                              //赛事名称
                              String eventName = object.getString("EventName");
 
@@ -286,13 +294,13 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
 
 
                              list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
-                             list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+
 
                          }
 
                      }else {
 
-                        Toast.makeText(MySignUpActivity.this,reason,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MySignUpListActivity.this,reason,Toast.LENGTH_SHORT).show();
 
                          //没有查询到报名信息
                      }
@@ -301,14 +309,18 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    isLoadFail=true;
+                    loadFail.setVisibility(View.VISIBLE);
+                    not_found.setVisibility(View.GONE);
                 }
 
 
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(MySignUpActivity.this, "网络错误或访问服务器出错!", Toast.LENGTH_SHORT).show();
+                isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
+                not_found.setVisibility(View.GONE);
             }
             @Override
             public void onCancelled(CancelledException cex) {
@@ -317,11 +329,13 @@ public class MySignUpActivity extends BaseActivity implements RefreshListView.On
             public void onFinished() {
 
 
-                if(list.size()<=0){
+                if(!isLoadFail) {
+                    if (list.size() <= 0) {
 
-                    tip.setVisibility(View.VISIBLE);
-                }else {
-                    tip.setVisibility(View.GONE);
+                        not_found.setVisibility(View.VISIBLE);
+                    } else {
+                        not_found.setVisibility(View.GONE);
+                    }
                 }
                  hud.dismiss();
                 listView.hideHeaderView();

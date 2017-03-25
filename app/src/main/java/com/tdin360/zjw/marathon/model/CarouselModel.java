@@ -5,13 +5,21 @@ package com.tdin360.zjw.marathon.model;
  * Created by Administrator on 2016/7/5.
  */
 public class CarouselModel {
+    private String eventId;
     private String picUrl;
     private String linkUrl;
+    private String type;
 
 
-    public CarouselModel(String picUrl, String linkUrl) {
+    public CarouselModel(String eventId,String picUrl, String linkUrl,String type) {
+        this.eventId = eventId;
         this.picUrl = picUrl;
         this.linkUrl = linkUrl;
+        this.type = type;
+    }
+
+    public String getEventId() {
+        return eventId;
     }
 
     public String getPicUrl() {
@@ -28,5 +36,9 @@ public class CarouselModel {
 
     public void setLinkUrl(String linkUrl) {
         this.linkUrl = linkUrl;
+    }
+
+    public String isType() {
+        return type;
     }
 }

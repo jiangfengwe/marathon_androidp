@@ -133,12 +133,12 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
                 if (firstVisibleItemPosition == 0
                         && -headerViewHeight < paddingTop) {
                     if (paddingTop > 0 && currentState == DOWN_PULL_REFRESH) { // 完全显示了.
-                        Log.i(TAG, "松开刷新");
+                       // Log.i(TAG, "松开刷新");
                         currentState = RELEASE_REFRESH;
-                        refreshHeaderView();
+                        //refreshHeaderView();
                     } else if (paddingTop < 0
                             && currentState == RELEASE_REFRESH) { // 没有显示完全
-                        Log.i(TAG, "下拉刷新");
+                       // Log.i(TAG, "下拉刷新");
                         currentState = DOWN_PULL_REFRESH;
                         refreshHeaderView();
                     }
@@ -150,7 +150,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
             case MotionEvent.ACTION_UP :
                 // 判断当前的状态是松开刷新还是下拉刷新
                 if (currentState == RELEASE_REFRESH) {
-                    Log.i(TAG, "刷新数据.");
+                   // Log.i(TAG, "刷新数据.");
                     // 把头布局设置为完全显示状态
                     headerView.setPadding(0, 0, 0, 0);
                     // 进入到正在刷新中状态
@@ -207,7 +207,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
             if (isScrollToBottom && !isLoadingMore) {
                 isLoadingMore = true;
                 // 当前到底部
-                Log.i(TAG, "加载更多数据");
+               // Log.i(TAG, "加载更多数据");
                 footerView.setPadding(0, 0, 0, 0);
                 this.setSelection(this.getCount());
 

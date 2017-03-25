@@ -16,7 +16,7 @@
 
      <LinearLayout
          android:id="@+id/main"
-
+          android:visibility="gone"
          android:orientation="vertical"
          android:layout_width="match_parent"
          android:layout_height="match_parent">
@@ -84,18 +84,14 @@
 
     </com.tdin360.zjw.marathon.weight.MyGridView>
 
-          <!--提示文本-->
-             <TextView
-                 android:id="@+id/notData"
-                 android:visibility="gone"
-                 android:textColor="@color/dark"
-                android:layout_marginTop="50dp"
-                 android:layout_centerInParent="true"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textSize="18sp"
-                 android:text="暂无赞助商!"
-                 />
+          <!--没有数据提示-->
+         <LinearLayout
+             android:layout_marginTop="20dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+             <include layout="@layout/not_found_layout"></include>
+         </LinearLayout>
+
 
 
      </RelativeLayout>

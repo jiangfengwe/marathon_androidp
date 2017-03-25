@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Bundle;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.SoftReference;
 
@@ -23,9 +25,9 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         handler = new Handler();
-        SharedPreferences share = this.getSharedPreferences("GuideData",Activity.MODE_PRIVATE);
-        final boolean isGuide = share.getBoolean("isGuide", false);
+
 
          runnable = new Runnable() {
              @Override
@@ -34,13 +36,11 @@ public class WelcomeActivity extends Activity {
                  Intent intent;
 
                  //如果已经引导过了就直接跳转到主界面否则就进入引导页
-                 if (!isGuide) {
-
-                     intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                 }else {
+                if (SharedPreferencesManager.isGuide(getApplicationContext())) {
 
                      intent = new Intent(WelcomeActivity.this, GuideActivity.class);
-
+                 }else {
+                     intent = new Intent(WelcomeActivity.this, MainActivity.class);
                  }
 
                  startActivity(intent);
@@ -56,12 +56,16 @@ public class WelcomeActivity extends Activity {
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
+        MobclickAgent.onPageStart("启动页");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         JPushInterface.onPause(this);
+        MobclickAgent.onPageStart("启动页");
+        MobclickAgent.onPause(this);
     }
 
 

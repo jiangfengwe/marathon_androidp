@@ -98,5 +98,15 @@
 
     -keep class com.linkedin.** { *; }
     -keepattributes Signature
+    -keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep public class [com.tdin360.zjw.marathon].R$*{
+public static final int *;
+}
 
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 #   end 友盟代码混淆

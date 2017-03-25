@@ -6,7 +6,7 @@
     <color name="colorPrimaryDark">#191919</color>
     <!--底部tabBar的颜色 -->
     <color name="bottomTabBar">#191919</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ffb400</color>
     <color name="province_line_border">#C7C7C7</color>
     <color name="textBlack">#333</color>
     <color name="red">#e41515</color>
@@ -21,6 +21,7 @@
     <color name="dark">#b9b9b9</color>
     <!--黄色字体颜色-->
     <color name="yellow_color">#ffb400</color>
+    <color name="blue">#0625d9</color>
 
     <!--按钮颜色-->
     <color name="buttonNColor">#ffb400</color>

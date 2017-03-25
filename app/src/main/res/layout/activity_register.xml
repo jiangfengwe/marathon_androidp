@@ -70,6 +70,7 @@
                 android:textColorHint="@color/dark"
                 android:drawablePadding="5dp"
                 android:layout_weight="1.5"
+                android:maxLines="1"
                 android:background="@color/body_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

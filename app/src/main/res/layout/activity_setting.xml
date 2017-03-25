@@ -63,32 +63,13 @@
                     />
             </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/feedback"
-        android:background="@drawable/personal_center_item_selector"
-        android:padding="15dp"
-        android:layout_marginTop="1dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="意见反馈"
-            />
-        <ImageView
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_right"
-            />
-    </RelativeLayout>
+
 
     <Button
+        android:layout_marginTop="20dp"
         android:id="@+id/clear"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/oval_red_button_selector"

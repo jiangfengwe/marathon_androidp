@@ -85,7 +85,7 @@ public class UpdateManager {
      2  * 获取版本号
      3  * @return 当前应用的版本号
      4  */
-    private static int getVersion(Context context) {
+    public static int getVersion(Context context) {
         try {
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);

@@ -8,14 +8,14 @@ import java.io.Serializable;
  * Created by admin on 16/12/25.
  */
 
-public class ShareInfo implements Serializable{
+public class ShareModel implements Serializable{
 
     private String title;
     private String url;
     private Bitmap bitmap;
     private String describe;
 
-    public ShareInfo(String title, String url, String describe, Bitmap bitmap) {
+    public ShareModel(String title, String url, String describe, Bitmap bitmap) {
         this.title = title;
         this.url = url;
         this.describe = describe;

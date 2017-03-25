@@ -8,12 +8,12 @@ import java.util.List;
  * Created by admin on 17/3/12.
  */
 
-public interface IStepService {
+public interface StepService {
 
     void addStep(StepModel model);
-    void deleteStepById(int id);
+    boolean deleteStepById(int id);
     StepModel findStepById(int id);
-    void deleteAll();
+    boolean deleteAll();
     boolean updateStep(StepModel model);
     List<StepModel> getAllStep();
 }

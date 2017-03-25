@@ -4,27 +4,50 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.GoodsModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.Serializable;
+
 public class MyGoodsDetailsActivity extends BaseActivity {
 
-    private int id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setToolBarTitle("物资详情");
         showBackButton();
-        Intent intent = getIntent();
-         this.id = intent.getIntExtra("id", 0);
+        GoodsModel model = (GoodsModel) getIntent().getSerializableExtra("model");
 
-        httpRequest();
+        showInfo(model);
+
+    }
+
+    /**
+     *显示信息
+     * @param model
+     */
+    private void showInfo(GoodsModel model) {
+
+        TextView name = (TextView) this.findViewById(R.id.name);
+        name.setText(model.getName());
+        TextView gander = (TextView) this.findViewById(R.id.sex);
+        gander.setText(model.getGander());
+        TextView idNumber = (TextView) this.findViewById(R.id.iDNumber);
+        idNumber.setText(model.getIdNumber());
+        TextView num = (TextView) this.findViewById(R.id.numBer);
+        num.setText(model.getNumber());
+        TextView size = (TextView) this.findViewById(R.id.clothesSize);
+        size.setText(model.getSize());
+
 
     }
 
@@ -53,8 +76,8 @@ public class MyGoodsDetailsActivity extends BaseActivity {
     private void httpRequest(){
 
         RequestParams params = new RequestParams(HttpUrlUtils.MY_GOODS_DETAIL);
-        params.addQueryStringParameter("Id",id+"");
-
+        params.addQueryStringParameter("Id","");
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
