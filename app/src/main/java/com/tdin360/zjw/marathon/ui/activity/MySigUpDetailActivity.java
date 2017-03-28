@@ -1,6 +1,9 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import android.support.v4.view.PagerAdapter;
@@ -49,6 +52,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         setToolBarTitle("报名详情");
         showBackButton();
         initView();
+        register();
 
         this.model = (SignUpInfoModel) getIntent().getSerializableExtra("model");
         showData(model);
@@ -61,6 +65,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
         params.addQueryStringParameter("orderNo",model.getOrderNum());
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -440,19 +445,37 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
     }
 
+    private MyBroadcastReceiver receiver;
+
+
+
+    private void register(){
+
+        receiver = new MyBroadcastReceiver();
+        IntentFilter intentFilter  =new IntentFilter(PayActivity.PAY_ACTION);
+        registerReceiver(receiver,intentFilter);
+    }
+    /**
+     * （当从详情页去支付成功时）进行数据更新
+     */
+    private class MyBroadcastReceiver extends BroadcastReceiver{
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            httpRequest();
+
+        }
+    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //在没有支付的情况下，支付成功怎回来刷新支付状态
-        if(requestCode==REQUEST_CODE){
+    protected void onDestroy() {
+        super.onDestroy();
 
-            if(data!=null&&data.getBooleanExtra("isOk",false)){
-                httpRequest();
+        if(receiver!=null){
 
-            }
-
-
+            unregisterReceiver(receiver);
         }
     }
 }

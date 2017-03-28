@@ -83,9 +83,8 @@ public class ShowHtmlActivity extends BaseActivity {
              * 构建分享内容
              */
           ShareInfoManager manager = new ShareInfoManager(this);
-            manager.buildShareWebLink(title,"http://www.baidu.com","来自网页详情的分享", BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
+            manager.buildShareWebLink(title,url,"佰家赛事", BitmapFactory.decodeResource(getResources(),R.drawable.umeng_socialize_share_web));
             showShareButton(manager);
-
 
            loading(url);
 

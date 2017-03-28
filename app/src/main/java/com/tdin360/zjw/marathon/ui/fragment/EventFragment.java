@@ -56,6 +56,8 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     private int pageCount;
     private TextView loadFile;
     private EventServiceImpl impl;
+    private TextView not_found;
+    private boolean isLoadFail;
 
     public static EventFragment newInstance(){
 
@@ -75,6 +77,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
          this.impl  = new EventServiceImpl(getContext());
          this.listView= (RefreshListView) view.findViewById(R.id.listView);
          this.loadFile = (TextView) view.findViewById(R.id.loadFail);
+         this.not_found = (TextView) view.findViewById(R.id.not_found);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
          this.listView.setAdapter(marathonListViewAdapter);
          this.listView.setOnRefreshListener(this);
@@ -209,6 +212,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
             //1获取缓存数据
             list  = impl.getAllEvent();
             marathonListViewAdapter.updateList(list);
+            not_found.setVisibility(View.GONE);
             //如果获取得到缓存数据则加载本地数据
             if(list.size()==0){
                 loadFile.setVisibility(View.VISIBLE);
@@ -269,6 +273,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
         impl.deleteAll();
         loadFile.setVisibility(View.GONE);
+        not_found.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
         params.addBodyParameter("appKey","eventkeyfdsfds520tdzh123456");
@@ -304,6 +309,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                 } catch (JSONException e) {
                     e.printStackTrace();
                     loadFile.setVisibility(View.VISIBLE);
+                    isLoadFail=true;
                 }
             }
 
@@ -312,6 +318,8 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
                   Toast.makeText(getActivity(),"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
                   loadFile.setVisibility(View.VISIBLE);
+                  not_found.setVisibility(View.GONE);
+                isLoadFail=true;
 
             }
 
@@ -323,12 +331,15 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
             @Override
             public void onFinished() {
 
-                if(list.size()>0){
-                    loadFile.setVisibility(View.GONE);
+                if(!isLoadFail&&list.size()==0){
+
+                  not_found.setVisibility(View.VISIBLE);
+
+                }else {
+                    not_found.setVisibility(View.GONE);
                 }
 
                 hud.dismiss();
-                //加载更多
             listView.hideFooterView();
             listView.hideHeaderView();
              marathonListViewAdapter.updateList(list);

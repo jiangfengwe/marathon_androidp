@@ -152,33 +152,68 @@
 
              </View>
          </TableLayout>
-          <TextView
-              android:layout_marginLeft="10dp"
-              android:textStyle="bold"
+          <LinearLayout
+              android:padding="10dp"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <LinearLayout
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+          <com.tdin360.zjw.marathon.weight.MyTableView
+              android:padding="5dp"
+              android:layout_weight="2"
+              android:gravity="center"
               android:textColor="@color/textBlack"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="领取时间:"
+              android:text="领取日期"
               />
-            <TextView
-                android:id="@+id/time"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="2017-04-30  9:00 － 18:00"
-                />
+              <com.tdin360.zjw.marathon.weight.MyTableView
+              android:padding="5dp"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:textColor="@color/textBlack"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="领取时段"
+              />
+              </LinearLayout>
+              <LinearLayout
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+          <com.tdin360.zjw.marathon.weight.MyTableView
+              android:padding="5dp"
+              android:layout_weight="2"
+              android:textColor="@color/textBlack"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:text="2017-07-20"
+              />
+              <com.tdin360.zjw.marathon.weight.MyTableView
+              android:padding="5dp"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:textColor="@color/textBlack"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="9:00--18:00"
+              />
+              </LinearLayout>
+
 
           <TextView
               android:layout_marginTop="15dp"
-              android:layout_marginLeft="10dp"
               android:textStyle="bold"
               android:textColor="@color/textBlack"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="领取方式:"
               />
-
+          </LinearLayout>
           <TableLayout
               android:shrinkColumns="0"
               android:layout_width="match_parent"

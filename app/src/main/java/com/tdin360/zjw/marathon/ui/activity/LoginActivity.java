@@ -34,7 +34,8 @@ import org.xutils.x;
  * 用户登录
  *
  */
-public class LoginActivity extends BaseActivity {
+public class
+LoginActivity extends BaseActivity {
 
     private EditText editTextName,editTextPass;
 

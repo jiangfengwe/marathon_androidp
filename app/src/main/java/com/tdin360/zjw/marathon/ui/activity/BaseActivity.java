@@ -64,19 +64,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
 
-
+//                 分享图片
                 if(manager.getShareType()== ShareInfoManager.ShareType.IMAGE){
 
 
-                    new ShareAction(BaseActivity.this).withText("佰家运动分享")
+                    new ShareAction(BaseActivity.this).withText(manager.getTitle())
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())
                             .withMedia(manager.ShareImage())
                             .share();
 
-                }else {
+                }else {//分享网页
 
-                    new ShareAction(BaseActivity.this).withText("佰家运动分享")
+                    new ShareAction(BaseActivity.this).withText(manager.getTitle())
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())
                             .withMedia(manager.shareLink())
@@ -289,7 +289,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
     /**
      * sd卡读取权限授权成功后默认执行改方法供给子类来调用

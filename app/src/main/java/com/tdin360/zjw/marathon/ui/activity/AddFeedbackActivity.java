@@ -26,8 +26,6 @@ public class AddFeedbackActivity extends BaseActivity {
 
     private EditText editText;
     private KProgressHUD hud;
-    private boolean isReload;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +81,6 @@ public class AddFeedbackActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-
                 try {
                     JSONObject json = new JSONObject(result);
 
@@ -94,6 +91,7 @@ public class AddFeedbackActivity extends BaseActivity {
                         //更新列表
                         Intent intent = new Intent(FeedbackListActivity.ACTION);
                         sendBroadcast(intent);
+                        finish();
 
                     }else {
 
@@ -104,6 +102,8 @@ public class AddFeedbackActivity extends BaseActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                    Toast.makeText(AddFeedbackActivity.this,"提交失败!",Toast.LENGTH_SHORT).show();
                 }
 
             }

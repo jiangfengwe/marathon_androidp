@@ -6,39 +6,41 @@
     android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.AddFeedbackActivity">
     <include layout="@layout/toolbar_layout"></include>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:padding="10dp"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:orientation="vertical"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <EditText
-            android:id="@+id/edit"
+        <LinearLayout
             android:padding="5dp"
-            android:enabled="true"
-            android:gravity="top"
-            android:scrollbars="vertical"
-            android:background="@drawable/edittext_border_color"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:hint="请输入您的宝贵意见或建议"
-            />
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/edit"
+                android:padding="5dp"
+                android:enabled="true"
+                android:gravity="top"
+                android:scrollbars="vertical"
+                android:background="@drawable/edittext_border_color"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:hint="请输入您的宝贵意见或建议"
+                />
 
-        <Button
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/oval_red_button_selector"
+                android:onClick="submit"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="提交"
+                android:textColor="#fff"
+                android:textSize="18sp"
 
-            android:onClick="submit"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="提交"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:background="@drawable/oval_red_button_selector"
-            />
-    </LinearLayout>
-</ScrollView>
+                />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

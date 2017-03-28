@@ -72,9 +72,10 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setToolBarTitle("个人信息");
+        showBackButton();
         this.utils = new HeadImageUtils(getApplicationContext());
         initView();
-
     }
 
     @Override

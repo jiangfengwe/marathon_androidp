@@ -36,6 +36,10 @@ public class MyGoodsDetailsActivity extends BaseActivity {
      * @param model
      */
     private void showInfo(GoodsModel model) {
+        if(model==null){
+
+            return;
+        }
 
         TextView name = (TextView) this.findViewById(R.id.name);
         name.setText(model.getName());

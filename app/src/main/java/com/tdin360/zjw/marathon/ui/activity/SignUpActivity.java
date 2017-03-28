@@ -6,11 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -29,7 +27,7 @@ import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.service.XmlParserHandler;
-import com.tdin360.zjw.marathon.utils.ValidateUtil;
+import com.tdin360.zjw.marathon.utils.ValidateUtils;
 import com.tdin360.zjw.marathon.weight.AutoText;
 import com.tdin360.zjw.marathon.weight.OnWheelChangedListener;
 import com.tdin360.zjw.marathon.weight.WheelView;
@@ -658,7 +656,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             editTextPhone.requestFocus();
             return;
         }
-         else  if(!ValidateUtil.isMobileNO(editTextPhone.getText().toString().trim())){
+         else  if(!ValidateUtils.isMobileNO(editTextPhone.getText().toString().trim())){
             Toast.makeText(SignUpActivity.this,"手机号格式错误!",Toast.LENGTH_SHORT).show();
             editTextPhone.requestFocus();
             return;
@@ -670,7 +668,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             editTextEmail.requestFocus();
             return;
 
-        }else if(!ValidateUtil.isEmailParams(editTextEmail.getText().toString().trim())){//正则表达式验证是否是邮箱格式
+        }else if(!ValidateUtils.isEmailParams(editTextEmail.getText().toString().trim())){//正则表达式验证是否是邮箱格式
 
                 Toast.makeText(SignUpActivity.this,"邮箱格式错误!",Toast.LENGTH_SHORT).show();
                 editTextEmail.requestFocus();
@@ -828,7 +826,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 //        紧急联系电话
         param.addBodyParameter("EmergencyContactPhone",editTextLinkPhone.getText().toString().trim());
         //报名来源
-        param.addBodyParameter("RegistratorSource","Android 客户端");
+        param.addBodyParameter("RegistratorSource","来自Android客户端");
         param.setMaxRetryCount(0);//最大重复请求次数
         param.setConnectTimeout(5*1000);
         param.addBodyParameter("appKey",HttpUrlUtils.appKey);

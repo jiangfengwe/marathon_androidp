@@ -35,6 +35,8 @@ import org.xutils.x;
  * @author zhangzhijun
  */
 public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPAYResultListener{
+
+    public static final String PAY_ACTION="PAY_OK";
     private IWXAPI api;
     private RadioButton aliPay,wXPay,yLPay;
     private String orderNo;
@@ -506,6 +508,13 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private void showPaySuccessDialog(){
 
 
+        //(通过广播来更新)来自与报名详情支付成功更改支付状态
+        if(from.equals("signUpDetail")){
+
+            Intent intent = new Intent(PAY_ACTION);
+            sendBroadcast(intent);
+        }
+
         final AlertDialog alert = new AlertDialog.Builder(this).create();
         View view = View.inflate(PayActivity.this, R.layout.pay_result_dialog, null);
         alert.setView(view);
@@ -537,8 +546,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 }else {
 
                     //返回更新
-                    intent.putExtra("isOk",true);
-                    setResult(MySigUpDetailActivity.REQUEST_CODE,intent);
                     finish();
                 }
 
@@ -561,6 +568,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         RequestParams params = new RequestParams(HttpUrlUtils.CHECKED_PAY_STATUS);
         params.setConnectTimeout(5*1000);
         params.addBodyParameter("orderNo",orderNo);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

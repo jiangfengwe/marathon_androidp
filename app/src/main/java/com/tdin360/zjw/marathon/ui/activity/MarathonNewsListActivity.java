@@ -147,7 +147,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
     private void httpRequest(){
 
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
-        requestParams.addQueryStringParameter("eventId","1");
+        requestParams.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
         requestParams.addQueryStringParameter("newsOrNoticeName","赛事新闻");
         requestParams.addQueryStringParameter("PageNumber",pageNumber+"");
         requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);

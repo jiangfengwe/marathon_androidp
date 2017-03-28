@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * Created by admin on 17/1/2.
  */
 
-public class ValidateUtil {
+public class ValidateUtils {
 
     /**
      * 正则表达式验证手机号格式

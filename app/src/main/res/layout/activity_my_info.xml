@@ -10,41 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:onClick="back"
-            android:layout_margin="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/nav_back"
-            />
-        <TextView
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我的信息"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:id="@+id/edit"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="编辑"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            />
-
-    </RelativeLayout>
+        <include layout="@layout/toolbar_layout"></include>
     <LinearLayout
 
         android:id="@+id/main"
@@ -269,6 +235,18 @@
             ></View>
 
     </TableLayout>
+
+    <Button
+        android:layout_margin="10dp"
+        android:background="@drawable/oval_red_button_selector"
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="编辑"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+
+        />
 
     </LinearLayout
 >

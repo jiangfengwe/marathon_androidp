@@ -19,6 +19,7 @@ public class ShareInfoManager {
     private ShareType shareType;
     private UMImage umImage;
     private UMWeb umWeb;
+    private String title;
     public enum ShareType{
 
         IMAGE,//分享图片
@@ -28,6 +29,13 @@ public class ShareInfoManager {
     public ShareInfoManager(Context context){
 
        this.context=context;
+    }
+
+    //获取标题
+    public String getTitle(){
+
+
+        return this.title;
     }
     /**
      * 获取分享类型
@@ -71,8 +79,9 @@ public class ShareInfoManager {
      */
     public void buildShareWebLink(String title,String url,String description,Bitmap bitmap){
 
-       this.shareType=ShareType.LINK;
-         this.umWeb = new UMWeb(url);
+        this.title=title;
+        this.shareType=ShareType.LINK;
+        this.umWeb = new UMWeb(url);
         umWeb.setTitle(title);
         umWeb.setDescription(description);
 

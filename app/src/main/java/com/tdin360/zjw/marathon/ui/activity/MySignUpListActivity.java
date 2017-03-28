@@ -1,8 +1,11 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +59,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
         setToolBarTitle("我的报名");
         showBackButton();
         initView();
+        register();
     }
     @Override
     public int getLayout() {
@@ -100,6 +105,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
             if(convertView==null){
                 viewHolder = new ViewHolder();
                 convertView=View.inflate(MySignUpListActivity.this,R.layout.my_signup_list_item,null);
+                viewHolder.status = (ImageView) convertView.findViewById(R.id.status);
                 viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
                 viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
                 viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
@@ -108,7 +114,6 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
                 Animation animation = AnimationUtils.loadAnimation(MySignUpListActivity.this, R.anim.arrow);
                 viewHolder.arrow.startAnimation(animation);
 
-
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -116,6 +121,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
 
 
             SignUpInfoModel model = list.get(position);
+            viewHolder.status.setEnabled(model.isPayed());
             x.image().bind(viewHolder.imageView,model.getImageUrl());
             viewHolder.matchName.setText(model.getEventName());
             viewHolder.matchAchievement.setText(model.getAttendProject());
@@ -124,6 +130,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
             return convertView;
         }
         class ViewHolder{
+            private ImageView status;
             private ImageView imageView;
             private TextView matchTime;
             private TextView matchName;
@@ -343,5 +350,39 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
                 myAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+
+    private MyBroadcastReceiver receiver;
+
+    //注册广播
+    private void register(){
+
+        this.receiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(PayActivity.PAY_ACTION);
+        registerReceiver(receiver,filter);
+
+    }
+    /**
+     * 用于接收支付成功后刷新数据的广播
+     */
+    private class MyBroadcastReceiver extends BroadcastReceiver{
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            httpRequest();
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(receiver!=null){
+
+            unregisterReceiver(receiver);
+        }
     }
 }

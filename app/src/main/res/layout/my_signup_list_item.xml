@@ -13,7 +13,15 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/item"
+            android:src="@drawable/loading_banner_default"
+            />
+        <ImageView
+
+            android:id="@+id/status"
+            android:scaleType="centerCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sign_up_status_tag_selector"
             />
         <LinearLayout
             android:layout_alignParentBottom="true"

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -111,7 +112,7 @@ public class MarathonDetailsActivity extends BaseActivity {
          * 构建分享内容
          */
         ShareInfoManager manager = new ShareInfoManager(this);
-         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家运动分享",BitmapFactory.decodeResource(getResources(),R.mipmap.logo));
+         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家赛事",BitmapFactory.decodeResource(getResources(),R.drawable.umeng_socialize_share_web));
         showShareButton(manager);
 
         //如果报名已结束就不显示报名按钮
@@ -289,6 +290,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                     JSONObject json  =new JSONObject(result);
 
 
+
                     /**
                      * 获取轮播图数据
                      */
@@ -299,7 +301,8 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                         String picUrl = jsonObject.getString("PictureUrl");
                         CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),picUrl, "","0");
-                        carouselList.add(model);
+                        carouselList.add(model);  carouselList.add(model);  carouselList.add(model);
+
                         service.addEventDetail(model);
 
                     }

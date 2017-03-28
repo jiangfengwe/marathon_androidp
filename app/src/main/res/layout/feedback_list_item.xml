@@ -21,7 +21,7 @@
             app:riv_border_color="#5fff"
             app:riv_mutate_background="true"
             app:riv_oval="true"
-            android:src="@drawable/item"
+            android:src="@drawable/loading_banner_default"
             />
         <TextView
             android:id="@+id/name"

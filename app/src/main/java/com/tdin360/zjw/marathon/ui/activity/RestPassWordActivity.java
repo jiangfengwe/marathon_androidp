@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -15,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -23,7 +21,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.utils.ValidateUtil;
+import com.tdin360.zjw.marathon.utils.ValidateUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -148,7 +146,7 @@ public class RestPassWordActivity extends BaseActivity {
         String tel = this.editTextTel.getText().toString().trim();
 
         //验证手机号码是否符合规范
-        if(tel.length()<11||!ValidateUtil.isMobileNO(tel)){
+        if(tel.length()<11||!ValidateUtils.isMobileNO(tel)){
 
             Toast.makeText(this,"手机号有误,请正确填写手机号!",Toast.LENGTH_SHORT).show();
             editTextTel.requestFocus();
@@ -266,7 +264,7 @@ public class RestPassWordActivity extends BaseActivity {
         String tel = this.editTextTel.getText().toString().trim();
 
         //验证手机号码是否符合规范
-        if(tel.length()<11||!ValidateUtil.isMobileNO(tel)){
+        if(tel.length()<11||!ValidateUtils.isMobileNO(tel)){
 
             Toast.makeText(this,"手机号有误,请正确填写手机号!",Toast.LENGTH_SHORT).show();
             editTextTel.requestFocus();

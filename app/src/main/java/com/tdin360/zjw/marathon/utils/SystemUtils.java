@@ -16,8 +16,8 @@ import java.util.List;
 
 public class SystemUtils {
 
-
     /**
+     * 用于处理通知消息
      * 判断应用是否已经启动
      * @param context 一个context
      * @param packageName 要判断应用的包名
@@ -30,13 +30,13 @@ public class SystemUtils {
                 = activityManager.getRunningAppProcesses();
         for(int i = 0; i < processInfos.size(); i++){
             if(processInfos.get(i).processName.equals(packageName)){
-                Log.i("NotificationLaunch",
-                        String.format("the %s is running, isAppAlive return true", packageName));
+              //  Log.i("NotificationLaunch",
+                      //  String.format("the %s is running, isAppAlive return true", packageName));
                 return true;
             }
         }
-        Log.i("NotificationLaunch",
-                String.format("the %s is not running, isAppAlive return false", packageName));
+      //  Log.i("NotificationLaunch",
+            //    String.format("the %s is not running, isAppAlive return false", packageName));
         return false;
     }
 

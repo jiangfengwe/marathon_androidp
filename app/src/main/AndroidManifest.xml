@@ -284,11 +284,17 @@
             android:value="58ad39b89f06fd36410004df"></meta-data>
         <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_VALUE}"/>
         <!-- 友盟 -->
-        <!-- 只有精简版新浪和豆瓣需要此配置 -->
+
+          <!--微博回调-->
         <activity
-            android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.UMDefault" />
+            android:name=".ui.activity.WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <!-- QQ精简版分享配置 -->
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
@@ -308,6 +314,30 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!--登录回调-->
+        <activity
+            android:name="jp.line.android.sdk.activity.LineAuthCompleteActivity"
+            android:configChanges="keyboard|orientation"
+            android:exported="true"
+            android:screenOrientation="sensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="line.1471474450"/>
+            </intent-filter>
+        </activity>
+        <!--没安装客户端下登录-->
+        <activity
+            android:name="jp.line.android.sdk.activity.WebLoginActivity"
+            android:configChanges="keyboard|orientation"
+            android:exported="false"
+            android:screenOrientation="sensor">
+        </activity>
+
         <activity
             android:name=".ui.activity.MyAchievementDetailsActivity"
             android:screenOrientation="portrait" />

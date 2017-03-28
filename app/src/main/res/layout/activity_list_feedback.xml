@@ -15,8 +15,6 @@
         <com.tdin360.zjw.marathon.weight.RefreshListView
             android:id="@+id/listView"
             android:listSelector="@android:color/transparent"
-            android:divider="@color/lineColor"
-            android:dividerHeight="0.5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

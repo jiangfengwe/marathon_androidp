@@ -55,9 +55,11 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     /**
      *     底部指示器背景颜色
      */
-
-
     private int pageBarColor=android.R.color.transparent;
+
+    private int pagePointSize=30;//设置指示器的大小
+
+    private boolean stopScroll;
 
     public Carousel(Context context) {
         super(context);
@@ -94,6 +96,26 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
         this.page.setLayoutParams(params);
         main.addView(page);
         this.addView(main);
+
+
+        //添加viewpager的滑动事件
+        this.viewPager.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (MotionEvent.ACTION_DOWN == event.getAction()) {
+                    handler.removeMessages(WHAT);
+                } else if (MotionEvent.ACTION_UP == event.getAction()) {
+
+
+                    handler.sendEmptyMessageDelayed(WHAT, loopTime);
+                }
+                return stopScroll;
+            }
+        });
+
+        //启动自动轮播
+        handler.sendEmptyMessageDelayed(WHAT, loopTime);
     }
 
     /**
@@ -129,10 +151,56 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     public void loadCarousel(final List<View>views){
         this.views=views;
 
-        if(views.size()>1) {
+        //如果轮播图大于1张才显示指示器
+             if(views.size()<=1){
+
+                 stopScroll=true;
+             }
+
+            if(!stopScroll) {
+
+                for (int i = 0; i < views.size(); i++) {
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pagePointSize,pagePointSize);
+                    ImageView item = new ImageView(getContext());
+                    params.leftMargin = 5;
+                    item.setLayoutParams(params);
+                    item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+                    if (i == 0) {
+
+                        item.setEnabled(false);
+                    } else {
+                        item.setEnabled(true);
+                    }
+                    page.addView(item);
+                    setPageBarPosition(Gravity.CENTER);
+
+                }
+
+            }
+            this.viewPager.setAdapter(new CarouselAdapter());
+
+
+
+    }
+
+    /**
+     *
+     * @param views 轮播图片容器
+     * @param loopTime 轮播时间(单位毫秒)
+     */
+    public void loadCarousel(final List<View>views,final int loopTime){
+        this.views=views;
+        this.loopTime=loopTime;
+
+        if(views.size()<=1){
+            stopScroll=true;
+        }
+
+        if(!stopScroll) {
             for (int i = 0; i < views.size(); i++) {
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pagePointSize, pagePointSize);
                 ImageView item = new ImageView(getContext());
                 params.leftMargin = 5;
                 item.setLayoutParams(params);
@@ -145,69 +213,12 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
                 }
                 page.addView(item);
                 setPageBarPosition(Gravity.CENTER);
-
             }
-            this.viewPager.setAdapter(new CarouselAdapter());
-
-            this.viewPager.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (MotionEvent.ACTION_DOWN == event.getAction()) {
-
-                        handler.removeMessages(WHAT);
-                    } else if (MotionEvent.ACTION_UP == event.getAction()) {
-
-                        handler.sendEmptyMessageDelayed(WHAT, loopTime);
-                    }
-                    return false;
-                }
-            });
-            handler.sendEmptyMessageDelayed(WHAT, loopTime);
         }
-    }
 
-    /**
-     *
-     * @param views 轮播图片容器
-     * @param loopTime 轮播时间(单位毫秒)
-     */
-    public void loadCarousel(final List<View>views,final int loopTime){
-        this.views=views;
-        this.loopTime=loopTime;
-        for(int i=0;i<views.size();i++){
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10,10);
-            ImageView item = new ImageView(getContext());
-            params.leftMargin=5;
-            item.setLayoutParams(params);
-            item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
-            if(i==0){
-
-                item.setEnabled(false);
-            }else {
-                item.setEnabled(true);
-            }
-            page.addView(item);
-             setPageBarPosition(Gravity.CENTER);
-        }
         this.viewPager.setAdapter(new CarouselAdapter());
 
-        this.viewPager.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-                if(MotionEvent.ACTION_DOWN==event.getAction()){
-
-                    handler.removeMessages(WHAT);
-                }else if(MotionEvent.ACTION_UP==event.getAction()){
-
-                    handler.sendEmptyMessageDelayed(WHAT,loopTime);
-                }
-                return false;
-            }
-        });
-        handler.sendEmptyMessageDelayed(WHAT,loopTime);
     }
 
     /**
@@ -219,39 +230,35 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     public void loadCarousel(final List<View>views,final int loopTime,int gravity){
         this.views=views;
         this.loopTime=loopTime;
-        for(int i=0;i<views.size();i++){
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10,10);
-            ImageView item = new ImageView(getContext());
-            params.leftMargin=5;
-            item.setLayoutParams(params);
-            item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
-            if(i==0){
 
-                item.setEnabled(false);
-            }else {
-                item.setEnabled(true);
+        if(views.size()<=1){
+            stopScroll=true;
+        }
+
+        if(!stopScroll) {
+            for (int i = 0; i < views.size(); i++) {
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pagePointSize,pagePointSize);
+                ImageView item = new ImageView(getContext());
+                params.leftMargin = 5;
+                item.setLayoutParams(params);
+                item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+                if (i == 0) {
+
+                    item.setEnabled(false);
+                } else {
+                    item.setEnabled(true);
+                }
+                page.addView(item);
+
+                  setPageBarPosition(gravity);
+
             }
-            page.addView(item);
-            setPageBarPosition(gravity);
         }
         this.viewPager.setAdapter(new CarouselAdapter());
 
-        this.viewPager.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-                if(MotionEvent.ACTION_DOWN==event.getAction()){
-
-                    handler.removeMessages(WHAT);
-                }else if(MotionEvent.ACTION_UP==event.getAction()){
-
-                    handler.sendEmptyMessageDelayed(WHAT,loopTime);
-                }
-                return false;
-            }
-        });
-        handler.sendEmptyMessageDelayed(WHAT,loopTime);
     }
 
     /**
@@ -263,7 +270,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            if(views.size()==0){
+            if(stopScroll){
                 handler.removeMessages(WHAT);
                 return;
             }
@@ -320,12 +327,13 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     @Override
     public void onPageSelected(int position) {
 
-              int p = position%views.size();
-             page.getChildAt(prePosition%views.size()).setEnabled(true);
-             page.getChildAt(p).setEnabled(false);
-             this.prePosition= position;
-             currentPosition= position;
-
+             if(views.size()>1) {
+                 int p = position % views.size();
+                 page.getChildAt(prePosition % views.size()).setEnabled(true);
+                 page.getChildAt(p).setEnabled(false);
+                 this.prePosition = position;
+                 currentPosition = position;
+             }
     }
 
     @Override
