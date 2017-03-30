@@ -45,7 +45,9 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
     private View view1;
     private View view2;
     private Button payBtn;
-    private SignUpInfoModel model;
+    private String price;
+    private String orderNo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,17 +56,23 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         initView();
         register();
 
-        this.model = (SignUpInfoModel) getIntent().getSerializableExtra("model");
+        SignUpInfoModel model = (SignUpInfoModel) getIntent().getSerializableExtra("model");
         showData(model);
+        if(model==null){//当报名成功直接支付成功后查看报名详情会进入该操作
+
+            String orderNo = getIntent().getStringExtra("orderNo");
+            httpRequest(orderNo);
+
+        }
 
     }
     /**
      * 请求网络数据(支付成功后根据订单号更新支付结果)
      */
-    private void httpRequest() {
+    private void httpRequest(String orderNo) {
 
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
-        params.addQueryStringParameter("orderNo",model.getOrderNum());
+        params.addQueryStringParameter("orderNo",orderNo);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -405,7 +413,8 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         //订单号
         TextView  order = (TextView) view2.findViewById(R.id.orderNumber);
 
-
+        this.orderNo = model.getOrderNum();
+        this.price = model.getPrice();
         order.setText(model.getOrderNum());
 
         //支付金额
@@ -432,22 +441,17 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
      * @param view
      */
     public void toPay(View view) {
-
-
-        MarathonDataUtils.init().setEventId(model.getEventId());
-        MarathonDataUtils.init().setEventName(model.getEventName());
-        Intent intent = new Intent(this,PayActivity.class);
-         intent.putExtra("order",model.getOrderNum());
+        
+         Intent intent = new Intent(this,PayActivity.class);
+         intent.putExtra("order",orderNo);
          intent.putExtra("subject","报名费用");
-         intent.putExtra("money",model.getPrice());
+         intent.putExtra("money",price);
          intent.putExtra("from","signUpDetail");
          startActivityForResult(intent,REQUEST_CODE);
 
     }
 
     private MyBroadcastReceiver receiver;
-
-
 
     private void register(){
 
@@ -464,7 +468,13 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            httpRequest();
+            if(intent!=null){
+
+                String orderNo = intent.getStringExtra("orderNo");
+                httpRequest(orderNo);
+            }
+
+
 
         }
     }

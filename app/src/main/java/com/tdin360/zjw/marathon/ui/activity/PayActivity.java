@@ -508,12 +508,13 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private void showPaySuccessDialog(){
 
 
-        //(通过广播来更新)来自与报名详情支付成功更改支付状态
-        if(from.equals("signUpDetail")){
 
-            Intent intent = new Intent(PAY_ACTION);
-            sendBroadcast(intent);
-        }
+            //从支付详情进入支付成功则去改变支付状态
+           if(from.equals("signUpDetail")) {
+               Intent intent = new Intent(PAY_ACTION);
+               intent.putExtra("orderNo", orderNo);
+               sendBroadcast(intent);
+           }
 
         final AlertDialog alert = new AlertDialog.Builder(this).create();
         View view = View.inflate(PayActivity.this, R.layout.pay_result_dialog, null);
@@ -539,7 +540,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             public void onClick(View v) {
                 Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
                 if(from.equals("signUp")){//来源于报名界面的支付
-
+                    intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
                     finish();
                   //跳转到报名详细

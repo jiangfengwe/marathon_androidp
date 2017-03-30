@@ -371,7 +371,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            list.clear();
             httpRequest();
 
         }

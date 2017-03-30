@@ -43,8 +43,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText editTextPass1;
     private EditText editTextPass2;
     private ImageView clearBtn;
-    private CheckBox checkBox;
-    private Button submitBtn;
+
     private CheckBox showPass1,showPass2;
 
     @Override
@@ -58,33 +57,10 @@ public class RegisterActivity extends BaseActivity {
         this.editTextPass1= (EditText) this.findViewById(R.id.password1);
         this.editTextPass2= (EditText) this.findViewById(R.id.password2);
         this.clearBtn = (ImageView) this.findViewById(R.id.clear);
-        this.checkBox = (CheckBox) this.findViewById(R.id.isOk);
-        this.submitBtn = (Button) this.findViewById(R.id.submitBtn);
         this.showPass1 = (CheckBox) this.findViewById(R.id.showPass1);
         this.showPass2 = (CheckBox) this.findViewById(R.id.showPass2);
         this.showPass1.setOnCheckedChangeListener(new  MyCheckBoxListener());
         this.showPass2.setOnCheckedChangeListener(new  MyCheckBoxListener());
-
-         this.findViewById(R.id.look).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-
-                 Intent intent = new Intent(RegisterActivity.this,ShowHtmlActivity.class);
-
-                 intent.putExtra("title","服务协议");
-                 intent.putExtra("url","file:///android_asset/about.html");
-
-                 startActivity(intent);
-             }
-         });
-
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                 submitBtn.setEnabled(isChecked);
-            }
-        });
 
 
         /**
@@ -283,6 +259,16 @@ public class RegisterActivity extends BaseActivity {
             String pass1  =this.editTextPass1.getText().toString().trim();
             String pass2 = this.editTextPass2.getText().toString().trim();
 
+
+
+
+        //验证手机号码是否符合规范
+        if(tel.length()<11||!ValidateUtils.isMobileNO(tel)){
+
+            Toast.makeText(this,"手机号有误,请正确填写手机号!",Toast.LENGTH_SHORT).show();
+            editTextTel.requestFocus();
+            return;
+        }
 
         //验证验证码
 

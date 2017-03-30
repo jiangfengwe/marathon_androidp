@@ -21,8 +21,10 @@ import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
 import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.MenuModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MenuDataUtils;
+import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -301,7 +303,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                         String picUrl = jsonObject.getString("PictureUrl");
                         CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),picUrl, "","0");
-                        carouselList.add(model);  carouselList.add(model);  carouselList.add(model);
+                        carouselList.add(model);
 
                         service.addEventDetail(model);
 
@@ -402,6 +404,8 @@ public class MarathonDetailsActivity extends BaseActivity {
         }else {
             Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
             startActivity(intent);
+            //设置登录成功后跳转到报名界面
+            LoginNavigationConfig.instance().setNavType(NavType.SignUp);
 
         }
 

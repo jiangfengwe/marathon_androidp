@@ -48,6 +48,7 @@
             <TextView
                 android:padding="5dp"
                 android:id="@+id/message"
+                android:textSize="16sp"
                 android:textColor="@color/textBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

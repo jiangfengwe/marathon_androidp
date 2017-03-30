@@ -154,7 +154,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/submitBtn"
+
             android:onClick="submit"
             android:layout_marginTop="30dp"
             android:background="@drawable/oval_red_button_selector"
@@ -165,33 +165,7 @@
             android:textColor="@color/white"
             />
 
-        <LinearLayout
-            android:layout_marginTop="20dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <CheckBox
-            android:id="@+id/isOk"
-            android:checked="true"
-            android:button="@null"
-            android:drawableLeft="@drawable/gander_checked_selector"
-            android:layout_width="wrap_content"
-            android:drawablePadding="5dp"
-            android:textSize="15sp"
-            android:textColor="@color/dark"
-            android:layout_height="wrap_content"
-            android:text="已阅读并同意"
-            />
-            <TextView
-                android:textSize="15sp"
-                android:id="@+id/look"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_blue_light"
-                android:text="《服务协议》"
-                />
-        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

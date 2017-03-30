@@ -6,9 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -27,6 +31,7 @@ import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.service.XmlParserHandler;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ValidateUtils;
 import com.tdin360.zjw.marathon.weight.AutoText;
 import com.tdin360.zjw.marathon.weight.OnWheelChangedListener;
@@ -153,6 +158,10 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     //主布局
     private LinearLayout main;
 
+    //注意事项相关
+    private CheckBox checkBox;
+    private Button submitBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -254,9 +263,10 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextPost= (EditText) this.findViewById(R.id.post);
          this.editTextLinkName= (EditText) this.findViewById(R.id.linkName);
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
-
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+        this.checkBox = (CheckBox) this.findViewById(R.id.isOk);
+        this.submitBtn = (Button) this.findViewById(R.id.submitBtn);
 
         //加载失败点击重新获取
         this.loadFail.setOnClickListener(new View.OnClickListener() {
@@ -267,6 +277,27 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             }
         });
 
+        //注意事项
+        this.findViewById(R.id.look).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SignUpActivity.this,ShowHtmlActivity.class);
+
+                intent.putExtra("title","注意事项");
+                intent.putExtra("url","file:///android_asset/agreement.html");
+
+                startActivity(intent);
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                submitBtn.setEnabled(isChecked);
+            }
+        });
 
         //出生日期选择部分
         this.dateSelect= (TextView) this.findViewById(R.id.dateSelect);
@@ -290,6 +321,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                           idCardTypeString=idTypeList.get(position).getValue();
+
+
              }
 
              @Override
@@ -321,6 +354,18 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                   country=parent.getItemAtPosition(position).toString();
+
+                 if(!country.equals("China 中国")){
+                     mCurrentProviceName="其它";
+                     mCurrentCityName="其它";
+                     mCurrentDistrictName="其它";
+                     showSelectedResult();
+                 }else {
+
+                     areaAddress.setText("请选择所在地");
+
+                 }
+
              }
 
              @Override
@@ -467,13 +512,73 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId()+"");
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("phone", SharedPreferencesManager.getLoginInfo(getApplicationContext()).getName());
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
 
+
                 try {
                     JSONObject json = new JSONObject(s);
 
+                    //填充姓名
+                    String name = json.getString("RegistratorName");
+                    editTextName.setText(name.equals("null")?"":name);
+                    //填充性别
+                    boolean sex = json.getBoolean("RegistratorSex");
+                    if(sex){
+
+                        radioGroup.check(R.id.radio1);
+                    }else {
+                        radioGroup.check(R.id.radio2);
+                    }
+
+                    //填充年月日
+                    int dateOfBirthYear = json.getInt("DateOfBirthYear");
+                    int dateOfBirthMonth = json.getInt("DateOfBirthMonth");
+                    int dateOfBirthDay = json.getInt("DateOfBirthDay");
+                    mYear=dateOfBirthYear;
+                    mMonth=dateOfBirthMonth;
+                    mDay=dateOfBirthDay;
+                    dateSelect.setText(dateOfBirthYear+"-"+dateOfBirthMonth+"-"+dateOfBirthDay);
+
+
+                    //填充地址
+                    String address = json.getString("RegistratorPlace");
+                    editTextAddress.setText(address.equals("null")?"":address);
+
+
+                    //填充省市区
+                    mCurrentProviceName = json.getString("Province");
+                    mCurrentCityName = json.getString("City");
+                    mCurrentDistrictName = json.getString("County");
+                    showSelectedResult();
+
+
+                    //填充手机号
+                    String registratorPhone = json.getString("RegistratorPhone");
+                    editTextPhone.setText(registratorPhone.equals("null")?"":registratorPhone);
+                    //填充邮箱
+                    String registratorEmail = json.getString("RegistratorEmail");
+                    editTextEmail.setText(registratorEmail.equals("null")?"":registratorEmail);
+                    //填充证件号码
+                    String documentNumber = json.getString("RegistratorDocumentNumber");
+                    idCardNumber.setText(documentNumber.equals("null")?"":documentNumber);
+                    //填充证件类型
+                    idCardTypeString = json.getString("RegistratorDocumentType");
+
+
+
+                     clothesSizeString = json.getString("RegistratorSize");
+                    //填充邮政编码
+                    String postCode = json.getString("RegisterPostCode");
+                    editTextPost.setText(postCode.equals("null")?"":postCode);
+                    //填充紧急联系人
+                    String contactName = json.getString("EmergencyContactName");
+                    editTextLinkName.setText(contactName.equals("null")?"":contactName);
+                    //填充紧急联系电话
+                    String contactPhone = json.getString("EmergencyContactPhone");
+                    editTextLinkPhone.setText(contactPhone.equals("null")?"":contactPhone);
                     //获取证件类型
                     JSONArray idNumberType = json.getJSONArray("AvailableDocumentType");
 
@@ -545,19 +650,46 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                 idCardType.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,idTypeList));
                 clothesSize.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,clothesSizeList));
                 projectSpinner.setAdapter(new ArrayAdapter<>(SignUpActivity.this,android.R.layout.simple_list_item_1,projectList));
+                //设置选择证件类型
+                setSpinnerSelectedByValue(idCardType,idTypeList,idCardTypeString);
+                //设置服装尺码选中
+                setSpinnerSelectedByValue(clothesSize,clothesSizeList,clothesSizeString);
+
+
 
             }
         });
     }
 
 
+    /**
+     * 根据值来设置spinner的选中项
+     * @param spinner
+     * @param list
+     * @param value
+     */
+  private void setSpinnerSelectedByValue(Spinner spinner,List<SpinnerModel> list,String value){
+
+
+       for (int i=0;i<list.size();i++){
+
+           if(list.get(i).getValue().equals(value)){
+               spinner.setSelection(i,true);
+
+               break;
+           }
+       }
+
+  }
+
+    //出生日期
     @Override
     public void onChange(int year, int month, int day) {
 
         mYear=year;
         mMonth=month;
         mDay=day;
-        dateSelect.setText(new StringBuilder().append( year).append("年").append(month).append("月").append(day)+"日");
+        dateSelect.setText(new StringBuilder().append( year).append("-").append(month).append("-").append(day));
     }
 
     //省县市选择部分
@@ -699,10 +831,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         }
 
+
 //        验证所在地
         if(areaAddress.getText().toString().trim().equals("请选择所在地")){
             Toast.makeText(SignUpActivity.this,"请选择所在地!",Toast.LENGTH_SHORT).show();
             return;
+
         }
         // 验证参赛项目
         if(projectName.length()==0||projectName.equals("请选择参赛项目")){
@@ -775,8 +909,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         dialog.show();
 
 
-
-
     }
     //提交到服务器
     private void submit2Server(){
@@ -825,6 +957,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.addBodyParameter("EmergencyContactName",editTextLinkName.getText().toString().trim());
 //        紧急联系电话
         param.addBodyParameter("EmergencyContactPhone",editTextLinkPhone.getText().toString().trim());
+        param.addBodyParameter("IsAgree","true");
         //报名来源
         param.addBodyParameter("RegistratorSource","来自Android客户端");
         param.setMaxRetryCount(0);//最大重复请求次数

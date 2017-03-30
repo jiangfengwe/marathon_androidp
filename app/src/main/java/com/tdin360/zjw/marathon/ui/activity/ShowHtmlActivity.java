@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
+import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -58,7 +60,7 @@ public class ShowHtmlActivity extends BaseActivity {
         if (intent!=null){
 
             boolean isSign = intent.getBooleanExtra("isSign", false);
-            if(isSign&& MarathonDataUtils.init().getStatus().equals("进行中")){
+            if(isSign&& MarathonDataUtils.init().getStatus().equals("报名中")){
                 this.signUpBtn.setVisibility(View.VISIBLE);
                 this.signUpBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -71,6 +73,7 @@ public class ShowHtmlActivity extends BaseActivity {
                         }else {
                             Intent intent = new Intent(ShowHtmlActivity.this,LoginActivity.class);
                             startActivity(intent);
+                            LoginNavigationConfig.instance().setNavType(NavType.SignUp);
 
                         }
                     }

@@ -7,19 +7,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
+import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,18 +27,16 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-
 /***
  *
  *
  * 用户登录
  *
  */
-public class
-LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity {
+
 
     private EditText editTextName,editTextPass;
-
     private CheckBox checkBox;
     private ImageView clearBtn;
     @Override
@@ -207,9 +205,36 @@ LoginActivity extends BaseActivity {
                         //通知个人中心修改登录状态
                         Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
-
                         hud.dismiss();
-                        finish();
+
+                        //登录成功后根据指定目标跳转到指定界面
+                        switch (LoginNavigationConfig.instance().getNavType()){
+
+                            case SignUp://跳转到报名界面
+                                intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                            break;
+                            case MySignUp://跳转到我的报名界面
+                                intent = new Intent(LoginActivity.this,MySignUpListActivity.class);
+                                break;
+                            case MyMark://跳转到我的成绩界面
+                                intent = new Intent(LoginActivity.this,MyAchievementListActivity.class);
+                                break;
+                            case MyInfo://跳转到个人资料界面
+                                intent = new Intent(LoginActivity.this,MyInfoActivity.class);
+                                break;
+                            case MyFeed://跳转到我的反馈界面
+                                intent = new Intent(LoginActivity.this,FeedbackListActivity.class);
+                                break;
+
+                            case MyGoods://跳转到我的物资界面
+
+                                intent = new Intent(LoginActivity.this,MyGoodsListActivity.class);
+                                break;
+
+                        }
+
+                           startActivity(intent);
+                          finish();
 
                     }else {
                         Toast.makeText(LoginActivity.this,reason,Toast.LENGTH_SHORT).show();

@@ -25,6 +25,8 @@ import com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.HeadImageUtils;
+import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
+import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
 /**个人中心
@@ -79,6 +81,8 @@ public class MyFragment extends Fragment {
                     //用户没有登录则跳转到登录
                     Intent intent = new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
+                    //设置登录成功后跳转到个人信息界面
+                    LoginNavigationConfig.instance().setNavType(NavType.MyInfo);
                 }
 
 
@@ -97,6 +101,8 @@ public class MyFragment extends Fragment {
                }else {
                    Intent intent = new Intent(getContext(), LoginActivity.class);
                    startActivity(intent);
+                   //设置登录成功后跳转到我的报名界面
+                   LoginNavigationConfig.instance().setNavType(NavType.MySignUp);
                }
 
 
@@ -117,6 +123,8 @@ public class MyFragment extends Fragment {
                 }else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
+                    //设置登录成功后跳转到报名界面
+                    LoginNavigationConfig.instance().setNavType(NavType.MyGoods);
                 }
 
 
@@ -135,6 +143,8 @@ public class MyFragment extends Fragment {
                  }else {
                      Intent intent = new Intent(getContext(), LoginActivity.class);
                      startActivity(intent);
+                     //设置登录成功后跳转到物资界面
+                     LoginNavigationConfig.instance().setNavType(NavType.MyMark);
                  }
 
 

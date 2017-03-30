@@ -59,12 +59,16 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
 				if(listener!=null){
 					listener.onWXPaySuccess();
+
 				}
 
 			}else {
 
-				Toast.makeText(this,resp.errStr,Toast.LENGTH_SHORT).show();
+				Toast.makeText(this,"支付失败了!"+resp.errStr,Toast.LENGTH_SHORT).show();
+
 			}
+
+			finish();
 		}
 	}
 }

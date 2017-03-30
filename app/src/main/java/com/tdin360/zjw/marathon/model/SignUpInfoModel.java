@@ -241,6 +241,10 @@ public class SignUpInfoModel implements Serializable {
         return orderNum;
     }
 
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
     public String getPrice() {
         return price;
     }

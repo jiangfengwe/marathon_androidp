@@ -12,7 +12,7 @@
 
   <LinearLayout
       android:id="@+id/main"
-      android:visibility="gone"
+       android:visibility="gone"
       android:layout_width="match_parent"
       android:orientation="vertical"
       android:layout_height="match_parent">
@@ -48,7 +48,7 @@
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="姓名:"
+                    android:text="姓        名:"
                     />
                 <EditText
                     android:id="@+id/name"
@@ -76,7 +76,7 @@
                     android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="手机号:"
+                    android:text="手  机  号:"
                     />
                 <EditText
 
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:text="邮箱:"
+                    android:text="邮        箱:"
                     />
                 <EditText
 
@@ -228,7 +228,7 @@
                     android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="性别:"
+                    android:text="性        别:"
                     />
                 <RadioGroup
                     android:id="@+id/radioGroup"
@@ -251,7 +251,7 @@
                         android:id="@+id/radio2"
                         android:button="@null"
                         android:drawableLeft="@drawable/gander_checked_selector"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="50dp"
                         android:drawablePadding="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -277,7 +277,7 @@
                     android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="国家:"
+                    android:text="国        家:"
                     />
                 <Spinner
                     android:id="@+id/country"
@@ -309,7 +309,7 @@
                     android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="所在地:"
+                    android:text="所  在  地:"
                     />
                 <TextView
                     android:id="@+id/areaAddress"
@@ -513,8 +513,37 @@
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
                 android:padding="10dp"
-                android:layout_height="100dp">
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:padding="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/isOk"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/gander_checked_selector"
+                        android:layout_width="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/dark"
+                        android:layout_height="wrap_content"
+                        android:text="已阅读报名"
+                        />
+                    <TextView
+                        android:textSize="15sp"
+                        android:id="@+id/look"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1C86EE"
+                        android:text="《注意事项》"
+                        />
+                </LinearLayout>
                 <Button
+                    android:enabled="false"
+                    android:layout_marginBottom="20dp"
                     android:id="@+id/submitBtn"
                     android:textColor="@android:color/white"
                     android:background="@drawable/oval_red_button_selector"

@@ -20,8 +20,9 @@
             />
         <TextView
             android:id="@+id/free"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/red"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:textSize="30sp"
             />
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -56,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <Button
+                    style="?android:attr/borderlessButtonStyle"
                     android:id="@+id/details"
                     android:background="@drawable/yellow_rect_selector"
                     android:layout_width="wrap_content"

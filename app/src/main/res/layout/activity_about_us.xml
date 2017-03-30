@@ -19,6 +19,7 @@
             android:src="@mipmap/logo"
             />
         <TextView
+            android:id="@+id/version"
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:textSize="18sp"
@@ -55,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark"
-                android:text="www.tdin360.com"
+                android:text="www.baijar.com"
                 />
         </RelativeLayout>
 
@@ -79,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark"
-                android:text="10086"
+                android:text="085188622851"
                 />
         </RelativeLayout>
 
@@ -111,6 +112,7 @@
             android:id="@+id/quest" />
 
         <TextView
+            android:visibility="gone"
             android:onClick="click"
             android:layout_marginTop="0.5dp"
              android:padding="15dp"
