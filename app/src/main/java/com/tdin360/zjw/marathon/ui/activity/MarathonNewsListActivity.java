@@ -3,27 +3,24 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.NewsListViewAdapter;
 import com.tdin360.zjw.marathon.model.NewsModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -34,19 +31,18 @@ import java.util.List;
  * 赛事新闻
  * @author zhangzhijun
  */
-public class MarathonNewsListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MarathonNewsListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener{
 
 
     private TextView loadFail;
-    private RefreshListView refreshListView;
+    private ListView refreshListView;
     private List<NewsModel> newsModelList=new ArrayList<>();
     private NewsListViewAdapter newsListViewAdapter;
     private int pageNumber=1;
     private int totalPages;
     private TextView not_found;
-    private KProgressHUD hud;
     private boolean isLoadFail;
-
+    private PullToRefreshLayout pullToRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,35 +57,23 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
 
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
-        this.refreshListView.setOnRefreshListener(this);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.refreshListView  = (ListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnItemClickListener(new MyListener());
         this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.newsListViewAdapter  =new NewsListViewAdapter(newsModelList,this);
         this.refreshListView.setAdapter(this.newsListViewAdapter);
-         initHUD();
+        this.pullToRefreshLayout.setOnRefreshListener(this);
+
          //加载数据
         loadData();
 
 
     }
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
 
-        //显示提示框
-        this.hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
-
-    }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
 
-        hud.show();
 
         /**
          * 判断网络是否处于可用状态
@@ -97,10 +81,10 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
             //加载网络数据
-            httpRequest();
+            pullToRefreshLayout.autoRefresh();
         } else {
 
-            hud.dismiss();
+
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
@@ -144,7 +128,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
      *
      * 获取新闻数据列表
      */
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
         requestParams.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
@@ -158,6 +142,12 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             public void onSuccess(String result) {
 
                 try {
+
+                    if (isRefresh){
+
+                        newsModelList.clear();
+
+                    }
 
                     JSONObject json  = new JSONObject(result);
 
@@ -176,11 +166,25 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
                     }
                     //加载成功隐藏
                     loadFail.setVisibility(View.GONE);
+
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
 
                     isLoadFail=true;
                     loadFail.setVisibility(View.VISIBLE);
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                 }
 
             }
@@ -191,6 +195,12 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
                 isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
+                if (isRefresh){
+
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
             }
 
             @Override
@@ -201,7 +211,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
             @Override
             public void onFinished() {
 
-                hud.dismiss();
+
                 if(!isLoadFail) {
                     //判断是否有数据
                     if (newsModelList.size() > 0) {
@@ -212,8 +222,7 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
                     }
 
                 }
-                refreshListView.hideHeaderView();
-                refreshListView.hideFooterView();
+
                 newsListViewAdapter.updateListView(newsModelList);
 
             }
@@ -221,25 +230,28 @@ public class MarathonNewsListActivity extends BaseActivity implements RefreshLis
 
     }
 
+
+
     @Override
-    public void onDownPullRefresh() {
-        //刷新
-        newsModelList.clear();
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
         pageNumber=1;
-        httpRequest();
+        httpRequest(true);
 
     }
 
     @Override
-    public void onLoadingMore() {
-        //下拉加载更多
-        if(pageNumber<totalPages){
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
 
-            pageNumber++;
-            httpRequest();
+        //上拉加载更多
+        if(pageNumber==totalPages){
+
+          pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
         }else {
+            pageNumber++;
+            httpRequest(false);
 
-            refreshListView.hideFooterView();
         }
     }
 

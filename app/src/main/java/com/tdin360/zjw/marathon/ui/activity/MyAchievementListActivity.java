@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,8 @@ import com.tdin360.zjw.marathon.model.MarkModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,18 +39,18 @@ import java.util.List;
 /**
  * 我的成绩列表
  */
-public class MyAchievementListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MyAchievementListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
-    private RefreshListView listView;
+    private ListView listView;
     private TextView loadFail;
     private List<MarkModel> data = new ArrayList<>();
     private MyAdapter adapter;
-    private KProgressHUD hud;
+
     private TextView not_found;
     private boolean isLoadFail;
     private int totalPages;
     private int pageNumber=1;
-
+    private PullToRefreshLayout pullToRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +61,9 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
 
     private void initView() {
-        this.listView = (RefreshListView) this.findViewById(R.id.listView);
-        this.listView.setOnRefreshListener(this);
+        this.listView = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.adapter = new MyAdapter();
@@ -75,24 +78,12 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
             }
         });
 
-        initHUD();
 
         loadData();
     }
 
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
 
-        //显示提示框
-        this.hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
 
-    }
     private class MyAdapter extends BaseAdapter{
 
 
@@ -189,12 +180,12 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
-            hud.show();
+
             //加载网络数据
-            httpRequest();
+            pullToRefreshLayout.autoRefresh();
         } else {
 
-            hud.dismiss();
+
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
@@ -227,11 +218,30 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
             alert.show();
         }
     }
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
 
+        pageNumber=1;
+        httpRequest(true);
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
+        }else {
+            pageNumber++;
+            httpRequest(false);
+
+        }
+    }
     /**
      * 请求网络数据
      */
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
         loadFail.setVisibility(View.GONE);
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARK_SEARCH);
@@ -245,6 +255,11 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
 
                 try {
+
+                    if(isRefresh){
+
+                        data.clear();
+                    }
                     JSONObject json = new JSONObject(result);
                     totalPages = json.getInt("TotalPages");
                     JSONObject message = json.getJSONObject("EventMobileMessage");
@@ -311,9 +326,21 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
                     }
 
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                     loadFail.setVisibility(View.GONE);
                     isLoadFail=true;
                     not_found.setVisibility(View.GONE);
@@ -322,7 +349,12 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                if (isRefresh){
 
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
                 isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
@@ -335,10 +367,8 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
             @Override
             public void onFinished() {
-                listView.hideHeaderView();
-                listView.hideFooterView();
+
                 adapter.notifyDataSetChanged();
-                hud.dismiss();
 
                 if(!isLoadFail) {
                     if (data.size() == 0) {
@@ -356,26 +386,5 @@ public class MyAchievementListActivity extends BaseActivity implements RefreshLi
 
     }
 
-    @Override
-    public void onDownPullRefresh() {
 
-        data.clear();
-        httpRequest();
-    }
-
-    @Override
-    public void onLoadingMore() {
-
-        if(pageNumber<totalPages){
-
-            pageNumber++;
-            httpRequest();
-        }else {
-
-           listView.hideFooterView();
-
-        }
-
-
-    }
 }

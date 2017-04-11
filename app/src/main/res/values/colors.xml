@@ -28,4 +28,6 @@
     <color name="buttonPColor">#e1af00</color>
     <!--轮播图底部背景颜色-->
     <color name="CarouselPageBarBackgroundColor">#50000000</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="light_blue">#6593cb</color>
 </resources>

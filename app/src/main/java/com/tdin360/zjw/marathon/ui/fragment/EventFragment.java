@@ -12,15 +12,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
@@ -33,7 +32,9 @@ import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullableListView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,10 +48,10 @@ import java.util.List;
 /**马拉松赛事列表
  * Created by Administrator on 2016/8/9.
  */
-public class EventFragment extends Fragment implements RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener {
+public class EventFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener {
 
     private List<EventModel>list = new ArrayList<>();
-    private RefreshListView listView;
+    private ListView listView;
     private MarathonListViewAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
@@ -58,6 +59,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     private EventServiceImpl impl;
     private TextView not_found;
     private boolean isLoadFail;
+    private PullToRefreshLayout pullToRefreshLayout;
 
     public static EventFragment newInstance(){
 
@@ -75,12 +77,13 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
          this.impl  = new EventServiceImpl(getContext());
-         this.listView= (RefreshListView) view.findViewById(R.id.listView);
+         this.pullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.pull_Layout);
+         this.listView= (PullableListView) view.findViewById(R.id.listView);
          this.loadFile = (TextView) view.findViewById(R.id.loadFail);
          this.not_found = (TextView) view.findViewById(R.id.not_found);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
          this.listView.setAdapter(marathonListViewAdapter);
-         this.listView.setOnRefreshListener(this);
+         this.pullToRefreshLayout.setOnRefreshListener(this);
          this.listView.setOnItemClickListener(this);
 
 
@@ -148,53 +151,12 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
     }
 
-    @Override
-    public void onDownPullRefresh() {
-
-        if(NetWorkUtils.isNetworkAvailable(getContext())){
-
-            pageNumber=1;
-            list.clear();
-            httpRequest();
-        }else {
-
-            listView.hideHeaderView();
-        }
-
-    }
-
-    @Override
-    public void onLoadingMore() {
-
-        if(NetWorkUtils.isNetworkAvailable(getContext())) {
-            if (pageNumber < pageCount) {
-
-                pageNumber++;
-
-                httpRequest();
-            } else {
-                listView.hideFooterView();
-
-            }
-        }else {
-
-            listView.hideFooterView();
-        }
-    }
 
 
-    private KProgressHUD hud;
+
     //加载数据(包括缓存数据和网络数据)
     private void loadData(){
 
-        //显示加载
-       hud = KProgressHUD.create(getActivity());
-
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();
         /**
          * 判断网络是否处于可用状态
          */
@@ -202,12 +164,11 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
             //加载网络数据
 
-            httpRequest();
+            //首次自动刷新
+            pullToRefreshLayout.autoRefresh();
 
 
         }else {
-
-            hud.dismiss();
 
             //1获取缓存数据
             list  = impl.getAllEvent();
@@ -242,10 +203,6 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
             }
 
-
-
-
-
         }
 
 
@@ -268,7 +225,7 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
     //加载网络数据
 
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
 
         impl.deleteAll();
@@ -283,6 +240,11 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
             public void onSuccess(String s) {
 
                 try {
+
+                    if (isRefresh){
+                       list.clear();
+                    }
+
                     JSONObject obj = new JSONObject(s);
 
 
@@ -302,14 +264,25 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                         String shareUrl = object.getString("EventSiteUrl");
                         EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl);
                         list.add(eventModel);
+
                         impl.addEvent(eventModel);
 
                     }
                     loadFile.setVisibility(View.GONE);
+                   if (isRefresh){
+
+                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                   }else {
+                       pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                   }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     loadFile.setVisibility(View.VISIBLE);
                     isLoadFail=true;
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }
                 }
             }
 
@@ -319,7 +292,11 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                   Toast.makeText(getActivity(),"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
                   loadFile.setVisibility(View.VISIBLE);
                   not_found.setVisibility(View.GONE);
-                isLoadFail=true;
+                  isLoadFail=true;
+                if (isRefresh){
+
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }
 
             }
 
@@ -339,9 +316,6 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
                     not_found.setVisibility(View.GONE);
                 }
 
-                hud.dismiss();
-            listView.hideFooterView();
-            listView.hideHeaderView();
              marathonListViewAdapter.updateList(list);
             }
         });
@@ -358,5 +332,29 @@ public class EventFragment extends Fragment implements RefreshListView.OnRefresh
 
 
            }
+    }
+
+
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+
+        pageNumber=1;
+        httpRequest(true);
+
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+
+        if(pageNumber==pageCount){
+
+        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+        }else {
+
+            pageNumber++;
+            httpRequest(false);
+        }
+
     }
 }

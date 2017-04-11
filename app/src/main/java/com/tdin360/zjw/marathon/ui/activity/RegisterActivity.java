@@ -233,8 +233,9 @@ public class RegisterActivity extends BaseActivity {
 
                    handler.sendEmptyMessageDelayed(0,1000);
                     if(totalTime>1){
+                          button.setText("("+totalTime+")秒后获取");
                         totalTime--;
-                        button.setText("("+totalTime+")秒后获取");
+                      
                     }else {
                         handler.removeMessages(0);
                         button.setText("获取验证码");

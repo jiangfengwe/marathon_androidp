@@ -5,22 +5,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.GoodsModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,17 +35,17 @@ import java.util.List;
  * 领取物资
  * @author zhangzhijun
  */
-public class MyGoodsListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener{
 
-    private RefreshListView refreshListView;
+    private ListView refreshListView;
     private TextView loadFail;
     private List<GoodsModel>list = new ArrayList<>();
     private  MyAdapter myAdapter;
-    private KProgressHUD hud;
     private TextView not_found;
     private boolean isLoadFail;
     private int totalPages;
     private int pageNumber=1;
+    private PullToRefreshLayout pullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,61 +57,49 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
 
     }
 
-    private void initView() {
-
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.not_found = (TextView) this.findViewById(R.id.not_found);
-        this.refreshListView = (RefreshListView) this.findViewById(R.id.listView);
-        this.refreshListView.setOnRefreshListener(this);
-        this.myAdapter = new MyAdapter();
-        this.refreshListView.setAdapter(myAdapter);
-        initHUD();
-        loadData();
-
-    }
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
-
-        //显示提示框
-        this.hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
-
-    }
-
     @Override
     public int getLayout() {
         return R.layout.activity_my_goods;
     }
 
+    private void initView() {
+
+        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+        this.not_found = (TextView) this.findViewById(R.id.not_found);
+        this.refreshListView = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
+
+        this.myAdapter = new MyAdapter();
+        this.refreshListView.setAdapter(myAdapter);
+
+        loadData();
+
+    }
+
+
     @Override
-    public void onDownPullRefresh() {
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
 
-        list.clear();
 
-        httpRequest();
+        pageNumber=1;
+        httpRequest(true);
+
     }
 
     @Override
-    public void onLoadingMore() {
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
 
-        if(pageNumber<totalPages){
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-            pageNumber++;
-            httpRequest();
         }else {
-
-            refreshListView.hideFooterView();
+            pageNumber++;
+            httpRequest(false);
 
         }
     }
-
-
-
 
     /**
      * 数据适配器
@@ -157,7 +144,7 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
             final GoodsModel model = list.get(position);
 
             holder.eventName.setText(model.getEventName());
-            holder.intro.setText(model.getContent());
+            holder.intro.setText(model.getContent().equals("null")?"":model.getContent());
 
             /**
              * 查看物资
@@ -192,9 +179,9 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
-            hud.show();
+
             //加载网络数据
-            httpRequest();
+             pullToRefreshLayout.autoRefresh();
         } else {
 
 
@@ -234,7 +221,7 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
     /**
      * 请求网络数据
      */
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
 
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MY_GOODS);
@@ -248,9 +235,12 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
             public void onSuccess(String result) {
 
 
-                Log.d("-------->>>>>", "onSuccess: "+result);
                 try {
 
+                    if(isRefresh){
+
+                        list.clear();
+                    }
                     JSONObject json  = new JSONObject(result);
 
                     totalPages = json.getInt("TotalPages");
@@ -285,8 +275,21 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
                         Toast.makeText(x.app(),reason,Toast.LENGTH_SHORT).show();
                     }
 
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                     isLoadFail=true;
                     not_found.setVisibility(View.GONE);
                     loadFail.setVisibility(View.VISIBLE);
@@ -297,7 +300,12 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                if (isRefresh){
 
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
                 isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
@@ -322,10 +330,7 @@ public class MyGoodsListActivity extends BaseActivity implements RefreshListView
                     }
 
                 }
-                 hud.dismiss();
 
-                refreshListView.hideHeaderView();
-                refreshListView.hideFooterView();
                 myAdapter.notifyDataSetChanged();
 
 

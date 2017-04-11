@@ -80,6 +80,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     //性别
     private RadioGroup radioGroup;
     private boolean gander=true;// 默认是男
+
+//    血型
+
+    private Spinner bloodType;
+    private String bloodStr;
+
     //国家
     private Spinner spinnerCountry;
     private String country;
@@ -255,6 +261,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextPhone= (EditText) this.findViewById(R.id.phone);
          this.editTextEmail= (EditText) this.findViewById(R.id.email);
          this.idCardType= (Spinner) this.findViewById(R.id.idCardType);
+         this.bloodType = (Spinner) this.findViewById(R.id.bloodSpinner);
          this.idCardNumber= (EditText) this.findViewById(R.id.idCardNumber);
          this.radioGroup= (RadioGroup) this.findViewById(R.id.radioGroup);
          this.spinnerCountry= (Spinner) this.findViewById(R.id.country);
@@ -348,6 +355,25 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                 }
             }
         });
+
+
+        //选择血型
+
+        this.bloodType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+               bloodStr = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
         //选择国家
          spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
@@ -753,7 +779,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
     private void showSelectedResult() {
 
-         areaAddress.setText(new StringBuilder().append(mCurrentProviceName).append(" ").append(mCurrentCityName).append(" ").append(mCurrentDistrictName));
+         areaAddress.setText(new StringBuilder().append(mCurrentProviceName).append("－").append(mCurrentCityName).append("－").append(mCurrentDistrictName));
     }
     @Override
     public void onChanged(WheelView wheel, int oldValue, int newValue) {
@@ -960,9 +986,10 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.addBodyParameter("IsAgree","true");
         //报名来源
         param.addBodyParameter("RegistratorSource","来自Android客户端");
+        param.addBodyParameter("appKey",HttpUrlUtils.appKey);
         param.setMaxRetryCount(0);//最大重复请求次数
         param.setConnectTimeout(5*1000);
-        param.addBodyParameter("appKey",HttpUrlUtils.appKey);
+     
 
 
         x.http().post(param, new Callback.CommonCallback<String>() {

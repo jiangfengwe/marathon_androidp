@@ -7,26 +7,25 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
+
 import android.view.LayoutInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.FeedBackModel;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,9 +42,9 @@ import java.util.List;
  *  意见反馈列表
  * @author zhangzhijun
  */
-public class FeedbackListActivity extends BaseActivity  implements RefreshListView.OnRefreshListener{
+public class FeedbackListActivity extends BaseActivity  implements PullToRefreshLayout.OnRefreshListener{
 
-    private RefreshListView listView;
+    private ListView listView;
     private List<FeedBackModel>list = new ArrayList<>();
     private int totalPages;
     private HeadImageUtils utils;
@@ -55,6 +54,7 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
     private TextView loadFail;
     private boolean isLoadFail;
     public static String ACTION="reLoad";
+    private PullToRefreshLayout pullToRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,31 +68,19 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
     private void initView() {
 
         this.utils = new HeadImageUtils(this);
-        this.listView = (RefreshListView) this.findViewById(R.id.listView);
-        this.listView.setOnRefreshListener(this);
+        this.listView = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
         this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.myAdapter = new MyAdapter();
         this.listView.setAdapter(myAdapter);
-        initHUD();
-        httpRequest();
 
+        pullToRefreshLayout.autoRefresh();
     }
-    private KProgressHUD hud;
 
 
-    private void initHUD(){
 
-        //显示提示框
-        hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
-        hud.show();
-
-
-    }
 
 //    @Override
 //    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -129,36 +117,11 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
        startActivity(intent);
     }
 
-    @Override
-    public void onDownPullRefresh() {
-
-        list.clear();
-        pageNumber=1;
-
-        httpRequest();
-
-    }
-
-    @Override
-    public void onLoadingMore() {
-
-
-        if(pageNumber<totalPages){
-
-           pageNumber++;
-            httpRequest();
-        }else {
-            listView.hideFooterView();
-
-        }
-
-
-    }
 
     /**
      * 获取网络数据
      */
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
         loadFail.setVisibility(View.GONE);
         RequestParams params  =new RequestParams(HttpUrlUtils.FEED_LIST);
@@ -170,6 +133,11 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
             public void onSuccess(String result) {
 
                 try {
+
+                    if(isRefresh){
+
+                        list.clear();
+                    }
                     JSONObject json = new JSONObject(result);
 
                     totalPages = json.getInt("TotalPages");
@@ -186,8 +154,20 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
                         list.add(new FeedBackModel(createTimeStr,content,timeStr,replyContent));
                     }
 
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                     isLoadFail=true;
                     loadFail.setVisibility(View.VISIBLE);
                     not_found.setVisibility(View.GONE);
@@ -196,7 +176,12 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                if (isRefresh){
 
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
                 isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
@@ -210,10 +195,7 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
 
             @Override
             public void onFinished() {
-                hud.dismiss();
 
-                listView.hideHeaderView();
-                listView.hideFooterView();
                 myAdapter.notifyDataSetChanged();
                 if(!isLoadFail) {
                     if (list.size() == 0) {
@@ -229,6 +211,28 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
 
     }
 
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+
+        pageNumber=1;
+        httpRequest(true);
+
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
+        }else {
+            pageNumber++;
+            httpRequest(false);
+
+        }
+    }
     /**
      * 展示反馈列表以及回复列表
      */
@@ -323,7 +327,7 @@ public class FeedbackListActivity extends BaseActivity  implements RefreshListVi
         @Override
         public void onReceive(Context context, Intent intent) {
             list.clear();
-            httpRequest();
+            httpRequest(true);
         }
     }
 

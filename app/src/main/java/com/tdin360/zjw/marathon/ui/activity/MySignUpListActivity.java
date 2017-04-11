@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.Image;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +14,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.SignUpInfoModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,18 +41,17 @@ import java.util.List;
 /**
  * 我的报名列表
  */
-public class MySignUpListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MySignUpListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
-    private RefreshListView listView;
+    private ListView listView;
     private TextView loadFail;
     private List<SignUpInfoModel> list = new ArrayList<>();
     private  MyAdapter myAdapter;
     private TextView not_found;
-    private KProgressHUD hud;
     private boolean isLoadFail;
     private int pageNumber=1;
     private int totalPages;
-
+    private PullToRefreshLayout pullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,9 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
         return R.layout.activity_my_sign_up;
     }
     private void initView() {
-        this.listView = (RefreshListView) this.findViewById(R.id.refreshListView);
-        this.listView.setOnRefreshListener(this);
+        this.listView = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
 
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
         this.not_found = (TextView) this.findViewById(R.id.not_found);
@@ -83,53 +84,57 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
         });
         this.myAdapter = new MyAdapter();
         this.listView.setAdapter(myAdapter);
-        initHUD();
+
         loadData();
     }
-    private class MyAdapter extends BaseAdapter{
+    private class MyAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return list==null?0:list.size();
+            return list == null ? 0 : list.size();
         }
+
         @Override
         public Object getItem(int position) {
             return list.get(position);
         }
+
         @Override
         public long getItemId(int position) {
             return position;
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView=View.inflate(MySignUpListActivity.this,R.layout.my_signup_list_item,null);
+                convertView = View.inflate(MySignUpListActivity.this, R.layout.my_signup_list_item, null);
                 viewHolder.status = (ImageView) convertView.findViewById(R.id.status);
-                viewHolder.matchTime= (TextView) convertView.findViewById(R.id.time);
-                viewHolder.matchName= (TextView) convertView.findViewById(R.id.matchName);
-                viewHolder.matchAchievement= (TextView) convertView.findViewById(R.id.projectName);
-                viewHolder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+                viewHolder.matchTime = (TextView) convertView.findViewById(R.id.time);
+                viewHolder.matchName = (TextView) convertView.findViewById(R.id.matchName);
+                viewHolder.matchAchievement = (TextView) convertView.findViewById(R.id.projectName);
+                viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
                 viewHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
                 Animation animation = AnimationUtils.loadAnimation(MySignUpListActivity.this, R.anim.arrow);
                 viewHolder.arrow.startAnimation(animation);
 
                 convertView.setTag(viewHolder);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
 
             SignUpInfoModel model = list.get(position);
             viewHolder.status.setEnabled(model.isPayed());
-            x.image().bind(viewHolder.imageView,model.getImageUrl());
+            x.image().bind(viewHolder.imageView, model.getImageUrl());
             viewHolder.matchName.setText(model.getEventName());
             viewHolder.matchAchievement.setText(model.getAttendProject());
-            viewHolder.matchTime.setText(model.getCreateTime()+"");
+            viewHolder.matchTime.setText(model.getCreateTime() + "");
 
             return convertView;
         }
-        class ViewHolder{
+
+        class ViewHolder {
             private ImageView status;
             private ImageView imageView;
             private TextView matchTime;
@@ -140,34 +145,21 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
 
         }
     }
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
-
-        //显示提示框
-        this.hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
-
-    }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
         /**
          * 判断网络是否处于可用状态
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
-            hud.show();
+
             //加载网络数据
-            httpRequest();
+             pullToRefreshLayout.autoRefresh();
         } else {
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-           hud.dismiss();
+
             //如果缓存数据不存在则需要用户打开网络设置
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("网络不可用，是否打开网络设置");
@@ -189,26 +181,31 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
         }
     }
     @Override
-    public void onDownPullRefresh() {
-        list.clear();
-        httpRequest();
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+
+        pageNumber=1;
+        httpRequest(true);
+
     }
+
     @Override
-    public void onLoadingMore() {
-        //下拉加载更多
-        if(pageNumber<totalPages){
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
 
-            pageNumber++;
-            httpRequest();
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
         }else {
+            pageNumber++;
+            httpRequest(false);
 
-            listView.hideFooterView();
         }
     }
     /**
      * 请求网络数据
      */
-    private void httpRequest() {
+    private void httpRequest(final boolean isRefresh) {
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
@@ -218,6 +215,11 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
             public void onSuccess(String result) {
 
                 try {
+
+                    if(isRefresh){
+
+                        list.clear();
+                    }
                     JSONObject json = new JSONObject(result);
                     totalPages = json.getInt("TotalPages");
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
@@ -312,10 +314,21 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
                          //没有查询到报名信息
                      }
 
+                    if (isRefresh){
 
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                     isLoadFail=true;
                     loadFail.setVisibility(View.VISIBLE);
                     not_found.setVisibility(View.GONE);
@@ -325,6 +338,12 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                if (isRefresh){
+
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
                 isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
@@ -344,9 +363,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
                         not_found.setVisibility(View.GONE);
                     }
                 }
-                 hud.dismiss();
-                listView.hideHeaderView();
-                listView.hideFooterView();
+
                 myAdapter.notifyDataSetChanged();
             }
         });
@@ -371,8 +388,7 @@ public class MySignUpListActivity extends BaseActivity implements RefreshListVie
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            list.clear();
-            httpRequest();
+            httpRequest(true);
 
         }
     }

@@ -7,24 +7,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.NoticeListViewAdapter;
 import com.tdin360.zjw.marathon.model.NoticeModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
+
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -35,18 +36,19 @@ import java.util.List;
  * 赛事公告
  * @author zhangzhijun
  */
-public class MarathonNoticeListActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class MarathonNoticeListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
 
     private TextView loadFail;
-    private RefreshListView refreshListView;
+    private ListView refreshListView;
     private List<NoticeModel> noticeModelList=new ArrayList<>();
     private NoticeListViewAdapter noticeListViewAdapter;
     private int pageNumber=1;
     private int totalPages;
     private TextView not_found;
-    private KProgressHUD hud;
+
     private boolean isLoadFail;
+    private PullToRefreshLayout pullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,32 +64,20 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
 
 
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.refreshListView  = (RefreshListView) this.findViewById(R.id.listView);
-        this.refreshListView.setOnRefreshListener(this);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.refreshListView  = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
         this.refreshListView.setOnItemClickListener(new MyListener());
         this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.noticeListViewAdapter  =new NoticeListViewAdapter(noticeModelList,this);
         this.refreshListView.setAdapter(this.noticeListViewAdapter);
 
-        initHUD();
           loadData();
 
 
 
     }
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
 
-        //显示提示框
-        this.hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-        hud.setCancellable(true);
-        hud.setAnimationSpeed(1);
-        hud.setDimAmount(0.5f);
-
-    }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
 
@@ -96,12 +86,12 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
-            hud.show();
+
             //加载网络数据
-            httpRequest();
+           pullToRefreshLayout.autoRefresh();
         } else {
 
-            hud.dismiss();
+
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
             loadFail.setVisibility(View.VISIBLE);
             //获取缓存数据
@@ -143,7 +133,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
     /**
      * 请求网络数据
      */
-    private void httpRequest(){
+    private void httpRequest(final boolean isRefresh){
 
 
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
@@ -163,6 +153,11 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
                     /*
                      * 获取新闻、公告数据列表
                       */
+
+                    if(isRefresh){
+
+                        noticeModelList.clear();
+                    }
                     JSONObject json  = new JSONObject(result);
 
 
@@ -178,9 +173,23 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
                     }
 
                     loadFail.setVisibility(View.GONE);
+
+                    if (isRefresh){
+
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                    }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (isRefresh){
 
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    }
                     isLoadFail=true;
                     not_found.setVisibility(View.GONE);
                     loadFail.setVisibility(View.VISIBLE);
@@ -191,7 +200,12 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+                if (isRefresh){
 
+                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                }
                isLoadFail=true;
                 loadFail.setVisibility(View.VISIBLE);
                 not_found.setVisibility(View.GONE);
@@ -215,9 +229,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
                         not_found.setVisibility(View.VISIBLE);
                     }
                 }
-                hud.dismiss();
-                refreshListView.hideHeaderView();
-                refreshListView.hideFooterView();
+
                 noticeListViewAdapter.updateListView(noticeModelList);
 
             }
@@ -226,25 +238,27 @@ public class MarathonNoticeListActivity extends BaseActivity implements RefreshL
     }
 
 
+
     @Override
-    public void onDownPullRefresh() {
-        //刷新
-        noticeModelList.clear();
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+
         pageNumber=1;
-        httpRequest();
+        httpRequest(true);
 
     }
 
     @Override
-    public void onLoadingMore() {
-        //下拉加载更多
-        if(pageNumber<totalPages){
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
 
-            pageNumber++;
-            httpRequest();
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
         }else {
+            pageNumber++;
+            httpRequest(false);
 
-            refreshListView.hideFooterView();
         }
     }
 

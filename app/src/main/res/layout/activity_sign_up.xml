@@ -12,7 +12,7 @@
 
   <LinearLayout
       android:id="@+id/main"
-       android:visibility="gone"
+
       android:layout_width="match_parent"
       android:orientation="vertical"
       android:layout_height="match_parent">
@@ -260,6 +260,37 @@
                         />
                 </RadioGroup>
             </LinearLayout>
+            <View
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/lineColor"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"></View>
+            <LinearLayout
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="16sp"
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="血        型:"
+                    />
+                <Spinner
+                    android:id="@+id/bloodSpinner"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:entries="@array/bloodList"
+                    style="@android:style/Widget.Spinner"
+                    />
+
+            </LinearLayout>
+
             <View
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -530,7 +561,7 @@
                         android:textSize="15sp"
                         android:textColor="@color/dark"
                         android:layout_height="wrap_content"
-                        android:text="已阅读报名"
+                        android:text="已阅读"
                         />
                     <TextView
                         android:textSize="15sp"

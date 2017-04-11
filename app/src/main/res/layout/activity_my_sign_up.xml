@@ -14,13 +14,20 @@
 
   <include layout="@layout/toolbar_layout"></include>
 
-    <com.tdin360.zjw.marathon.weight.RefreshListView
-        android:id="@+id/refreshListView"
-        android:listSelector="@android:color/transparent"
+    <com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout
+        android:id="@+id/pull_Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+      <include layout="@layout/refresh_head"></include>
+      <com.tdin360.zjw.marathon.weight.pullToControl.PullableListView
+          android:id="@+id/listView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
-    </com.tdin360.zjw.marathon.weight.RefreshListView>
+      </com.tdin360.zjw.marathon.weight.pullToControl.PullableListView>
+
+      <include layout="@layout/load_more"></include>
+    </com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout>
   </LinearLayout>
 
 

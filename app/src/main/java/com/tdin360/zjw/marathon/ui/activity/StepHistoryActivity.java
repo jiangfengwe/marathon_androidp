@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +16,8 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.StepModel;
 import com.tdin360.zjw.marathon.step.StepUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.StepServiceImpl;
-import com.tdin360.zjw.marathon.weight.RefreshListView;
+import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +26,16 @@ import java.util.List;
  * 计步历史纪录
  * @author zhangzhijun
  */
-public class StepHistoryActivity extends BaseActivity implements RefreshListView.OnRefreshListener{
+public class StepHistoryActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener{
 
-    private RefreshListView refreshListView;
+    private ListView refreshListView;
     private StepServiceImpl stepService;
     private List<StepModel>list=new ArrayList<>();
     private TextView empty;
     private  MyAdapter adapter;
+    private PullToRefreshLayout pullToRefreshLayout;
+    private int totalPages;
+    private int pageNumber=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,19 +49,20 @@ public class StepHistoryActivity extends BaseActivity implements RefreshListView
     private void initView() {
 
         this.stepService = new StepServiceImpl(getApplicationContext());
-        this.refreshListView = (RefreshListView) this.findViewById(R.id.refreshListView);
-
+        this.refreshListView = (ListView) this.findViewById(R.id.listView);
+        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+        this.pullToRefreshLayout.setOnRefreshListener(this);
         this.empty = (TextView) this.findViewById(R.id.empty);
-        this.refreshListView.setOnRefreshListener(this);
         this.adapter = new MyAdapter();
         this.refreshListView.setAdapter(adapter);
         this.registerForContextMenu(refreshListView);
-        loadData();
+
+        pullToRefreshLayout.autoRefresh();
 
     }
 
     //加载数据
-    private void loadData(){
+    private void loadData(boolean isRefresh){
 
         list = this.stepService.getAllStep();
         adapter.notifyDataSetChanged();
@@ -66,24 +72,43 @@ public class StepHistoryActivity extends BaseActivity implements RefreshListView
             empty.setVisibility(View.VISIBLE);
         }
 
-         refreshListView.hideHeaderView();
-        refreshListView.hideFooterView();
+        if (isRefresh){
+
+            pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+        }else {
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+        }
     }
     @Override
     public int getLayout() {
         return R.layout.activity_step_history;
     }
 
+
     @Override
-    public void onDownPullRefresh() {
-        loadData();
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+
+        pageNumber=1;
+        loadData(true);
+
     }
 
     @Override
-    public void onLoadingMore() {
-        loadData();
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        //上拉加载更多
+        if(pageNumber==totalPages){
 
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
+
+        }else {
+            pageNumber++;
+            loadData(false);
+
+        }
     }
+
+
 
     /**
      * 数据适配器
@@ -169,7 +194,7 @@ public class StepHistoryActivity extends BaseActivity implements RefreshListView
 
                 if(isOk){
                     Toast.makeText(StepHistoryActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
-                    loadData();
+                    loadData(true);
                 }
 
                 break;
@@ -178,7 +203,7 @@ public class StepHistoryActivity extends BaseActivity implements RefreshListView
 
                 if(isSuccess){
                     Toast.makeText(StepHistoryActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
-                    loadData();
+                    loadData(true);
                 }
                 break;
         }
