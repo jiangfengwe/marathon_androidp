@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,16 +115,12 @@ public class MarathonDetailsActivity extends BaseActivity {
          * 构建分享内容
          */
         ShareInfoManager manager = new ShareInfoManager(this);
-         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家赛事",BitmapFactory.decodeResource(getResources(),R.drawable.umeng_socialize_share_web));
+         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家赛事",MarathonDataUtils.init().getEventImageUrl());
         showShareButton(manager);
 
         //如果报名已结束就不显示报名按钮
          this.signBtn = (Button) this.findViewById(R.id.signBtn);
-         if(MarathonDataUtils.init().getStatus().equals("已结束")){
 
-             this.signBtn.setVisibility(View.GONE);
-
-         }
 
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
@@ -139,6 +136,15 @@ public class MarathonDetailsActivity extends BaseActivity {
                 loadData();
              }
          });
+
+        this.mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(MarathonDetailsActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
          loadData();
 
@@ -237,9 +243,10 @@ public class MarathonDetailsActivity extends BaseActivity {
                      case 0://赛事简介
 
                          intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
-                         intent.putExtra("isSign",true);
+                         intent.putExtra("shareTitle",MarathonDataUtils.init().getEventName());
                          intent.putExtra("title","赛事简介");
                          intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+MarathonDataUtils.init().getEventId()+"&categoryName=赛事简介");
+
                          break;
                      case 1: //赛事新闻
                          intent = new Intent(MarathonDetailsActivity.this,MarathonNewsListActivity.class);
@@ -292,7 +299,6 @@ public class MarathonDetailsActivity extends BaseActivity {
                     JSONObject json  =new JSONObject(result);
 
 
-
                     /**
                      * 获取轮播图数据
                      */
@@ -302,7 +308,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                         JSONObject jsonObject = array1.getJSONObject(i);
 
                         String picUrl = jsonObject.getString("PictureUrl");
-                        CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),picUrl, "","0");
+                        CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),"",picUrl, "","0");
                         carouselList.add(model);
 
                         service.addEventDetail(model);
@@ -318,7 +324,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                         JSONObject jsonObject = array2.getJSONObject(i);
                         String pictureUrl = jsonObject.getString("PictureUrl");
 
-                        CarouselModel carouselModel = new CarouselModel(MarathonDataUtils.init().getEventId(), pictureUrl, "","1");
+                        CarouselModel carouselModel = new CarouselModel(MarathonDataUtils.init().getEventId(),"赞助商名称",pictureUrl, "","1");
                         sponsorList.add(carouselModel);
                         service.addEventDetail(carouselModel);
 
@@ -372,10 +378,11 @@ public class MarathonDetailsActivity extends BaseActivity {
 
             CarouselModel carouselModel = this.carouselList.get(i);
             ImageView imageView  =new ImageView(this);
+            imageView.setBackgroundResource(R.drawable.loading_banner_default);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageOptions imageOptions = new ImageOptions.Builder()
                     //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
-                    .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
+                  //  .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.loading_banner_error)//加载失败后默认显示图片
                     .build();
@@ -417,5 +424,7 @@ public class MarathonDetailsActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mCarousel.onDestroy();
+        //内存泄漏
+        UMShareAPI.get(this).release();
     }
 }

@@ -219,9 +219,6 @@ public class LoginActivity extends BaseActivity {
                             case MyMark://跳转到我的成绩界面
                                 intent = new Intent(LoginActivity.this,MyAchievementListActivity.class);
                                 break;
-                            case MyInfo://跳转到个人资料界面
-                                intent = new Intent(LoginActivity.this,MyInfoActivity.class);
-                                break;
                             case MyFeed://跳转到我的反馈界面
                                 intent = new Intent(LoginActivity.this,FeedbackListActivity.class);
                                 break;

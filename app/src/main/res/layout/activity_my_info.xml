@@ -238,7 +238,7 @@
 
     <Button
         android:layout_margin="10dp"
-        android:background="@drawable/oval_red_button_selector"
+        android:background="@drawable/oval_yellow_button_selector"
         android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

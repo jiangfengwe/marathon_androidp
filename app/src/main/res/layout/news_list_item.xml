@@ -13,10 +13,10 @@
         android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/loading_small_default"
+        android:background="@drawable/loading_small_default"
         />
 
         <LinearLayout
@@ -38,7 +38,7 @@
 
                 />
             <TextView
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
                 android:textSize="15sp"
                 android:id="@+id/time"
                 android:maxLines="1"

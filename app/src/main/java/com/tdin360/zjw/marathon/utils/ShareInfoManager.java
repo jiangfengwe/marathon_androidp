@@ -75,9 +75,9 @@ public class ShareInfoManager {
      * @param title 链接标题
      * @param url 链接地址
      * @param description 链接描述
-     * @param bitmap 缩略图
+     * @param imageUrl 缩略图
      */
-    public void buildShareWebLink(String title,String url,String description,Bitmap bitmap){
+    public void buildShareWebLink(String title,String url,String description,String imageUrl){
 
         this.title=title;
         this.shareType=ShareType.LINK;
@@ -85,8 +85,8 @@ public class ShareInfoManager {
         umWeb.setTitle(title);
         umWeb.setDescription(description);
 
-        if(bitmap!=null){
-            UMImage thumb = new UMImage(context,bitmap);
+        if(imageUrl!=null&&!imageUrl.equals("")){
+            UMImage thumb = new UMImage(context,imageUrl);
             //图片压缩
             thumb.compressStyle = UMImage.CompressStyle.SCALE;//大小压缩，默认为大小压缩，适合普通很大的图
             thumb.compressFormat = Bitmap.CompressFormat.JPEG;

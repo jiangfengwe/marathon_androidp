@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     private MarathonListViewAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
-    private TextView loadFile;
+    private TextView loadFail;
     private EventServiceImpl impl;
     private TextView not_found;
     private boolean isLoadFail;
@@ -79,7 +80,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
          this.impl  = new EventServiceImpl(getContext());
          this.pullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.pull_Layout);
          this.listView= (PullableListView) view.findViewById(R.id.listView);
-         this.loadFile = (TextView) view.findViewById(R.id.loadFail);
+         this.loadFail = (TextView) view.findViewById(R.id.loadFail);
          this.not_found = (TextView) view.findViewById(R.id.not_found);
          this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
          this.listView.setAdapter(marathonListViewAdapter);
@@ -176,7 +177,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             not_found.setVisibility(View.GONE);
             //如果获取得到缓存数据则加载本地数据
             if(list.size()==0){
-                loadFile.setVisibility(View.VISIBLE);
+                loadFail.setVisibility(View.VISIBLE);
                 //2.如果缓存数据不存在则需要用户打开网络设置
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -217,6 +218,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             MarathonDataUtils.init().setEventName(eventInfo.getName());
             MarathonDataUtils.init().setStatus(eventInfo.getStatus());
             MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
+            MarathonDataUtils.init().setEventImageUrl(eventInfo.getPicUrl());
             Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
             startActivity(intent);
 
@@ -228,8 +230,8 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     private void httpRequest(final boolean isRefresh){
 
 
-        impl.deleteAll();
-        loadFile.setVisibility(View.GONE);
+
+        loadFail.setVisibility(View.GONE);
         not_found.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
@@ -240,13 +242,12 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             public void onSuccess(String s) {
 
                 try {
-
+                    impl.deleteAll();
                     if (isRefresh){
                        list.clear();
                     }
 
                     JSONObject obj = new JSONObject(s);
-
 
                     pageCount = obj.getInt("TotalPages");
                     JSONArray array = obj.getJSONArray("EventSystemMessageList");
@@ -268,7 +269,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                         impl.addEvent(eventModel);
 
                     }
-                    loadFile.setVisibility(View.GONE);
+                    loadFail.setVisibility(View.GONE);
                    if (isRefresh){
 
                      pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
@@ -277,7 +278,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    loadFile.setVisibility(View.VISIBLE);
+                    loadFail.setVisibility(View.VISIBLE);
                     isLoadFail=true;
                     if (isRefresh){
 
@@ -290,7 +291,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             public void onError(Throwable throwable, boolean b) {
 
                   Toast.makeText(getActivity(),"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
-                  loadFile.setVisibility(View.VISIBLE);
+                  loadFail.setVisibility(View.VISIBLE);
                   not_found.setVisibility(View.GONE);
                   isLoadFail=true;
                 if (isRefresh){
@@ -308,12 +309,18 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             @Override
             public void onFinished() {
 
+                if(list.size()>0){
+                    loadFail.setVisibility(View.GONE);
+                }
+
                 if(!isLoadFail&&list.size()==0){
 
                   not_found.setVisibility(View.VISIBLE);
 
+
                 }else {
                     not_found.setVisibility(View.GONE);
+
                 }
 
              marathonListViewAdapter.updateList(list);

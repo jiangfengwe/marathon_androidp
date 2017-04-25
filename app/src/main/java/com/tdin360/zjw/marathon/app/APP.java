@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.tdin360.zjw.marathon.utils.db.DbManager;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -33,6 +34,9 @@ public class App extends Application {
         //友盟分享
         UMShareAPI.get(this);
         Log.LOG=false;
+//        分享时无客户端自动跳转到下载界面
+        Config.isJumptoAppStore = true;
+//        友盟统计
         MobclickAgent.setDebugMode(false);
 
         //创建数据库

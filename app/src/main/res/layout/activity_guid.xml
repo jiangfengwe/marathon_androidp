@@ -39,7 +39,7 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:textSize="16dp"
-      android:padding="8dp"
+      android:padding="5dp"
       android:textColor="@drawable/guide_text_selector"
       android:text="立即体验"
 

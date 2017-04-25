@@ -265,6 +265,8 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
 
                 NewsModel newsModel = (NewsModel) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(MarathonNewsListActivity.this, ShowHtmlActivity.class);
+                intent.putExtra("shareTitle",newsModel.getTitle());
+                intent.putExtra("shareImageUrl",newsModel.getPicUrl());
                 intent.putExtra("title", "赛事新闻");
                 intent.putExtra("url", newsModel.getDetailUrl());
                 startActivity(intent);

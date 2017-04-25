@@ -6,6 +6,6 @@
     >
 
 </corners>
-    <solid android:color="@android:color/holo_red_light"></solid>
-    <stroke android:color="@android:color/holo_red_light" android:width="0.5dp"></stroke>
+    <solid android:color="@color/buttonNColor"></solid>
+    <stroke android:color="@color/buttonNColor" android:width="0.5dp"></stroke>
 </shape>

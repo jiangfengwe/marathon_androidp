@@ -43,14 +43,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-
-                    android:layout_weight="2"
                     android:textSize="16sp"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="姓        名:"
                     />
                 <EditText
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/name"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -73,13 +72,12 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="手  机  号:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/phone"
                     android:maxLength="11"
                     android:inputType="phone"
@@ -103,14 +101,15 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:text="邮        箱:"
                     />
                 <EditText
 
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/email"
                     android:inputType="textEmailAddress"
                     android:layout_weight="1"
@@ -134,13 +133,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="出生日期:"
                     />
                 <TextView
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/dateSelect"
                     android:layout_weight="1"
                     android:text="请选择出生日期"
@@ -168,12 +167,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="证件类型:"
                     />
                 <Spinner
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/idCardType"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -197,13 +197,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="证件号码:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/idCardNumber"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -225,12 +225,12 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="性        别:"
                     />
                 <RadioGroup
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/radioGroup"
                     android:layout_weight="1"
                     android:orientation="horizontal"
@@ -274,12 +274,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="血        型:"
                     />
                 <Spinner
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/bloodSpinner"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -305,12 +306,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="国        家:"
                     />
                 <Spinner
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/country"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -337,12 +339,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="所  在  地:"
                     />
                 <TextView
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/areaAddress"
                     android:text="请选择所在地"
                     android:layout_weight="1"
@@ -370,12 +373,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="报名项目:"
                     />
                 <Spinner
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/projectSpinner"
                     android:layout_weight="1"
                     style="@android:style/Widget.Spinner"
@@ -401,12 +405,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="服装尺码:"
                     />
                 <Spinner
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/clothesSize"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -431,13 +436,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="现居地址:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/address"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -459,13 +464,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="邮政编码:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/post"
                     android:layout_weight="1"
                     android:inputType="number"
@@ -489,13 +494,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="紧急联系人:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/linkName"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -517,13 +522,13 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="紧急联系电话:"
                     />
                 <EditText
-
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/linkPhone"
                     android:inputType="phone"
                     android:layout_weight="1"
@@ -539,51 +544,21 @@
                 android:background="@color/lineColor"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
                 android:padding="10dp"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:padding="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <CheckBox
-                        android:id="@+id/isOk"
-                        android:button="@null"
-                        android:drawableLeft="@drawable/gander_checked_selector"
-                        android:layout_width="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/dark"
-                        android:layout_height="wrap_content"
-                        android:text="已阅读"
-                        />
-                    <TextView
-                        android:textSize="15sp"
-                        android:id="@+id/look"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#1C86EE"
-                        android:text="《注意事项》"
-                        />
-                </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="90dp">
                 <Button
-                    android:enabled="false"
-                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
                     android:id="@+id/submitBtn"
                     android:textColor="@android:color/white"
-                    android:background="@drawable/oval_red_button_selector"
+                    android:background="@drawable/oval_yellow_button_selector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:text="提交"
                     />
-
             </LinearLayout>
 
         </LinearLayout>

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 赛事详情操作
+ * 赛事详情离线数据操作
  * Created by admin on 17/3/22.
  */
 
@@ -69,7 +69,7 @@ public class EventDetailsServiceImpl implements EventDetailService{
 
             String type1 =  cursor.getString(cursor.getColumnIndex("type")) ;
 
-            list.add(new CarouselModel(eventId1,imageUrl,url,type1));
+            list.add(new CarouselModel(eventId1,imageUrl,"",url,type1));
 
         }
 

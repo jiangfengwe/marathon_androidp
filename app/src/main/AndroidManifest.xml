@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tdin360.zjw.marathon"
     android:versionCode="220"
-    android:versionName="2.2.0">
+    android:versionName="2.2.0"
+
+    >
 
     <!--打电话-->
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>

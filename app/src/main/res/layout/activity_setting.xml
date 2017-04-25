@@ -72,7 +72,7 @@
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/oval_red_button_selector"
+        android:background="@drawable/oval_yellow_button_selector"
         android:textSize="18sp"
         android:textColor="#fff"
         android:text="退出登录"

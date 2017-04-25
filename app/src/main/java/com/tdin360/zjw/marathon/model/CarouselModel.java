@@ -1,18 +1,20 @@
 package com.tdin360.zjw.marathon.model;
 
 /**
- * 轮播图实体类
+ * 轮播图赞助商实体类
  * Created by Administrator on 2016/7/5.
  */
 public class CarouselModel {
+    private String title;
     private String eventId;
     private String picUrl;
     private String linkUrl;
     private String type;
 
 
-    public CarouselModel(String eventId,String picUrl, String linkUrl,String type) {
+    public CarouselModel(String eventId,String title,String picUrl, String linkUrl,String type) {
         this.eventId = eventId;
+        this.title=title;
         this.picUrl = picUrl;
         this.linkUrl = linkUrl;
         this.type = type;
@@ -20,6 +22,14 @@ public class CarouselModel {
 
     public String getEventId() {
         return eventId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPicUrl() {

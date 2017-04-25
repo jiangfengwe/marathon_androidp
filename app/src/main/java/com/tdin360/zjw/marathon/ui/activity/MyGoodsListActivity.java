@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,6 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
         this.refreshListView = (ListView) this.findViewById(R.id.listView);
         this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
         this.pullToRefreshLayout.setOnRefreshListener(this);
-
         this.myAdapter = new MyAdapter();
         this.refreshListView.setAdapter(myAdapter);
 
@@ -243,6 +243,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
                     }
                     JSONObject json  = new JSONObject(result);
 
+                    Log.d("物资-------->>>", "onSuccess: "+json);
                     totalPages = json.getInt("TotalPages");
                     JSONObject message = json.getJSONObject("EventMobileMessage");
 

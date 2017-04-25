@@ -81,8 +81,7 @@ public class MyFragment extends Fragment {
                     //用户没有登录则跳转到登录
                     Intent intent = new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
-                    //设置登录成功后跳转到个人信息界面
-                    LoginNavigationConfig.instance().setNavType(NavType.MyInfo);
+
                 }
 
 

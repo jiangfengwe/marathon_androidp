@@ -12,6 +12,7 @@ public class MarathonDataUtils {
     private String eventName;
     private String status;
     private String shareUrl;
+    private String eventImageUrl;
     private MarathonDataUtils (){}
 
 
@@ -59,5 +60,13 @@ public class MarathonDataUtils {
 
     public void setShareUrl(String shareUrl) {
         this.shareUrl = shareUrl;
+    }
+
+    public String getEventImageUrl() {
+        return eventImageUrl;
+    }
+
+    public void setEventImageUrl(String eventImageUrl) {
+        this.eventImageUrl = eventImageUrl;
     }
 }

@@ -31,7 +31,7 @@
 
             <Button
                 style="?android:attr/borderlessButtonStyle"
-                android:background="@drawable/oval_red_button_selector"
+                android:background="@drawable/oval_yellow_button_selector"
                 android:onClick="submit"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"

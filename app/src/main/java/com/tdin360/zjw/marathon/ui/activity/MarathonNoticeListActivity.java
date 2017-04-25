@@ -273,6 +273,8 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
             if(noticeModelList.size()>0) {
                 NoticeModel noticeModel = (NoticeModel) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(x.app(), ShowHtmlActivity.class);
+                intent.putExtra("shareTitle",noticeModel.getTitle());
+                intent.putExtra("shareImageUrl",MarathonDataUtils.init().getEventImageUrl());
                 intent.putExtra("title", "赛事公告");
                 intent.putExtra("url", noticeModel.getUrl());
                 startActivity(intent);

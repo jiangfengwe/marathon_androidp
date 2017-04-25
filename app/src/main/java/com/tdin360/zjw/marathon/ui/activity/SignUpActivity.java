@@ -2,12 +2,25 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +28,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -163,9 +177,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     private TextView loadFail;
     //主布局
     private LinearLayout main;
-
-    //注意事项相关
-    private CheckBox checkBox;
     private Button submitBtn;
 
     @Override
@@ -175,7 +186,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         setToolBarTitle("报名");
         showBackButton();
         initView();
-
+        this.initPopDialog();
     }
 
     @Override
@@ -249,11 +260,68 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         }
     }
 
+
+    //免责声明弹出窗
+    private void initPopDialog(){
+
+        final Dialog dialog = new Dialog(this,R.style.MyDialogStyle);
+        dialog.setCancelable(false);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View viewDialog = inflater.inflate(R.layout.alert_dialog, null);
+        //同意
+        viewDialog.findViewById(R.id.agree).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        viewDialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        final View loadView = viewDialog.findViewById(R.id.loadView);
+        final WebView webView =(WebView)viewDialog.findViewById(R.id.webView);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.setWebViewClient(new WebViewClient(){
+
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                loadView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                loadView.setVisibility(View.GONE);
+            }
+
+
+        });
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl("http://www.baidu.com");
+        dialog.show();
+        //获取屏幕宽高　
+        DisplayMetrics metric = new DisplayMetrics();
+         this.getWindowManager().getDefaultDisplay().getMetrics(metric);
+
+        int width =  metric.widthPixels;
+        int height = metric.heightPixels;
+//设置dialog的宽高为屏幕的宽高
+        ViewGroup.LayoutParams layoutParams = new  ViewGroup.LayoutParams(width-100,height-300);
+        dialog.setContentView(viewDialog, layoutParams);
+    }
+
     private void initView() {
 
         //滚动内容部分
         this.autoText= (AutoText) this.findViewById(R.id.autoText);
-        this.autoText.initScrollTextView(this.getWindowManager(),"为了能够快速报名,请正确填写您的报名信息,如有问题请及时与我们联系!");
+        this.autoText.initScrollTextView(this.getWindowManager(),getResources().getString(R.string.tip));
         this.autoText.setSpeed(1);
         this.autoText.starScroll();
            //表单控件初始化
@@ -272,8 +340,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.checkBox = (CheckBox) this.findViewById(R.id.isOk);
         this.submitBtn = (Button) this.findViewById(R.id.submitBtn);
+
 
         //加载失败点击重新获取
         this.loadFail.setOnClickListener(new View.OnClickListener() {
@@ -284,27 +352,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             }
         });
 
-        //注意事项
-        this.findViewById(R.id.look).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(SignUpActivity.this,ShowHtmlActivity.class);
-
-                intent.putExtra("title","注意事项");
-                intent.putExtra("url","file:///android_asset/agreement.html");
-
-                startActivity(intent);
-            }
-        });
-
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                submitBtn.setEnabled(isChecked);
-            }
-        });
 
         //出生日期选择部分
         this.dateSelect= (TextView) this.findViewById(R.id.dateSelect);
@@ -837,12 +884,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
 
 //        验证出生日期
-         if(dateSelect.getText().toString().trim().equals("请选择出生日期")){
+         if(dateSelect.getText().toString().trim().contains("请")){
              Toast.makeText(SignUpActivity.this,"请选择出生日期!",Toast.LENGTH_SHORT).show();
              return;
          }
         //        验证证件类型
-        if(idCardTypeString.length()==0||idCardTypeString.equals("请选择证件类型")){
+        if(idCardTypeString.length()==0||idCardTypeString.contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择证件类型!",Toast.LENGTH_SHORT).show();
 
             return;
@@ -859,20 +906,20 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
 
 //        验证所在地
-        if(areaAddress.getText().toString().trim().equals("请选择所在地")){
+        if(areaAddress.getText().toString().trim().contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择所在地!",Toast.LENGTH_SHORT).show();
             return;
 
         }
         // 验证参赛项目
-        if(projectName.length()==0||projectName.equals("请选择参赛项目")){
+        if(projectName.length()==0||projectName.contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择参赛项目!",Toast.LENGTH_SHORT).show();
 
             return;
 
         }
         // 验证参赛项目
-        if(clothesSizeString.length()==0||clothesSizeString.equals("请选择服装尺码")){
+        if(clothesSizeString.length()==0||clothesSizeString.contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择服装尺码!",Toast.LENGTH_SHORT).show();
 
             return;
@@ -963,6 +1010,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.addBodyParameter("RegistratorDocumentType",idCardTypeString);
 //        性别
         param.addBodyParameter("RegistratorSex",gander+"");
+
+//        血型
+        param.addBodyParameter("BloodType",bloodStr);
 //        国家
         param.addBodyParameter("Country",country);
 //        省份

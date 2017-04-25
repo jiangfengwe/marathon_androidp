@@ -59,6 +59,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         String eventDetailSql="CREATE TABLE  "+EVENT_DETAIL_TABLE+" (\n" +
                 "    id       INTEGER PRIMARY KEY AUTOINCREMENT\n" +
                 "                     NOT NULL,\n" +
+                "    title    VARCHAR,\n"+
                 "    eventId  INTEGER,\n" +
                 "    imageUrl VARCHAR,\n" +
                 "    url      VARCHAR,\n" +

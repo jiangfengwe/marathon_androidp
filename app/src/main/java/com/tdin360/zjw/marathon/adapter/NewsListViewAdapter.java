@@ -68,9 +68,9 @@ public class NewsListViewAdapter extends BaseAdapter {
         viewHolder.time.setText(newsModel.getTime());
         ImageOptions imageOptions = new ImageOptions.Builder()
               //  .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(60))//图片大小
-                .setLoadingDrawableId(R.drawable.loading_small_default)//加载中默认显示图片
+               // .setLoadingDrawableId(R.drawable.loading_small_default)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
-                .setFailureDrawableId(R.drawable.search_nodata)//加载失败后默认显示图片
+                .setFailureDrawableId(R.drawable.loading_small_error)//加载失败后默认显示图片
                 .build();
         x.image().bind(viewHolder.imageView, newsModel.getPicUrl(),imageOptions);
 

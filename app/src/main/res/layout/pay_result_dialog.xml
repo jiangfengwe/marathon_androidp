@@ -44,7 +44,7 @@
                 <Button
 
                     android:id="@+id/home"
-                    android:background="@drawable/oval_red_button_selector"
+                    android:background="@drawable/oval_yellow_button_selector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"

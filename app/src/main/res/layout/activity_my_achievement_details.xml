@@ -4,18 +4,16 @@
     android:id="@+id/activity_my_achievement_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/chengjibeijing"
-    tools:context="com.tdin360.zjw.marathon.ui.activity.MyAchievementDetailsActivity">
 
+    android:background="@color/background"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.MyAchievementDetailsActivity">
+        <include layout="@layout/toolbar_layout"></include>
     <LinearLayout
+        android:layout_centerInParent="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/toolbar_layout"></include>
-
+        android:layout_height="wrap_content">
     <LinearLayout
-
         android:gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"

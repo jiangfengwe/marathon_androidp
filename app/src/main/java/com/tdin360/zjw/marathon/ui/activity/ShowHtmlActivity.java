@@ -33,7 +33,6 @@ public class ShowHtmlActivity extends BaseActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
-    private Button signUpBtn;
     private KProgressHUD hud;
 
     @Override
@@ -47,7 +46,6 @@ public class ShowHtmlActivity extends BaseActivity {
         this.webView.setWebChromeClient(new MyWebViewChromeClient());
         this.webView.setWebViewClient(new MyWebViewClient());
 
-        this.signUpBtn = (Button) this.findViewById(R.id.signBtn);
         this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
 
         initHUD();
@@ -59,34 +57,25 @@ public class ShowHtmlActivity extends BaseActivity {
 
         if (intent!=null){
 
-            boolean isSign = intent.getBooleanExtra("isSign", false);
-            if(isSign&& MarathonDataUtils.init().getStatus().equals("报名中")){
-                this.signUpBtn.setVisibility(View.VISIBLE);
-                this.signUpBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //检查用户是否登录登录后才能报名
-                        if(SharedPreferencesManager.isLogin(ShowHtmlActivity.this)){
-
-                            Intent intent = new Intent(ShowHtmlActivity.this,SignUpActivity.class);
-                            startActivity(intent);
-                        }else {
-                            Intent intent = new Intent(ShowHtmlActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            LoginNavigationConfig.instance().setNavType(NavType.SignUp);
-
-                        }
-                    }
-                });
-            }
             String title = intent.getStringExtra("title");
+            String shareTitle="";
+            String shareImageUrl=null;
+            try{
+                shareTitle = intent.getStringExtra("shareTitle");
+                shareImageUrl = intent.getStringExtra("shareImageUrl");
+
+            }catch (Exception e){
+
+
+            }
+
             setToolBarTitle(title);
             final String url = intent.getStringExtra("url");
             /**
              * 构建分享内容
              */
           ShareInfoManager manager = new ShareInfoManager(this);
-            manager.buildShareWebLink(title,url,"佰家赛事", BitmapFactory.decodeResource(getResources(),R.drawable.umeng_socialize_share_web));
+            manager.buildShareWebLink(shareTitle,url,"佰家赛事", shareImageUrl);
             showShareButton(manager);
 
            loading(url);
