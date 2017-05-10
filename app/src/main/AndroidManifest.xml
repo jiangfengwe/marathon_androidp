@@ -2,18 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tdin360.zjw.marathon"
     android:versionCode="220"
-    android:versionName="2.2.0"
+    android:versionName="2.2.0">
 
-    >
+    <!-- 打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+     <!--打开相机-->
+    <uses-permission android:name="android.permission.CAMERA"/>
 
-    <!--打电话-->
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
-
-    <!--极光推送配置-->
+    <!-- 极光推送配置 -->
     <!-- Required  一些系统要求的权限，如访问网络等 -->
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,7 +28,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
 
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
@@ -69,20 +69,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 银联支付 -->
-        <uses-library
-            android:name="org.simalliance.openmobileapi"
-            android:required="false" />
 
-        <activity
-            android:name="com.unionpay.uppay.PayActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.unionpay.UPPayWapActivity"
-            android:configChanges="orientation|keyboardHidden|fontScale"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
@@ -156,11 +144,12 @@
 
         <!-- 极光推送 -->
 
+
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
@@ -172,18 +161,20 @@
             android:name="cn.jpush.android.service.DaemonService"
             android:enabled="true"
             android:exported="true">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
-                <category android:name="com.tdin360.zjw.marathon"/>
+
+                <category android:name="com.tdin360.zjw.marathon" />
             </intent-filter>
         </service>
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <category android:name="com.tdin360.zjw.marathon"/>
+
+                <category android:name="com.tdin360.zjw.marathon" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -193,6 +184,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -211,28 +203,28 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="${applicationId}" />
             </intent-filter>
         </activity>
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false" />
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data
             android:name="JPUSH_CHANNEL"
-            android:value="developer-default"/>
+            android:value="developer-default" />
         <!-- 引导界面 -->
         <activity
             android:name=".ui.activity.GuideActivity"
@@ -243,7 +235,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.RestPassWordActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SearchActivity"
             android:screenOrientation="portrait" />
@@ -282,17 +274,21 @@
         <!-- 友盟分享集成 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58ad39b89f06fd36410004df"></meta-data>
-        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_VALUE}"/>
+            android:value="58ad39b89f06fd36410004df" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
         <!-- 友盟 -->
 
-          <!--微博回调-->
+
+        <!-- 微博回调 -->
         <activity
             android:name=".ui.activity.WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -316,29 +312,27 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--登录回调-->
+        <!-- 登录回调 -->
         <activity
             android:name="jp.line.android.sdk.activity.LineAuthCompleteActivity"
             android:configChanges="keyboard|orientation"
             android:exported="true"
             android:screenOrientation="sensor">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="line.1471474450"/>
+                <data android:scheme="line.1471474450" />
             </intent-filter>
         </activity>
-        <!--没安装客户端下登录-->
+        <!-- 没安装客户端下登录 -->
         <activity
             android:name="jp.line.android.sdk.activity.WebLoginActivity"
             android:configChanges="keyboard|orientation"
             android:exported="false"
-            android:screenOrientation="sensor">
-        </activity>
-
+            android:screenOrientation="sensor" />
         <activity
             android:name=".ui.activity.MyAchievementDetailsActivity"
             android:screenOrientation="portrait" />
@@ -355,11 +349,19 @@
         <service android:name=".service.DownloadAPKService" />
         <service android:name=".step.StepCounterService" />
 
-        <activity android:name=".ui.activity.StepSettingActivity"
-            android:screenOrientation="portrait"
-            ></activity>
-        <activity android:name=".ui.activity.StepHistoryActivity"></activity>
-        <activity android:name=".ui.activity.FeedbackListActivity"></activity>
+        <activity
+            android:name=".ui.activity.StepSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.StepHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.FeedbackListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TeamSignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.MyTeamListActivity"></activity>
     </application>
 
 </manifest>

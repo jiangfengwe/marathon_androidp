@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -19,14 +20,14 @@ import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
-import com.tdin360.zjw.marathon.utils.CacheFileManager;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity implements UpdateManager.UpdateListener{
 
     private CheckBox switchBtn;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +92,43 @@ public class SettingActivity extends BaseActivity {
      */
     private void checkUpdate(){
 
-        boolean isNewVersion = UpdateManager.checkVersion(this);
+        UpdateManager.setUpdateListener(this);
+        UpdateManager.checkNewVersion(getApplicationContext());
 
-        if(isNewVersion){//发现新版本
+    }
+    @Override
+    public int getLayout() {
+        return R.layout.activity_setting;
+    }
+
+
+    @Override
+    public void doSDCardPermission() {
+
+        downloadAPK();
+    }
+
+    //下载安装包
+    private void downloadAPK(){
+
+
+        Toast.makeText(this,"已在后台下载",Toast.LENGTH_SHORT).show();
+        //启动下载器下载安装包
+        Intent intent = new Intent(SettingActivity.this, DownloadAPKService.class);
+        intent.putExtra("url",url);
+        startService(intent);
+    }
+
+    @Override
+    public void checkFinished(boolean isUpdate, String content, String url) {
+
+         this.url = url;
+        if(isUpdate){//发现新版本
 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("版本更新");
-            alert.setMessage("发现新版本，是否下载更新?");
+            alert.setMessage(Html.fromHtml(content));
             alert.setCancelable(false);
 
             alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
@@ -106,13 +136,12 @@ public class SettingActivity extends BaseActivity {
                 public void onClick(DialogInterface dialog, int which) {
 
                     //判断权限
-                    if(ContextCompat.checkSelfPermission(SettingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                        downloadAPK();
 
-                        ActivityCompat.requestPermissions(SettingActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_CODE);
                     }else {
+                        requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                        //启动下载器下载安装包
-                        startService(new Intent(SettingActivity.this,DownloadAPKService.class));
                     }
 
                 }
@@ -147,23 +176,6 @@ public class SettingActivity extends BaseActivity {
             });
 
             alert.show();
-        }
-
-    }
-    @Override
-    public int getLayout() {
-        return R.layout.activity_setting;
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode==Constants.WRITE_EXTERNAL_CODE){
-
-            //启动下载器下载安装包
-             startService(new Intent(SettingActivity.this,DownloadAPKService.class));
         }
     }
 }

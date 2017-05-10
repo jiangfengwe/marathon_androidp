@@ -1,18 +1,14 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
 
-import android.Manifest;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
@@ -31,11 +26,9 @@ import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
-import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullableListView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,62 +90,9 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             }
         });
 
-        //检查更新
-        checkUpdate();
-
-
         //加载数据
          loadData();
     }
-
-    /**
-     * 检查安装包是否有更新
-     */
-    private void checkUpdate(){
-
-
-        boolean isNewVersion = UpdateManager.checkVersion(getActivity());
-
-        if(isNewVersion){//发现新版本
-
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-
-            alert.setTitle("版本更新");
-            alert.setMessage("发现新版本，是否下载更新?");
-            alert.setCancelable(false);
-
-            alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    //判断权限
-                    if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_CODE);
-                    }else {
-
-                        //启动下载器下载安装包
-                        getContext().startService(new Intent(getActivity(),DownloadAPKService.class));
-                    }
-
-                }
-            });
-
-            alert.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.dismiss();
-                }
-            });
-
-            alert.show();
-        }
-
-    }
-
-
 
 
     //加载数据(包括缓存数据和网络数据)
@@ -219,6 +159,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             MarathonDataUtils.init().setStatus(eventInfo.getStatus());
             MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
             MarathonDataUtils.init().setEventImageUrl(eventInfo.getPicUrl());
+            MarathonDataUtils.init().setRegister(eventInfo.isRegister());
             Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
             startActivity(intent);
 
@@ -247,9 +188,11 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                        list.clear();
                     }
 
+
                     JSONObject obj = new JSONObject(s);
 
                     pageCount = obj.getInt("TotalPages");
+
                     JSONArray array = obj.getJSONArray("EventSystemMessageList");
 
                     for(int i=0;i<array.length();i++){
@@ -263,8 +206,10 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                         String pictureUrl = object.getString("PictureUrl");
 
                         String shareUrl = object.getString("EventSiteUrl");
-                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl);
+                        boolean isRegister = object.getBoolean("IsRegister");
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl,isRegister);
                         list.add(eventModel);
+
 
                         impl.addEvent(eventModel);
 
@@ -283,6 +228,9 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                     if (isRefresh){
 
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }else {
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+
                     }
                 }
             }
@@ -297,6 +245,8 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                 if (isRefresh){
 
                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                }else {
+                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                 }
 
             }
@@ -308,6 +258,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
 
             @Override
             public void onFinished() {
+
 
                 if(list.size()>0){
                     loadFail.setVisibility(View.GONE);
@@ -357,10 +308,14 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
         if(pageNumber==pageCount){
 
         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
-        }else {
+
+        }else if(pageNumber<pageCount){
 
             pageNumber++;
             httpRequest(false);
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
 
     }

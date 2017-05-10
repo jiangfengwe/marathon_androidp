@@ -11,5 +11,7 @@ public enum NavType {
     MyMark,//我的成绩
     MySignUp,//我的报名
     MyFeed,//我的意见反馈
-    MyGoods//我的物资
+    MyGoods,//我的物资
+    Team, //团队报名
+    Other//其它
 }

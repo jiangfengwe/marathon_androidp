@@ -12,5 +12,5 @@ public interface EventDetailService {
 
     void addEventDetail(CarouselModel model);
     List<CarouselModel> getAllEventDetail(String eventId,String type);
-    void deleteAll();
+    void deleteAll(String eventId);
 }

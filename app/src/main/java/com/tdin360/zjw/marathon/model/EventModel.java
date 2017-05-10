@@ -22,24 +22,18 @@ public class EventModel {
 
     private String shardUrl;
 
+    private boolean isRegister;
 
-    public EventModel(int id, String name, String status, String picUrl, String startDate,String shardUrl) {
+
+    public EventModel(int id, String name, String status, String picUrl, String startDate,String shardUrl,boolean isRegister) {
         this.id=id;
         this.name = name;
         this.status = status;
         this.picUrl = picUrl;
         this.startDate = startDate;
         this.shardUrl=shardUrl;
+        this.isRegister=isRegister;
 
-    }
-    public EventModel(int id, String name, String status, String picUrl, String startDate, long time,String shardUrl) {
-       this.id=id;
-        this.name = name;
-        this.status = status;
-        this.picUrl = picUrl;
-        this.startDate = startDate;
-        this.time = time;
-        this.shardUrl=shardUrl;
     }
 
 
@@ -94,5 +88,13 @@ public class EventModel {
 
     public String getShardUrl() {
         return shardUrl;
+    }
+
+    public boolean isRegister() {
+        return isRegister;
+    }
+
+    public void setRegister(boolean register) {
+        isRegister = register;
     }
 }

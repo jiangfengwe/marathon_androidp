@@ -21,12 +21,16 @@ public class SQLHelper extends SQLiteOpenHelper {
     public static final String EVENT_DETAIL_TABLE="EventDetail";
 
     //通知消息表
-    public static final String NOTICE_TABLE="Notice";
+    public static final String NOTICE_MESSAGE_TABLE="NoticeMessage";
 
     //计步历史
     public static final String STEP="Step";
     //个人资料信息表
     public static final String MY_INFO_TABLE="MY_INFO";
+    //新闻
+    public static final String NEWS_INFO="news";
+//    通知
+    public static final String NOTICE_INFO="notice";
 
 
     public SQLHelper(Context context){
@@ -52,7 +56,8 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    eventImageUrl VARCHAR,\n" +
                 "    shareUrl VARCHAR,\n" +
                 "    eventStatus   VARCHAR,\n" +
-                "    time          VARCHAR\n" +
+                "    time          VARCHAR,\n" +
+                "    enable  VARCHAR"+
                 ");";
 
 //        赛事详情表
@@ -67,7 +72,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 ");";
 
 //        通知消息表
-        String create_Notice_Sql="CREATE TABLE  "+NOTICE_TABLE+" (\n" +
+        String create_Notice_Sql="CREATE TABLE  "+NOTICE_MESSAGE_TABLE+" (\n" +
                 "    id      INTEGER      NOT NULL\n" +
                 "                         PRIMARY KEY AUTOINCREMENT,\n" +
                 "    forName VARCHAR (20),\n" +
@@ -91,18 +96,27 @@ public class SQLHelper extends SQLiteOpenHelper {
         String myInfoSql="CREATE TABLE  "+MY_INFO_TABLE+" (\n" +
                 "    id      INTEGER PRIMARY KEY AUTOINCREMENT\n" +
                 "                    NOT NULL,\n" +
-                "    [tel]    VARCHAR NOT NULL,\n" +
+                "    tel    VARCHAR NOT NULL,\n" +
                 "    name    VARCHAR,\n" +
                 "    gander  BOOLEAN,\n" +
                 "    bothday VARCHAR,\n" +
                 "    email   VARCHAR\n" +
                 ");";
+        //新闻
+        String newsSql = "CREATE TABLE "+NEWS_INFO+"(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                "newsId Integer,eventId VARCHAR,title VARCHAR,imageUrl VARCHAR,url VARCHAR,time VARCHAR)";
+        //公告
+        String noticeSql = "CREATE TABLE "+NOTICE_INFO+"(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                "noticeId Integer, eventId VARCHAR,title VARCHAR,url VARCHAR,time VARCHAR)";
+
 
         db.execSQL(eventSql);
         db.execSQL(eventDetailSql);
         db.execSQL(create_Notice_Sql);
         db.execSQL(create_Step_Sql);
         db.execSQL(myInfoSql);
+        db.execSQL(newsSql);
+        db.execSQL(noticeSql);
 
 
     }
@@ -110,5 +124,14 @@ public class SQLHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        db.execSQL("DROP TABLE IF EXISTS "+EVENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+EVENT_DETAIL_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+NOTICE_MESSAGE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+NEWS_INFO);
+        db.execSQL("DROP TABLE IF EXISTS "+NOTICE_INFO);
+        db.execSQL("DROP TABLE IF EXISTS "+MY_INFO_TABLE);
+
+        onCreate(db);
     }
+
 }

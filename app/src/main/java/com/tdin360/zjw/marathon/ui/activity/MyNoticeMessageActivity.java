@@ -5,16 +5,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
-import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
+import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +31,11 @@ public class MyNoticeMessageActivity extends BaseActivity {
     private List<NoticeMessageModel> list = new ArrayList<>();
     private LinearLayout tip;
     private   NoticeMessageListAdapter adapter;
-    private NoticeServiceImpl service;
+    private NoticeMessageServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.service = new NoticeServiceImpl(this);
+        this.service = new NoticeMessageServiceImpl(this);
         setToolBarTitle("通知消息");
         showBackButton();
         initView();
@@ -53,6 +57,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
         this.tip = (LinearLayout) this.findViewById(R.id.tip);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         this.adapter = new NoticeMessageListAdapter();
         mRecyclerView.setAdapter(adapter);
 
@@ -77,6 +82,8 @@ public class MyNoticeMessageActivity extends BaseActivity {
 
     }
 
+
+
     /**
      * 通知消息列表适配器
      */
@@ -98,6 +105,10 @@ public class MyNoticeMessageActivity extends BaseActivity {
             holder.message.setText(messageItem.getMessage());
 
         }
+
+
+
+
 
         @Override
         public int getItemCount() {

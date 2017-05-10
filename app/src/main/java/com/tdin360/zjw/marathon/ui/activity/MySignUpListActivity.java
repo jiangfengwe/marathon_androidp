@@ -196,10 +196,13 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
 
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
     /**
@@ -207,6 +210,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
      */
     private void httpRequest(final boolean isRefresh) {
         loadFail.setVisibility(View.GONE);
+        not_found.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);

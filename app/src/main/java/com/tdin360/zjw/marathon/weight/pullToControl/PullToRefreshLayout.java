@@ -408,15 +408,6 @@ public class PullToRefreshLayout extends RelativeLayout
 			{
 
 
-				//滚动到底部加载更多
-				if(((Pullable) pullableView).canPullUp()&&state!=LOADING){
-
-					changeState(RELEASE_TO_LOAD);
-
-
-				}
-
-
 				if (pullDownY > 0
 						|| (((Pullable) pullableView).canPullDown()
 								&& canPullDown && state != LOADING))
@@ -485,16 +476,16 @@ public class PullToRefreshLayout extends RelativeLayout
 			} else if (pullUpY < 0)
 			{
 				// 下面是判断上拉加载的，同上，注意pullUpY是负值
-//				if (-pullUpY <= loadmoreDist
-//						&& (state == RELEASE_TO_LOAD || state == DONE))
-//				{
-//					changeState(INIT);
-//				}
-				// 上拉操作
-//				if (-pullUpY >= loadmoreDist && state == INIT)
-//				{
-//					changeState(RELEASE_TO_LOAD);
-//				}
+				if (-pullUpY <= loadmoreDist
+						&& (state == RELEASE_TO_LOAD || state == DONE))
+				{
+					changeState(INIT);
+				}
+//				 上拉操作
+				if (-pullUpY >= loadmoreDist && state == INIT)
+				{
+					changeState(RELEASE_TO_LOAD);
+				}
 
  		}
 //			// 因为刷新和加载操作不能同时进行，所以pullDownY和pullUpY不会同时不为0，因此这里用(pullDownY +

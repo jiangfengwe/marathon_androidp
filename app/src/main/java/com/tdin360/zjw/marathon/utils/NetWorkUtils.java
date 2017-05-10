@@ -3,6 +3,7 @@ package com.tdin360.zjw.marathon.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 /**
  * 网络检查工具类
@@ -28,11 +29,13 @@ public class NetWorkUtils {
                 // 当前网络是连接的
                 if (info.getState() == NetworkInfo.State.CONNECTED)
                 {
+
                     // 当前所连接的网络可用
                     return true;
                 }
             }
         }
+
         return false;
     }
 }

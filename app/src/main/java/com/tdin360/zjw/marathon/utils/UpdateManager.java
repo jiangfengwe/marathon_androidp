@@ -3,7 +3,10 @@ package com.tdin360.zjw.marathon.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -15,15 +18,29 @@ import org.xutils.x;
  * @author zhangzhijun
  */
 
-public class UpdateManager {
 
+public class UpdateManager {
+    public interface UpdateListener{
+
+
+       void checkFinished(boolean isUpdate,String content,String url);
+
+    }
 
     private static boolean isUpdate;
+    private static UpdateListener listener;
+    private static String url;
+    private static String content;
+
+    public static void setUpdateListener(UpdateListener listener1){
+
+          listener=listener1;
+    }
     /**
      * 检查更新
      *
      */
-    public static boolean checkVersion(final Context context){
+    public static void checkNewVersion(final Context context){
 
 
         /**
@@ -31,11 +48,11 @@ public class UpdateManager {
          */
         if(!NetWorkUtils.isNetworkAvailable(context)){
 
-            return isUpdate=false;
+            return;
 
         }
 
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
+        RequestParams params = new RequestParams(HttpUrlUtils.UPDATE_URL);
 
 
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -44,21 +61,32 @@ public class UpdateManager {
 
                 //获取服务器版本
 
-                int serverVersion=1;
-                //获取当前版本
-                int currentVersion = getVersion(context);
+                try {
+                    JSONObject obj = new JSONObject(result);
+                     url = obj.getString("AndoroidUrl");
+                    content = obj.getString("UpdateContent");
+                    int serverVersion=obj.getInt("Version");
+                    //获取当前版本
+                    int currentVersion = getVersion(context);
 
 
-                //检查到新版本
-                if(serverVersion<=0|currentVersion<=0){
 
-                    return;
+                    if(serverVersion<=0|currentVersion<=0){
+
+                        return;
+                    }
+                  //检查到新版本
+                    if(serverVersion>currentVersion){
+
+
+                        isUpdate=true;
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                if(serverVersion>currentVersion){
 
-                    isUpdate=true;
-                }
 
             }
 
@@ -75,10 +103,15 @@ public class UpdateManager {
             @Override
             public void onFinished() {
 
+                if(listener!=null){
+
+                  listener.checkFinished(isUpdate,content,url);
+
+                }
             }
         });
 
-        return isUpdate;
+
     }
 
     /**

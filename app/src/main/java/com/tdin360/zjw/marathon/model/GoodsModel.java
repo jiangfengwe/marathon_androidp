@@ -19,9 +19,10 @@ public class GoodsModel implements Serializable{
     private String content;
     private String size;
     private boolean isApply;
+    private String goodsInfo;
 
 
-    public GoodsModel(int id,String name,String gander,String number,String idNumber,String eventName, String content,String size,boolean isApply) {
+    public GoodsModel(int id,String name,String gander,String number,String idNumber,String eventName, String content,String size,boolean isApply,String goodsInfo) {
         this.id = id;
         this.name=name;
         this.number=number;
@@ -31,6 +32,7 @@ public class GoodsModel implements Serializable{
         this.content = content;
         this.size=size;
         this.isApply = isApply;
+        this.goodsInfo=goodsInfo;
     }
 
 
@@ -69,4 +71,9 @@ public class GoodsModel implements Serializable{
     public boolean isApply() {
         return isApply;
     }
+
+    public String getGoodsInfo() {
+        return goodsInfo;
+    }
+
 }

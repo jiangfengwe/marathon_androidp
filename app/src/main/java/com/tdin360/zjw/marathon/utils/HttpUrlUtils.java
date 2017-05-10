@@ -7,7 +7,7 @@ package com.tdin360.zjw.marathon.utils;
 public class HttpUrlUtils {
 
 
-    private static final String BASE="http://www.baijar.com:1004/";
+    private static final String BASE="http://shop.baijar.com/";
     public static final String appKey="eventkeyfdsfds520tdzh123456";
 
     //用户注册接口
@@ -61,7 +61,6 @@ public class HttpUrlUtils {
     //提交反馈
     public static final String ADDFEED_INFO=BASE+"eventinfo/FeedBackContent";
 
-
-    //安装包更新下载地址
-    public static final String DOWNLOAD_URL="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1488963955064&di=9956f46ee621f2b42091ce8d2ebf0d4d&imgtype=0&src=http%3A%2F%2Fimg.qumingxing.com%2Fupload%2Fmastermap%2F20160705%2Feyhm6j29.JPG";
+    //检查更新
+    public static final String UPDATE_URL="http://shop.baijar.com/eventinfo/AppUpdate";
 }

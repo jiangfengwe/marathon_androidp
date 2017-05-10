@@ -12,13 +12,16 @@ public class NoticeModel implements Serializable{
     private int id;
     private String title;
     private String url;
+    private String time;
     private String[] split;
+
 
 
     public NoticeModel(int id, String title, String date, String url ) {
         this.id=id;
         this.title = title;
         this.url=url;
+        this.time=date;
         this.split = date.split("-");
 
     }
@@ -52,6 +55,14 @@ public class NoticeModel implements Serializable{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getDay() {

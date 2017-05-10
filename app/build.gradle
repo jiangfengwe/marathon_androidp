@@ -25,6 +25,7 @@ android {
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
+
     //配置签名文件
     signingConfigs{
 
@@ -34,11 +35,33 @@ android {
             storeFile file("zzj.jks")
             keyPassword="zhangzhijun"
         }
+
+    }
+    //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     buildTypes {
+
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
         release {
-            minifyEnabled false;//是否启用混淆
+
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            minifyEnabled true;//是否启用混淆
+            //Zipalign优化
+            zipAlignEnabled true
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -70,7 +93,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     //    xutils3网络框架依赖库 https://github.com/wyouflf/xUtils3
-    compile 'org.xutils:xutils:3.3.42'
+    compile 'org.xutils:xutils:3.3.4'
     //    支付宝支付依赖库
     compile files('libs/alipaySdk-20161222.jar')
     //    极光推送依赖库
@@ -78,15 +101,12 @@ dependencies {
     compile 'cn.jiguang.sdk:jcore:1.0.0'
     //    微信支付依赖库
     compile files('libs/libammsdk.jar')
-    //    银联支付依赖库
-    compile files('libs/UPPayAssistEx.jar')
-    compile files('libs/UPPayPluginExPro.jar')
+
     //    加载动画库 https://github.com/ybq/Android-SpinKit?utm_source=tuicool&utm_medium=referral
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     //标签库 https://github.com/2dxgujun/AndroidTagGroup
     compile 'me.gujun.android.taggroup:library:1.4@aar'
-    //    圆角图片库 https://github.com/vinc3m1/RoundedImageView
-    compile 'com.makeramen:roundedimageview:2.3.0'
+
     //hud加载提示框 https://github.com/Kaopiz/KProgressHUD
     compile 'com.kaopiz:kprogresshud:1.0.5'
     //友盟分享集成库
@@ -100,7 +120,7 @@ dependencies {
     compile files('libs/umeng_social_shareview.jar')
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
-    //    高德地图依赖包
-    compile files('libs/Android_Map3D_SDK_V5.0.0_20170311.jar')
+    //高德地图依赖包
+    compile 'com.amap.api:3dmap:latest.integration'
 }
 

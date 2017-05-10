@@ -15,6 +15,7 @@ import com.tdin360.zjw.marathon.model.NewsModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.db.impl.NewsServiceImpl;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
@@ -43,10 +44,12 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
     private TextView not_found;
     private boolean isLoadFail;
     private PullToRefreshLayout pullToRefreshLayout;
+    private NewsServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.service  = new NewsServiceImpl(getApplicationContext());
         setToolBarTitle("赛事新闻");
         showBackButton();
         initView();
@@ -84,37 +87,40 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             pullToRefreshLayout.autoRefresh();
         } else {
 
-
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setVisibility(View.VISIBLE);
+
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
-
+             newsModelList = service.getAllNews(MarathonDataUtils.init().getEventId());
+             newsListViewAdapter.updateListView(newsModelList);
 
             //如果缓存数据不存在则需要用户打开网络设置
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            if(newsModelList.size()==0) {
+                loadFail.setVisibility(View.VISIBLE);
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            alert.setMessage("网络不可用，是否打开网络设置");
-            alert.setCancelable(false);
-            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //打开网络设置
+                alert.setMessage("网络不可用，是否打开网络设置");
+                alert.setCancelable(false);
+                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //打开网络设置
 
-                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                        startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                    dialog.dismiss();
-                }
-            });
+                        dialog.dismiss();
+                    }
+                });
 
-            alert.show();
+                alert.show();
+            }
         }
     }
     @Override
@@ -142,7 +148,8 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             public void onSuccess(String result) {
 
                 try {
-
+                    //删除缓存
+                    service.deleteNews(MarathonDataUtils.init().getEventId());
                     if (isRefresh){
 
                         newsModelList.clear();
@@ -160,9 +167,9 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
 
 
                         int id = o.getInt("Id");
-
-                        newsModelList.add(new NewsModel(id, o.getString("MessageName"), o.getString("MessagePictureUrl"),HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS+id, o.getString("CreateTimeStr")));
-
+                        NewsModel newsModel = new NewsModel(id, o.getString("MessageName"), o.getString("MessagePictureUrl"), HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS + id, o.getString("CreateTimeStr"));
+                        newsModelList.add(newsModel);
+                        service.addNews(newsModel);
                     }
                     //加载成功隐藏
                     loadFail.setVisibility(View.GONE);
@@ -212,16 +219,17 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             public void onFinished() {
 
 
-                if(!isLoadFail) {
                     //判断是否有数据
                     if (newsModelList.size() > 0) {
-
+                        loadFail.setVisibility(View.GONE);
+                    //如果加载失败且没有数据
+                    } else if(newsModelList.size()>0&&!isLoadFail){
                         not_found.setVisibility(View.GONE);
-                    } else {
+                    }else {
+
                         not_found.setVisibility(View.VISIBLE);
                     }
 
-                }
 
                 newsListViewAdapter.updateListView(newsModelList);
 
@@ -248,10 +256,13 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
 
           pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
 

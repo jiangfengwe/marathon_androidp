@@ -120,7 +120,9 @@ public class SearchActivity extends AppCompatActivity {
                 MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
                 MarathonDataUtils.init().setEventName(eventInfo.getName());
                 MarathonDataUtils.init().setStatus(eventInfo.getStatus());
+                MarathonDataUtils.init().setEventImageUrl(eventInfo.getPicUrl());
                 MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
+                MarathonDataUtils.init().setRegister(eventInfo.isRegister());
                 Intent intent = new Intent(SearchActivity.this, MarathonDetailsActivity.class);
 
                 startActivity(intent);
@@ -192,8 +194,10 @@ public class SearchActivity extends AppCompatActivity {
                         String status = object.getString("Status");
                         String eventStartTime = object.getString("EventStartTimeStr");
                         String shareUrl = object.getString("EventSiteUrl");
-                        long time = object.getLong("Timestamp");
-                        list.add(new EventModel(id,eventName,status,"",eventStartTime,time,shareUrl));
+                         String pictureUrl = object.getString("PictureUrl");
+                         boolean isRegister = object.getBoolean("IsRegister");
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl,isRegister);
+                        list.add(eventModel);
 
 
                     }

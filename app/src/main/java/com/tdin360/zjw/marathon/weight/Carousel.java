@@ -151,6 +151,10 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
     public void loadCarousel(final List<View>views){
         this.views=views;
 
+        if(views.size()==0){
+
+            return;
+        }
         //如果轮播图大于1张才显示指示器
              if(views.size()<=1){
 

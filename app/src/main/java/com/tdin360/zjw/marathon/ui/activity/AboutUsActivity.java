@@ -45,7 +45,7 @@ public class AboutUsActivity extends BaseActivity {
 
                intent = new Intent();
                intent.setAction("android.intent.action.VIEW");
-               Uri content_url = Uri.parse("http://www.baijar.com");
+               Uri content_url = Uri.parse("http://"+getResources().getString(R.string.webAddress));
                intent.setData(content_url);
                startActivity(intent);
 
@@ -86,7 +86,7 @@ public class AboutUsActivity extends BaseActivity {
            case R.id.xy:
                 intent = new Intent(AboutUsActivity.this,ShowHtmlActivity.class);
                intent.putExtra("title","服务协议");
-               intent.putExtra("url","file:///android_asset/agreement.html");
+               intent.putExtra("url","file:///android_asset/serverAgreement.html");
                startActivity(intent);
 
                break;
@@ -116,7 +116,7 @@ public class AboutUsActivity extends BaseActivity {
      * 打电话
      */
     private void callPhone(){
-        Intent phoneIntent = new Intent("android.intent.action.CALL", Uri.parse("tel:085188622851"));
+        Intent phoneIntent = new Intent("android.intent.action.CALL", Uri.parse("tel:"+getResources().getString(R.string.tel)));
         startActivity(phoneIntent);
 
     }

@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark"
-                android:text="www.baijar.com"
+                android:text="@string/webAddress"
                 />
         </RelativeLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark"
-                android:text="085188622851"
+                android:text="@string/tel"
                 />
         </RelativeLayout>
 

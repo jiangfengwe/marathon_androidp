@@ -12,7 +12,7 @@
 
   <LinearLayout
       android:id="@+id/main"
-
+      android:visibility="visible"
       android:layout_width="match_parent"
       android:orientation="vertical"
       android:layout_height="match_parent">
@@ -25,6 +25,11 @@
     android:textColor="@android:color/holo_red_dark"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
+
+      <View
+          android:background="@color/lineColor"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"></View>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -44,6 +49,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="姓        名:"
@@ -51,7 +57,9 @@
                 <EditText
                     android:layout_marginLeft="5dp"
                     android:id="@+id/name"
+                    android:hint="请输入真实姓名"
                     android:layout_weight="1"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -72,6 +80,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="手  机  号:"
@@ -79,9 +88,11 @@
                 <EditText
                     android:layout_marginLeft="5dp"
                     android:id="@+id/phone"
+                    android:textColor="@color/textBlack"
                     android:maxLength="11"
                     android:inputType="phone"
                     android:layout_weight="1"
+                    android:hint="请输入手机号码"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -101,7 +112,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
@@ -111,8 +122,10 @@
 
                     android:layout_marginLeft="5dp"
                     android:id="@+id/email"
+                    android:hint="请输入邮箱"
                     android:inputType="textEmailAddress"
                     android:layout_weight="1"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -125,7 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
-                android:id="@+id/dateSelectBtn"
+
                  android:padding="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -133,17 +146,17 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="出生日期:"
                     />
-                <TextView
+                <EditText
+                    android:editable="false"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/dateSelect"
                     android:layout_weight="1"
-                    android:text="请选择出生日期"
-                    android:textSize="16sp"
+                    android:hint="请选择出生日期"
                     android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,7 +180,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="证件类型:"
@@ -197,7 +210,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="证件号码:"
@@ -206,7 +219,9 @@
                     android:layout_marginLeft="5dp"
                     android:id="@+id/idCardNumber"
                     android:layout_weight="1"
+                    android:hint="请输入证件号码"
                     android:layout_width="match_parent"
+                    android:textColor="@color/textBlack"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
@@ -224,13 +239,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:textColor="@color/textBlack"
                     android:textSize="16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="性        别:"
                     />
                 <RadioGroup
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="15dp"
                     android:id="@+id/radioGroup"
                     android:layout_weight="1"
                     android:orientation="horizontal"
@@ -274,7 +290,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="血        型:"
@@ -306,7 +322,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="国        家:"
@@ -331,7 +347,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
             <LinearLayout
-                android:id="@+id/areaAddressBtn"
                android:padding="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -339,18 +354,19 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="所  在  地:"
                     />
-                <TextView
+                <EditText
+
+                    android:focusable="false"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/areaAddress"
-                    android:text="请选择所在地"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:hint="请选择所在地"
                     android:textColor="@color/textBlack"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -373,7 +389,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="报名项目:"
@@ -405,7 +421,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="服装尺码:"
@@ -428,6 +444,7 @@
                 android:background="@color/lineColor"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"></View>
+
             <LinearLayout
                 android:padding="10dp"
                 android:gravity="center_vertical"
@@ -436,7 +453,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="现居地址:"
@@ -445,11 +462,14 @@
                     android:layout_marginLeft="5dp"
                     android:id="@+id/address"
                     android:layout_weight="1"
+                    android:hint="请输入现居地址"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
             </LinearLayout>
+
             <View
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -465,16 +485,19 @@
                 <TextView
                     android:textSize="16sp"
 
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="邮政编码:"
                     />
                 <EditText
+                    android:hint="请输入邮政编码"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/post"
                     android:layout_weight="1"
                     android:inputType="number"
                     android:maxLength="6"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -494,15 +517,17 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="紧急联系人:"
                     />
                 <EditText
+                    android:hint="请输入紧急联系人姓名"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/linkName"
                     android:layout_weight="1"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -522,17 +547,19 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textSize="16sp"
-
+                    android:textColor="@color/textBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="紧急联系电话:"
                     />
                 <EditText
+                    android:hint="请输入紧急联系人电话"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/linkPhone"
                     android:inputType="phone"
                     android:layout_weight="1"
                     android:maxLength="11"
+                    android:textColor="@color/textBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"

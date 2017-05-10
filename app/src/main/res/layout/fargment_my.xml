@@ -9,26 +9,6 @@
     android:layout_height="match_parent">
 
     <!--导航栏部分-->
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-                <TextView
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_tab_title4"
-                    android:textColor="@color/white"
-                    />
-
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -48,17 +28,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-                <com.makeramen.roundedimageview.RoundedImageView
+            <LinearLayout
+                android:padding="3dp"
+                android:background="@drawable/image_oval_border"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+
                     android:id="@+id/myImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:scaleType="centerCrop"
-                    app:riv_border_width="5dip"
-                    app:riv_border_color="#5fff"
-                    app:riv_mutate_background="true"
-                    app:riv_oval="true"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/signup_photo"
                     />
+            </LinearLayout>
+
+
             <TextView
                 android:id="@+id/userName"
                 android:layout_marginTop="5dp"
@@ -157,6 +142,32 @@
                     />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/myTeam"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/white"
+                    android:drawablePadding="2dp"
+                    android:drawableLeft="@drawable/my_team"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的团队"
+                    />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/arrow_right"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/myNotice"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
@@ -235,4 +246,25 @@
             </RelativeLayout>
                 </LinearLayout>
             </ScrollView>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_tab_title4"
+                    android:textColor="@color/white"
+                    />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
 </LinearLayout>

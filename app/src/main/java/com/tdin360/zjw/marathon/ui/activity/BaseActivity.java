@@ -1,13 +1,20 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -234,17 +241,22 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param permissions
      * @return
      */
-      public boolean hasPermission(String...permissions){
+      public boolean hasPermission(String... permissions){
 
-          for (String permission:permissions
-               ) {
+//          不是6.0系统不进行检查
+          if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
 
-              if(ContextCompat.checkSelfPermission(this,permission)!= PackageManager.PERMISSION_GRANTED){
+              return true;
+          }
+
+          for (String permission:permissions) {
+
+              if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
 
                   return false;
               }
-
           }
+
 
           return true;
 
@@ -273,6 +285,47 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        //没有获取到权限
+        if(grantResults.length>0&&grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+
+            String message="";
+
+                switch (requestCode){
+
+                    case Constants.WRITE_EXTERNAL_CODE:
+                        message="您需要开启存储权限之后才能使用!";
+                        break;
+                    case Constants.CALL_CODE:
+                        message="您需要开启电话权限之后才能使用!";
+                        break;
+                    case Constants.CAMERA_CODE:
+                        message="您需要开启相机权限之后才能使用!";
+                        break;
+                }
+
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("温馨提示");
+            alert.setMessage(message);
+            alert.setCancelable(false);
+            alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(getAppDetailSettingIntent(BaseActivity.this));
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+             alert.show();
+
+            return;
+        }
+
         switch (requestCode){
 
             case Constants.WRITE_EXTERNAL_CODE:
@@ -291,11 +344,33 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 获取应用详情页面intent
+     *
+     * @return
+     */
+    public Intent getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", context.getPackageName());
+        }
+        return localIntent;
+    }
+
+
+    /**
      * sd卡读取权限授权成功后默认执行改方法供给子类来调用
      */
     public void doSDCardPermission(){
 
-         action.open();
+         if(action!=null) {
+             action.open();
+         }
     }
     /**
      * 打开相机权限授权成功后默认执行改方法供给子类来调用

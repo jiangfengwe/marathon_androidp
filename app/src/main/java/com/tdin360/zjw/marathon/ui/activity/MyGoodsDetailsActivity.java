@@ -1,20 +1,11 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
+import android.os.Bundle;
+import android.webkit.WebView;
+import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.GoodsModel;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
-import java.io.Serializable;
 
 public class MyGoodsDetailsActivity extends BaseActivity {
 
@@ -51,6 +42,8 @@ public class MyGoodsDetailsActivity extends BaseActivity {
         num.setText(model.getNumber());
         TextView size = (TextView) this.findViewById(R.id.clothesSize);
         size.setText(model.getSize());
+        WebView info  = (WebView) this.findViewById(R.id.goodsInfo);
+        info.loadData(model.getGoodsInfo(),"text/html; charset=UTF-8",null);
 
 
     }
@@ -61,49 +54,18 @@ public class MyGoodsDetailsActivity extends BaseActivity {
     }
 
 
-    /**
-     * 申请快递
-     * @param view
-     */
-    public void click(View view) {
+//    /**
+//     * 申请快递
+//     * @param view
+//     */
+//    public void click(View view) {
+//
+//
+//        Intent intent = new Intent(this,ExpressActivity.class);
+//        startActivity(intent);
+//
+//    }
 
 
-        Intent intent = new Intent(this,ExpressActivity.class);
-        startActivity(intent);
 
-    }
-
-
-    /**
-     * 请求网络数据
-     */
-    private void httpRequest(){
-
-        RequestParams params = new RequestParams(HttpUrlUtils.MY_GOODS_DETAIL);
-        params.addQueryStringParameter("Id","");
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-
-                Log.d("========>>", "onSuccess: "+result);
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
 }

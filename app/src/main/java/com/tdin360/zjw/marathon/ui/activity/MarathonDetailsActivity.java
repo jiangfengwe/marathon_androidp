@@ -6,11 +6,16 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,15 +59,18 @@ public class MarathonDetailsActivity extends BaseActivity {
 
 
     private Carousel mCarousel;
-    private MyGridView mGridView;
+
     private List<CarouselModel>carouselList=new ArrayList<>();
     private List<CarouselModel>sponsorList= new ArrayList<>();
-    private MarathonHomeMyGridViewAdapter adapter;
-    private TextView not_found;
-    private LinearLayout main;
+
     private TextView loadFail;
-    private Button signBtn;
+    private View  isEnableView;
     private EventDetailsServiceImpl service;
+    private RecyclerView mRecyclerView;
+    private View headerView;
+    private MyAdapter mAdapter;
+    private LinearLayout panel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +88,10 @@ public class MarathonDetailsActivity extends BaseActivity {
 //            window.setNavigationBarColor(Color.TRANSPARENT);
 //        }
 
+
         initView();
         initMenu();
+
     }
 
     /**
@@ -107,6 +117,13 @@ public class MarathonDetailsActivity extends BaseActivity {
     //初始化
     private void initView() {
 
+        this.headerView = View.inflate(this,R.layout.marathon_details_header,null);
+        this.mRecyclerView = (RecyclerView) this.findViewById(R.id.mRecyclerView);
+         this.panel = (LinearLayout) this.findViewById(R.id.panel);
+        this.mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+         this.mAdapter=new MyAdapter();
+         this.mRecyclerView.setAdapter(mAdapter);
+
         this.service = new EventDetailsServiceImpl(this);
         setToolBarTitle(MarathonDataUtils.init().getEventName());
 
@@ -119,16 +136,19 @@ public class MarathonDetailsActivity extends BaseActivity {
         showShareButton(manager);
 
         //如果报名已结束就不显示报名按钮
-         this.signBtn = (Button) this.findViewById(R.id.signBtn);
+          this.isEnableView=this.findViewById(R.id.isEnable);
+         if(!MarathonDataUtils.init().isRegister()){
+
+             this.isEnableView.setVisibility(View.VISIBLE);
+
+         }
 
 
-         this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-         this.not_found = (TextView) this.findViewById(R.id.not_found);
-         this.mCarousel = (Carousel) this.findViewById(R.id.mCarousel);
-         this.mGridView  = (MyGridView) this.findViewById(R.id.myGridView);
-         this.adapter = new MarathonHomeMyGridViewAdapter(sponsorList,getApplicationContext());
-         this.mGridView.setAdapter(adapter);
+
+         this.mCarousel = (Carousel) headerView.findViewById(R.id.mCarousel);
+
+
 
          this.loadFail.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -137,18 +157,108 @@ public class MarathonDetailsActivity extends BaseActivity {
              }
          });
 
-        this.mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Toast.makeText(MarathonDetailsActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
          loadData();
 
 
+    }
+
+    class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
+
+       private final int HEAD=0x01;
+
+        @Override
+        public int getItemViewType(int position) {
+
+
+            if(position==0){
+                return HEAD;
+            }
+            return super.getItemViewType(position);
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+
+            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+            if(manager instanceof GridLayoutManager) {
+                final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+                gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        return getItemViewType(position) == HEAD
+                                ? gridManager.getSpanCount() : 1;
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onViewAttachedToWindow(MyViewHolder holder) {
+            super.onViewAttachedToWindow(holder);
+
+
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if(lp != null
+                    && lp instanceof StaggeredGridLayoutManager.LayoutParams
+                    && holder.getLayoutPosition() == 0) {
+                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+                p.setFullSpan(true);
+            }
+        }
+
+        @Override
+        public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            if(viewType==HEAD){
+                return new MyViewHolder(headerView);
+            }
+
+            return new MyViewHolder(View.inflate(MarathonDetailsActivity.this,R.layout.marath_home_list_item,null));
+        }
+
+        @Override
+        public void onBindViewHolder(MyAdapter.MyViewHolder holder, int position) {
+
+
+
+            if(getItemViewType(position)==HEAD ){
+                return;
+            }
+                ImageOptions imageOptions = new ImageOptions.Builder()
+                        //.setSize(DensityUtil.dip2px(340), DensityUtil.dip2px(300))//图片大小
+                        //.setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                        .setImageScaleType(ImageView.ScaleType.FIT_CENTER)
+                        .setLoadingDrawableId(R.drawable.loading_small_default)//加载中默认显示图片
+                        .setUseMemCache(true)//设置使用缓存
+                        .setFailureDrawableId(R.drawable.loading_small_error)//加载失败后默认显示图片
+                        .build();
+                x.image().bind(holder.imageView, sponsorList.get(getRealPosition(holder)).getPicUrl(), imageOptions);
+
+        }
+        public int getRealPosition(RecyclerView.ViewHolder holder) {
+            int position = holder.getLayoutPosition();
+            return headerView == null ? position : position - 1;
+        }
+        @Override
+        public int getItemCount() {
+            return headerView==null? sponsorList.size():sponsorList.size()+1;
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            private ImageView imageView;
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                if(getItemViewType()!=HEAD){
+
+
+                    this.imageView= (ImageView) itemView.findViewById(R.id.imageView);
+                }
+            }
+
+        }
     }
 
     private KProgressHUD hud;
@@ -172,6 +282,7 @@ public class MarathonDetailsActivity extends BaseActivity {
         }else {
 
             hud.dismiss();
+            panel.setVisibility(View.GONE);
             //获取缓存数据
 
             this.carouselList = this.service.getAllEventDetail(MarathonDataUtils.init().getEventId(),"0");
@@ -180,7 +291,7 @@ public class MarathonDetailsActivity extends BaseActivity {
 
             //如果获取得到缓存数据则加载本地数据
             if(carouselList.size()==0&&sponsorList.size()==0){
-
+                panel.setVisibility(View.VISIBLE);
                 loadFail.setText("点击重新加载");
                 loadFail.setVisibility(View.VISIBLE);
                 //如果缓存数据不存在则需要用户打开网络设置
@@ -210,8 +321,8 @@ public class MarathonDetailsActivity extends BaseActivity {
             }else {//显示本地数据
 
                 showCarousel();
-                adapter.updateList(sponsorList);
-                main.setVisibility(View.VISIBLE);
+                mAdapter.notifyDataSetChanged();
+
             }
 
         }
@@ -223,7 +334,7 @@ public class MarathonDetailsActivity extends BaseActivity {
      */
     private void initMenu(){
       List<MenuModel>  list =  MenuDataUtils.getMenus(this);
-      LinearLayout menuLayout = (LinearLayout) this.findViewById(R.id.menuLayout);
+      LinearLayout menuLayout = (LinearLayout)  headerView.findViewById(R.id.menuLayout);
      for(int i=0;i<list.size();i++){
 
          MenuModel menuModel = list.get(i);
@@ -277,28 +388,22 @@ public class MarathonDetailsActivity extends BaseActivity {
      */
     private void httpRequest(){
 
-        service.deleteAll();
-
-        /**
-         * 清空旧数据
-         */
-        if(carouselList!=null) {
-            carouselList.clear();
-            sponsorList.clear();
-        }
 
         loadFail.setVisibility(View.GONE);
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
+        final RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params,new Callback.CommonCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
+
+
                 try {
                     JSONObject json  =new JSONObject(result);
-
-
+                    service.deleteAll(MarathonDataUtils.init().getEventId());
+                    sponsorList.clear();
+                    carouselList.clear();
                     /**
                      * 获取轮播图数据
                      */
@@ -330,22 +435,23 @@ public class MarathonDetailsActivity extends BaseActivity {
 
 
                     }
-
-//                    加载成功显示界面
-                    main.setVisibility(View.VISIBLE);
+                   panel.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
 
                     loadFail.setVisibility(View.VISIBLE);
+                     panel.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+
                 Toast.makeText(MarathonDetailsActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
                 loadFail.setText("点击重新加载");
                 loadFail.setVisibility(View.VISIBLE);
+                panel.setVisibility(View.VISIBLE);
 
             }
 
@@ -358,14 +464,10 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                 hud.dismiss();
                 showCarousel();
-                if(sponsorList.size()>0) {
-                  not_found.setVisibility(View.GONE);
-                }else {
-                    not_found.setVisibility(View.VISIBLE);
-                }
 
                 //更新赞助商数据
-                adapter.updateList(sponsorList);
+                mAdapter.notifyDataSetChanged();
+
             }
         });
     }
@@ -382,7 +484,7 @@ public class MarathonDetailsActivity extends BaseActivity {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageOptions imageOptions = new ImageOptions.Builder()
                     //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
-                  //  .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
+//                    .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.loading_banner_error)//加载失败后默认显示图片
                     .build();
@@ -402,19 +504,44 @@ public class MarathonDetailsActivity extends BaseActivity {
     public void toSignUp(View view) {
 
 
-        //检查用户是否登录登录后才能报名
-        if(SharedPreferencesManager.isLogin(getApplicationContext())){
+        switch (view.getId()){
 
-            Intent intent = new Intent(MarathonDetailsActivity.this,SignUpActivity.class);
-            startActivity(intent);
+            case R.id.signBtn://个人报名
+                //检查用户是否登录登录后才能报名
+                if(SharedPreferencesManager.isLogin(getApplicationContext())){
 
-        }else {
-            Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
-            startActivity(intent);
-            //设置登录成功后跳转到报名界面
-            LoginNavigationConfig.instance().setNavType(NavType.SignUp);
+                    Intent intent = new Intent(MarathonDetailsActivity.this,SignUpActivity.class);
+                    startActivity(intent);
 
+                }else {
+                    Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    //设置登录成功后跳转到报名界面
+                    LoginNavigationConfig.instance().setNavType(NavType.SignUp);
+
+                }
+                break;
+            case R.id.signTeam://团队报名
+
+                Toast.makeText(this,"开发中敬请期待",Toast.LENGTH_SHORT).show();
+
+
+//                //检查用户是否登录登录后才能报名
+//                if(SharedPreferencesManager.isLogin(getApplicationContext())){
+//
+//                    Intent intent = new Intent(MarathonDetailsActivity.this,TeamSignUpActivity.class);
+//                    startActivity(intent);
+//
+//                }else {
+//                    Intent intent = new Intent(MarathonDetailsActivity.this,LoginActivity.class);
+//                    startActivity(intent);
+//                    //设置登录成功后跳转到报名界面
+//                    LoginNavigationConfig.instance().setNavType(NavType.Team);
+//
+//                }
+                break;
         }
+
 
 
     }

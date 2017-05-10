@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--轮播图区-->
+
+    <com.tdin360.zjw.marathon.weight.Carousel
+        android:id="@+id/mCarousel"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+
+    </com.tdin360.zjw.marathon.weight.Carousel>
+
+    <!--分类菜单区-->
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/menuLayout"
+        android:layout_width="match_parent"
+        android:background="@color/body_color"
+        android:layout_height="wrap_content">
+    </LinearLayout>
+    <!--赞助商列表-->
+
+    <TextView
+        android:background="@color/body_color"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:text="赞助商"
+        />
+
+</LinearLayout>

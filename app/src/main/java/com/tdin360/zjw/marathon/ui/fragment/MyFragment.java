@@ -4,16 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import com.makeramen.roundedimageview.RoundedImageView;
+import android.widget.Toast;
+
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
@@ -23,11 +23,15 @@ import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
 import com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyTeamListActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
-import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
 
 /**个人中心
  * Created by Administrator on 2016/8/9.
@@ -37,9 +41,9 @@ public class MyFragment extends Fragment {
     public static final String ACTION="LOGIN_STATUS";//广播action
 
     private  TextView userName;
-    private RoundedImageView myImageView;
+    private ImageView myImageView;
 
-     private HeadImageUtils utils;
+
     public static MyFragment newInstance(){
 
         return   new MyFragment();
@@ -54,10 +58,8 @@ public class MyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        this.utils = new HeadImageUtils(getActivity());
         userName  = (TextView) view.findViewById(R.id.userName);
-        myImageView = (RoundedImageView) view.findViewById(R.id.myImage);
+        myImageView = (ImageView) view.findViewById(R.id.myImage);
 
         //显示信息
         showInfo();
@@ -81,6 +83,7 @@ public class MyFragment extends Fragment {
                     //用户没有登录则跳转到登录
                     Intent intent = new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
+                    LoginNavigationConfig.instance().setNavType(NavType.Other);
 
                 }
 
@@ -107,7 +110,25 @@ public class MyFragment extends Fragment {
 
            }
        });
+        //我的成绩
+        view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                if(SharedPreferencesManager.isLogin(getContext())){
+
+                    Intent intent = new Intent(getContext(), MyAchievementListActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                    //设置登录成功后跳转到物资界面
+                    LoginNavigationConfig.instance().setNavType(NavType.MyMark);
+                }
+
+
+            }
+        });
         /**
          * 我的物资
          */
@@ -130,26 +151,31 @@ public class MyFragment extends Fragment {
 
             }
         });
-        //我的成绩
-         view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
 
-                 if(SharedPreferencesManager.isLogin(getContext())){
+        /**
+         * 我的团队
+         */
+        view.findViewById(R.id.myTeam).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
 
-                     Intent intent = new Intent(getContext(), MyAchievementListActivity.class);
-                     startActivity(intent);
-                 }else {
-                     Intent intent = new Intent(getContext(), LoginActivity.class);
-                     startActivity(intent);
-                     //设置登录成功后跳转到物资界面
-                     LoginNavigationConfig.instance().setNavType(NavType.MyMark);
-                 }
+               Toast.makeText(getActivity(),"开发中敬请期待",Toast.LENGTH_SHORT).show();
+//
+//               Intent intent = new Intent(getContext(), MyTeamListActivity.class);
+//                  startActivity(intent);
+//               if(SharedPreferencesManager.isLogin(getContext())){
+//
+//                   Intent intent = new Intent(getContext(), MyGoodsListActivity.class);
+//                   startActivity(intent);
+//               }else {
+//                   Intent intent = new Intent(getContext(), LoginActivity.class);
+//                   startActivity(intent);
+//                   //设置登录成功后跳转到报名界面
+//                   LoginNavigationConfig.instance().setNavType(NavType.MyGoods);
+//               }
 
-
-             }
-         });
-
+           }
+       });
 
         /**
          * 通知消息
@@ -181,33 +207,30 @@ public class MyFragment extends Fragment {
         });
     }
 
-
     /**
      * 显示个人信息
      */
     private void showInfo(){
-
-        userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
+        LoginModel model = SharedPreferencesManager.getLoginInfo(getContext());
+        userName.setText(model.getName());
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getContext())){
 
-            //         获取用户头像
-            LoginModel model = SharedPreferencesManager.getLoginInfo(getContext());
-            Bitmap bitmap =  utils.getImage(model.getName());
+            //    获取用户头像
+            ImageOptions imageOptions = new ImageOptions.Builder()
+                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+//                     .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                     .setRadius(DensityUtil.dip2px(80))
+                    .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+//                    .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                    .setUseMemCache(true)//设置使用缓存
+                    .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
+                    .build();
+            x.image().bind(myImageView,model.getImageUrl(),imageOptions);
 
-            if(bitmap!=null){
-                myImageView.setImageBitmap(bitmap);
-
-            }else if(!model.getImageUrl().equals("")) {//从网络中获取头像图片
-                utils.download(model.getImageUrl(),SharedPreferencesManager.getLoginInfo(getActivity()).getName());
-
-
-            }
 
         }else {
-
-            myImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.signup_photo));
-
+            myImageView.setImageResource(R.drawable.signup_photo);
         }
 
     }

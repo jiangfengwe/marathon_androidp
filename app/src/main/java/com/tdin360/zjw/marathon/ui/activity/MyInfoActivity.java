@@ -4,29 +4,25 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.UserModel;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.Constants;
-import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -36,11 +32,11 @@ import com.tdin360.zjw.marathon.utils.db.impl.MyInfoServiceImpl;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 
 /**
@@ -50,7 +46,7 @@ import java.io.FileOutputStream;
 public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.OnMyDatePickerChangeListener{
 
     private TextView edit;
-    private RoundedImageView imageView;
+    private ImageView imageView;
     private EditText editName;
     private EditText editTel;
     private EditText editEmail;
@@ -62,7 +58,6 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private TextView editBirth;
     //用于存储用户选择裁剪后的头像
     private KProgressHUD hud;
-    private HeadImageUtils utils;
 
     private MyInfoServiceImpl service;
 
@@ -74,7 +69,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
         setToolBarTitle("个人信息");
         showBackButton();
-        this.utils = new HeadImageUtils(getApplicationContext());
+
         initView();
     }
 
@@ -87,7 +82,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
         this.service = new MyInfoServiceImpl(this);
         this.edit = (TextView) this.findViewById(R.id.edit);
-        this.imageView = (RoundedImageView) this.findViewById(R.id.imageView);
+        this.imageView = (ImageView) this.findViewById(R.id.imageView);
         this.editName = (EditText) this.findViewById(R.id.name);
         this.editTel = (EditText) this.findViewById(R.id.tel);
         this.editEmail = (EditText) this.findViewById(R.id.email);
@@ -213,12 +208,18 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
      */
     private void showHeadImage(){
 
+        ImageOptions imageOptions = new ImageOptions.Builder()
+                .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+                .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setRadius(DensityUtil.dip2px(80))
+//                .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                .setUseMemCache(true)//设置使用缓存
+                .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
+                .build();
+          x.image().bind(imageView,SharedPreferencesManager.getLoginInfo(this).getImageUrl(),imageOptions);
 
-        Bitmap image = utils.getImage(SharedPreferencesManager.getLoginInfo(this).getName());
-        if(image!=null){
-            imageView.setImageBitmap(image);
 
-        }
     }
     //加载数据(包括缓存数据和网络数据)
     private void loadData() {
@@ -409,14 +410,14 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             startPhotoZoom(uri);
         }else if(requestCode==OpenCameraRequestCode){
 
-            Uri uri = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
+            Uri uri = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.png"));
             startPhotoZoom(uri);
         }
 
         //图片裁剪后返回这里
         if(requestCode==Constants.EDIT_IMAGE_CODE){
 
-             upLoadFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
+             upLoadFile(new File(getExternalFilesDir("images").getPath()+"/temp.png"));
 
         }
 
@@ -474,8 +475,9 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                     if(success){
                         Toast.makeText(MyInfoActivity.this,"头像上传成功",Toast.LENGTH_SHORT).show();
-                        //上传成功将文件重新命名
-                        file.renameTo(new File(utils.getFilePath(SharedPreferencesManager.getLoginInfo(getApplicationContext()).getName())));
+                        //上传成功将新的图片地址保存起来
+
+                         SharedPreferencesManager.updateImageUrl(getApplicationContext(),url);
                         //显示上传的头像
                         showHeadImage();
 
@@ -746,8 +748,8 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         intent.putExtra("outputX", 200);
         intent.putExtra("outputY", 200);
         intent.putExtra("return-data", true);
-        intent.putExtra("output", Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg")));
-        intent.putExtra("outputFormat", "JPEG");
+        intent.putExtra("output", Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.png")));
+        intent.putExtra("outputFormat", "PNG");
         startActivityForResult(intent,Constants.EDIT_IMAGE_CODE);
     }
 

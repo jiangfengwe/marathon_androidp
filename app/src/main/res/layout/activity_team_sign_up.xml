@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.TeamSignUpActivity">
+  <include layout="@layout/toolbar_layout"></include>
+    <LinearLayout
+        android:gravity="center"
+        android:background="@color/body_color"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <RadioGroup
+            android:id="@+id/teamGroup"
+            android:orientation="horizontal"
+            android:background="@drawable/team_tab_border"
+            android:layout_width="200dp"
+            android:layout_height="35dp">
+            <RadioButton
+                android:id="@+id/tab1"
+                android:checked="true"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/team_left_selector"
+                android:textColor="@drawable/team_tab_title_selector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="创建团队"
+                />
+            <RadioButton
+                android:id="@+id/tab2"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/team_right_selector"
+                android:textColor="@drawable/team_tab_title_selector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="加入团队"
+                />
+        </RadioGroup>
+    </LinearLayout>
+        <include layout="@layout/create_team_view"></include>
+        <include layout="@layout/add_team_view"></include>
+</LinearLayout>

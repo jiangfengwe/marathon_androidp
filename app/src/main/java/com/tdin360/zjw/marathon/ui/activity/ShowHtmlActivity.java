@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -35,6 +36,7 @@ public class ShowHtmlActivity extends BaseActivity {
     private ProgressBar progressBar;
     private KProgressHUD hud;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,7 @@ public class ShowHtmlActivity extends BaseActivity {
         if (intent!=null){
 
             String title = intent.getStringExtra("title");
+            setToolBarTitle(title);
             String shareTitle="";
             String shareImageUrl=null;
             try{
@@ -66,18 +69,18 @@ public class ShowHtmlActivity extends BaseActivity {
 
             }catch (Exception e){
 
-
             }
 
-            setToolBarTitle(title);
             final String url = intent.getStringExtra("url");
             /**
              * 构建分享内容
              */
-          ShareInfoManager manager = new ShareInfoManager(this);
-            manager.buildShareWebLink(shareTitle,url,"佰家赛事", shareImageUrl);
-            showShareButton(manager);
 
+            if(shareTitle!=null) {
+                ShareInfoManager manager = new ShareInfoManager(this);
+                manager.buildShareWebLink(shareTitle, url, "佰家赛事", shareImageUrl);
+                showShareButton(manager);
+            }
            loading(url);
 
         }

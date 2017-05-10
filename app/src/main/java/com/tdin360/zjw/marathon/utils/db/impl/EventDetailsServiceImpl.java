@@ -69,7 +69,7 @@ public class EventDetailsServiceImpl implements EventDetailService{
 
             String type1 =  cursor.getString(cursor.getColumnIndex("type")) ;
 
-            list.add(new CarouselModel(eventId1,imageUrl,"",url,type1));
+            list.add(new CarouselModel(eventId1,"",imageUrl,url,type1));
 
         }
 
@@ -79,11 +79,11 @@ public class EventDetailsServiceImpl implements EventDetailService{
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAll(String eventId) {
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
         try {
 
-            conn.delete(SQLHelper.EVENT_DETAIL_TABLE, null, null);
+            conn.delete(SQLHelper.EVENT_DETAIL_TABLE,"eventId=?",new String[]{eventId});
 
         }catch (Exception e){
 

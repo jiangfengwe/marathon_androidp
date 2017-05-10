@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.tdin360.zjw.marathon.model.EventModel;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
 import com.tdin360.zjw.marathon.utils.db.service.EventService;
@@ -41,6 +43,7 @@ public class EventServiceImpl implements EventService {
             values.put("eventStatus",model.getStatus());
             values.put("time",model.getStartDate());
             values.put("shareUrl",model.getShardUrl());
+            values.put("enable",model.isRegister());
            conn.insert(SQLHelper.EVENT_TABLE, null, values);
 
         }
@@ -63,7 +66,8 @@ public class EventServiceImpl implements EventService {
             String eventStatus = cursor.getString(cursor.getColumnIndex("eventStatus"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             String shareUrl = cursor.getString(cursor.getColumnIndex("shareUrl"));
-            list.add(new EventModel(eventId,eventName,eventStatus,eventImageUrl,time,shareUrl));
+            boolean enable = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("enable")));
+            list.add(new EventModel(eventId,eventName,eventStatus,eventImageUrl,time,shareUrl,enable));
 
 
         }

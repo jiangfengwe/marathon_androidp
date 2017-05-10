@@ -13,6 +13,7 @@ public class MarathonDataUtils {
     private String status;
     private String shareUrl;
     private String eventImageUrl;
+    private boolean isRegister;
     private MarathonDataUtils (){}
 
 
@@ -68,5 +69,13 @@ public class MarathonDataUtils {
 
     public void setEventImageUrl(String eventImageUrl) {
         this.eventImageUrl = eventImageUrl;
+    }
+
+    public boolean isRegister() {
+        return isRegister;
+    }
+
+    public void setRegister(boolean register) {
+        isRegister = register;
     }
 }

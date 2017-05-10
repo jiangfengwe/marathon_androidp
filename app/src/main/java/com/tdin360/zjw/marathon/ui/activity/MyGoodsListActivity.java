@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,10 +93,13 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
 
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
 
@@ -224,6 +226,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
     private void httpRequest(final boolean isRefresh){
 
 
+        loadFail.setVisibility(View.GONE);
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MY_GOODS);
         requestParams.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
         requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -243,7 +246,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
                     }
                     JSONObject json  = new JSONObject(result);
 
-                    Log.d("物资-------->>>", "onSuccess: "+json);
+//                    Log.d("物资-------->>>", "onSuccess: "+json);
                     totalPages = json.getInt("TotalPages");
                     JSONObject message = json.getJSONObject("EventMobileMessage");
 
@@ -267,7 +270,9 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
                             String eventName = object.getString("EventName");
                             String content = object.getString("MaterilasContent");
                             boolean isApply = object.getBoolean("IsApply");
-                            list.add(new GoodsModel(id,name,gender,number,documentNumber,eventName,content,size,isApply));
+                            String goodsInfo = object.getString("GoodsInfo");
+
+                            list.add(new GoodsModel(id,name,gender,number,documentNumber,eventName,content,size,isApply,goodsInfo));
                         }
 
 
@@ -320,17 +325,14 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
             @Override
             public void onFinished() {
 
-                if(!isLoadFail) {
-                    //判断是否有数据
-                    if (list.size() > 0) {
 
-                        not_found.setVisibility(View.GONE);
+                    //判断是否有数据
+                    if ((list.size() > 0&&!isLoadFail)) {
+                        not_found.setVisibility(View.VISIBLE);
 
                     } else {
-                        not_found.setVisibility(View.VISIBLE);
+                        not_found.setVisibility(View.GONE);
                     }
-
-                }
 
                 myAdapter.notifyDataSetChanged();
 

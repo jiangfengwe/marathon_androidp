@@ -9,26 +9,18 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,7 +63,7 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * @author zzj
  * 2016-8-11
- * 赛事报名表单
+ * 个人报名表单
  */
 public class SignUpActivity extends BaseActivity implements  OnWheelChangedListener,MyDatePickerDialog.OnMyDatePickerChangeListener {
 
@@ -118,13 +110,13 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     private EditText editTextLinkPhone;
 
     //出生日期选择相关
-    private TextView dateSelect;
+    private EditText dateSelect;
     private int mYear;
     private int mMonth;
     private int mDay;
 
     //省市区选择
-    private TextView areaAddress;
+    private EditText areaAddress;
     private WheelView mViewProvince;
     private WheelView mViewCity;
     private WheelView mViewDistrict;
@@ -177,13 +169,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     private TextView loadFail;
     //主布局
     private LinearLayout main;
-    private Button submitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setToolBarTitle("报名");
+        setToolBarTitle("个人报名");
         showBackButton();
         initView();
         this.initPopDialog();
@@ -304,7 +295,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         });
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://www.baidu.com");
+        webView.loadUrl("http://shop.baijar.com/EventInfo/Disclaimer?eventId="+MarathonDataUtils.init().getEventId());
         dialog.show();
         //获取屏幕宽高　
         DisplayMetrics metric = new DisplayMetrics();
@@ -340,7 +331,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.submitBtn = (Button) this.findViewById(R.id.submitBtn);
+
 
 
         //加载失败点击重新获取
@@ -354,8 +345,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
 
         //出生日期选择部分
-        this.dateSelect= (TextView) this.findViewById(R.id.dateSelect);
-        this.findViewById(R.id.dateSelectBtn).setOnClickListener(new View.OnClickListener() {
+        this.dateSelect= (EditText) this.findViewById(R.id.dateSelect);
+        this.findViewById(R.id.dateSelect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -428,14 +419,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
                   country=parent.getItemAtPosition(position).toString();
 
-                 if(!country.equals("China 中国")){
+                 if(!country.contains("中国")){
                      mCurrentProviceName="其它";
                      mCurrentCityName="其它";
                      mCurrentDistrictName="其它";
                      showSelectedResult();
                  }else {
 
-                     areaAddress.setText("请选择所在地");
+                     areaAddress.setText("");
 
                  }
 
@@ -449,9 +440,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
 
         //省市县选择
-        this.areaAddress= (TextView) this.findViewById(R.id.areaAddress);
+        this.areaAddress= (EditText) this.findViewById(R.id.areaAddress);
 
-        this.findViewById(R.id.areaAddressBtn).setOnClickListener(new View.OnClickListener() {
+        this.findViewById(R.id.areaAddress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this).create();
@@ -597,14 +588,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                     //填充姓名
                     String name = json.getString("RegistratorName");
                     editTextName.setText(name.equals("null")?"":name);
-                    //填充性别
-                    boolean sex = json.getBoolean("RegistratorSex");
-                    if(sex){
-
-                        radioGroup.check(R.id.radio1);
-                    }else {
-                        radioGroup.check(R.id.radio2);
-                    }
+//                    //填充性别
+//                    boolean sex = json.getBoolean("RegistratorSex");
+//                    if(!sex){
+//
+//                        radioGroup.check(R.id.radio2);
+//                    }else {
+//                        radioGroup.check(R.id.radio1);
+//                    }
 
                     //填充年月日
                     int dateOfBirthYear = json.getInt("DateOfBirthYear");
@@ -613,8 +604,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                     mYear=dateOfBirthYear;
                     mMonth=dateOfBirthMonth;
                     mDay=dateOfBirthDay;
-                    dateSelect.setText(dateOfBirthYear+"-"+dateOfBirthMonth+"-"+dateOfBirthDay);
-
+                    if(dateOfBirthYear!=0) {
+                     dateSelect.setText(dateOfBirthYear + "-" + dateOfBirthMonth + "-" + dateOfBirthDay);
+                    }
 
                     //填充地址
                     String address = json.getString("RegistratorPlace");
@@ -625,7 +617,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                     mCurrentProviceName = json.getString("Province");
                     mCurrentCityName = json.getString("City");
                     mCurrentDistrictName = json.getString("County");
-                    showSelectedResult();
+                    if(!mCurrentDistrictName.equals("")||!mCurrentProviceName.contains("null")) {
+                        showSelectedResult();
+                    }
 
 
                     //填充手机号
@@ -696,6 +690,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    loadFail.setText("点击重新加载");
                     loadFail.setVisibility(View.VISIBLE);
                 }
 
@@ -911,6 +906,9 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             return;
 
         }
+
+
+
         // 验证参赛项目
         if(projectName.length()==0||projectName.contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择参赛项目!",Toast.LENGTH_SHORT).show();
@@ -918,7 +916,17 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             return;
 
         }
-        // 验证参赛项目
+
+
+//        验证性别与参赛项目
+
+        if((gander&&projectName.contains("女"))||(!gander&&projectName.contains("男"))){
+
+            Toast.makeText(SignUpActivity.this,"性别与参赛项目不匹配!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 验证服装尺码
         if(clothesSizeString.length()==0||clothesSizeString.contains("请")){
             Toast.makeText(SignUpActivity.this,"请选择服装尺码!",Toast.LENGTH_SHORT).show();
 
@@ -1034,6 +1042,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 //        紧急联系电话
         param.addBodyParameter("EmergencyContactPhone",editTextLinkPhone.getText().toString().trim());
         param.addBodyParameter("IsAgree","true");
+        param.addBodyParameter("LoginPhone",SharedPreferencesManager.getLoginInfo(SignUpActivity.this).getName());
         //报名来源
         param.addBodyParameter("RegistratorSource","来自Android客户端");
         param.addBodyParameter("appKey",HttpUrlUtils.appKey);

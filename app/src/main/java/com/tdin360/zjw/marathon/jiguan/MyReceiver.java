@@ -5,13 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.utils.SystemUtils;
-import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
+import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
 
 
 import org.json.JSONException;
@@ -35,7 +34,7 @@ public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "JPush";
     public static  final int SystemMessage=10;
 	public static  final int CustomMessage=20;
-	private NoticeServiceImpl service;
+	private NoticeMessageServiceImpl service;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -156,7 +155,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 	//普通通知消息发送到MainActivity
 	private void saveMessage(Context context, String msg){
-		this.service = new NoticeServiceImpl(context);
+		this.service = new NoticeMessageServiceImpl(context);
 
 		service.addNotice(new NoticeMessageModel("", getTime(), msg.trim()));
 

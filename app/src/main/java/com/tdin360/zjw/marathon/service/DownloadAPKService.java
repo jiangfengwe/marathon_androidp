@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.UpdateManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,8 @@ public class DownloadAPKService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        downloadTask();
+        String url = intent.getStringExtra("url");
+        downloadTask(url);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -53,12 +55,12 @@ public class DownloadAPKService extends Service {
     /**
      * 下载任务
      */
-    private void downloadTask() {
+    private void downloadTask(String url) {
 
 
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(HttpUrlUtils.DOWNLOAD_URL));
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
         //设置下载网络环境
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
@@ -66,12 +68,12 @@ public class DownloadAPKService extends Service {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         //设置下载路径
 
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "update.apk");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "baijar.apk");
         //显示下载界面
         request.setVisibleInDownloadsUi(true);
         // 设置一些基本显示信息
         request.setTitle("安装包更新");
-        request.setDescription("apk下载中");
+        request.setDescription("正在下载安装包");
         request.setMimeType("application/vnd.android.package-archive");
 
 

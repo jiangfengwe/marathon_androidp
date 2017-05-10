@@ -232,10 +232,13 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
 
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
     /**

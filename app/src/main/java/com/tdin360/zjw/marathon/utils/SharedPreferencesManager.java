@@ -57,7 +57,15 @@ public class SharedPreferencesManager {
 
     }
 
+    //更新头像
+    public static void updateImageUrl(Context context,String url){
 
+        SharedPreferences sharedPreferences = context.getSharedPreferences("loginInfo",Activity.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putString(LoginModel.imageKey,url);
+        edit.commit();
+
+    }
 
 
 

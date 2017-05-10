@@ -28,20 +28,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-            <com.makeramen.roundedimageview.RoundedImageView
+           <LinearLayout
+               android:background="@drawable/image_oval_border"
+               android:padding="3dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                app:riv_border_width="5dip"
-                app:riv_border_color="#5fff"
-                app:riv_mutate_background="true"
-                app:riv_oval="true"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/signup_photo"
                 />
 
-
+    </LinearLayout>
         <TextView
             android:id="@+id/tip"
             android:layout_marginTop="5dp"

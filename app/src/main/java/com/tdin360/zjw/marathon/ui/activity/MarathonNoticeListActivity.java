@@ -19,6 +19,7 @@ import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 
+import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
@@ -49,11 +50,12 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
 
     private boolean isLoadFail;
     private PullToRefreshLayout pullToRefreshLayout;
-
+    private NoticeServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.service = new NoticeServiceImpl(getApplicationContext());
         setToolBarTitle("赛事公告");
         showBackButton();
         initView();
@@ -86,42 +88,45 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
          */
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
-
             //加载网络数据
            pullToRefreshLayout.autoRefresh();
         } else {
 
 
             Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setVisibility(View.VISIBLE);
+
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
 
+            noticeModelList = service.getAllNotice(MarathonDataUtils.init().getEventId());
+            noticeListViewAdapter.updateListView(noticeModelList);
+            if(noticeModelList.size()==0) {
+                loadFail.setVisibility(View.VISIBLE);
+                //如果缓存数据不存在则需要用户打开网络设置
 
-            //如果缓存数据不存在则需要用户打开网络设置
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setMessage("网络不可用，是否打开网络设置");
+                alert.setCancelable(false);
+                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //打开网络设置
 
-            alert.setMessage("网络不可用，是否打开网络设置");
-            alert.setCancelable(false);
-            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //打开网络设置
+                        startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 
-                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                    }
+                });
+                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
-                    dialog.dismiss();
-                }
-            });
-
-            alert.show();
+                alert.show();
+            }
         }
     }
     @Override
@@ -154,6 +159,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                      * 获取新闻、公告数据列表
                       */
 
+                    service.deleteNotice(MarathonDataUtils.init().getEventId());
                     if(isRefresh){
 
                         noticeModelList.clear();
@@ -168,8 +174,10 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                         JSONObject o = (JSONObject) eventMessageList.get(i);
 
                         int id = o.getInt("Id");
-                        noticeModelList.add(new NoticeModel(id, o.getString("MessageName"),o.getString("CreateTimeStr"),HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS+id));
+                        NoticeModel model = new NoticeModel(id, o.getString("MessageName"), o.getString("CreateTimeStr"), HttpUrlUtils.EVENT_NEWS_OR_NOTICE_DETAILS + id);
+                        noticeModelList.add(model);
 
+                        service.addNotice(model);
                     }
 
                     loadFail.setVisibility(View.GONE);
@@ -219,16 +227,19 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
             @Override
             public void onFinished() {
 
-                if(!isLoadFail) {
+
                     //判断是否有数据
                     if (noticeModelList.size() > 0) {
 
-                        not_found.setVisibility(View.GONE);
+                      loadFail.setVisibility(View.GONE);
 
-                    } else {
+                    } else if(noticeModelList.size()>0&&!isLoadFail) {
+                        not_found.setVisibility(View.GONE);
+                    }else {
+
                         not_found.setVisibility(View.VISIBLE);
                     }
-                }
+
 
                 noticeListViewAdapter.updateListView(noticeModelList);
 
@@ -255,10 +266,13 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
 
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
 

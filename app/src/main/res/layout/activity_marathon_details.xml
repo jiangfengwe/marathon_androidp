@@ -4,113 +4,86 @@
     android:id="@+id/activity_marathon_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+
     tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity">
-     <LinearLayout
-         android:layout_width="match_parent"
-         android:orientation="vertical"
-         android:layout_height="match_parent">
-     <include layout="@layout/toolbar_layout"></include>
-
-     <LinearLayout
-         android:id="@+id/main"
-          android:visibility="gone"
-         android:orientation="vertical"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
 
 
-    <ScrollView
-        android:layout_weight="1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    <include layout="@layout/toolbar_layout"></include>
 
+
+
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/lineColor"
+             android:layout_weight="1"
+            android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="match_parent">
 
+        </android.support.v7.widget.RecyclerView>
 
-    <!--轮播图区-->
-
-        <com.tdin360.zjw.marathon.weight.Carousel
-            android:id="@+id/mCarousel"
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-
-        </com.tdin360.zjw.marathon.weight.Carousel>
-
-    <!--分类菜单区-->
-    <LinearLayout
-        android:padding="10dp"
-        android:orientation="horizontal"
-        android:id="@+id/menuLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/body_color"
-        android:layout_height="wrap_content">
-    </LinearLayout>
-    <!--赞助商列表-->
+        android:layout_height="45dp">
+   <LinearLayout
 
-        <TextView
-            android:background="@color/body_color"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:text="赞助商"
-            />
-     <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
-    <com.tdin360.zjw.marathon.weight.MyGridView
-        android:layout_marginTop="1dp"
-        android:background="@color/lineColor"
-        android:id="@+id/myGridView"
-        android:focusable="false"
-        android:padding="5dp"
-        android:numColumns="2"
-        android:scrollbars="none"
-        android:horizontalSpacing="1dp"
-        android:verticalSpacing="1dp"
-        android:listSelector="@android:color/transparent"
+       android:background="@color/white"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+       <Button
+
+           android:layout_weight="1"
+           android:id="@+id/signBtn"
+           android:onClick="toSignUp"
+           android:text="个人报名"
+           android:textSize="16sp"
+           android:textColor="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/rect_red_button_selector"
+           />
+       <Button
+
+           android:layout_marginLeft="1dp"
+           android:layout_weight="1"
+           android:id="@+id/signTeam"
+           android:onClick="toSignUp"
+           android:text="团队报名"
+           android:textSize="16sp"
+           android:textColor="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@android:color/holo_red_light"
+           />
+   </LinearLayout>
+       <View
+           android:visibility="gone"
+            android:id="@+id/isEnable"
+           android:clickable="true"
+           android:background="#7f000000"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           />
+    </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/panel"
+        android:layout_marginTop="50dp"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.tdin360.zjw.marathon.weight.MyGridView>
-
-          <!--没有数据提示-->
-         <LinearLayout
-             android:layout_marginTop="20dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
-             <include layout="@layout/not_found_layout"></include>
-         </LinearLayout>
-
-
-
-     </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
-    <Button
-        android:id="@+id/signBtn"
-        android:layout_marginTop="5dp"
-        android:onClick="toSignUp"
-        android:text="立即报名"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rect_red_button_selector"
-        />
-     </LinearLayout>
-     </LinearLayout>
-
-
+    </LinearLayout>
     <!--加载失败时显示提示-->
     <LinearLayout
         android:layout_centerInParent="true"
@@ -118,4 +91,5 @@
         android:layout_height="wrap_content">
         <include layout="@layout/layout_loadingfail"></include>
     </LinearLayout>
+
 </RelativeLayout>

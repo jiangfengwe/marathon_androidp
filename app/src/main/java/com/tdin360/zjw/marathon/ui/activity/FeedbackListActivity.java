@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.FeedBackModel;
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.utils.HeadImageUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
@@ -31,11 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 
 /**
@@ -47,7 +47,6 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     private ListView listView;
     private List<FeedBackModel>list = new ArrayList<>();
     private int totalPages;
-    private HeadImageUtils utils;
     private MyAdapter myAdapter;
     private int pageNumber=1;
     private TextView not_found;
@@ -59,15 +58,13 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showBackButton();
-        setToolBarTitle("我的意见反馈");
+        setToolBarTitle("意见反馈");
         initView();
         register();
 
     }
 
     private void initView() {
-
-        this.utils = new HeadImageUtils(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
         this.pullToRefreshLayout.setOnRefreshListener(this);
@@ -124,6 +121,7 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     private void httpRequest(final boolean isRefresh){
 
         loadFail.setVisibility(View.GONE);
+        not_found.setVisibility(View.GONE);
         RequestParams params  =new RequestParams(HttpUrlUtils.FEED_LIST);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(FeedbackListActivity.this).getName());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -227,10 +225,13 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
 
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
 
-        }else {
+        }else if(pageNumber<totalPages){
             pageNumber++;
             httpRequest(false);
 
+        }else {
+
+            pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
     /**
@@ -266,13 +267,17 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
                 convertView = LayoutInflater.from(FeedbackListActivity.this).inflate(R.layout.feedback_list_item,null);
 
                 holder.image = (ImageView) convertView.findViewById(R.id.imageView);
-                LoginModel info = SharedPreferencesManager.getLoginInfo(FeedbackListActivity.this);
-                Bitmap image = utils.getImage(info.getName());
-                if(image==null){
-
-                  image = BitmapFactory.decodeResource(getResources(),R.drawable.signup_photo);
-                }
-                holder.image.setImageBitmap(image);
+                LoginModel info = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+                ImageOptions imageOptions = new ImageOptions.Builder()
+                        .setSize(DensityUtil.dip2px(50), DensityUtil.dip2px(50))//图片大小
+                        .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                        .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                        .setRadius(50)
+                        .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                        .setUseMemCache(true)//设置使用缓存
+                        .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
+                        .build();
+                x.image().bind(holder.image,info.getImageUrl(),imageOptions);
                 holder.time = (TextView) convertView.findViewById(R.id.time);
                 holder.content  = (TextView) convertView.findViewById(R.id.content);
                 holder.answerContent = (TextView) convertView.findViewById(R.id.answerContent);

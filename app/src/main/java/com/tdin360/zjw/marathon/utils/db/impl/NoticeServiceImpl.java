@@ -4,8 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-import com.tdin360.zjw.marathon.model.NoticeMessageModel;
+import com.tdin360.zjw.marathon.model.NewsModel;
+import com.tdin360.zjw.marathon.model.NoticeModel;
+import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
 import com.tdin360.zjw.marathon.utils.db.service.NoticeService;
 
@@ -13,81 +16,89 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 个人中心通知消息接口实现类
- * Created by admin on 17/2/16.
+ * Created by admin on 17/5/8.
  */
 
 public class NoticeServiceImpl implements NoticeService {
 
-    private SQLHelper sqlHelper;
+
+
+    private SQLHelper helper;
+
     public NoticeServiceImpl(Context context){
-
-        this.sqlHelper = new SQLHelper(context);
+        this.helper=new SQLHelper(context);
     }
-
     @Override
-    public void addNotice(NoticeMessageModel model) {
+    public void addNotice(NoticeModel model) {
 
-        SQLiteDatabase writableDatabase = this.sqlHelper.getWritableDatabase();
+        SQLiteDatabase writableDatabase = this.helper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("forName",model.getForName());
-        values.put("forTime",model.getForTime());
-        values.put("content",model.getMessage());
-        writableDatabase.insert(SQLHelper.NOTICE_TABLE,null,values);
+        values.put("eventId", MarathonDataUtils.init().getEventId());
+        values.put("title",model.getTitle());
+        values.put("url",model.getUrl());
+        values.put("time",model.getTime());
+        writableDatabase.insert(SQLHelper.NOTICE_INFO,null,values);
         writableDatabase.close();
 
     }
 
     @Override
-    public boolean deleteNotice(int id) {
+    public boolean deleteNotice(String eventId) {
 
-        SQLiteDatabase database = sqlHelper.getWritableDatabase();
 
-        int delete = database.delete(SQLHelper.NOTICE_TABLE, "id=?", new String[]{id+""});
-        if(delete>0){
+        SQLiteDatabase conn = this.helper.getReadableDatabase();
+        try {
 
-            return true;
+            conn.delete(SQLHelper.NOTICE_INFO,"eventId=?",new String[]{eventId});
+
+        }catch (Exception e){
+
+        }finally {
+            conn.close();
         }
+
+
         return false;
     }
 
     @Override
     public boolean deleteAllNotice() {
 
-        SQLiteDatabase database = sqlHelper.getWritableDatabase();
 
-        int delete = database.delete(SQLHelper.NOTICE_TABLE,null,null);
-        if(delete>0){
+        SQLiteDatabase conn = this.helper.getReadableDatabase();
+        try {
 
-            return true;
+            conn.delete(SQLHelper.NOTICE_INFO,null,null);
+
+        }catch (Exception e){
+
+        }finally {
+            conn.close();
         }
 
         return false;
     }
 
     @Override
-    public List<NoticeMessageModel> getAllNotice() {
+    public List<NoticeModel> getAllNotice(String eventId) {
 
-        SQLiteDatabase database = this.sqlHelper.getReadableDatabase();
+        SQLiteDatabase conn = this.helper.getReadableDatabase();
 
-        Cursor cursor = database.query(SQLHelper.NOTICE_TABLE, null, null, null, null, null,"id DESC");
+        Cursor cursor = conn.query(SQLHelper.NOTICE_INFO, null, "eventId=?", new String[]{eventId}, null, null, null);
+        List<NoticeModel>list=new ArrayList<>();
 
-        List<NoticeMessageModel>list=new ArrayList<>();
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("noticeId"));
+            String title = cursor.getString(cursor.getColumnIndex("title"));
+            String url = cursor.getString(cursor.getColumnIndex("url"));
+            String time = cursor.getString(cursor.getColumnIndex("time"));
+            NoticeModel model = new NoticeModel(id,title,time,url);
+            list.add(model);
 
-            int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex("id")));
-
-            String forName = cursor.getString(cursor.getColumnIndex("forName"));
-
-            String forTime = cursor.getString(cursor.getColumnIndex("forTime"));
-            String content = cursor.getString(cursor.getColumnIndex("content"));
-
-            list.add(new NoticeMessageModel(id,forName,forTime,content));
         }
-
-        cursor.close();
-        database.close();
-
+        conn.close();
         return list;
+
+
     }
 }

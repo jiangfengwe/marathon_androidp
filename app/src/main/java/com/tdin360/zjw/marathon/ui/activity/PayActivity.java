@@ -2,15 +2,15 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.View;
-import android.widget.CompoundButton;
+
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +23,7 @@ import com.tdin360.zjw.marathon.wxapi.WXPayEntryActivity;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.unionpay.UPPayAssistEx;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -90,75 +90,117 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private static final int SDK_PAY_FLAG = 1;
     private void toAliPay(){
 
+        this.delCommonPay("zfb");
+    }
+
+
+    //获取订单并支付
+    private void delCommonPay(String payMethod){
 
         Toast.makeText(PayActivity.this,"获取订单中...",Toast.LENGTH_SHORT).show();
         //获取支付订单
-         RequestParams params = new RequestParams(HttpUrlUtils.PAY);
-         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-         params.addQueryStringParameter("orderNomber",orderNo);
-         params.addQueryStringParameter("payMethod","zfb");
-         x.http().get(params, new Callback.CommonCallback<String>() {
-             @Override
-             public void onSuccess(final String result) {
+        final RequestParams params = new RequestParams(HttpUrlUtils.PAY);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addQueryStringParameter("orderNomber",orderNo);
+        params.addQueryStringParameter("payMethod",payMethod);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(final String result) {
 
-             try {
-                   JSONObject json = new JSONObject(result);
-                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
-                     boolean success = eventMobileMessage.getBoolean("Success");
+                try {
+                    JSONObject json = new JSONObject(result);
+                    JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
+                    boolean success = eventMobileMessage.getBoolean("Success");
 
-               // final String reason = eventMobileMessage.getString("Reason");
-
+//                    Log.d("------pay------->>>>", "onSuccess: "+json);
                     if(success){
 
 
-                        JSONObject aliPayData = json.getJSONObject("AliPayData");
-                        final String body = aliPayData.getString("Body");
+                        String payMethod = json.getString("PayMethod");
 
-                        Runnable payRunnable = new Runnable() {
+                        switch (payMethod){
 
-                             @Override
-                             public void run() {
-                                 // 构造PayTask 对象
-                                 PayTask alipay = new PayTask(PayActivity.this);
-                                 // 调用支付接口，获取支付结果
-                                 String result = alipay.pay (body, true);
+//                            支付宝支付
+                            case "zfb":
 
-                                 Message msg = new Message();
-                                 msg.what = SDK_PAY_FLAG;
-                                 msg.obj = result;
-                                 mHandler.sendMessage(msg);
+                                JSONObject aliPayData = json.getJSONObject("AliPayData");
+                                final String body = aliPayData.getString("Body");
 
-                             }
-                         };
+                                Runnable payRunnable = new Runnable() {
 
-                         // 必须异步调用
-                         Thread payThread = new Thread(payRunnable);
-                         payThread.start();
+                                    @Override
+                                    public void run() {
+                                        // 构造PayTask 对象
+                                        PayTask alipay = new PayTask(PayActivity.this);
+                                        // 调用支付接口，获取支付结果
+                                        String result = alipay.pay (body, true);
+
+                                        Message msg = new Message();
+                                        msg.what = SDK_PAY_FLAG;
+                                        msg.obj = result;
+                                        mHandler.sendMessage(msg);
+
+                                    }
+                                };
+
+                                // 必须异步调用
+                                Thread payThread = new Thread(payRunnable);
+                                payThread.start();
+
+                                break;
+                            case "wx":
+
+                                JSONObject obj = json.getJSONObject("AppWeiXinPayModel");
+                                PayReq req = new PayReq();
+                                req.appId			= obj.getString("appId");
+                                req.partnerId		= obj.getString("partnerId");
+                                req.prepayId		= obj.getString("prepayId");
+                                req.nonceStr		= obj.getString("nonceStr");
+                                req.timeStamp		= obj.getString("timeStamp");
+                                req.packageValue	= obj.getString("packageValue");
+                                req.sign			= obj.getString("sign");
+//                                req.extData			= obj.getString("extData"); // optional
+
+                                // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+
+                                api.sendReq(req);
+
+                                break;
+                            case "":
+                                break;
+                        }
 
 
 
-                  }
+                    }else {
+                        String reason = eventMobileMessage.getString("Reason");
+                        Toast.makeText(PayActivity.this,reason,Toast.LENGTH_SHORT).show();
+                    }
 
-                 } catch (JSONException e) {
-                     e.printStackTrace();
-                 }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-             @Override
-             public void onError(Throwable ex, boolean isOnCallback) {
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
 
-             }
+                Toast.makeText(PayActivity.this,"获取订单失败,请重新获取",Toast.LENGTH_SHORT).show();
 
-             @Override
-             public void onCancelled(CancelledException cex) {
+            }
 
-             }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-             @Override
-             public void onFinished() {
+            }
 
-             }
-         });
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -209,225 +251,18 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private void toWxPay(){
 
 
+        this.delCommonPay("wx");
 
-        Toast.makeText(this, "获取订单中...", Toast.LENGTH_SHORT).show();
-
-        RequestParams params = new RequestParams(HttpUrlUtils.PAY);
-        params.setConnectTimeout(10*1000);
-        params.setMaxRetryCount(1);
-        params.addQueryStringParameter("orderNomber",orderNo);
-        params.addQueryStringParameter("payMethod","wx");
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-
-
-            @Override
-            public void onSuccess(String s) {
-
-
-                if(s!=null&&!s.equals("")){
-
-                    try {
-                        JSONObject json = new JSONObject(s);
-
-                        JSONObject message = json.getJSONObject("EventMobileMessage");
-
-                        boolean success = message.getBoolean("Success");
-                        String reason = message.getString("Reason");
-                        if(success){
-
-                            JSONObject obj = json.getJSONObject("AppWeiXinPayModel");
-                            PayReq req = new PayReq();
-                            req.appId			= obj.getString("appId");
-                            req.partnerId		= obj.getString("partnerId");
-                            req.prepayId		= obj.getString("prepayId");
-                            req.nonceStr		= obj.getString("nonceStr");
-                            req.timeStamp		= obj.getString("timeStamp");
-                            req.packageValue	= obj.getString("packageValue");
-                            req.sign			= obj.getString("sign");
-//                          req.extData			= obj.getString("extData"); // optional
-
-                            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-
-                            api.sendReq(req);
-
-
-
-                        }else {
-
-                            Toast.makeText(PayActivity.this,reason,Toast.LENGTH_SHORT).show();
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable throwable, boolean b) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException e) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
     }
 
 
 
 
-    //    银联支付模式配置00表示生产环境，01表示测试环境
-    private String mMode = "01";
     //银联支付
     private void toUnionpay(){
 
 
-        String TN_URL_01 = "http://101.231.204.84:8091/sim/getacptn";
-        RequestParams params = new RequestParams(TN_URL_01);
-        params.setConnectTimeout(120000);
-        params.setMaxRetryCount(1);
 
-        x.http().post(params, new Callback.CommonCallback<String>() {
-
-
-            @Override
-            public void onSuccess(String s) {
-
-
-                if ( s == null || s.length() == 0) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
-                    builder.setTitle("错误提示");
-                    builder.setMessage("网络连接失败,请重试!");
-                    builder.setNegativeButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    builder.create().show();
-                } else {
-
-                    /*************************************************
-                     * 步骤2：通过银联工具类启动支付插件
-                     ************************************************/
-
-                    UPPayAssistEx.startPay(PayActivity.this, null, null, s, mMode);
-                }
-
-
-
-            }
-
-            @Override
-            public void onError(Throwable throwable, boolean b) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
-                builder.setTitle("错误提示");
-                builder.setMessage("网络连接失败,请重试!");
-                builder.setNegativeButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.create().show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException e) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-
-            }
-        });
-
-
-
-    }
-    //接收银联支付返回结果
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*************************************************
-         * 步骤3：处理银联手机支付控件返回的支付结果
-         ************************************************/
-        if (data == null) {
-            return;
-        }
-
-        String msg = "";
-        /*
-         * 支付控件返回字符串:success、fail、cancel 分别代表支付成功，支付失败，支付取消
-         */
-        String str = data.getExtras().getString("pay_result");
-        if (str.equalsIgnoreCase("success")) {
-            // 支付成功后，extra中如果存在result_data，取出校验
-            // result_data结构见c）result_data参数说明
-            if (data.hasExtra("result_data")) {
-                String result = data.getExtras().getString("result_data");
-                try {
-                    JSONObject resultJson = new JSONObject(result);
-                    String sign = resultJson.getString("sign");
-                    String dataOrg = resultJson.getString("data");
-                    // 验签证书同后台验签证书
-                    // 此处的verify，商户需送去商户后台做验签
-                    boolean ret = verify(dataOrg, sign, mMode);
-                    if (ret) {
-                        // 验证通过后，显示支付结果
-                        msg = "支付成功！";
-                    } else {
-                        // 验证不通过后的处理
-                        // 建议通过商户后台查询支付结果
-                        msg = "支付失败！";
-                    }
-                } catch (JSONException e) {
-                }
-            } else {
-                // 未收到签名信息
-                // 建议通过商户后台查询支付结果
-                msg = "支付成功！";
-            }
-        } else if (str.equalsIgnoreCase("fail")) {
-            msg = "支付失败！";
-        } else if (str.equalsIgnoreCase("cancel")) {
-            msg = "用户取消了支付";
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("支付结果通知");
-        builder.setMessage(msg);
-        builder.setInverseBackgroundForced(true);
-        // builder.setCustomTitle();
-        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
-    }
-
-
-    //银联支付验证
-    private boolean verify(String msg, String sign64, String mode) {
-        // 此处的verify，商户需送去商户后台做验签
-        return true;
 
     }
 

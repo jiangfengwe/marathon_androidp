@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyGoodsDetailsActivity">
 
     <include layout="@layout/toolbar_layout"></include>
@@ -152,151 +153,14 @@
 
              </View>
          </TableLayout>
-          <LinearLayout
-              android:padding="10dp"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <LinearLayout
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-          <com.tdin360.zjw.marathon.weight.MyTableView
-              android:padding="5dp"
-              android:layout_weight="2"
-              android:gravity="center"
-              android:textColor="@color/textBlack"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="领取日期"
-              />
-              <com.tdin360.zjw.marathon.weight.MyTableView
-              android:padding="5dp"
-              android:layout_weight="1"
-              android:gravity="center"
-              android:textColor="@color/textBlack"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="领取时段"
-              />
-              </LinearLayout>
-              <LinearLayout
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-          <com.tdin360.zjw.marathon.weight.MyTableView
-              android:padding="5dp"
-              android:layout_weight="2"
-              android:textColor="@color/textBlack"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="2017-07-20"
-              />
-              <com.tdin360.zjw.marathon.weight.MyTableView
-              android:padding="5dp"
-              android:layout_weight="1"
-              android:gravity="center"
-              android:textColor="@color/textBlack"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="9:00--18:00"
-              />
-              </LinearLayout>
 
 
-          <TextView
-              android:layout_marginTop="15dp"
-              android:textStyle="bold"
-              android:textColor="@color/textBlack"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="领取方式:"
-              />
-          </LinearLayout>
-          <TableLayout
-              android:shrinkColumns="0"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <TableRow
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  >
-
-                  <TextView
-                      android:textColor="@color/textBlack"
-                      android:textSize="14sp"
-                      android:padding="5dp"
-                      android:layout_width="match_parent"
-                      android:text="1.现场领取:"
-                      />
-                  <TextView
-                      android:textColor="@color/textBlack"
-                      android:textSize="14sp"
-                      android:padding="5dp"
-                      android:layout_width="match_parent"
-                      android:text="领取地点"
-                      />
-              </TableRow>
-
-
-          </TableLayout>
-          <LinearLayout
-              android:layout_marginLeft="15dp"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <TextView
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content"
-                  android:textColor="@color/textBlack"
-                  android:textSize="12sp"
-                  android:text="需要携带材料:"
-                  />
-              <TextView
-                  android:layout_height="wrap_content"
-                  android:layout_width="match_parent"
-                  android:text="1.材料1，2.材料二"
-                  />
-
-          </LinearLayout>
-          <LinearLayout
-              android:layout_marginTop="20dp"
-              android:layout_marginLeft="10dp"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <TextView
-
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content"
-                  android:textColor="@color/textBlack"
-                  android:textSize="14sp"
-                  android:text="2.快递领取:"
-                  />
-              <TextView
-                  android:layout_height="wrap_content"
-                  android:layout_width="match_parent"
-                  android:text="1.填写快递申请单，2.支付快递费用"
-                  />
-
-          </LinearLayout>
-          <LinearLayout
-              android:padding="10dp"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <Button
-                  android:onClick="click"
-                  android:background="@drawable/oval_yellow_button_selector"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:textColor="@color/white"
-                  android:textSize="16sp"
-                  android:text="申请快递"
-                  />
-
-          </LinearLayout>
+        <WebView
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:id="@+id/goodsInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
       </LinearLayout>
   </ScrollView>
 </LinearLayout>

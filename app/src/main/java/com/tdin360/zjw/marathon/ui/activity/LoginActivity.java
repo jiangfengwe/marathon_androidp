@@ -212,26 +212,35 @@ public class LoginActivity extends BaseActivity {
 
                             case SignUp://跳转到报名界面
                                 intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                                startActivity(intent);
                             break;
                             case MySignUp://跳转到我的报名界面
                                 intent = new Intent(LoginActivity.this,MySignUpListActivity.class);
+                                startActivity(intent);
                                 break;
                             case MyMark://跳转到我的成绩界面
                                 intent = new Intent(LoginActivity.this,MyAchievementListActivity.class);
+                                startActivity(intent);
                                 break;
                             case MyFeed://跳转到我的反馈界面
                                 intent = new Intent(LoginActivity.this,FeedbackListActivity.class);
+                                startActivity(intent);
                                 break;
 
                             case MyGoods://跳转到我的物资界面
 
                                 intent = new Intent(LoginActivity.this,MyGoodsListActivity.class);
+                                startActivity(intent);
+                                break;
+
+                            case Team://团队报名
+                                intent = new Intent(LoginActivity.this,TeamSignUpActivity.class);
+                                startActivity(intent);
                                 break;
 
                         }
 
-                           startActivity(intent);
-                          finish();
+                            finish();
 
                     }else {
                         Toast.makeText(LoginActivity.this,reason,Toast.LENGTH_SHORT).show();
