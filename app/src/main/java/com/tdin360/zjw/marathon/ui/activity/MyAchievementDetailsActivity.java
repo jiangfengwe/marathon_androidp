@@ -1,14 +1,13 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.MarkModel;
 
-import java.io.Serializable;
 
 /**
  *成绩详情
@@ -56,14 +55,7 @@ public class MyAchievementDetailsActivity extends BaseActivity {
         TextView project = (TextView) this.findViewById(R.id.projectName);
         project.setText(model.getCompetitorType());
         TextView mark = (TextView) this.findViewById(R.id.mark);
-        if(model.getCompetitorType().contains("半程")){
-            mark.setText(model.getkM210975Jing().equals("null")?"00:00:00":model.getkM210975Jing());
-
-        }else {
-
-            mark.setText(model.getkM42195Jing().equals("null")?"00:00:00":model.getkM42195Jing());
-        }
-
+         mark.setText(model.getJing().equals("null")||model.getJing().equals("")? "00:00:00":model.getJing());
         TextView organizer = (TextView) this.findViewById(R.id.organizer);
           organizer.setText(model.getEventOrganizer().equals("null")?"":model.getEventOrganizer());
     }

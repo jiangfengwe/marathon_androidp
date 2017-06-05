@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TableLayout
+        android:shrinkColumns="1"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,13 +13,11 @@
             <TextView
                 android:text="手机号码:"
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 />
             <TextView
                 android:id="@+id/tel"
-                android:layout_marginLeft="10dp"
-                android:text="157******"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
                 />
@@ -29,16 +28,15 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="国        籍:"
                 />
             <TextView
                 android:id="@+id/country"
-                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="中国"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -47,16 +45,15 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="省        份:"
                 />
             <TextView
                 android:id="@+id/province"
-                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="贵州省"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -65,16 +62,15 @@
         <TableRow   android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="城        市:"
                 />
             <TextView
                 android:id="@+id/city"
-                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="贵阳市"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -83,34 +79,15 @@
         <TableRow   android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="区        县:"
                 />
             <TextView
                 android:id="@+id/area"
-                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="花溪区"
-                />
-        </TableRow>
-        <View android:layout_width="match_parent"
-            android:background="@color/lineColor"
-            android:layout_height="0.5dp"></View>
-        <TableRow   android:padding="10dp">
-            <TextView
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/textBlack"
-                android:text="现居地址:"
-                />
-            <TextView
-                android:id="@+id/address"
-                android:layout_marginLeft="10dp"
-                android:textSize="16sp"
-                android:textColor="@color/textBlack"
-                android:text="地址"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -119,16 +96,34 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
+                android:textColor="@color/textBlack"
+                android:text="现居地址:"
+                />
+            <TextView
+
+                android:id="@+id/address"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+
                 android:textColor="@color/textBlack"
                 android:text="邮政编码:"
                 />
             <TextView
                 android:id="@+id/postCode"
-                android:layout_marginLeft="10dp"
+
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="550025"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -137,16 +132,16 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="紧急联系人:"
                 />
             <TextView
                 android:id="@+id/linkName"
-                android:layout_marginLeft="10dp"
+
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="张三"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -155,16 +150,16 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="紧急联系电话:"
                 />
             <TextView
                 android:id="@+id/linkPhone"
-                android:layout_marginLeft="10dp"
+
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="138*＊＊＊＊＊"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"

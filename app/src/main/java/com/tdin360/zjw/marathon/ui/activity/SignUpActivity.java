@@ -445,6 +445,18 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         this.findViewById(R.id.areaAddress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                //判断国家是不是中国不不是中国就不需要选择
+
+                if(!country.equals("中国")){
+
+                    Toast.makeText(SignUpActivity.this,"不是中国国籍不需要选择此项",Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+
                 final AlertDialog alertDialog = new AlertDialog.Builder(SignUpActivity.this).create();
                 View view = View.inflate(SignUpActivity.this,R.layout.province_select,null);
                 setUpViews(view);

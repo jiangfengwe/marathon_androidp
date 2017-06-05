@@ -2,13 +2,22 @@ package com.tdin360.zjw.marathon.ui.fragment;
 
 
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +27,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
+
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.EventModel;
+
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullableListView;
+
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +56,7 @@ import java.util.List;
 /**马拉松赛事列表
  * Created by Administrator on 2016/8/9.
  */
-public class EventFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener {
+public class EventFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener {
 
     private List<EventModel>list = new ArrayList<>();
     private ListView listView;
@@ -92,7 +106,22 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
 
         //加载数据
          loadData();
+
+
+        /**
+         * 检查更新
+         *
+         */
+
+        if(NetWorkUtils.isNetworkAvailable(getContext())){
+
+            UpdateManager.checkNewVersion(getContext());
+            UpdateManager.setUpdateListener(this);
+
+        }
     }
+
+
 
 
     //加载数据(包括缓存数据和网络数据)
@@ -182,12 +211,17 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             @Override
             public void onSuccess(String s) {
 
+                if(s==null||s.equals("")){
+                    return;
+                }
+
                 try {
                     impl.deleteAll();
                     if (isRefresh){
                        list.clear();
                     }
 
+//                   Log.d("-------->", "onSuccess: "+s);
 
                     JSONObject obj = new JSONObject(s);
 
@@ -202,12 +236,13 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                         String eventName = object.getString("EventName");
                         String status = object.getString("Status");
                         String eventStartTime = object.getString("EventStartTimeStr");
+                        String signUpStartTimeStr = object.getString("EventApplyStartTimeStr");
 
                         String pictureUrl = object.getString("PictureUrl");
 
                         String shareUrl = object.getString("EventSiteUrl");
                         boolean isRegister = object.getBoolean("IsRegister");
-                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl,isRegister);
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,signUpStartTimeStr,eventStartTime,shareUrl,isRegister);
                         list.add(eventModel);
 
 
@@ -260,8 +295,8 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             public void onFinished() {
 
 
-                if(list.size()>0){
-                    loadFail.setVisibility(View.GONE);
+                if(isLoadFail){
+                  loadFail.setVisibility(View.GONE);
                 }
 
                 if(!isLoadFail&&list.size()==0){
@@ -269,7 +304,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                   not_found.setVisibility(View.VISIBLE);
 
 
-                }else {
+                }else if(list.size()>0&&!isLoadFail){
                     not_found.setVisibility(View.GONE);
 
                 }
@@ -283,15 +318,60 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        //没有获取到权限
+        if(grantResults.length>0&&grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+
+
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            alert.setTitle("温馨提示");
+            alert.setMessage("您需要开启存储权限之后才能下载更新!");
+            alert.setCancelable(false);
+            alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(getAppDetailSettingIntent(getContext()));
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.show();
+
+            return;
+        }
            if (requestCode==Constants.WRITE_EXTERNAL_CODE){
 
                //启动下载器下载安装包
-                getContext().startService(new Intent(getActivity(),DownloadAPKService.class));
+
+               downloadAPK();
 
 
            }
     }
 
+    /**
+     * 获取应用详情页面intent
+     *
+     * @return
+     */
+    public Intent getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", context.getPackageName());
+        }
+        return localIntent;
+    }
 
     @Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
@@ -319,4 +399,79 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
         }
 
     }
+
+
+
+    private String url;
+    @Override
+    public void checkFinished(boolean isUpdate, String content, String url) {
+        //检查更新
+
+        this.url=url;
+        if (isUpdate) {//发现新版本
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            alert.setTitle("版本更新");
+            alert.setMessage(Html.fromHtml(content));
+            alert.setCancelable(false);
+
+            alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+
+                    //6.0系统兼容
+                    if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+
+                        //没有权限就申请
+                        if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+
+                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},Constants.WRITE_EXTERNAL_CODE);
+
+                        }else {
+
+                            downloadAPK();
+                        }
+
+                    }else {
+
+                        downloadAPK();
+                    }
+
+
+                }
+            });
+
+            alert.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+
+            alert.show();
+        }
+    }
+
+
+    //下载安装包
+    private void downloadAPK(){
+
+
+        Toast.makeText(getActivity(),"已在后台下载",Toast.LENGTH_SHORT).show();
+        //启动下载器下载安装包
+        Intent intent = new Intent(getActivity(), DownloadAPKService.class);
+        intent.putExtra("url",url);
+        getActivity().startService(intent);
+
+    }
+
+
+
+
+
 }

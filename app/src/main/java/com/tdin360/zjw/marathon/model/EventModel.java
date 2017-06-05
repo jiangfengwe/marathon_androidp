@@ -15,8 +15,10 @@ public class EventModel {
     private String status;
 //    赛事图片
     private String picUrl;
-    //竞赛日期
+    //比赛时间
     private String startDate;
+    //报名时间
+    private String signUpStartTime;
     //倒计时时间戳
     private long time;
 
@@ -25,11 +27,12 @@ public class EventModel {
     private boolean isRegister;
 
 
-    public EventModel(int id, String name, String status, String picUrl, String startDate,String shardUrl,boolean isRegister) {
+    public EventModel(int id, String name, String status, String picUrl,String signUpStartTime, String startDate,String shardUrl,boolean isRegister) {
         this.id=id;
         this.name = name;
         this.status = status;
         this.picUrl = picUrl;
+        this.signUpStartTime=signUpStartTime;
         this.startDate = startDate;
         this.shardUrl=shardUrl;
         this.isRegister=isRegister;
@@ -66,10 +69,15 @@ public class EventModel {
         return picUrl;
     }
 
+
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
 
+    public String getSignUpStartTime(){
+
+        return signUpStartTime;
+    }
     public String getStartDate() {
         return startDate;
     }

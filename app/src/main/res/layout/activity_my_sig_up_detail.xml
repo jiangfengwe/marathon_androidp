@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MySigUpDetailActivity">
    <include layout="@layout/toolbar_layout"></include>
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40dp">

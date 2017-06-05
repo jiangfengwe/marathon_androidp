@@ -330,6 +330,7 @@ public class RegisterActivity extends BaseActivity {
         params.addBodyParameter("phone",tel);
         params.addBodyParameter("password",password);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("registerSource","来自Android客户端");
         params.setConnectTimeout(5*1000);
         params.setMaxRetryCount(0);
         x.http().post(params, new Callback.CommonCallback<String>() {

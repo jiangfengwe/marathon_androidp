@@ -3,19 +3,16 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +20,6 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.MarathonHomeMyGridViewAdapter;
 import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.MenuModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -35,10 +31,9 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventDetailsServiceImpl;
-import com.tdin360.zjw.marathon.utils.db.service.EventDetailService;
 import com.tdin360.zjw.marathon.weight.Carousel;
 import com.tdin360.zjw.marathon.weight.MenuView;
-import com.tdin360.zjw.marathon.weight.MyGridView;
+import com.tdin360.zjw.marathon.weight.SpaceItemDecoration;
 import com.umeng.socialize.UMShareAPI;
 
 import org.json.JSONArray;
@@ -55,14 +50,12 @@ import java.util.List;
  * 赛事详情界面
  * @author zhangzhijun
  */
-public class MarathonDetailsActivity extends BaseActivity {
+public class MarathonDetailsActivity extends BaseActivity implements Carousel.OnCarouselItemClickListener{
 
 
     private Carousel mCarousel;
-
     private List<CarouselModel>carouselList=new ArrayList<>();
     private List<CarouselModel>sponsorList= new ArrayList<>();
-
     private TextView loadFail;
     private View  isEnableView;
     private EventDetailsServiceImpl service;
@@ -74,20 +67,6 @@ public class MarathonDetailsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        设置状态栏透明
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//            window.setNavigationBarColor(Color.TRANSPARENT);
-//        }
-
 
         initView();
         initMenu();
@@ -117,25 +96,30 @@ public class MarathonDetailsActivity extends BaseActivity {
     //初始化
     private void initView() {
 
-        this.headerView = View.inflate(this,R.layout.marathon_details_header,null);
-        this.mRecyclerView = (RecyclerView) this.findViewById(R.id.mRecyclerView);
+         this.headerView = View.inflate(this,R.layout.marathon_details_header,null);
+         this.mRecyclerView = (RecyclerView) this.findViewById(R.id.mRecyclerView);
          this.panel = (LinearLayout) this.findViewById(R.id.panel);
-        this.mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+         this.mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+         this.mRecyclerView.addItemDecoration(new SpaceItemDecoration(10,2));
          this.mAdapter=new MyAdapter();
          this.mRecyclerView.setAdapter(mAdapter);
-
-        this.service = new EventDetailsServiceImpl(this);
+         this.service = new EventDetailsServiceImpl(this);
         setToolBarTitle(MarathonDataUtils.init().getEventName());
+
+
 
         showBackButton();
         /**
          * 构建分享内容
          */
         ShareInfoManager manager = new ShareInfoManager(this);
-         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家赛事",MarathonDataUtils.init().getEventImageUrl());
+         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家运动",MarathonDataUtils.init().getEventImageUrl());
+
         showShareButton(manager);
 
-        //如果报名已结束就不显示报名按钮
+
+
+        //如果报名已结束就显示蒙板
           this.isEnableView=this.findViewById(R.id.isEnable);
          if(!MarathonDataUtils.init().isRegister()){
 
@@ -143,12 +127,21 @@ public class MarathonDetailsActivity extends BaseActivity {
 
          }
 
+        /**
+         * 不可报名时用户点击是进行提示
+         */
+         this.isEnableView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Snackbar.make(isEnableView,"报名暂时未开放或已结束!",Snackbar.LENGTH_SHORT).show();
+             }
+         });
+
 
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
 
          this.mCarousel = (Carousel) headerView.findViewById(R.id.mCarousel);
-
-
+        this.mCarousel.setOnCarouselItemClickListener(this);
 
          this.loadFail.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -161,8 +154,40 @@ public class MarathonDetailsActivity extends BaseActivity {
          loadData();
 
 
+
     }
 
+    /**
+     * 轮播图的点击处理
+     * @param pos
+     */
+    @Override
+    public void onClick(int pos) {
+
+
+        CarouselModel model = carouselList.get(pos);
+        if(model.getLinkUrl()==null||model.getLinkUrl().equals("null")){
+
+            return;
+        }
+        String url = model.getLinkUrl();
+
+        if(!url.contains("http://")){
+
+            url="http://"+url;
+        }
+        Intent intent = new Intent(this,ShowHtmlActivity.class);
+        intent.putExtra("title",model.getTitle());
+        intent.putExtra("url",url);
+//        intent.putExtra("shareTitle",model.getTitle());
+//        intent.putExtra("shareImageUrl",model.getPicUrl());
+         startActivity(intent);
+
+    }
+
+    /**
+     * 赞助商列表
+     */
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
        private final int HEAD=0x01;
@@ -215,7 +240,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                 return new MyViewHolder(headerView);
             }
 
-            return new MyViewHolder(View.inflate(MarathonDetailsActivity.this,R.layout.marath_home_list_item,null));
+            return new MyViewHolder(View.inflate(MarathonDetailsActivity.this,R.layout.marath_details_list_item,null));
         }
 
         @Override
@@ -226,7 +251,10 @@ public class MarathonDetailsActivity extends BaseActivity {
             if(getItemViewType(position)==HEAD ){
                 return;
             }
-                ImageOptions imageOptions = new ImageOptions.Builder()
+
+
+            CarouselModel model = sponsorList.get(getRealPosition(holder));
+            ImageOptions imageOptions = new ImageOptions.Builder()
                         //.setSize(DensityUtil.dip2px(340), DensityUtil.dip2px(300))//图片大小
                         //.setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                         .setImageScaleType(ImageView.ScaleType.FIT_CENTER)
@@ -234,7 +262,10 @@ public class MarathonDetailsActivity extends BaseActivity {
                         .setUseMemCache(true)//设置使用缓存
                         .setFailureDrawableId(R.drawable.loading_small_error)//加载失败后默认显示图片
                         .build();
-                x.image().bind(holder.imageView, sponsorList.get(getRealPosition(holder)).getPicUrl(), imageOptions);
+                x.image().bind(holder.imageView, model.getPicUrl(), imageOptions);
+
+             holder.title.setText(model.getTitle().equals("null")?"":model.getTitle());
+
 
         }
         public int getRealPosition(RecyclerView.ViewHolder holder) {
@@ -249,12 +280,44 @@ public class MarathonDetailsActivity extends BaseActivity {
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             private ImageView imageView;
-            public MyViewHolder(View itemView) {
+            private TextView title;
+            public MyViewHolder(final View itemView) {
                 super(itemView);
                 if(getItemViewType()!=HEAD){
 
-
                     this.imageView= (ImageView) itemView.findViewById(R.id.imageView);
+                    this.title = (TextView) itemView.findViewById(R.id.sponsorName);
+
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            try {
+                                String linkUrl = sponsorList.get(getRealPosition(MyViewHolder.this)).getLinkUrl();
+                                if (linkUrl != null && !linkUrl.equals("")) {
+
+                                    String url;
+                                    if (linkUrl.contains("http://")) {
+
+                                        url = linkUrl;
+                                    } else {
+
+                                        url = "http://" + linkUrl;
+                                    }
+
+                                    Uri uri = Uri.parse(url);
+                                    Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                                    startActivity(it);
+                                } else {
+
+                                    Snackbar.make(itemView, "该暂赞助商没有提供链接地址", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }catch (Exception e){
+e.printStackTrace();
+                                Snackbar.make(itemView, "地址有误无法打开", Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
 
@@ -401,6 +464,8 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                 try {
                     JSONObject json  =new JSONObject(result);
+
+//                     Log.d("--------->>>", "onSuccess: "+json);
                     service.deleteAll(MarathonDataUtils.init().getEventId());
                     sponsorList.clear();
                     carouselList.clear();
@@ -413,7 +478,9 @@ public class MarathonDetailsActivity extends BaseActivity {
                         JSONObject jsonObject = array1.getJSONObject(i);
 
                         String picUrl = jsonObject.getString("PictureUrl");
-                        CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),"",picUrl, "","0");
+                        String url = jsonObject.getString("Url");
+                        String name = jsonObject.getString("Name");
+                        CarouselModel model = new CarouselModel(MarathonDataUtils.init().getEventId(),name,picUrl,url,"0");
                         carouselList.add(model);
 
                         service.addEventDetail(model);
@@ -428,8 +495,9 @@ public class MarathonDetailsActivity extends BaseActivity {
 
                         JSONObject jsonObject = array2.getJSONObject(i);
                         String pictureUrl = jsonObject.getString("PictureUrl");
-
-                        CarouselModel carouselModel = new CarouselModel(MarathonDataUtils.init().getEventId(),"赞助商名称",pictureUrl, "","1");
+                        String url = jsonObject.getString("Url");
+                        String title = jsonObject.getString("Name");
+                        CarouselModel carouselModel = new CarouselModel(MarathonDataUtils.init().getEventId(),title,pictureUrl,url,"1");
                         sponsorList.add(carouselModel);
                         service.addEventDetail(carouselModel);
 
@@ -490,6 +558,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                     .build();
             x.image().bind(imageView, carouselModel.getPicUrl(),imageOptions);
             views.add(imageView);
+
 
         }
 

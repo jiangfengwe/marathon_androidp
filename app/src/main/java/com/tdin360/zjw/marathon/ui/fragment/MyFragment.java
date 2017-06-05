@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
+import com.tdin360.zjw.marathon.ui.activity.BaseActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyGoodsListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyAchievementListActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
@@ -27,7 +30,16 @@ import com.tdin360.zjw.marathon.ui.activity.MyTeamListActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
+import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.shareboard.SnsPlatform;
+import com.umeng.socialize.utils.ShareBoardlistener;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
@@ -42,7 +54,7 @@ public class MyFragment extends Fragment {
 
     private  TextView userName;
     private ImageView myImageView;
-
+    private ShareAction action;
 
     public static MyFragment newInstance(){
 
@@ -188,6 +200,17 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        //系统设置
+        view.findViewById(R.id.setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
       //关于我们
         view.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,14 +220,18 @@ public class MyFragment extends Fragment {
             }
         });
 
-       //系统设置
-        view.findViewById(R.id.setting).setOnClickListener(new View.OnClickListener() {
+
+
+        //分享给好友
+
+        view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SettingActivity.class);
-                startActivity(intent);
+
+                shareApp();
             }
         });
+
     }
 
     /**
@@ -241,6 +268,103 @@ public class MyFragment extends Fragment {
         Intent intent = new Intent(getContext(), MyInfoActivity.class);
         startActivity(intent);
 
+    }
+
+    /**
+     *  分享给好友
+     */
+    private void shareApp(){
+
+           /*使用友盟自带分享模版*/
+        action = new ShareAction(getActivity()).setDisplayList(
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE,
+                SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
+        ).setShareboardclickCallback(new ShareBoardlistener() {
+            @Override
+            public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+
+                UMWeb umWeb = new UMWeb(getString(R.string.shareDownLoadUrl));
+                umWeb.setTitle("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。");
+                umWeb.setDescription("佰家运动");
+                UMImage image = new UMImage(getActivity(),R.mipmap.logo);
+
+                image.compressStyle = UMImage.CompressStyle.SCALE;//质量压缩，适合长图的分享
+                image.compressFormat = Bitmap.CompressFormat.JPEG;//用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
+                umWeb.setThumb(image);
+
+                new ShareAction(getActivity()).withText("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。")
+                            .setPlatform(share_media)
+                            .setCallback(new MyUMShareListener())
+                            .withMedia(umWeb)
+                            .share();
+                }
+
+
+        });
+
+
+      action.open();
+    }
+
+
+
+    /**
+     * 自定义分享结果监听器
+     */
+    private class MyUMShareListener implements UMShareListener {
+
+
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            Toast.makeText(getActivity(),"正在打开分享...",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                Toast.makeText(getActivity(), platform + " 收藏成功啦", Toast.LENGTH_SHORT).show();
+            } else {
+                if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                        && platform != SHARE_MEDIA.EMAIL
+                        && platform != SHARE_MEDIA.FLICKR
+                        && platform != SHARE_MEDIA.FOURSQUARE
+                        && platform != SHARE_MEDIA.TUMBLR
+                        && platform != SHARE_MEDIA.POCKET
+                        && platform != SHARE_MEDIA.PINTEREST
+                        && platform != SHARE_MEDIA.INSTAGRAM
+                        && platform != SHARE_MEDIA.GOOGLEPLUS
+                        && platform != SHARE_MEDIA.YNOTE
+                        && platform != SHARE_MEDIA.EVERNOTE) {
+                    Toast.makeText(getActivity(), platform + " 分享成功啦!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable throwable) {
+            if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                    && platform != SHARE_MEDIA.EMAIL
+                    && platform != SHARE_MEDIA.FLICKR
+                    && platform != SHARE_MEDIA.FOURSQUARE
+                    && platform != SHARE_MEDIA.TUMBLR
+                    && platform != SHARE_MEDIA.POCKET
+                    && platform != SHARE_MEDIA.PINTEREST
+
+                    && platform != SHARE_MEDIA.INSTAGRAM
+                    && platform != SHARE_MEDIA.GOOGLEPLUS
+                    && platform != SHARE_MEDIA.YNOTE
+                    && platform != SHARE_MEDIA.EVERNOTE) {
+                Toast.makeText(getActivity(), platform + " 分享失败啦!", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            Toast.makeText(getActivity(),"分享已取消!",Toast.LENGTH_SHORT).show();
+        }
     }
 
 

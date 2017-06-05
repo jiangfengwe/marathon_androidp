@@ -118,6 +118,8 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+#xutils3注解不被混淆
+ -keep class com.lidroid.** { *; }
 
 #保持枚举 enum 类不被混淆
 -keepclassmembers enum * {
@@ -161,6 +163,12 @@
 #-keep class com.google.gson.stream.** { *; }
 
 #mob
+# 极光推送
+-dontoptimize
+-dontpreverify
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+
 -keep class android.net.http.SslError
 -keep class android.webkit.**{*;}
 -keep class cn.sharesdk.**{*;}

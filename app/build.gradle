@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.tdin360.zjw.marathon"//极光推送配置
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 23
-        versionCode  1
-        versionName "1.0.0"
+        versionCode  4
+        versionName "1.0.4"
         multiDexEnabled true //突破应用方法数的65535的限制
         //不指定渠道时默认添加友盟渠道
         manifestPlaceholders = [UMENG_CHANNEL_VALUE:"Umeng"]
@@ -64,6 +64,7 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
         }
 
 
@@ -72,12 +73,10 @@ android {
     // 友盟多渠道打包配置
     productFlavors {
 
-//        wandoujia {}
-//        baidu{}
-//        xiaomi{}
-          //huawei{}
-//        yingyongbao{}
-
+          wandoujia {}
+          huawei{}
+          ppzhushou{}
+          yingyongbao{}
           baijar{}
     }
 

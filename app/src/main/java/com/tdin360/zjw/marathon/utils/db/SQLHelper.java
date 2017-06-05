@@ -23,12 +23,12 @@ public class SQLHelper extends SQLiteOpenHelper {
     //通知消息表
     public static final String NOTICE_MESSAGE_TABLE="NoticeMessage";
 
-    //计步历史
-    public static final String STEP="Step";
     //个人资料信息表
     public static final String MY_INFO_TABLE="MY_INFO";
+
     //新闻
     public static final String NEWS_INFO="news";
+
 //    通知
     public static final String NOTICE_INFO="notice";
 
@@ -56,7 +56,8 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    eventImageUrl VARCHAR,\n" +
                 "    shareUrl VARCHAR,\n" +
                 "    eventStatus   VARCHAR,\n" +
-                "    time          VARCHAR,\n" +
+                "    signUpTime    VARCHAR,\n" +
+                "    eventTime     VARCHAR,\n" +
                 "    enable  VARCHAR"+
                 ");";
 
@@ -80,16 +81,6 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    content VARCHAR\n" +
                 ");";
 
-//        计步表
-        String create_Step_Sql="CREATE TABLE "+STEP+" (\n" +
-                "    id            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
-                "                          NOT NULL,\n" +
-                "    userId        INTEGER NOT NULL,\n" +
-                "    totalStep     INTEGER NOT NULL,\n" +
-                "    totalDistance DOUBLE  NOT NULL,\n" +
-                "    totalKcal     DOUBLE  NOT NULL,\n" +
-                "    date          DATE    NOT NULL\n" +
-                ");";
 
 
         //我的资料表
@@ -113,7 +104,6 @@ public class SQLHelper extends SQLiteOpenHelper {
         db.execSQL(eventSql);
         db.execSQL(eventDetailSql);
         db.execSQL(create_Notice_Sql);
-        db.execSQL(create_Step_Sql);
         db.execSQL(myInfoSql);
         db.execSQL(newsSql);
         db.execSQL(noticeSql);

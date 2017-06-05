@@ -2,8 +2,10 @@ package com.tdin360.zjw.marathon.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 
+import com.tdin360.zjw.marathon.R;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
@@ -81,11 +83,25 @@ public class ShareInfoManager {
 
         this.title=title;
         this.shareType=ShareType.LINK;
-        this.umWeb = new UMWeb(url);
+        String shareUrl="";
+        if(url!=null&&!url.contains("http://")){
+            shareUrl="http://"+url;
+        }else if(url!=null){
+            shareUrl=url;
+        }
+        this.umWeb = new UMWeb(shareUrl);
         umWeb.setTitle(title);
         umWeb.setDescription(description);
 
-        if(imageUrl!=null&&!imageUrl.equals("")){
+        if(imageUrl==null||imageUrl.equals("")){
+            UMImage thumb = new UMImage(context, R.mipmap.logo);
+            //图片压缩
+            thumb.compressStyle = UMImage.CompressStyle.SCALE;//大小压缩，默认为大小压缩，适合普通很大的图
+            thumb.compressFormat = Bitmap.CompressFormat.JPEG;
+            umWeb.setThumb(thumb);
+
+        }else {
+
             UMImage thumb = new UMImage(context,imageUrl);
             //图片压缩
             thumb.compressStyle = UMImage.CompressStyle.SCALE;//大小压缩，默认为大小压缩，适合普通很大的图
@@ -102,4 +118,15 @@ public class ShareInfoManager {
         return  this.umWeb;
     }
 
+
+    @Override
+    public String toString() {
+        return "ShareInfoManager{" +
+                "context=" + context +
+                ", shareType=" + shareType +
+                ", umImage=" + umImage +
+                ", umWeb=" + umWeb +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

@@ -61,7 +61,7 @@ public class ShowHtmlActivity extends BaseActivity {
 
             String title = intent.getStringExtra("title");
             setToolBarTitle(title);
-            String shareTitle="";
+            String shareTitle=null;
             String shareImageUrl=null;
             try{
                 shareTitle = intent.getStringExtra("shareTitle");

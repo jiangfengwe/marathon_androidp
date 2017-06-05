@@ -11,6 +11,7 @@
     <include layout="@layout/toolbar_layout"></include>
 
   <ScrollView
+      android:layout_weight="1"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
       <LinearLayout
@@ -29,7 +30,7 @@
 
                  <TextView
                      android:textSize="16sp"
-
+                     android:textColor="@color/textBlack"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="姓        名:"
@@ -41,7 +42,7 @@
                      android:layout_marginLeft="5dp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="张三"
+
                      />
 
              </TableRow>
@@ -54,6 +55,7 @@
              <TableRow android:padding="5dp">
 
                  <TextView
+                     android:textColor="@color/textBlack"
                      android:textSize="16sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -66,7 +68,7 @@
                      android:textSize="15sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="男"
+
                      />
 
              </TableRow>
@@ -79,7 +81,7 @@
              <TableRow android:padding="5dp">
 
                  <TextView
-
+                     android:textColor="@color/textBlack"
                      android:textSize="16sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -92,7 +94,7 @@
                      android:textSize="15sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="xxxx"
+
                      />
 
              </TableRow>
@@ -105,6 +107,7 @@
              <TableRow android:padding="5dp">
 
                  <TextView
+                     android:textColor="@color/textBlack"
                      android:textSize="16sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -117,7 +120,7 @@
                      android:textColor="@color/textBlack"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="0000"
+
                      />
 
              </TableRow>
@@ -127,9 +130,11 @@
                  android:layout_width="match_parent">
 
              </View>
+
              <TableRow android:padding="5dp">
 
                  <TextView
+                     android:textColor="@color/textBlack"
                      android:textSize="16sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -142,7 +147,7 @@
                      android:textSize="15sp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="xxl"
+
                      />
 
              </TableRow>
@@ -162,5 +167,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
       </LinearLayout>
+
   </ScrollView>
+    <Button
+        android:id="@+id/btn_confirm"
+        android:onClick="confirmClick"
+        android:background="@drawable/rect_yellow_button_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="领取物资"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        />
 </LinearLayout>

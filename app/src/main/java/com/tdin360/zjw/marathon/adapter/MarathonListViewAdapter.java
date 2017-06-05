@@ -65,6 +65,7 @@ public void updateList( List<EventModel> list){
              convertView =inflater.inflate(R.layout.marathon_list_item,parent,false);
              viewHolder.eventName = (TextView) convertView.findViewById(R.id.eventName);
              viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
+             viewHolder.eventTime = (TextView) convertView.findViewById(R.id.eventTime);
              viewHolder.signUpTime = (TextView) convertView.findViewById(R.id.signUpTime);
              viewHolder.status = (TextView) convertView.findViewById(R.id.status);
 
@@ -75,7 +76,8 @@ public void updateList( List<EventModel> list){
 
         EventModel eventModel = list.get(position);
         viewHolder.eventName.setText(eventModel.getName());
-        viewHolder.signUpTime.setText(eventModel.getStartDate());
+        viewHolder.signUpTime.setText(eventModel.getSignUpStartTime());
+        viewHolder.eventTime.setText(eventModel.getStartDate());
         //处理图片
         ImageOptions imageOptions = new ImageOptions.Builder()
                 //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
@@ -89,6 +91,8 @@ public void updateList( List<EventModel> list){
 
         if(eventModel.getStatus().equals("已结束")){
             viewHolder.status.setEnabled(false);
+        }else {
+            viewHolder.status.setEnabled(true);
         }
 
 
@@ -100,6 +104,7 @@ public void updateList( List<EventModel> list){
         private TextView eventName;
         private ImageView imageView;
         private TextView signUpTime;
+        private TextView eventTime;
         private TextView status;
 
     }

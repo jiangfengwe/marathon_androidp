@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +26,18 @@ import java.util.List;
  * Created by admin on 17/1/15.
  */
 
+
 public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeListener{
 
+    /**
+     * 轮播图点击
+     */
+    public interface OnCarouselItemClickListener{
+
+        void onClick(int pos);
+    }
+
+    private OnCarouselItemClickListener listener;
     /**
      * handler消息标识
      */
@@ -71,7 +82,10 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
         initView(context);
     }
 
+public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener){
 
+    this.listener=listener;
+}
 
     /**
      * 初始化控件
@@ -161,6 +175,21 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
                  stopScroll=true;
              }
 
+             for(int j=0;j<views.size();j++){
+
+                 final int pos=j;
+                views.get(j).setOnClickListener(new OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         if(listener!=null){
+
+                            listener.onClick(pos);
+                         }
+                     }
+                 });
+             }
+
+
             if(!stopScroll) {
 
                 for (int i = 0; i < views.size(); i++) {
@@ -170,6 +199,7 @@ public class Carousel extends RelativeLayout implements ViewPager.OnPageChangeLi
                     params.leftMargin = 5;
                     item.setLayoutParams(params);
                     item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+
                     if (i == 0) {
 
                         item.setEnabled(false);

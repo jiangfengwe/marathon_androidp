@@ -1,6 +1,7 @@
 package com.tdin360.zjw.marathon.service;
 
 import android.app.DownloadManager;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +27,7 @@ import static com.umeng.socialize.utils.DeviceConfig.context;
  * 更新下载器
  */
 public class DownloadAPKService extends Service {
+
     public DownloadAPKService() {
     }
 
@@ -76,8 +78,7 @@ public class DownloadAPKService extends Service {
         request.setDescription("正在下载安装包");
         request.setMimeType("application/vnd.android.package-archive");
 
-
-        dm.enqueue(request);
+         dm.enqueue(request);
 
 
     }
@@ -118,6 +119,8 @@ public class DownloadAPKService extends Service {
                 long longExtra = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 
                 if (longExtra != -1) {
+
+
                     installApk(context, longExtra);
                 }
             }

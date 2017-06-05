@@ -14,13 +14,12 @@
             <TextView
                 android:text="真实姓名:"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 android:textColor="@color/textBlack"
                 />
             <TextView
                 android:id="@+id/name"
                 android:layout_marginLeft="10dp"
-                android:text="张三"
+
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
                 />
@@ -31,7 +30,7 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="性        别:"
                 />
@@ -40,7 +39,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="男"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -49,7 +48,7 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="出生日期:"
                 />
@@ -58,7 +57,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="1993年8月12日"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -67,7 +66,7 @@
         <TableRow   android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="证件类型:"
                 />
@@ -76,7 +75,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="身份证"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -85,16 +84,17 @@
         <TableRow   android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="证件号码:"
                 />
             <TextView
+
                 android:id="@+id/iDNumber"
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="88888"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -103,7 +103,7 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="赛事名称:"
                 />
@@ -112,7 +112,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="贵阳国际马拉松赛"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -121,7 +121,7 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="参赛项目:"
                 />
@@ -130,7 +130,24 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="男子马拉松全程"
+
+                />
+        </TableRow>
+        <View android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>  <TableRow  android:padding="10dp">
+            <TextView
+                android:textSize="16sp"
+
+                android:textColor="@color/textBlack"
+                android:text="参赛号码:"
+                />
+            <TextView
+                android:id="@+id/attendNumber"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
@@ -139,7 +156,7 @@
         <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="服装尺码:"
                 />
@@ -148,15 +165,16 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="xxl"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"
             android:background="@color/lineColor"
-            android:layout_height="0.5dp"></View>   <TableRow  android:padding="10dp">
+            android:layout_height="0.5dp"></View>
+        <TableRow  android:padding="10dp">
             <TextView
                 android:textSize="16sp"
-                android:textStyle="bold"
+
                 android:textColor="@color/textBlack"
                 android:text="报名时间:"
                 />
@@ -165,7 +183,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
-                android:text="时间"
+
                 />
         </TableRow>
         <View android:layout_width="match_parent"

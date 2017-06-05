@@ -195,16 +195,19 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
             public void onFinished() {
 
                 myAdapter.notifyDataSetChanged();
-                if(!isLoadFail) {
-                    if (list.size() == 0) {
+
+                if(isLoadFail){
+                    loadFail.setVisibility(View.VISIBLE);
+                }else
+                if (!isLoadFail&&list.size() == 0) {
+
                         not_found.setVisibility(View.VISIBLE);
-                    } else {
+                 }else if(!isLoadFail&&list.size()>0){
 
                         not_found.setVisibility(View.GONE);
                     }
                 }
 
-            }
         });
 
     }

@@ -26,6 +26,7 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.SnsPlatform;
@@ -54,6 +55,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.btnBack= (ImageView) this.findViewById(R.id.btn_Back);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -235,6 +242,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     /**
      * 检查是否拥有权限

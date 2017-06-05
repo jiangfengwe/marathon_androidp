@@ -11,7 +11,7 @@
           android:src="@drawable/loading_banner_default"
       />
       <LinearLayout
-          android:padding="10dp"
+          android:padding="5dp"
           android:layout_alignParentBottom="true"
           android:background="#363636"
           android:orientation="horizontal"
@@ -34,14 +34,27 @@
                   android:textSize="18sp"
                   />
               <TextView
-                  android:drawableLeft="@drawable/date_icon"
+                  android:gravity="center_vertical"
+                  android:drawableLeft="@drawable/sign_time"
                   android:drawablePadding="5dp"
                   android:textSize="15sp"
                   android:id="@+id/signUpTime"
-                  android:textColor="@color/white"
+                  android:textColor="@color/lineColor"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="2017年3／10－3／20"
+                  android:text="2017年7月5日"
+                  />
+              <TextView
+                  android:layout_marginTop="2dp"
+                  android:gravity="center_vertical"
+                  android:drawableLeft="@drawable/event_time"
+                  android:drawablePadding="5dp"
+                  android:textSize="15sp"
+                  android:id="@+id/eventTime"
+                  android:textColor="@color/lineColor"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="2017年7月5日"
                   />
           </LinearLayout>
 

@@ -48,8 +48,10 @@ public class MarkModel implements Serializable{
     private String kM40Jing;
     private String kM42195Qiang;
     private String kM42195Jing;
+    private String qiang;
+    private String jing;
 
-    public MarkModel(String name, String number, String competitorRank, String competitorAmount, String gradeJudge,String eventName,String eventOrganizer,String pictureUrl,boolean competitorSex, String competitorType, String countryOrRegion, String kM5Qiang, String kM5Jing, String kM10Qiang, String kM10Jing, String kM137Qiang, String kM137Jing, String kM18Qiang, String kM18Jing, String kM20Qiang, String kM20Jing, String kM210975Qiang, String kM210975Jing, String kM215Qiang, String kM215Jing, String kM25Qiang, String kM25Jing, String kM29Qiang, String kM29Jing, String kM35Qiang, String kM35Jing, String kM376Qiang, String kM376Jing, String kM40Qiang, String kM40Jing, String kM42195Qiang, String kM42195Jing) {
+    public MarkModel(String name, String number, String competitorRank, String competitorAmount, String gradeJudge,String eventName,String eventOrganizer,String pictureUrl,boolean competitorSex, String competitorType, String countryOrRegion, String kM5Qiang, String kM5Jing, String kM10Qiang, String kM10Jing, String kM137Qiang, String kM137Jing, String kM18Qiang, String kM18Jing, String kM20Qiang, String kM20Jing, String kM210975Qiang, String kM210975Jing, String kM215Qiang, String kM215Jing, String kM25Qiang, String kM25Jing, String kM29Qiang, String kM29Jing, String kM35Qiang, String kM35Jing, String kM376Qiang, String kM376Jing, String kM40Qiang, String kM40Jing, String kM42195Qiang, String kM42195Jing,String qiang,String jing) {
         this.name = name;
         this.number = number;
         this.competitorRank = competitorRank;
@@ -87,6 +89,9 @@ public class MarkModel implements Serializable{
         this.kM40Jing = kM40Jing;
         this.kM42195Qiang = kM42195Qiang;
         this.kM42195Jing = kM42195Jing;
+        this.qiang=qiang;
+        this.jing=jing;
+
     }
 
 
@@ -236,5 +241,21 @@ public class MarkModel implements Serializable{
 
     public String getkM25Qiang() {
         return kM25Qiang;
+    }
+
+    public String getQiang() {
+        return qiang;
+    }
+
+    public void setQiang(String qiang) {
+        this.qiang = qiang;
+    }
+
+    public String getJing() {
+        return jing;
+    }
+
+    public void setJing(String jing) {
+        this.jing = jing;
     }
 }

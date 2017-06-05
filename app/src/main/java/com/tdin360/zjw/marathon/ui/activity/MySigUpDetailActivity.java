@@ -83,6 +83,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
                 try {
                     JSONObject json = new JSONObject(result);
 
+
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
 
                     boolean success = eventMobileMessage.getBoolean("Success");
@@ -347,6 +348,9 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
         //参赛项目
         TextView  projectNameTv = (TextView) view0.findViewById(R.id.projectName);
         projectNameTv.setText(model.getAttendProject());
+//        参赛号码
+        TextView attendNumber = (TextView) view0.findViewById(R.id.attendNumber);
+        attendNumber.setText((model.getAttendNumber().equals("null"))|| model.getAttendNumber().equals("") ? "暂未分配" :model.getAttendNumber());
 
         //服装尺码
         TextView  clothesSize = (TextView) view0.findViewById(R.id.clothesSize);

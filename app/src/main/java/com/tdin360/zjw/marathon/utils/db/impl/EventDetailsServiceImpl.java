@@ -42,6 +42,7 @@ public class EventDetailsServiceImpl implements EventDetailService{
             values.put("eventId",model.getEventId());
             values.put("imageUrl",model.getPicUrl());
             values.put("url",model.getLinkUrl());
+            values.put("title",model.getTitle());
             values.put("type",model.isType());
             conn.insert(SQLHelper.EVENT_DETAIL_TABLE, null, values);
 
@@ -62,14 +63,12 @@ public class EventDetailsServiceImpl implements EventDetailService{
 
         while (cursor.moveToNext()){
 
-
             String eventId1 = cursor.getString(cursor.getColumnIndex("eventId"));
             String imageUrl = cursor.getString(cursor.getColumnIndex("imageUrl"));
             String url = cursor.getString(cursor.getColumnIndex("url"));
-
+            String title = cursor.getString(cursor.getColumnIndex("title"));
             String type1 =  cursor.getString(cursor.getColumnIndex("type")) ;
-
-            list.add(new CarouselModel(eventId1,"",imageUrl,url,type1));
+            list.add(new CarouselModel(eventId1,title,imageUrl,url,type1));
 
         }
 

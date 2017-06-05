@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -138,17 +139,8 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                  viewHolder.matchName.setText(model.getEventName());
                  viewHolder.projectName.setText(model.getCompetitorType());
 
-                 if(model.getCompetitorType().contains("半程")){
-
-                     viewHolder.qiang.setText(model.getkM210975Qiang().equals("null")?"00:00:00":model.getkM210975Qiang());
-                     viewHolder.jing.setText(model.getkM42195Jing().equals("null")?"00:00:00":model.getkM215Jing());
-
-                 }else {
-                     viewHolder.qiang.setText(model.getkM42195Qiang().equals("null")?"00:00:00":model.getkM42195Qiang());
-                     viewHolder.jing.setText(model.getkM42195Jing().equals("null")?"00:00:00":model.getkM42195Jing());
-
-                 }
-
+                 viewHolder.qiang.setText(model.getQiang().equals("null")||model.getQiang().equals("")?"00:00:00":model.getQiang());
+                 viewHolder.jing.setText(model.getJing().equals("null")||model.getJing().equals("")?"":model.getJing());
 
                 return convertView;
             }
@@ -267,6 +259,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                     totalPages = json.getInt("TotalPages");
                     JSONObject message = json.getJSONObject("EventMobileMessage");
 
+//                     Log.d("--------->>>>>>", "onSuccess: "+json);
                     boolean success = message.getBoolean("Success");
 
                     if(success){
@@ -316,12 +309,13 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                              String km40Jing = item.getString("KM40Jing");
                              String km42195Qiang = item.getString("KM42195Qiang");
                              String km42195Jing = item.getString("KM42195Jing");
-
+                             String qiang = item.getString("Qiang");
+                             String jing = item.getString("Jing");
 
                              data.add(new MarkModel(name,number,competitorRank,competitorAmount,gradeJudge,eventName,eventOrganizer,pictureUrl,sex,competitorType,
                                      countryOrRegion,km5Qiang,km5Jing,km10Qiang,km10Jing,km137Qiang,km137Jing,km18Qiang,km18Jing,km20Qiang,km20Jing,
                                      km210975Qiang,km210975Jing,km215Qiang,km215Jing,km25Qiang,km25Jing,km29Qiang,km29Jing,km35Qiang,km35Jing,km376Qiang,
-                                     km376Jing,km40Qiang,km40Jing,km42195Qiang,km42195Jing));
+                                     km376Jing,km40Qiang,km40Jing,km42195Qiang,km42195Jing,qiang,jing));
 
 
                          }
@@ -376,6 +370,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                 if(!isLoadFail) {
                     if (data.size() == 0) {
 
+                        not_found.setText("目前还没有任何成绩记录!");
                         not_found.setVisibility(View.VISIBLE);
                     } else {
 

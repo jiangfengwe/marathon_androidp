@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -225,6 +226,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                         list.clear();
                     }
                     JSONObject json = new JSONObject(result);
+//                     Log.d("-------->>>>", "onSuccess: "+json);
                     totalPages = json.getInt("TotalPages");
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
 
@@ -271,7 +273,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                              String email = object.getString("RegistratorEmail");
 
 //                             证件号码
-                             String number = object.getString("RegistratorDocumentNumber");
+                             String idNumber = object.getString("RegistratorDocumentNumber");
 
 //                             证件类型
                              String type = object.getString("RegistratorDocumentType");
@@ -286,7 +288,9 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                              boolean isPay = object.getBoolean("RegistratorIsPay");
 
 //                              参赛号码
-                             String documentNumber = object.getString("RegistratorDocumentNumber");
+                             String number = object.getString("RegistratorNumber");
+
+
 
 //                             邮政编码
                              String postCode = object.getString("RegisterPostCode");
@@ -306,7 +310,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                              String orderNo = object.getString("OrderNo");
 
 
-                             list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,number,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,documentNumber,isPay,createTime,orderNo,money));
+                             list.add(new SignUpInfoModel(pictureUrl,id,eventName,name,phone,email,birth,idNumber,type,sex,country,province,city,county,projectType,size,address,postCode,emergencyContactName,emergencyContactPhone,number,isPay,createTime,orderNo,money));
 
 
                          }
@@ -362,6 +366,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                 if(!isLoadFail) {
                     if (list.size() <= 0) {
 
+                        not_found.setText("您还没有报名哦，去报名再来看吧!");
                         not_found.setVisibility(View.VISIBLE);
                     } else {
                         not_found.setVisibility(View.GONE);

@@ -116,36 +116,10 @@
            </LinearLayout>
     </LinearLayout>
             <RelativeLayout
-                android:id="@+id/myGoods"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:gravity="center"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"
-                    android:drawablePadding="2dp"
-                    android:drawableLeft="@drawable/my_goods"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我的物资"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-            <RelativeLayout
                 android:id="@+id/myTeam"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -168,10 +142,37 @@
                     />
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/myNotice"
+                android:id="@+id/myGoods"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
                 android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/white"
+                    android:drawablePadding="2dp"
+                    android:drawableLeft="@drawable/my_goods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的物资"
+                    />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/arrow_right"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/myNotice"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -235,6 +236,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="关于我们"
+                    />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/share"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="@color/white"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:drawableLeft="@drawable/my_share_app"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="推荐给好友"
                     />
                 <ImageView
                     android:layout_centerVertical="true"

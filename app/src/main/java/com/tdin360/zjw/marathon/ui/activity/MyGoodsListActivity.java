@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,8 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
         this.pullToRefreshLayout.setOnRefreshListener(this);
         this.myAdapter = new MyAdapter();
         this.refreshListView.setAdapter(myAdapter);
+
+
 
         loadData();
 
@@ -226,7 +229,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
     private void httpRequest(final boolean isRefresh){
 
 
-        loadFail.setVisibility(View.GONE);
+         loadFail.setVisibility(View.GONE);
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MY_GOODS);
         requestParams.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
         requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -246,7 +249,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
                     }
                     JSONObject json  = new JSONObject(result);
 
-//                    Log.d("物资-------->>>", "onSuccess: "+json);
+//                   Log.d("物资-------->>>", "onSuccess: "+json);
                     totalPages = json.getInt("TotalPages");
                     JSONObject message = json.getJSONObject("EventMobileMessage");
 
@@ -268,11 +271,12 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
                             String documentNumber = object.getString("DocumentNumber");
                             String size = object.getString("MaterilasSize");
                             String eventName = object.getString("EventName");
-                            String content = object.getString("MaterilasContent");
+                            String content = object.getString("MaterilasReceiveTimeStr");
                             boolean isApply = object.getBoolean("IsApply");
                             String goodsInfo = object.getString("GoodsInfo");
+                            boolean isReceive = object.getBoolean("MaterilasIsReceive");
 
-                            list.add(new GoodsModel(id,name,gender,number,documentNumber,eventName,content,size,isApply,goodsInfo));
+                            list.add(new GoodsModel(id,name,gender,number,documentNumber,eventName,content,size,isApply,goodsInfo,isReceive));
                         }
 
 
@@ -327,7 +331,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
 
 
                     //判断是否有数据
-                    if ((list.size() > 0&&!isLoadFail)) {
+                    if ((list.size() <= 0&&!isLoadFail)) {
                         not_found.setVisibility(View.VISIBLE);
 
                     } else {

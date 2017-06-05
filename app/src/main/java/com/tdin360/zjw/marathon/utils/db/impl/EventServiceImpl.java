@@ -41,7 +41,8 @@ public class EventServiceImpl implements EventService {
             values.put("eventImageUrl",model.getPicUrl());
             values.put("eventName",model.getName());
             values.put("eventStatus",model.getStatus());
-            values.put("time",model.getStartDate());
+            values.put("signUptime",model.getSignUpStartTime());
+            values.put("eventTime",model.getStartDate());
             values.put("shareUrl",model.getShardUrl());
             values.put("enable",model.isRegister());
            conn.insert(SQLHelper.EVENT_TABLE, null, values);
@@ -64,10 +65,11 @@ public class EventServiceImpl implements EventService {
             String eventImageUrl = cursor.getString(cursor.getColumnIndex("eventImageUrl"));
             String eventName = cursor.getString(cursor.getColumnIndex("eventName"));
             String eventStatus = cursor.getString(cursor.getColumnIndex("eventStatus"));
-            String time = cursor.getString(cursor.getColumnIndex("time"));
+            String signUptime = cursor.getString(cursor.getColumnIndex("signUpTime"));
+            String eventTime = cursor.getString(cursor.getColumnIndex("eventTime"));
             String shareUrl = cursor.getString(cursor.getColumnIndex("shareUrl"));
             boolean enable = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("enable")));
-            list.add(new EventModel(eventId,eventName,eventStatus,eventImageUrl,time,shareUrl,enable));
+            list.add(new EventModel(eventId,eventName,eventStatus,eventImageUrl,signUptime,eventTime,shareUrl,enable));
 
 
         }

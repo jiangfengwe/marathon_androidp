@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.step.StepSettingModel;
+
 
 /**
  * 数据存储管理单例类
@@ -13,9 +13,6 @@ import com.tdin360.zjw.marathon.step.StepSettingModel;
  */
 public class SharedPreferencesManager {
 
-    public static final String LM_KEY="lm";
-    public static final String STEP_LENGTH_KEY="step_length";
-    public static final String WEIGHT_KEY="weight";
    /*
    清除用户报名数据
     */
@@ -118,54 +115,7 @@ public class SharedPreferencesManager {
 
     }
 
-    /**
-     *保存计步设置
-     * @param context
-     * @param model 计步设置参数
-     *
-     */
-    public static void saveStepParams(Context context, StepSettingModel model){
 
-        SharedPreferences shared = context.getSharedPreferences("step_set",Activity.MODE_PRIVATE);
-        SharedPreferences.Editor edit = shared.edit();
-        edit.putInt(LM_KEY,model.getLm());
-        edit.putInt(STEP_LENGTH_KEY,model.getStep_length());
-        edit.putInt(WEIGHT_KEY,model.getWeight());
-        edit.commit();
-
-    }
-
-    /**
-     * 获取计步设置参数
-     * @param context
-     * @return
-     */
-    public static StepSettingModel getStepSettingModel(Context context){
-
-        SharedPreferences shared = context.getSharedPreferences("step_set",Activity.MODE_PRIVATE);
-
-        int lm = shared.getInt(LM_KEY, 3);
-
-        int step_l = shared.getInt(STEP_LENGTH_KEY, 60);
-
-        int weight = shared.getInt(WEIGHT_KEY, 50);
-        return new StepSettingModel(lm,step_l,weight);
-
-
-    }
-
-    /**
-     * 清除计步设置恢复默认
-     * @param context
-     */
-    public static void clearStepParams(Context context){
-
-        SharedPreferences shared = context.getSharedPreferences("step_set",Activity.MODE_PRIVATE);
-        SharedPreferences.Editor edit = shared.edit();
-        edit.clear();
-        edit.commit();
-
-    }
 
     //保存当前版本号
     public static void saveGuideStatus(Context context){

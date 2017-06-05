@@ -1,6 +1,7 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +13,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.ui.fragment.CircleFragment;
 import com.tdin360.zjw.marathon.ui.fragment.EventFragment;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
-import com.tdin360.zjw.marathon.ui.fragment.StepFragment;
+import com.umeng.socialize.UMShareAPI;
 
 /**
  * 程序主界面
@@ -26,7 +27,7 @@ public class MainActivity extends FragmentActivity{
     private static  final String TAB4="tab4";
     private EventFragment marathonFragment;//赛事首页
     private CircleFragment circleFragment;//圈子
-    private StepFragment stepFragment;//运动
+
     private MyFragment personalCenterFragment;//我的
     private RadioGroup radioGroup;
 
@@ -39,7 +40,7 @@ public class MainActivity extends FragmentActivity{
           if(savedInstanceState!=null){
               this.marathonFragment= (EventFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
             //  this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
-              this.stepFragment = (StepFragment) this.getSupportFragmentManager().findFragmentByTag(TAB3);
+
               this.personalCenterFragment= (MyFragment) this.getSupportFragmentManager().findFragmentByTag(TAB4);
           }
         /**
@@ -50,6 +51,12 @@ public class MainActivity extends FragmentActivity{
           this.radioGroup.setOnCheckedChangeListener(new MyCheckedItemListener());
 //        默认选中第一个tab
           this.radioGroup.check(R.id.tab1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -84,12 +91,6 @@ public class MainActivity extends FragmentActivity{
 
                     break;
                 case R.id.tab3:
-                    if(stepFragment==null){
-                        stepFragment =  StepFragment.newInstance();
-                        fragmentTransaction.add(R.id.center,stepFragment,TAB3);
-                    }else {
-                        fragmentTransaction.show(stepFragment);
-                    }
 
                     break;
                 case R.id.tab4:
@@ -116,9 +117,7 @@ public class MainActivity extends FragmentActivity{
             if(circleFragment!=null&&circleFragment.isAdded()){
                 fragmentTransaction.hide(circleFragment);
             }
-            if(stepFragment!=null&&stepFragment.isAdded()){
-                fragmentTransaction.hide(stepFragment);
-            }
+            
             if(personalCenterFragment!=null&&personalCenterFragment.isAdded()){
                 fragmentTransaction.hide(personalCenterFragment);
             }

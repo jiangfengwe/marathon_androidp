@@ -51,11 +51,8 @@ public class PullableListView extends ListView implements Pullable
 		}
 
 			// 滑到底部了
-			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
-					&& getChildAt(
-							getLastVisiblePosition()
-									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()){
-
+ if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
+	 && getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()){
 
 				return true;
 		}

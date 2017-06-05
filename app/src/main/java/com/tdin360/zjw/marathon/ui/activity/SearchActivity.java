@@ -182,6 +182,7 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(result);
 
+//                    Log.d("------->>>", "onSuccess: "+obj);
 
                     JSONArray array = obj.getJSONArray("EventSystemMessageList");
 
@@ -196,7 +197,7 @@ public class SearchActivity extends AppCompatActivity {
                         String shareUrl = object.getString("EventSiteUrl");
                          String pictureUrl = object.getString("PictureUrl");
                          boolean isRegister = object.getBoolean("IsRegister");
-                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl, eventStartTime,shareUrl,isRegister);
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,"",eventStartTime,shareUrl,isRegister);
                         list.add(eventModel);
 
 

@@ -20,9 +20,10 @@ public class GoodsModel implements Serializable{
     private String size;
     private boolean isApply;
     private String goodsInfo;
+    private boolean isReceive;
 
 
-    public GoodsModel(int id,String name,String gander,String number,String idNumber,String eventName, String content,String size,boolean isApply,String goodsInfo) {
+    public GoodsModel(int id,String name,String gander,String number,String idNumber,String eventName, String content,String size,boolean isApply,String goodsInfo,boolean isReceive) {
         this.id = id;
         this.name=name;
         this.number=number;
@@ -33,6 +34,7 @@ public class GoodsModel implements Serializable{
         this.size=size;
         this.isApply = isApply;
         this.goodsInfo=goodsInfo;
+        this.isReceive=isReceive;
     }
 
 
@@ -74,6 +76,11 @@ public class GoodsModel implements Serializable{
 
     public String getGoodsInfo() {
         return goodsInfo;
+    }
+
+    public boolean isReceive(){
+
+        return isReceive;
     }
 
 }

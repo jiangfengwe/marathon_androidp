@@ -350,12 +350,6 @@
         <service android:name=".step.StepCounterService" />
 
         <activity
-            android:name=".ui.activity.StepSettingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.StepHistoryActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.FeedbackListActivity"
             android:screenOrientation="portrait" />
         <activity
