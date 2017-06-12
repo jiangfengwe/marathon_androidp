@@ -6,9 +6,23 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Path;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +34,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tdin360.zjw.marathon.Manifest;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.CityModel;
 import com.tdin360.zjw.marathon.model.DistrictModel;
 import com.tdin360.zjw.marathon.model.ProvinceModel;
 import com.tdin360.zjw.marathon.model.SpinnerModel;
+import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MyDatePickerDialog;
@@ -51,6 +70,12 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -147,7 +172,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     /**
      * 当前省的名称
      */
-    protected String mCurrentProviceName;
+    protected String mCurrentProviceName="";
     /**
      * 当前市的名称
      */
@@ -164,11 +189,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
 
     //加载控件
-
-
     private TextView loadFail;
     //主布局
     private LinearLayout main;
+
+    //健康证明
+
+    private ImageView imageView;
+    private RelativeLayout progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +323,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         });
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://shop.baijar.com/EventInfo/Disclaimer?eventId="+MarathonDataUtils.init().getEventId());
+        webView.loadUrl(HttpUrlUtils.ANNOUNCE+MarathonDataUtils.init().getEventId());
         dialog.show();
         //获取屏幕宽高　
         DisplayMetrics metric = new DisplayMetrics();
@@ -304,7 +332,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         int width =  metric.widthPixels;
         int height = metric.heightPixels;
 //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new  ViewGroup.LayoutParams(width-100,height-300);
+        ViewGroup.LayoutParams layoutParams = new  ViewGroup.LayoutParams(width-100,height-500);
         dialog.setContentView(viewDialog, layoutParams);
     }
 
@@ -331,6 +359,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
          this.editTextLinkPhone= (EditText) this.findViewById(R.id.linkPhone);
          this.main = (LinearLayout) this.findViewById(R.id.main);
          this.loadFail = (TextView) this.findViewById(R.id.loadFail);
+         this.progressBar = (RelativeLayout) this.findViewById(R.id.progressBar);
+         this.imageView = (ImageView) this.findViewById(R.id.imageView);
+         this.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
 
 
 
@@ -506,11 +542,15 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                 }
             });
 
-        //表单提交
+        /**
+         * 表单提交
+         */
+
            this.findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   submit();
+                    submit();
+
 
                }
            });
@@ -586,13 +626,14 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
-        params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId()+"");
+        params.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("phone", SharedPreferencesManager.getLoginInfo(getApplicationContext()).getName());
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
 
+//                Log.d("------>", "onSuccess: "+s);
 
                 try {
                     JSONObject json = new JSONObject(s);
@@ -629,14 +670,16 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                     mCurrentProviceName = json.getString("Province");
                     mCurrentCityName = json.getString("City");
                     mCurrentDistrictName = json.getString("County");
-                    if(!mCurrentDistrictName.equals("")||!mCurrentProviceName.contains("null")) {
+                    if(mCurrentProviceName!=null&&!mCurrentProviceName.equals("null")) {
+
+
                         showSelectedResult();
                     }
 
 
                     //填充手机号
-                    String registratorPhone = json.getString("RegistratorPhone");
-                    editTextPhone.setText(registratorPhone.equals("null")?"":registratorPhone);
+//                    String registratorPhone = json.getString("RegistratorPhone");
+                    editTextPhone.setText(SharedPreferencesManager.getLoginInfo(getApplication()).getName());
                     //填充邮箱
                     String registratorEmail = json.getString("RegistratorEmail");
                     editTextEmail.setText(registratorEmail.equals("null")?"":registratorEmail);
@@ -716,6 +759,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                  Toast.makeText(SignUpActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
 
                 loadFail.setText("点击重新加载");
+                main.setVisibility(View.GONE);
                 loadFail.setVisibility(View.VISIBLE);
             }
 
@@ -847,11 +891,261 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         }
     }
 
+
+    /**
+     * 上传健康证明
+     */
+
+
+    private void selectImage(){
+
+
+          AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+
+        alert.setTitle("选择图片");
+        alert.setItems(new String[]{"拍照","相册"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                switch (which){
+
+                    case 0://拍照
+
+
+
+//           6.0系统检查权限
+            if(hasPermission(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+             //打开相机
+
+                takePhoto();
+
+
+
+            }else {
+
+
+                requestPermission(Constants.CAMERA_CODE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA);
+            }
+                        break;
+                    case 1://相册
+
+                        if(hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+                            choosePhoto();
+
+                        }else {
+
+                            requestPermission(Constants.WRITE_EXTERNAL_CODE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        }
+
+
+
+                        break;
+                }
+
+            }
+        });
+
+        alert.show();
+
+
+
+
+    }
+
+    private Uri imageUri;
+
+    /**
+     * 拍照
+     */
+    void takePhoto(){
+
+        /**
+         * 这里将时间作为不同照片的名称
+         */
+        File outPath=new File(Environment.getExternalStorageDirectory(),"temp.jpg");
+
+        /**
+         * 如果该文件夹已经存在，则删除它，否则创建一个
+         */
+        try {
+            if (outPath.exists()) {
+                outPath.delete();
+            }
+            outPath.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /**
+         * 隐式打开拍照的Activity，并且传入CROP_PHOTO常量作为拍照结束后回调的标志
+         */
+        imageUri = Uri.fromFile(outPath);
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, 1000);
+
+    }
+
+    /**
+     * 从相册选取图片
+     */
+    void choosePhoto(){
+        /**
+         * 打开选择图片的界面
+         */
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");//相片类型
+        startActivityForResult(intent,2000);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            /**
+             * 拍照的请求标志
+             */
+            case 1000:
+                if (resultCode==RESULT_OK) {
+
+                    startPhotoZoom(imageUri);
+
+                }
+
+
+                break;
+            /**
+             * 从相册中选取图片的请求标志
+             */
+
+            case 2000:
+                if (resultCode == RESULT_OK) {
+
+                    Uri uri = data.getData();
+                    startPhotoZoom(uri);
+
+
+                }
+                break;
+
+
+        }
+
+
+
+
+    }
+
+    private File file;
+    /**
+     * 裁剪图片方法实现
+     * @param uri
+     */
+    public void startPhotoZoom(Uri uri) {
+
+
+        try {
+
+            this.progressBar.setVisibility(View.VISIBLE);
+
+            final Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+
+                this.file = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+
+                if(!file.exists()) {
+
+                    file.createNewFile();
+                }
+
+              new Thread(new Runnable() {
+                  @Override
+                  public void run() {
+
+
+                   compressImage(bitmap);
+
+
+
+                  }
+              }).start();
+
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+
+            Snackbar.make(imageView,"图片不可用，请重新选择",Snackbar.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private Handler handler = new Handler(){
+
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+                    progressBar.setVisibility(View.GONE);
+                    Bitmap image = BitmapFactory.decodeFile(file.getPath());
+                    if(image!=null) {
+                        imageView.setImageBitmap(image);
+                    }
+
+
+
+        }
+    };
+
+
+    /**
+     * 图片压缩
+     * @param image
+     */
+    private void compressImage(Bitmap image)   {
+
+        try {
+            FileOutputStream os = new FileOutputStream(file);
+
+            image.compress(Bitmap.CompressFormat.JPEG,50,os);
+            os.close();
+            image.recycle();
+
+    } catch (Exception e) {
+
+        Snackbar.make(imageView,"图片不可用，请重新选择",Snackbar.LENGTH_SHORT).show();
+    }
+        handler.sendEmptyMessage(0);
+
+    }
+
+
+    @Override
+    public void doCameraPermission() {
+
+        takePhoto();
+    }
+
+    @Override
+    public void doSDCardPermission() {
+
+        choosePhoto();
+    }
+
     /**
      * 提交表单
      *
      */
     public void submit() {
+
+
+
+
+
 
         //验证表单
 
@@ -911,6 +1205,18 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         }
 
+        //当用户选择身份证时验证
+        if(idCardTypeString.equals("身份证")&&idCardNumber.getText().toString().trim().length()<18){
+
+
+            Toast.makeText(SignUpActivity.this,"证件号码填写有误!",Toast.LENGTH_SHORT).show();
+            idCardNumber.requestFocus();
+
+            return;
+
+        }
+
+
 
 //        验证所在地
         if(areaAddress.getText().toString().trim().contains("请")){
@@ -952,8 +1258,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             editTextAddress.requestFocus();
             return;
         }
-
-
 
 
 //        验证邮政编码
@@ -1011,7 +1315,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         //设置提交参数
         RequestParams param = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
         //赛事id
-        param.addBodyParameter("EventId", MarathonDataUtils.init().getEventId()+"");
+        param.addBodyParameter("EventId",MarathonDataUtils.init().getEventId());
         //姓名
         param.addBodyParameter("RegistratorName",editTextName.getText().toString().trim());
 //        邮箱
@@ -1059,8 +1363,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         param.addBodyParameter("RegistratorSource","来自Android客户端");
         param.addBodyParameter("appKey",HttpUrlUtils.appKey);
         param.setMaxRetryCount(0);//最大重复请求次数
-        param.setConnectTimeout(5*1000);
-     
+        param.setConnectTimeout(15*1000);
+        param.setMultipart(true);
+
+        if(file!=null) {
+            param.addBodyParameter("uploadedFile", file);
+        }
 
 
         x.http().post(param, new Callback.CommonCallback<String>() {
@@ -1071,7 +1379,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                 try {
                     JSONObject json = new JSONObject(result);
 
-                   // Log.d("------->>", "onSuccess: "+result);
+//                   Log.d("---报名---->>", "onSuccess: "+result);
 
                     boolean success = json.getBoolean("Success");
                     String reason=json.getString("Reason");
@@ -1093,6 +1401,12 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
                         intent.putExtra("from","signUp");
                         startActivity(intent);
                         finish();
+                        //上传完成删除图片
+
+                        if(file!=null&&file.exists()){
+
+                            file.delete();
+                        }
                     }else {
 
                         //提示信息
@@ -1121,6 +1435,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             @Override
             public void onFinished() {
+
 
                 hud.dismiss();
 

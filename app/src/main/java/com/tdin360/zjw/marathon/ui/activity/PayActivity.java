@@ -9,8 +9,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import android.util.Log;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +52,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         showBackButton();
          initView();
          WXPayEntryActivity.listener=this;
-
 
     }
 
@@ -340,7 +341,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     /**
      * 支付成功后直接弹出支持成功界面
      */
-    private void showPaySuccessDialog(){
+    private void showPaySuccessDialog(final String title, final String link){
 
 
 
@@ -358,16 +359,44 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         TextView freeView = (TextView) view.findViewById(R.id.free);
         freeView.setText("¥ "+money);
 
-        //返回主页
-        view.findViewById(R.id.home).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PayActivity.this,MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                alert.dismiss();
-            }
-        });
+        //活动链接跳转
+
+        if(link!=null&&!link.equals("null")&&!link.equals("")){
+
+           Button btn = (Button) view.findViewById(R.id.home);
+
+            btn.setText(title);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(PayActivity.this,ShowHtmlActivity.class);
+                    intent.putExtra("title",title);
+                    intent.putExtra("url",link);
+                    startActivity(intent);
+
+                    finish();
+
+                }
+            });
+
+
+        }else {
+            //返回主页
+            view.findViewById(R.id.home).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PayActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    alert.dismiss();
+
+                }
+            });
+
+        }
+
+
 
         //查看详情
         view.findViewById(R.id.details).setOnClickListener(new View.OnClickListener() {
@@ -410,15 +439,20 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             public void onSuccess(String result) {
 
 
+
                 try {
                     JSONObject obj = new JSONObject(result);
 
                     boolean isPay = obj.getBoolean("isPay");
+                    String link = obj.getString("Link");
+                    String title = obj.getString("Name");
+
 
                     //支付成功
                     if(isPay){
 
-                   showPaySuccessDialog();
+
+                   showPaySuccessDialog(title,link);
 
                     }
 
@@ -433,6 +467,8 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+
+              Toast.makeText(PayActivity.this,"网络链接异常",Toast.LENGTH_SHORT).show();
             }
 
             @Override

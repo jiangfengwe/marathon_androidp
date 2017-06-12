@@ -117,8 +117,6 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
 
         showShareButton(manager);
 
-
-
         //如果报名已结束就显示蒙板
           this.isEnableView=this.findViewById(R.id.isEnable);
          if(!MarathonDataUtils.init().isRegister()){
@@ -172,15 +170,14 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
         }
         String url = model.getLinkUrl();
 
-        if(!url.contains("http://")){
+        if(!url.startsWith("http")){
 
             url="http://"+url;
         }
         Intent intent = new Intent(this,ShowHtmlActivity.class);
         intent.putExtra("title",model.getTitle());
         intent.putExtra("url",url);
-//        intent.putExtra("shareTitle",model.getTitle());
-//        intent.putExtra("shareImageUrl",model.getPicUrl());
+
          startActivity(intent);
 
     }
@@ -293,20 +290,18 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
                         public void onClick(View v) {
 
                             try {
-                                String linkUrl = sponsorList.get(getRealPosition(MyViewHolder.this)).getLinkUrl();
-                                if (linkUrl != null && !linkUrl.equals("")) {
+                                CarouselModel model = sponsorList.get(getRealPosition(MyViewHolder.this));
+                                if (model.getLinkUrl() != null && !model.getLinkUrl().equals("")) {
 
-                                    String url;
-                                    if (linkUrl.contains("http://")) {
+                                    String url=model.getLinkUrl();
+                                    if (!model.getLinkUrl().startsWith("http")) {
 
-                                        url = linkUrl;
-                                    } else {
-
-                                        url = "http://" + linkUrl;
+                                        url = "http://" + model.getLinkUrl();
                                     }
 
-                                    Uri uri = Uri.parse(url);
-                                    Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                                    Intent it = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
+                                    it.putExtra("title",model.getTitle());
+                                    it.putExtra("url",url);
                                     startActivity(it);
                                 } else {
 

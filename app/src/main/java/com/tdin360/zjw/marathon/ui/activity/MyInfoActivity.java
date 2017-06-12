@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.View;
@@ -132,7 +133,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                         alert.setTitle("更改头像");
                         alert.setCancelable(false);
-                        alert.setItems(new String[]{"打开照相机", "从相册中选择", "取消"}, new DialogInterface.OnClickListener() {
+                        alert.setItems(new String[]{"拍照", "相册", "取消"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -140,12 +141,12 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                                     case 0:
                                         //android 6.0 判断是否拥有打开照相机的权限
-                                        if(hasPermission(Manifest.permission.CAMERA)){
+                                        if(hasPermission(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
 
                                             openCamera();
                                         }else {
 
-                                            requestPermission(Constants.CAMERA_CODE,Manifest.permission.CAMERA);
+                                            requestPermission(Constants.CAMERA_CODE,Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE);
                                         }
                                         break;
                                     case 1:
@@ -494,14 +495,14 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MyInfoActivity.this,"上传失败",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(main,"头像上传失败",Snackbar.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-            Toast.makeText(MyInfoActivity.this,"头像上传失败",Toast.LENGTH_SHORT).show();
+            Snackbar.make(main,"头像上传失败",Snackbar.LENGTH_SHORT).show();
             }
 
             @Override

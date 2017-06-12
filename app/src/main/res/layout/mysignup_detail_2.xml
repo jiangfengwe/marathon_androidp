@@ -5,75 +5,95 @@
     android:padding="10dp"
     android:layout_height="match_parent">
 
-   <TableLayout
-       android:shrinkColumns="1"
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="订  单  号:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textBlack"
+            />
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/textBlack"
+            android:textSize="16sp"
+            android:id="@+id/orderNumber"
+            />
+    </LinearLayout>
 
 
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
-       <TableRow  android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:padding="10dp"
-           >
-           <TextView
-               android:text="订  单  号:"
-               android:textSize="16sp"
-               android:textColor="@color/textBlack"
-
-               />
-
-           <TextView
-               android:layout_marginLeft="5dp"
-               android:textColor="@color/textBlack"
-               android:textSize="16sp"
-               android:id="@+id/orderNumber"
-               />
-       </TableRow>
        <View android:layout_width="match_parent"
            android:layout_height="0.5dp"
            android:background="@color/lineColor"
            ></View>
 
-       <TableRow android:padding="10dp">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
            <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
                android:text="支付金额:"
                android:textSize="16sp"
                android:textColor="@color/textBlack"
 
                />
            <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
                android:layout_marginLeft="5dp"
                android:textColor="@color/textBlack"
                android:textSize="16sp"
                android:id="@+id/price"
                />
-       </TableRow>
+ </LinearLayout>
        <View android:layout_width="match_parent"
            android:layout_height="0.5dp"
            android:background="@color/lineColor"
            ></View>
-       <TableRow
-           android:padding="10dp"
-           >
+
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
            <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
                android:text="支付状态:"
                android:textSize="16sp"
 
                android:textColor="@color/textBlack"
                />
            <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
                android:layout_marginLeft="5dp"
                android:textSize="16sp"
                android:textColor="@color/textBlack"
                android:id="@+id/isPay"
                />
-       </TableRow>
+        </LinearLayout>
+
        <View android:layout_width="match_parent"
            android:layout_height="0.5dp"
            android:background="@color/lineColor"
            ></View>
 
-   </TableLayout>
+
 
     <Button
         android:id="@+id/payBtn"

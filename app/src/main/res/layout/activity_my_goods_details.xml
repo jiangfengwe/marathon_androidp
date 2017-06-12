@@ -170,6 +170,7 @@
 
   </ScrollView>
     <Button
+        android:visibility="gone"
         android:id="@+id/btn_confirm"
         android:onClick="confirmClick"
         android:background="@drawable/rect_yellow_button_selector"

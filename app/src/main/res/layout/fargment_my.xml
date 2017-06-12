@@ -116,10 +116,11 @@
            </LinearLayout>
     </LinearLayout>
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/myTeam"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
-                android:layout_marginTop="10dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -142,10 +143,11 @@
                     />
             </RelativeLayout>
             <RelativeLayout
+
                 android:id="@+id/myGoods"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView

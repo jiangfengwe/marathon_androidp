@@ -18,7 +18,7 @@ public class HttpUrlUtils {
     //赛事详情数据接口
     public static final String MARATHON_DETAILS=BASE+"EventInfo/CarouselAndSponsor";
     //赛事报名接口
-    public static final String MARATHON_SIGNUP=BASE+"EventInfo/PersonalRegister";
+    public static final String MARATHON_SIGNUP= BASE+"EventInfo/PersonalRegister";
     //赛事简介地址
     public static final String MARATHON_INTRO=BASE+"eventInfo/EventInfoDetail";
     //赛事新闻/公告接口
@@ -63,4 +63,7 @@ public class HttpUrlUtils {
     public static final String ADDFEED_INFO=BASE+"eventInfo/FeedBackContent";
     //检查更新接口
     public static final String UPDATE_URL="http://shop.baijar.com/eventinfo/AppUpdate";
+
+    //免责声明
+    public static final String ANNOUNCE="http://shop.baijar.com/EventInfo/Disclaimer?eventId=";
 }

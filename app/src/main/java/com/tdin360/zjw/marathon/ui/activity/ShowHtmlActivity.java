@@ -174,14 +174,21 @@ public class ShowHtmlActivity extends BaseActivity {
             progressBar.setVisibility(View.GONE);
             hud.dismiss();
 
-
         }
     }
 
     @Override
     public void onBackPressed() {
 
-          finish();
+
+        if(webView.canGoBack()){
+
+            webView.goBack();
+        }else {
+
+            finish();
+        }
+
     }
 
 }

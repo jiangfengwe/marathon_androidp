@@ -140,7 +140,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                  viewHolder.projectName.setText(model.getCompetitorType());
 
                  viewHolder.qiang.setText(model.getQiang().equals("null")||model.getQiang().equals("")?"00:00:00":model.getQiang());
-                 viewHolder.jing.setText(model.getJing().equals("null")||model.getJing().equals("")?"":model.getJing());
+                 viewHolder.jing.setText(model.getJing().equals("null")||model.getJing().equals("")?"00:00:00":model.getJing());
 
                 return convertView;
             }

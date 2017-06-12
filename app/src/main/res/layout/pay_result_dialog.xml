@@ -3,13 +3,22 @@
     android:id="@+id/activity_pay_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+
     android:orientation="vertical"
  >
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="支付结果"
+            />
+        <TextView
+            android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
             android:drawablePadding="2dp"
             android:drawableLeft="@drawable/label_selector_icon"
             android:layout_width="wrap_content"
@@ -20,7 +29,7 @@
             />
         <TextView
             android:id="@+id/free"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/red"
@@ -36,37 +45,29 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
 
+                <Button
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_red_btn_selector"
                     android:id="@+id/home"
-                    android:background="@drawable/oval_yellow_button_selector"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:text="返回首页"
                     />
-            </LinearLayout>
-            <LinearLayout
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
+
                 <Button
-                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_green_btn_selector"
                     android:id="@+id/details"
-                    android:background="@drawable/yellow_rect_selector"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/text_yellow_white_selector"
+                    android:textColor="@color/white"
                     android:text="查看详情"
                     />
 
-        </LinearLayout>
         </LinearLayout>
 
 

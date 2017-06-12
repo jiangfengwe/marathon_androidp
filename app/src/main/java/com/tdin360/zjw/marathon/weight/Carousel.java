@@ -119,17 +119,18 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
 
                 if (MotionEvent.ACTION_DOWN == event.getAction()) {
                     handler.removeMessages(WHAT);
-                } else if (MotionEvent.ACTION_UP == event.getAction()) {
+                }
 
+                if (MotionEvent.ACTION_UP == event.getAction()) {
 
+                    handler.removeMessages(WHAT);
                     handler.sendEmptyMessageDelayed(WHAT, loopTime);
                 }
                 return stopScroll;
             }
         });
 
-        //启动自动轮播
-        handler.sendEmptyMessageDelayed(WHAT, loopTime);
+
     }
 
     /**
@@ -173,6 +174,7 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
              if(views.size()<=1){
 
                  stopScroll=true;
+
              }
 
              for(int j=0;j<views.size();j++){
@@ -213,7 +215,8 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
 
             }
             this.viewPager.setAdapter(new CarouselAdapter());
-
+            handler.removeMessages(WHAT);
+            handler.sendEmptyMessageDelayed(WHAT,loopTime);
 
 
     }

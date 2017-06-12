@@ -288,7 +288,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                              boolean isPay = object.getBoolean("RegistratorIsPay");
 
 //                              参赛号码
-                             String number = object.getString("RegistratorNumber");
+                             String number = object.getString("RegistratorNumberStr");
 
 
 
