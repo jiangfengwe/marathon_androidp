@@ -1362,8 +1362,8 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         //报名来源
         param.addBodyParameter("RegistratorSource","来自Android客户端");
         param.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        param.setMaxRetryCount(0);//最大重复请求次数
-        param.setConnectTimeout(15*1000);
+        param.setUseCookie(false);
+        param.setConnectTimeout(20*1000);
         param.setMultipart(true);
 
         if(file!=null) {

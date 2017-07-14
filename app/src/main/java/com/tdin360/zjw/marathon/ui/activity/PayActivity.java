@@ -163,7 +163,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
 //                                req.extData			= obj.getString("extData"); // optional
 
                                 // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-
+                                api.registerApp(obj.getString("appId"));
                                 api.sendReq(req);
 
                                 break;

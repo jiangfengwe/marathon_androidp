@@ -6,8 +6,8 @@
 
     <!-- 打电话 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-     <!--打开相机-->
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 打开相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- 极光推送配置 -->
     <!-- Required  一些系统要求的权限，如访问网络等 -->
@@ -69,8 +69,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
@@ -355,7 +353,9 @@
         <activity
             android:name=".ui.activity.TeamSignUpActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.MyTeamListActivity"></activity>
+        <activity android:name=".ui.activity.MyTeamListActivity" />
+        <activity android:name=".ui.activity.RegisterOneActivity" />
+        <activity android:name=".ui.activity.GetCodeActivity"></activity>
     </application>
 
 </manifest>

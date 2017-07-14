@@ -245,11 +245,11 @@ public class MyFragment extends Fragment {
 
             //    获取用户头像
             ImageOptions imageOptions = new ImageOptions.Builder()
-                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
-//                     .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
-                     .setRadius(DensityUtil.dip2px(80))
+//                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+                     .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                     .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-//                    .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                     .setRadius(DensityUtil.dip2px(80))
+                     .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
                     .build();

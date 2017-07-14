@@ -173,7 +173,7 @@ public class DownloadAPKService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        //注销广播s
+        //注销广播
         if(receiver!=null){
 
             unregisterReceiver(receiver);

@@ -226,7 +226,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                         list.clear();
                     }
                     JSONObject json = new JSONObject(result);
-//                     Log.d("-------->>>>", "onSuccess: "+json);
+                      Log.d("-----我的报名--->>>>", "onSuccess: "+json);
                     totalPages = json.getInt("TotalPages");
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
 

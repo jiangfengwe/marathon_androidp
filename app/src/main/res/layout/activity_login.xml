@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:background="@drawable/login_background"
+    android:background="@color/white"
     android:focusableInTouchMode="true"
     tools:context="com.tdin360.zjw.marathon.ui.activity.LoginActivity">
 
@@ -25,22 +25,23 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:gravity="center_vertical"
-            android:background="@drawable/edittext_background"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
             android:layout_weight="1"
-            android:drawableLeft="@drawable/user_name"
+            android:drawableLeft="@drawable/user_phone"
             android:id="@+id/tel"
-            android:padding="10dp"
             android:background="@android:color/transparent"
             android:drawablePadding="5dp"
-            android:maxLines="1"
-            android:textColor="@color/white"
+            android:lines="1"
+            android:maxLength="11"
+            android:inputType="phone"
+            android:paddingBottom="5dp"
+            android:textColor="@color/textBlack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
+            android:textColorHint="@color/dark"
             android:hint="手机号"
             />
             <ImageView
@@ -52,68 +53,52 @@
                 android:src="@drawable/clear"
                 />
         </LinearLayout>
+        <View
+            android:background="@color/lineColor"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"></View>
         <LinearLayout
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edittext_background"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
         <EditText
+
             android:layout_weight="1"
             android:inputType="textPassword"
             android:drawableLeft="@drawable/user_password"
             android:id="@+id/password"
-            android:padding="10dp"
-            android:maxLines="1"
+            android:paddingBottom="5dp"
+            android:lines="1"
+            android:maxLength="18"
             android:drawablePadding="5dp"
             android:background="@android:color/transparent"
-            android:textColorHint="@color/white"
+            android:textColorHint="@color/dark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/textBlack"
             android:hint="密码"
             />
-            <CheckBox
-                android:id="@+id/checkbox"
+            <TextView
+                android:id="@+id/forGet"
+                android:onClick="loginClick"
                 android:layout_marginRight="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="忘记密码?"
                 android:button="@null"
-                android:drawableLeft="@drawable/show_or_hide_password_selector"
-                />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/forGet"
-            android:onClick="loginClick"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="忘了密码?"
-            />
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:textColor="@color/blue"
 
-            <Button
-                android:layout_weight="1"
-                android:onClick="loginClick"
-                android:id="@+id/registerBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="注册"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/white_button_selector"
                 />
+
+        </LinearLayout>
+        <View
+            android:background="@color/lineColor"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"></View>
+
         <Button
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:onClick="loginClick"
             android:id="@+id/loginBtn"
@@ -125,7 +110,20 @@
             android:background="@drawable/oval_yellow_button_selector"
             />
 
-        </LinearLayout>
+            <Button
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:onClick="loginClick"
+                android:id="@+id/registerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="注册"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="@drawable/oval_yellow_button_selector"
+                />
+
+
     </LinearLayout>
 
 </RelativeLayout>

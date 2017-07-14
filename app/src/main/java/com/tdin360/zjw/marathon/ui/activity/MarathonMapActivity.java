@@ -96,6 +96,7 @@ public class MarathonMapActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
+
                 try {
                     JSONObject json = new JSONObject(result);
 
@@ -125,8 +126,7 @@ public class MarathonMapActivity extends BaseActivity {
 
                                 double longitude = item.getDouble("Longitude");
                                 double latitude = item.getDouble("Latitude");
-
-                                nodes.add(new MapPointNode(longitude,latitude));
+                              nodes.add(new MapPointNode(longitude,latitude));
 
                                 String note = item.getString("Note");
 
@@ -180,6 +180,7 @@ public class MarathonMapActivity extends BaseActivity {
                     tv.setText(datas.get(0).getProjectName());
                     drawLine(datas.get(0).getNodes());
                     addMarker(datas.get(0));
+
                     setMapCenter(datas.get(0).getStartNode());
                 }
 

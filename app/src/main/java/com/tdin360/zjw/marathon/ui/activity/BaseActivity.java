@@ -32,6 +32,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
 
+import org.xutils.x;
+
 /**
  * 母版界面
  * @author zhangzhijun
@@ -46,9 +48,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        /**
+         * 设置布局
+         */
         setContentView(getLayout());
-
+        /**
+         * 使用注解框架
+         */
+        x.view().inject(this);
         this.mToolBar= (Toolbar) this.findViewById(R.id.mToolBar);
         this.toolBarTitle= (TextView) this.findViewById(R.id.toolbar_title);
         this.shareImage= (ImageView) this.findViewById(R.id.share);

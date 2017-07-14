@@ -52,6 +52,14 @@ public class MapProjectModel {
         return endNode;
     }
 
+    public void setEndNode(MapPointNode endNode) {
+        this.endNode = endNode;
+    }
+
+    public void setStartNode(MapPointNode startNode) {
+        this.startNode = startNode;
+    }
+
     @Override
     public String toString() {
         return this.projectName;

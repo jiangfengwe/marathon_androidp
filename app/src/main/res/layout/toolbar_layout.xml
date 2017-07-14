@@ -17,7 +17,7 @@
         <ImageView
 
             android:layout_marginLeft="10dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/btn_Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:ellipsize="end"
-        android:textColor="@color/white"
+        android:textColor="@color/textBlack"
         android:layout_centerVertical="true"
         android:text="标题"
          />

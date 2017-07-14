@@ -87,14 +87,20 @@ public void updateList( List<EventModel> list){
                 .build();
         x.image().bind(viewHolder.imageView, eventModel.getPicUrl(),imageOptions);
 
-        viewHolder.status.setText(eventModel.getStatus());
+        String status = eventModel.getStatus();
+        if(status==null||status.equals("")||status.equals("null")){
 
-        if(eventModel.getStatus().equals("已结束")){
-            viewHolder.status.setEnabled(false);
+            viewHolder.status.setVisibility(View.GONE);
         }else {
-            viewHolder.status.setEnabled(true);
-        }
 
+            viewHolder.status.setText(status);
+
+            if( status.contains("结束")){
+                viewHolder.status.setEnabled(false);
+            }else {
+                viewHolder.status.setEnabled(true);
+            }
+        }
 
 
          return convertView;

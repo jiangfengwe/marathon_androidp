@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MenuDataUtils {
 
-    private static String[]menuTitles = {"赛事简介","赛事新闻","赛事公告","赛事路线"};
+    private static String[]menuTitles = {"赛事介绍","赛事新闻","赛事公告","赛事路线"};
     private static int[]ids = {R.drawable.menu_icon1,R.drawable.menu_icon2,R.drawable.menu_icon3,R.drawable.menu_icon4};
 
 

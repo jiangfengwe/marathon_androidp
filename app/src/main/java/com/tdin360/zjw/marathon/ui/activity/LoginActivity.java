@@ -25,29 +25,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 /***
  *
  *
  * 用户登录
+ * @author zhangzhijun
  *
  */
 public class LoginActivity extends BaseActivity {
 
-
-    private EditText editTextName,editTextPass;
-    private CheckBox checkBox;
+     @ViewInject(R.id.tel)
+    private EditText editTextName;
+    @ViewInject(R.id.password)
+    private EditText editTextPass;
+    @ViewInject(R.id.clear)
     private ImageView clearBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          setToolBarTitle("登录");
           showBackButton();
-        this.editTextName= (EditText) this.findViewById(R.id.tel);
-        this.editTextPass= (EditText) this.findViewById(R.id.password);
-        this.checkBox = (CheckBox) this.findViewById(R.id.checkbox);
-        this.clearBtn = (ImageView) this.findViewById(R.id.clear);
 
         /**
          * 清空手机号
@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(s.length()>0){
+                if(s.toString().trim().length()>0){
                     clearBtn.setVisibility(View.VISIBLE);
                 }else {
                     clearBtn.setVisibility(View.INVISIBLE);
@@ -87,23 +87,27 @@ public class LoginActivity extends BaseActivity {
         });
 
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        /**
+         * 显示隐藏密码
+         */
 
-                if(isChecked){
-
-                    //显示密码
-                    editTextPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    editTextPass.setSelection(editTextPass.getText().length());
-                }else {
-                    //隐藏密码
-
-                    editTextPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    editTextPass.setSelection(editTextPass.getText().length());
-                }
-            }
-        });
+//        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                if(isChecked){
+//
+//                    //显示密码
+//                    editTextPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+//                    editTextPass.setSelection(editTextPass.getText().length());
+//                }else {
+//                    //隐藏密码
+//
+//                    editTextPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+//                    editTextPass.setSelection(editTextPass.getText().length());
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -122,7 +126,7 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.registerBtn://注册
 
-                intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
                 startActivityForResult(intent,500);
                 break;
             case R.id.forGet://忘记密码

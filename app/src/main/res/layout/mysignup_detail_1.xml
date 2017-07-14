@@ -32,6 +32,31 @@
     </LinearLayout>
         <View android:layout_width="wrap_content"
             android:background="@color/lineColor"
+            android:layout_height="0.5dp"></View>   <LinearLayout
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="邮        箱:"
+                android:textSize="16sp"
+
+                android:textColor="@color/textBlack"
+                />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:textSize="16sp"
+                android:textColor="@color/textBlack"
+                />
+    </LinearLayout>
+        <View android:layout_width="wrap_content"
+            android:background="@color/lineColor"
             android:layout_height="0.5dp"></View>
     <LinearLayout
         android:orientation="horizontal"

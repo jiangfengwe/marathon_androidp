@@ -369,7 +369,8 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
         telTv.setText(model.getPhone());
 
-
+        TextView emailTv = (TextView) view1.findViewById(R.id.email);
+        emailTv.setText(model.getEmail());
         //国家
        TextView  countryTv = (TextView) view1.findViewById(R.id.country);
 

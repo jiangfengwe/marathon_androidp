@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,6 +211,8 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
+
+
 
                 if(s==null||s.equals("")){
                     return;
@@ -423,7 +426,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
 
 
                     //6.0系统兼容
-                    if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
 
                         //没有权限就申请
                         if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){

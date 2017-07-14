@@ -412,8 +412,8 @@ e.printStackTrace();
                      case 0://赛事简介
 
                          intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
-                         intent.putExtra("shareTitle",MarathonDataUtils.init().getEventName());
-                         intent.putExtra("title","赛事简介");
+
+                         intent.putExtra("title","赛事介绍");
                          intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+MarathonDataUtils.init().getEventId()+"&categoryName=赛事简介");
 
                          break;
@@ -426,7 +426,10 @@ e.printStackTrace();
 
                          break;
                      case 3://参赛路线
-                         intent = new Intent(MarathonDetailsActivity.this,MarathonMapActivity.class);
+                         intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
+
+                         intent.putExtra("title","赛事路线");
+                         intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+MarathonDataUtils.init().getEventId()+"&categoryName=竞赛路线");
 
 
                          break;

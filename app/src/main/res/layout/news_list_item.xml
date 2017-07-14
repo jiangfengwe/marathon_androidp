@@ -13,40 +13,38 @@
         android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:scaleType="centerCrop"
         android:background="@drawable/loading_small_default"
         />
 
-        <LinearLayout
+        <RelativeLayout
 
-            android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/title"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:text="标题标题标题标题标题标题标题标题标 "
                 android:textColor="@color/white"
 
                 />
             <TextView
-                android:layout_marginTop="5dp"
-                android:textSize="15sp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:textSize="14sp"
                 android:id="@+id/time"
-                android:maxLines="1"
                 android:textColor="@color/dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2016-7-10"
                 />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

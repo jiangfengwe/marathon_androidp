@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.GetCodeActivity">
+    <include layout="@layout/toolbar_layout"></include>
+
+       <TextView
+           android:id="@+id/tip"
+           android:layout_marginTop="50dp"
+           android:layout_marginBottom="20dp"
+           android:layout_gravity="center"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="您会收到一条带验证码的短信"
+           android:textSize="16sp"
+           />
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:maxLines="1"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/user_code"
+            android:id="@+id/code"
+            android:hint="验证码"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            />
+            <TextView
+                android:id="@+id/getCode"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="@drawable/get_code_button_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60s"
+                />
+        </LinearLayout>
+
+        <View
+            android:background="@color/lineColor"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"></View>
+
+        <Button
+            android:onClick="nextClick"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/oval_yellow_button_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+</LinearLayout>
