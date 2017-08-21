@@ -9,7 +9,7 @@
         android:visibility="gone"
         android:drawablePadding="10dp"
         android:textColor="@color/dark"
-        android:drawableTop="@drawable/loadfail"
+        android:drawableTop="@drawable/load_fail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="加载失败,下拉重试!"

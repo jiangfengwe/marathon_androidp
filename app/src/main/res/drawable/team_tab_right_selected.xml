@@ -5,6 +5,6 @@
         android:topRightRadius="5dp"
         android:bottomRightRadius="5dp"
         ></corners>
-    <solid android:color="@color/buttonNColor"></solid>
+    <solid android:color="@color/green_button_normal"></solid>
     
 </shape>

@@ -86,7 +86,7 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/oval_yellow_button_selector"
+                android:background="@drawable/oval_green_button_selector"
                 android:text="获取验证码"
                 android:textColor="@color/white"
                 />
@@ -156,7 +156,7 @@
 
             android:onClick="submit"
             android:layout_marginTop="30dp"
-            android:background="@drawable/oval_yellow_button_selector"
+            android:background="@drawable/oval_green_button_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="立即注册"

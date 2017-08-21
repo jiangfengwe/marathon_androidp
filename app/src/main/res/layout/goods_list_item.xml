@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:padding="10dp"
-    android:background="@color/body_color"
+    android:background="@color/white"
     android:gravity="center_vertical"
     android:layout_height="wrap_content">
 
@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/eventName"
             android:textSize="18sp"
-            android:textColor="@color/white"
+            android:textColor="@color/textBlack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="赛事名称"

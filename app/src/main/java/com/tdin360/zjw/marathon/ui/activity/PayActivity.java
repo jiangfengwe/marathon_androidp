@@ -17,15 +17,19 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.alipay.PayResult;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.MessageEvent;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.wxapi.Constants;
 import com.tdin360.zjw.marathon.wxapi.WXPayEntryActivity;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -44,7 +48,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private String orderNo;
     private String subject;
     private String money;
-    private String from;//支付来源（报名成功进入支付、我的报名中进入支付）
+    private boolean isFormDetail;//是否从详情进入支付
+    private boolean isHotel;
+    private String url;
      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         showBackButton();
          initView();
          WXPayEntryActivity.listener=this;
+
 
     }
 
@@ -74,7 +81,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         this.orderNo = intent.getStringExtra("order");
         this.subject = intent.getStringExtra("subject");
         this.money = intent.getStringExtra("money");
-        this.from = intent.getStringExtra("from");
+        this.isFormDetail = intent.getBooleanExtra("isFromDetail",false);
+        this.isHotel=intent.getBooleanExtra("isHotel",false);
+        url = isHotel ? HttpUrlUtils.HOTEL_PAY:HttpUrlUtils.PAY;
 
         //显示支付费用及描述
         priceView.setText("¥ "+money);
@@ -98,9 +107,16 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     //获取订单并支付
     private void delCommonPay(String payMethod){
 
-        Toast.makeText(PayActivity.this,"获取订单中...",Toast.LENGTH_SHORT).show();
+        //显示提示框
+        final KProgressHUD hud = KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
+
         //获取支付订单
-        final RequestParams params = new RequestParams(HttpUrlUtils.PAY);
+        final RequestParams params = new RequestParams(url);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addQueryStringParameter("orderNomber",orderNo);
         params.addQueryStringParameter("payMethod",payMethod);
@@ -113,7 +129,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     JSONObject eventMobileMessage = json.getJSONObject("EventMobileMessage");
                     boolean success = eventMobileMessage.getBoolean("Success");
 
-//                    Log.d("------pay------->>>>", "onSuccess: "+json);
+//                     Log.d("------pay------->>>>", "onSuccess: "+json);
                     if(success){
 
 
@@ -151,6 +167,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                                 break;
                             case "wx":
 
+
                                 JSONObject obj = json.getJSONObject("AppWeiXinPayModel");
                                 PayReq req = new PayReq();
                                 req.appId			= obj.getString("appId");
@@ -175,7 +192,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
 
                     }else {
                         String reason = eventMobileMessage.getString("Reason");
-                        Toast.makeText(PayActivity.this,reason,Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(PayActivity.this,reason);
                     }
 
                 } catch (JSONException e) {
@@ -186,7 +203,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-                Toast.makeText(PayActivity.this,"获取订单失败,请重新获取",Toast.LENGTH_SHORT).show();
+                ToastUtils.show(PayActivity.this,"获取订单失败,请重新获取");
 
             }
 
@@ -198,6 +215,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onFinished() {
 
+                hud.dismiss();
             }
         });
 
@@ -231,10 +249,12 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                         // 判断resultStatus 为非"9000"则代表可能支付失败
                         // "8000"代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                         if (TextUtils.equals(resultStatus, "8000")) {
-                            Toast.makeText(PayActivity.this, "支付结果确认中", Toast.LENGTH_SHORT).show();
+
+                            ToastUtils.show(getBaseContext(),"支付结果确认中");
                         } else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-                            Toast.makeText(PayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+
+                            ToastUtils.show(getBaseContext(),"支付失败");
                         }
                     }
                     break;
@@ -346,10 +366,18 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
 
 
             //从支付详情进入支付成功则去改变支付状态
-           if(from.equals("signUpDetail")) {
+           if(isFormDetail&&!isHotel) {
                Intent intent = new Intent(PAY_ACTION);
                intent.putExtra("orderNo", orderNo);
                sendBroadcast(intent);
+           }
+
+           //酒店订单从详情进行支付
+           if(isFormDetail&&isHotel){
+
+//             改变支付状态
+
+              EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageType.HOTEL_STATS_UPDATE));
            }
 
         final AlertDialog alert = new AlertDialog.Builder(this).create();
@@ -402,8 +430,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         view.findViewById(R.id.details).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
-                if(from.equals("signUp")){//来源于报名界面的支付
+
+                if(!isHotel&&!isFormDetail){//来源于报名界面的支付
+                    Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
                     intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
                     finish();
@@ -411,6 +440,18 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 }else {
 
                     //返回更新
+                    finish();
+                }
+
+
+                if(isHotel&&!isFormDetail){
+
+                    //查看酒店预订详情
+
+
+
+                }else {
+
                     finish();
                 }
 
@@ -451,15 +492,14 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     //支付成功
                     if(isPay){
 
-
                    showPaySuccessDialog(title,link);
 
                     }
 
 
-
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    ToastUtils.show(getBaseContext(),"服务器数据异常");
                 }
 
             }
@@ -467,8 +507,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-
-              Toast.makeText(PayActivity.this,"网络链接异常",Toast.LENGTH_SHORT).show();
+               ToastUtils.show(getBaseContext(),"网络链接异常");
             }
 
             @Override

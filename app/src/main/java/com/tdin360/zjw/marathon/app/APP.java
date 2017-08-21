@@ -1,8 +1,8 @@
 package com.tdin360.zjw.marathon.app;
 
-import android.app.Application;
-
+import android.support.multidex.MultiDexApplication;
 import com.tdin360.zjw.marathon.utils.db.DbManager;
+import com.tencent.smtt.sdk.QbSdk;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
@@ -18,7 +18,7 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * Created by Administrator on 2016/8/10.
  */
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -42,6 +42,10 @@ public class App extends Application {
         //创建数据库
         DbManager.init(this);
 
+        if(QbSdk.canLoadX5(this)) {
+            //加载❤x5内核
+            QbSdk.initX5Environment(this, null);
+        }
     }
 
 //    分享平台配置
@@ -49,7 +53,7 @@ public class App extends Application {
 
         PlatformConfig.setWeixin("wx56d6dadff22bbf5e","47211ce7c72da9b01ace9b47ba5d9dfa");
         PlatformConfig.setQQZone("1105925323","q4m5hraExG9wAfe7");
-        PlatformConfig.setSinaWeibo("2316733117", "a4bdff71157545c0366244049d37d218","https://api.weibo.com/oauth2/default.html");
+        PlatformConfig.setSinaWeibo("2316733117", "a4bdff71157545c0366244049d37d218","http://sns.whalecloud.com");
 
     }
 }

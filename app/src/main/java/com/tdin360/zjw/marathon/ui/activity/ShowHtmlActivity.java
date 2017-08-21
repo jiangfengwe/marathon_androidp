@@ -2,29 +2,26 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
+
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
-import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
-import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.umeng.socialize.UMShareAPI;
+
+import org.xutils.view.annotation.ViewInject;
 
 /**
  * 用于显示网页的界面
@@ -32,25 +29,22 @@ import com.umeng.socialize.UMShareAPI;
  */
 public class ShowHtmlActivity extends BaseActivity {
 
+    @ViewInject(R.id.webView)
     private WebView webView;
+    @ViewInject(R.id.progressBar)
     private ProgressBar progressBar;
-    private KProgressHUD hud;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.webView = (WebView) this.findViewById(R.id.webView);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);//（这个对宿主没什么影响，建议声明）
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.getSettings().setAllowFileAccess(true);
         this.webView.setWebChromeClient(new MyWebViewChromeClient());
         this.webView.setWebViewClient(new MyWebViewClient());
-
-        this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
-
-        initHUD();
 
 
         showBackButton();
@@ -72,15 +66,7 @@ public class ShowHtmlActivity extends BaseActivity {
             }
 
             final String url = intent.getStringExtra("url");
-            /**
-             * 构建分享内容
-             */
 
-            if(shareTitle!=null) {
-                ShareInfoManager manager = new ShareInfoManager(this);
-                manager.buildShareWebLink(shareTitle, url, "佰家赛事", shareImageUrl);
-                showShareButton(manager);
-            }
            loading(url);
 
         }
@@ -116,21 +102,8 @@ public class ShowHtmlActivity extends BaseActivity {
 
      }
 
-    /**
-     * 初始化提示框
-     */
-    private void initHUD(){
 
-        //显示提示框
-        hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
-                hud.setCancellable(true);
-                hud.setAnimationSpeed(1);
-                hud.setDimAmount(0.5f);
-
-    }
-
-    private class MyWebViewChromeClient extends WebChromeClient{
+    private class MyWebViewChromeClient extends WebChromeClient {
 
 
 
@@ -149,7 +122,7 @@ public class ShowHtmlActivity extends BaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             progressBar.setVisibility(View.VISIBLE);
-            hud.show();
+
 
 
         }
@@ -172,7 +145,6 @@ public class ShowHtmlActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
-            hud.dismiss();
 
         }
     }

@@ -75,8 +75,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ShowHtmlActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.SignUpActivity"
             android:screenOrientation="portrait" />
@@ -281,14 +283,28 @@
 
         <!-- 微博回调 -->
         <activity
-            android:name=".ui.activity.WBShareActivity"
+            android:name="com.umeng.socialize.media.WBShareCallBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            >
+
+        </activity>
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:launchMode="singleTask"
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
         <!-- QQ精简版分享配置 -->
         <activity
@@ -309,28 +325,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <!-- 登录回调 -->
-        <activity
-            android:name="jp.line.android.sdk.activity.LineAuthCompleteActivity"
-            android:configChanges="keyboard|orientation"
-            android:exported="true"
-            android:screenOrientation="sensor">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="line.1471474450" />
-            </intent-filter>
-        </activity>
-        <!-- 没安装客户端下登录 -->
-        <activity
-            android:name="jp.line.android.sdk.activity.WebLoginActivity"
-            android:configChanges="keyboard|orientation"
-            android:exported="false"
-            android:screenOrientation="sensor" />
         <activity
             android:name=".ui.activity.MyAchievementDetailsActivity"
             android:screenOrientation="portrait" />
@@ -345,7 +339,6 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".service.DownloadAPKService" />
-        <service android:name=".step.StepCounterService" />
 
         <activity
             android:name=".ui.activity.FeedbackListActivity"
@@ -353,9 +346,47 @@
         <activity
             android:name=".ui.activity.TeamSignUpActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.MyTeamListActivity" />
-        <activity android:name=".ui.activity.RegisterOneActivity" />
-        <activity android:name=".ui.activity.GetCodeActivity"></activity>
+        <activity
+            android:name=".ui.activity.MyTeamListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RegisterOneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.GetCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AddCircleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".ui.activity.HotelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelOrderSubmitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SettingPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PhotoBrowseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelOrderDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.WebActivity"></activity>
     </application>
 
 </manifest>

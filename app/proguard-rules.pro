@@ -155,12 +155,12 @@
 #######################     常用第三方模块的混淆选项         ###################################
 #gson
 #如果用用到Gson解析包的，直接添加下面这几行就能成功混淆，不然会报错。
-#-keepattributes Signature
-## Gson specific classes
-#-keep class sun.misc.Unsafe { *; }
-## Application classes that will be serialized/deserialized over Gson
-#-keep class com.google.gson.** { *; }
-#-keep class com.google.gson.stream.** { *; }
+ -keepattributes Signature
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.** { *; }
+-keep class com.google.gson.stream.** { *; }
 
 #mob
 # 极光推送
@@ -217,101 +217,178 @@
 
 
 # start 友盟代码混淆
- -dontusemixedcaseclassnames
-    -dontshrink
-    -dontoptimize
-    -dontwarn com.google.android.maps.**
-    -dontwarn android.webkit.WebView
-    -dontwarn com.umeng.**
-    -dontwarn com.tencent.weibo.sdk.**
-    -dontwarn com.facebook.**
-    -keep public class javax.**
-    -keep public class android.webkit.**
-    -dontwarn android.support.v4.**
-    -keep enum com.facebook.**
-    -keepattributes Exceptions,InnerClasses,Signature
-    -keepattributes *Annotation*
-    -keepattributes SourceFile,LineNumberTable
+ -dontshrink
+ -dontoptimize
+ -dontwarn com.google.android.maps.**
+ -dontwarn android.webkit.WebView
+ -dontwarn com.umeng.**
+ -dontwarn com.tencent.weibo.sdk.**
+ -dontwarn com.facebook.**
+ -keep public class javax.**
+ -keep public class android.webkit.**
+ -dontwarn android.support.v4.**
+ -keep enum com.facebook.**
+ -keepattributes Exceptions,InnerClasses,Signature
+ -keepattributes *Annotation*
+ -keepattributes SourceFile,LineNumberTable
 
-    -keep public interface com.facebook.**
-    -keep public interface com.tencent.**
-    -keep public interface com.umeng.socialize.**
-    -keep public interface com.umeng.socialize.sensor.**
-    -keep public interface com.umeng.scrshot.**
-    -keep class com.android.dingtalk.share.ddsharemodule.** { *; }
-    -keep public class com.umeng.socialize.* {*;}
+ -keep public interface com.facebook.**
+ -keep public interface com.tencent.**
+ -keep public interface com.umeng.socialize.**
+ -keep public interface com.umeng.socialize.sensor.**
+ -keep public interface com.umeng.scrshot.**
+
+ -keep public class com.umeng.socialize.* {*;}
 
 
-    -keep class com.facebook.**
-    -keep class com.facebook.** { *; }
-    -keep class com.umeng.scrshot.**
-    -keep public class com.tencent.** {*;}
-    -keep class com.umeng.socialize.sensor.**
-    -keep class com.umeng.socialize.handler.**
-    -keep class com.umeng.socialize.handler.*
-    -keep class com.umeng.weixin.handler.**
-    -keep class com.umeng.weixin.handler.*
-    -keep class com.umeng.qq.handler.**
-    -keep class com.umeng.qq.handler.*
-    -keep class UMMoreHandler{*;}
-    -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
-    -keep class com.tencent.mm.sdk.modelmsg.** implements   com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
-    -keep class im.yixin.sdk.api.YXMessage {*;}
-    -keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
-    -keep class com.tencent.mm.sdk.** {
-     *;
-    }
-    -keep class com.tencent.mm.opensdk.** {
-   *;
-    }
-    -dontwarn twitter4j.**
-    -keep class twitter4j.** { *; }
+ -keep class com.facebook.**
+ -keep class com.facebook.** { *; }
+ -keep class com.umeng.scrshot.**
+ -keep public class com.tencent.** {*;}
+ -keep class com.umeng.socialize.sensor.**
+ -keep class com.umeng.socialize.handler.**
+ -keep class com.umeng.socialize.handler.*
+ -keep class com.umeng.weixin.handler.**
+ -keep class com.umeng.weixin.handler.*
+ -keep class com.umeng.qq.handler.**
+ -keep class com.umeng.qq.handler.*
+ -keep class UMMoreHandler{*;}
+ -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
+ -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+ -keep class im.yixin.sdk.api.YXMessage {*;}
+ -keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
+ -keep class com.tencent.mm.sdk.** {
+    *;
+ }
+ -keep class com.tencent.mm.opensdk.** {
+    *;
+ }
+ -keep class com.tencent.wxop.** {
+    *;
+ }
+ -keep class com.tencent.mm.sdk.** {
+    *;
+ }
+ -dontwarn twitter4j.**
+ -keep class twitter4j.** { *; }
 
-    -keep class com.tencent.** {*;}
-    -dontwarn com.tencent.**
-    -keep public class com.umeng.com.umeng.soexample.R$*{
-    public static final int *;
-    }
-    -keep public class com.linkedin.android.mobilesdk.R$*{
-    public static final int *;
-        }
-    -keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-    }
+ -keep class com.tencent.** {*;}
+ -dontwarn com.tencent.**
+ -keep class com.kakao.** {*;}
+ -dontwarn com.kakao.**
+ -keep public class com.umeng.com.umeng.soexample.R$*{
+     public static final int *;
+ }
+ -keep public class com.linkedin.android.mobilesdk.R$*{
+     public static final int *;
+ }
+ -keepclassmembers enum * {
+     public static **[] values();
+     public static ** valueOf(java.lang.String);
+ }
 
-    -keep class com.tencent.open.TDialog$*
-    -keep class com.tencent.open.TDialog$* {*;}
-    -keep class com.tencent.open.PKDialog
-    -keep class com.tencent.open.PKDialog {*;}
-    -keep class com.tencent.open.PKDialog$*
-    -keep class com.tencent.open.PKDialog$* {*;}
+ -keep class com.tencent.open.TDialog$*
+ -keep class com.tencent.open.TDialog$* {*;}
+ -keep class com.tencent.open.PKDialog
+ -keep class com.tencent.open.PKDialog {*;}
+ -keep class com.tencent.open.PKDialog$*
+ -keep class com.tencent.open.PKDialog$* {*;}
+ -keep class com.umeng.socialize.impl.ImageImpl {*;}
+ -keep class com.sina.** {*;}
+ -dontwarn com.sina.**
+ -keep class  com.alipay.share.sdk.** {
+    *;
+ }
 
-    -keep class com.sina.** {*;}
-    -dontwarn com.sina.**
-    -keep class  com.alipay.share.sdk.** {
-       *;
-    }
-    -keepnames class * implements android.os.Parcelable {
-    public static final ** CREATOR;
-    }
+ -keepnames class * implements android.os.Parcelable {
+     public static final ** CREATOR;
+ }
 
-    -keep class com.linkedin.** { *; }
-    -keepattributes Signature
-    -keepclassmembers class * {
-   public <init> (org.json.JSONObject);
-}
--keep public class [com.tdin360.zjw.marathon].R$*{
-public static final int *;
-}
-
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
+ -keep class com.linkedin.** { *; }
+ -keep class com.android.dingtalk.share.ddsharemodule.** { *; }
+ -keepattributes Signature
 
 #   end 友盟代码混淆
 #3D 地图 V5.0.0之后：
  -keep   class com.amap.api.maps.**{*;}
  -keep   class com.autonavi.**{*;}
  -keep   class com.amap.api.trace.**{*;}
+
+
+
+# 图片选择器
+ #1.support-v7-appcompat
+ -keep public class android.support.v7.widget.** { *; }
+ -keep public class android.support.v7.internal.widget.** { *; }
+ -keep public class android.support.v7.internal.view.menu.** { *; }
+
+ -keep public class * extends android.support.v4.view.ActionProvider {
+     public <init>(android.content.Context);
+ }
+
+ #2.rx
+ -dontwarn io.reactivex.**
+ -keepclassmembers class io.reactivex.** { *; }
+
+ #3.retrolambda
+ -dontwarn java.lang.invoke.*
+
+ #4.support-v4
+ -keep class android.support.v4.** { *; }
+ -keep interface android.support.v4.** { *; }
+
+ #5.ucrop
+ -dontwarn com.yalantis.ucrop**
+ -keep class com.yalantis.ucrop** { *; }
+ -keep interface com.yalantis.ucrop** { *; }
+
+ #6.photoview
+ -keep class uk.co.senab.photoview** { *; }
+ -keep interface uk.co.senab.photoview** { *; }
+
+ #7.rxgalleryfinal
+ -keep class cn.finalteam.rxgalleryfinal.ui.widget** { *; }
+
+ -keepclassmembers class * extends android.app.Activity {
+    public void *(android.view.View);
+ }
+ -keepclassmembers enum * {
+     public static **[] values();
+     public static ** valueOf(java.lang.String);
+ }
+ -keep class * implements android.os.Parcelable {
+   public static final android.os.Parcelable$Creator *;
+ }
+ -keepclassmembers class **.R$* {
+     public static <fields>;
+ }
+
+ -keepattributes *Annotation*
+ -keepclasseswithmembernames class * {
+     native <methods>;
+ }
+ -keepclassmembers public class * extends android.view.View {
+    void set*(***);
+    *** get*();
+ }
+
+# banner 的混淆代码
+-keep class com.youth.banner.** {
+    *;
+ }
+
+# Picasso 混淆
+ -dontwarn com.squareup.okhttp.**
+
+
+#eventBus
+ -keepattributes *Annotation*
+ -keepclassmembers class ** {
+     @org.greenrobot.eventbus.Subscribe <methods>;
+ }
+ -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+ # Only required if you use AsyncExecutor
+ -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+     <init>(Java.lang.Throwable);
+ }

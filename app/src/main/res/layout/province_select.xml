@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yellow_color"
+
         android:gravity="center"
          android:padding="10dp" >
         <TextView
@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dip"
             android:text="请选择省市区"
-            android:textColor="#fff"
+            android:textColor="@color/textBlack"
             android:textSize="20sp" />
     </RelativeLayout>
 
@@ -55,9 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/rect_yellow_button_selector"
+        android:background="@drawable/rect_green_button_selector"
         android:text="确定"
         android:textSize="16sp"
-        android:textColor="#fff" />
+        android:textColor="@color/white" />
 
 </LinearLayout>

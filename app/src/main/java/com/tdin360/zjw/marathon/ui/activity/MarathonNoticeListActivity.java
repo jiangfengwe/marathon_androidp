@@ -2,9 +2,11 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -13,13 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.NoticeListViewAdapter;
+import com.tdin360.zjw.marathon.adapter.CommonAdapter;
 import com.tdin360.zjw.marathon.model.NoticeModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeServiceImpl;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
@@ -28,6 +32,7 @@ import org.json.JSONObject;
 import org.xutils.common.Callback;
 
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -40,17 +45,18 @@ import java.util.List;
 public class MarathonNoticeListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
 
-    private TextView loadFail;
+    @ViewInject(R.id.listView)
     private ListView refreshListView;
     private List<NoticeModel> noticeModelList=new ArrayList<>();
-    private NoticeListViewAdapter noticeListViewAdapter;
+    private NoticeAdapter adapter;
     private int pageNumber=1;
     private int totalPages;
-    private TextView not_found;
-
-    private boolean isLoadFail;
+    @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
     private NoticeServiceImpl service;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +71,29 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
     private void initView() {
 
 
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
-        this.refreshListView  = (ListView) this.findViewById(R.id.listView);
         this.pullToRefreshLayout.setOnRefreshListener(this);
         this.refreshListView.setOnItemClickListener(new MyListener());
-        this.not_found = (TextView) this.findViewById(R.id.not_found);
-        this.noticeListViewAdapter  =new NoticeListViewAdapter(noticeModelList,this);
-        this.refreshListView.setAdapter(this.noticeListViewAdapter);
+        this.adapter = new NoticeAdapter(this,noticeModelList,R.layout.notice_list_item);
+        this.refreshListView.setAdapter(this.adapter);
+
+
+        /**
+         * 加载失败点击重试
+         */
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                switch (mode){
+
+                    case NOT_NETWORK:
+
+                        loadData();
+                        break;
+
+                }
+            }
+        });
 
           loadData();
 
@@ -93,15 +114,15 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
         } else {
 
 
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
 
             noticeModelList = service.getAllNotice(MarathonDataUtils.init().getEventId());
-            noticeListViewAdapter.updateListView(noticeModelList);
+             adapter.update(noticeModelList);
+
             if(noticeModelList.size()==0) {
-                loadFail.setVisibility(View.VISIBLE);
+
+                mErrorView.show(pullToRefreshLayout,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
                 //如果缓存数据不存在则需要用户打开网络设置
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -133,6 +154,27 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
     public int getLayout() {
         return R.layout.activity_marathon_notice;
     }
+
+
+    /**
+     * 数据适配器
+     */
+    class NoticeAdapter extends CommonAdapter<NoticeModel> {
+
+
+        public NoticeAdapter(Context context, List<NoticeModel> list, @LayoutRes int layoutId) {
+            super(context, list, layoutId);
+        }
+
+        @Override
+       protected void onBind(com.tdin360.zjw.marathon.adapter.ViewHolder holder, NoticeModel model) {
+
+            holder.setText(R.id.title,model.getTitle()).setText(R.id.time,model.getTime());
+
+
+        }
+    }
+
 
 
     /**
@@ -180,7 +222,6 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                         service.addNotice(model);
                     }
 
-                    loadFail.setVisibility(View.GONE);
 
                     if (isRefresh){
 
@@ -189,7 +230,12 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                     }
 
+                    if(noticeModelList.size()<=0){
 
+                        mErrorView.show(pullToRefreshLayout,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(pullToRefreshLayout);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     if (isRefresh){
@@ -198,9 +244,8 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                     }else {
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                     }
-                    isLoadFail=true;
-                    not_found.setVisibility(View.GONE);
-                    loadFail.setVisibility(View.VISIBLE);
+
+                    mErrorView.show(pullToRefreshLayout,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
                 }
 
             }
@@ -214,9 +259,11 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                 }else {
                     pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                 }
-               isLoadFail=true;
-                loadFail.setVisibility(View.VISIBLE);
-                not_found.setVisibility(View.GONE);
+
+                if(noticeModelList.size()<=0) {
+                    mErrorView.show(pullToRefreshLayout, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                }
+                ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
             }
 
             @Override
@@ -228,20 +275,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
             public void onFinished() {
 
 
-                    //判断是否有数据
-                    if (noticeModelList.size() > 0) {
-
-                      loadFail.setVisibility(View.GONE);
-
-                    } else if(noticeModelList.size()>0&&!isLoadFail) {
-                        not_found.setVisibility(View.GONE);
-                    }else {
-
-                        not_found.setVisibility(View.VISIBLE);
-                    }
-
-
-                noticeListViewAdapter.updateListView(noticeModelList);
+                adapter.notifyDataSetChanged();
 
             }
         });
@@ -294,8 +328,6 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                 startActivity(intent);
 
             }
-
-
         }
     }
 }

@@ -11,64 +11,73 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.adapter.CommonAdapter;
+import com.tdin360.zjw.marathon.adapter.ViewHolder;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
-
 import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
-import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.EventModel;
-
+import com.tdin360.zjw.marathon.ui.activity.WebActivity;
+import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
+import com.tdin360.zjw.marathon.utils.MessageEvent;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
-import com.tdin360.zjw.marathon.weight.pullToControl.PullableListView;
 
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**马拉松赛事列表
+/**赛事列表
  * Created by Administrator on 2016/8/9.
  */
-public class EventFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener {
+public class EventFragment extends BaseFragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener {
 
     private List<EventModel>list = new ArrayList<>();
+    @ViewInject(R.id.listView)
     private ListView listView;
-    private MarathonListViewAdapter marathonListViewAdapter;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+    private EventAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
-    private TextView loadFail;
     private EventServiceImpl impl;
-    private TextView not_found;
-    private boolean isLoadFail;
+    @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
+    @ViewInject(R.id.navRightItemImage)
+    private ImageView rightImage;
 
     public static EventFragment newInstance(){
 
@@ -82,22 +91,35 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
         return  inflater.inflate(R.layout.fragment_event,container,false);
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+          EventBus.getDefault().register(this);
          this.impl  = new EventServiceImpl(getContext());
-         this.pullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.pull_Layout);
-         this.listView= (PullableListView) view.findViewById(R.id.listView);
-         this.loadFail = (TextView) view.findViewById(R.id.loadFail);
-         this.not_found = (TextView) view.findViewById(R.id.not_found);
-         this.marathonListViewAdapter = new MarathonListViewAdapter(getActivity(),list);
+         this.marathonListViewAdapter = new EventAdapter(getActivity(),list,R.layout.marathon_list_item);
          this.listView.setAdapter(marathonListViewAdapter);
          this.pullToRefreshLayout.setOnRefreshListener(this);
          this.listView.setOnItemClickListener(this);
 
+        this.mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                if(mode== ErrorView.ViewShowMode.NOT_NETWORK){
+
+                   pullToRefreshLayout.autoRefresh();
+                }
+            }
+        });
+
+        TextView titleTv = (TextView) view.findViewById(R.id.toolbar_title);
+        titleTv.setText("赛事");
+        this.rightImage.setImageResource(R.drawable.search_big);
+           this.rightImage.setVisibility(View.VISIBLE);
 
         //搜索
-        view.findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
+            this.rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
@@ -123,8 +145,6 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     }
 
 
-
-
     //加载数据(包括缓存数据和网络数据)
     private void loadData(){
 
@@ -141,14 +161,19 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
 
         }else {
 
+
             //1获取缓存数据
-            list  = impl.getAllEvent();
-            marathonListViewAdapter.updateList(list);
-            not_found.setVisibility(View.GONE);
+             list  = impl.getAllEvent();
+            marathonListViewAdapter.update(list);
+
+//            Log.d("------local--->", "loadData: "+list.get(0).isWebPage());
+
             //如果获取得到缓存数据则加载本地数据
             if(list.size()==0){
-                loadFail.setVisibility(View.VISIBLE);
+
                 //2.如果缓存数据不存在则需要用户打开网络设置
+
+               mErrorView.show(pullToRefreshLayout,"没有数据,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
@@ -182,28 +207,67 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
             EventModel eventInfo = (EventModel) parent.getAdapter().getItem(position);
-            //为单例成员赋值
-            MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
-            MarathonDataUtils.init().setEventName(eventInfo.getName());
-            MarathonDataUtils.init().setStatus(eventInfo.getStatus());
-            MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
-            MarathonDataUtils.init().setEventImageUrl(eventInfo.getPicUrl());
-            MarathonDataUtils.init().setRegister(eventInfo.isRegister());
-            Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
-            startActivity(intent);
+
+           if(eventInfo.isWebPage()){
+
+               Intent intent = new Intent(getContext(), WebActivity.class);
+               intent.putExtra("url",eventInfo.getShardUrl());
+               intent.putExtra("imageUrl",eventInfo.getPicUrl());
+               startActivity(intent);
+
+           }else {
+               //为单例成员赋值
+               MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
+               MarathonDataUtils.init().setEventName(eventInfo.getName());
+               MarathonDataUtils.init().setStatus(eventInfo.getStatus());
+               MarathonDataUtils.init().setShareUrl(eventInfo.getShardUrl());
+               MarathonDataUtils.init().setEventImageUrl(eventInfo.getPicUrl());
+               MarathonDataUtils.init().setRegister(eventInfo.isRegister());
+               Intent intent = new Intent(getActivity(), MarathonDetailsActivity.class);
+               startActivity(intent);
+           }
 
     }
 
+    /**
+     * 数据适配器
+     */
+
+    class EventAdapter extends CommonAdapter<EventModel>{
+
+
+        public EventAdapter(Context context, List<EventModel> list, @LayoutRes int layoutId) {
+            super(context, list, layoutId);
+        }
+
+        @Override
+        protected void onBind(ViewHolder holder, EventModel model) {
+
+            holder.setText(R.id.eventName,model.getName());
+            holder.setText(R.id.signUpTime,model.getSignUpStartTime());
+            holder.setText(R.id.eventTime,model.getStartDate());
+            holder.setText(R.id.status,model.getStatus());
+            ImageView imageView = holder.getViewById(R.id.imageView);
+            x.image().bind(imageView,model.getPicUrl());
+            if(model.getStatus().contains("结束")){
+
+             holder.getViewById(R.id.status).setEnabled(false);
+            }else {
+
+              holder.getViewById(R.id.status).setEnabled(true);
+            }
+
+
+        }
+    }
 
     //加载网络数据
 
     private void httpRequest(final boolean isRefresh){
 
 
-
-        loadFail.setVisibility(View.GONE);
-        not_found.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
         params.addBodyParameter("appKey","eventkeyfdsfds520tdzh123456");
@@ -212,7 +276,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             @Override
             public void onSuccess(String s) {
 
-
+//                Log.d("-------->", "onSuccess: "+s);
 
                 if(s==null||s.equals("")){
                     return;
@@ -224,7 +288,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                        list.clear();
                     }
 
-//                   Log.d("-------->", "onSuccess: "+s);
+
 
                     JSONObject obj = new JSONObject(s);
 
@@ -245,24 +309,37 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
 
                         String shareUrl = object.getString("EventSiteUrl");
                         boolean isRegister = object.getBoolean("IsRegister");
-                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,signUpStartTimeStr,eventStartTime,shareUrl,isRegister);
-                        list.add(eventModel);
+                        boolean showPage = object.getBoolean("IsShowPage");
 
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,signUpStartTimeStr,eventStartTime,shareUrl,isRegister,showPage);
+                        list.add(eventModel);
 
                         impl.addEvent(eventModel);
 
                     }
-                    loadFail.setVisibility(View.GONE);
+
                    if (isRefresh){
 
                      pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                    }else {
                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                    }
+
+
+                    if(list.size()<=0){
+
+                        mErrorView.show(pullToRefreshLayout,"暂时还没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+
+                        mErrorView.hideErrorView(pullToRefreshLayout);
+                    }
+
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    loadFail.setVisibility(View.VISIBLE);
-                    isLoadFail=true;
+
+
                     if (isRefresh){
 
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
@@ -270,16 +347,19 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 
                     }
+
+                    mErrorView.show(pullToRefreshLayout,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
+
                 }
             }
 
             @Override
             public void onError(Throwable throwable, boolean b) {
 
-                  Toast.makeText(getActivity(),"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
-                  loadFail.setVisibility(View.VISIBLE);
-                  not_found.setVisibility(View.GONE);
-                  isLoadFail=true;
+                if(list.size()==0) {
+                    mErrorView.show(pullToRefreshLayout, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                }
+                ToastUtils.show(getActivity(),"网络不给力,连接服务器异常!");
                 if (isRefresh){
 
                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
@@ -297,22 +377,7 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             @Override
             public void onFinished() {
 
-
-                if(isLoadFail){
-                  loadFail.setVisibility(View.GONE);
-                }
-
-                if(!isLoadFail&&list.size()==0){
-
-                  not_found.setVisibility(View.VISIBLE);
-
-
-                }else if(list.size()>0&&!isLoadFail){
-                    not_found.setVisibility(View.GONE);
-
-                }
-
-             marathonListViewAdapter.updateList(list);
+             marathonListViewAdapter.update(list);
             }
         });
     }
@@ -334,47 +399,24 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
             alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(getAppDetailSettingIntent(getContext()));
+
+                    CommonUtils.getAppDetailSettingIntent(getActivity());
                 }
             });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+
             alert.show();
 
             return;
         }
-           if (requestCode==Constants.WRITE_EXTERNAL_CODE){
+           if (requestCode==Constants.WRITE_EXTERNAL_CODE&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
 
                //启动下载器下载安装包
 
                downloadAPK();
 
-
            }
     }
 
-    /**
-     * 获取应用详情页面intent
-     *
-     * @return
-     */
-    public Intent getAppDetailSettingIntent(Context context) {
-        Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction(Intent.ACTION_VIEW);
-            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-            localIntent.putExtra("com.android.settings.ApplicationPkgName", context.getPackageName());
-        }
-        return localIntent;
-    }
 
     @Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
@@ -404,7 +446,6 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
     }
 
 
-
     private String url;
     @Override
     public void checkFinished(boolean isUpdate, String content, String url) {
@@ -424,24 +465,23 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
                 public void onClick(DialogInterface dialog, int which) {
 
 
-
                     //6.0系统兼容
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 
-                        //没有权限就申请
-                        if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-
-                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},Constants.WRITE_EXTERNAL_CODE);
-
-                        }else {
-
-                            downloadAPK();
-                        }
-
+                        downloadAPK();
                     }else {
+
+                    //没有权限就申请
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_CODE);
+
+                    } else {
 
                         downloadAPK();
                     }
+
+                }
 
 
                 }
@@ -460,21 +500,77 @@ public class EventFragment extends Fragment implements PullToRefreshLayout.OnRef
         }
     }
 
-
+    private ProgressBar progressBar;
+    private TextView currentTv;
+    private TextView totalTv;
+    private AlertDialog dialog;
     //下载安装包
     private void downloadAPK(){
 
 
-        Toast.makeText(getActivity(),"已在后台下载",Toast.LENGTH_SHORT).show();
+        if(url==null&&url.equals("")){
+
+            Toast.makeText(getActivity(),"更新包无法下载",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //启动下载器下载安装包
         Intent intent = new Intent(getActivity(), DownloadAPKService.class);
         intent.putExtra("url",url);
         getActivity().startService(intent);
 
+
+        /**
+         * 下载更新进度提示框
+         */
+        this.dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setCancelable(false);
+        View view = View.inflate(getActivity(), R.layout.update_download_dialog,null);
+        this.progressBar= (ProgressBar) view.findViewById(R.id.progressBar);
+        this.currentTv= (TextView) view.findViewById(R.id.currentTv);
+        this.totalTv= (TextView) view.findViewById(R.id.totalTv);
+        view.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(view);
+        dialog.show();
+
     }
 
 
+    /**
+     * 下载更新进度条处理
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateDownload(MessageEvent event){
+
+        if(event.getType()== MessageEvent.MessageType.DOWNLOAD_UPDATE) {
+            progressBar.setMax((int) event.getTotalSize());
+            progressBar.setProgress((int) event.getCurrentSize());
+            totalTv.setText(CommonUtils.FormatFileSize(event.getTotalSize()));
+            currentTv.setText(CommonUtils.FormatFileSize(event.getCurrentSize()));
+            //下载完成
+            if(event.getCurrentSize()==event.getTotalSize()){
+
+                 if(dialog!=null){
+
+                   dialog.dismiss();
+                 }
 
 
+            }
 
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

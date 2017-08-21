@@ -9,12 +9,34 @@ public class HttpUrlUtils {
 
     private static final String BASE="http://shop.baijar.com/";
     public static final String appKey="eventkeyfdsfds520tdzh123456";
+
+    //验证手机号
+    public static final String REGISTER_ONE=BASE+"EventInfo/RegisterStep1";
     //用户注册接口
     public static final String MARATHON_REGISTER= BASE+"EventInfo/Register";
-    //用户登录接口
+    //验证验证码
+    public static final String VALIDATE_CODE=BASE+"EventInfo/RegisterStep2";
+    //设置密码
+    public static final String SET_PASSWORD=BASE+"EventInfo/RegisterStep3";
+    //登录
     public static final String MARATHON_LOGIN=BASE+"EventInfo/Login";
     //赛事列表接口
     public static final String MARATHON_HOME=BASE+"EventInfo/index";
+    //酒店列表
+    public static final String HOTEL_LIST=BASE+"eventinfo/GetHotels";
+    //酒店详情
+    public static final String HOTEL_DETAIL=BASE+"eventinfo/GetHotelDetail";
+    //酒店下单
+    public static final String HOTEL_BUY=BASE+"eventinfo/ReservationHotel";
+    //酒店预订支付
+    public static final String HOTEL_PAY= BASE+"eventinfo/HotelPay";
+    //我的预订
+    public static final String MY_HOTEL_ORDER=BASE+"eventinfo/MyReservation";
+    //酒店预订订单详情
+    public static final String HOTEL_ORDER_DETAILS=BASE+"eventinfo/ReservationDetail";
+    //取消订单
+    public static final String CANCEL_HOTEL_ORDER=BASE+"eventinfo/CancleOrder";
+
     //赛事详情数据接口
     public static final String MARATHON_DETAILS=BASE+"EventInfo/CarouselAndSponsor";
     //赛事报名接口
@@ -62,8 +84,8 @@ public class HttpUrlUtils {
     //提交反馈接口
     public static final String ADDFEED_INFO=BASE+"eventInfo/FeedBackContent";
     //检查更新接口
-    public static final String UPDATE_URL="http://shop.baijar.com/eventinfo/AppUpdate";
+    public static final String UPDATE_URL=BASE+"eventinfo/AppUpdate";
 
     //免责声明
-    public static final String ANNOUNCE="http://shop.baijar.com/EventInfo/Disclaimer?eventId=";
+    public static final String ANNOUNCE=BASE+"EventInfo/Disclaimer?eventId=";
 }

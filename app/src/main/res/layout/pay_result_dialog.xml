@@ -60,7 +60,7 @@
                 <Button
                     android:layout_marginLeft="2dp"
                     android:layout_weight="1"
-                    android:background="@drawable/rect_green_btn_selector"
+                    android:background="@drawable/rect_5_green_button_selector"
                     android:id="@+id/details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

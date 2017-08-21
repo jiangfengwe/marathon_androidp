@@ -22,6 +22,9 @@
     <string name="tel">085188622851</string>
     <string name="shareDownLoadUrl">http://shop.baijar.com/Home/AppDownload</string>
     <string name="intro">注:去年参与本赛事且拥有有效成绩的参赛者无需上传健康证明材料,其他参赛者报名全程与半程需要提供健康证明材料。</string>
+    <string name="not_data">暂时还没有数据</string>
+    <string name="error">加载失败，点击空白处加载</string>
+    <string name="not_network">网络连接错误,点击设置网络</string>
 
     <string-array name="CountryList">
         <item>中国</item>
@@ -274,4 +277,9 @@
         <item>其它</item>
 
     </string-array>
+    <!--入住酒店证件类型-->
+    <array name="hotel_idCardType">
+        <item>身份证</item>
+        <item>护照</item>
+    </array>
 </resources>

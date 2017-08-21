@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,7 +16,6 @@ import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
-import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,11 +123,15 @@ public class LoginActivity extends BaseActivity {
             case R.id.registerBtn://注册
 
                 intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
-                startActivityForResult(intent,500);
+                intent.putExtra("type","zc");
+                intent.putExtra("title","注册");
+                startActivity(intent);
                 break;
             case R.id.forGet://忘记密码
 
-                intent = new Intent(LoginActivity.this,RestPassWordActivity.class);
+                intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
+                intent.putExtra("type","zhmm");
+                intent.putExtra("title","找回密码");
                 startActivity(intent);
 
                 break;
@@ -190,6 +190,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(String s) {
 
+                Log.d("-----登录--->", "onSuccess: "+s);
                 try {
                     JSONObject json = new JSONObject(s);
 
@@ -200,11 +201,12 @@ public class LoginActivity extends BaseActivity {
 
                     String avatarUrl = json.getString("AvatarUrl");
 
+                    String customerId = json.getString("CustomerId");
                     //报名成功跳转到登录界面
                     if(success){
 
                         //保存用户登录数据
-                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,new LoginModel(tel,pass,avatarUrl));
+                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,new LoginModel(customerId,tel,pass,avatarUrl));
                         Toast.makeText(LoginActivity.this,"登录成功!",Toast.LENGTH_SHORT).show();
                         //通知个人中心修改登录状态
                         Intent intent  =new Intent(MyFragment.ACTION);

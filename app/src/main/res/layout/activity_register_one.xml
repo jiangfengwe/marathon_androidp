@@ -11,11 +11,12 @@
         android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
        <EditText
+           android:text=""
            android:maxLines="1"
            android:id="@+id/phone"
            android:drawableLeft="@drawable/user_phone"
@@ -59,6 +60,8 @@
             />
 
         <Button
+            android:enabled="false"
+            android:id="@+id/nextBtn"
             android:onClick="nextClick"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
@@ -66,7 +69,19 @@
             android:text="下一步"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:background="@drawable/oval_yellow_button_selector"
+            android:background="@drawable/oval_green_button_selector"
+            />
+
+
+        <TextView
+            android:id="@+id/toLogin"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已有账号"
             />
     </LinearLayout>
 

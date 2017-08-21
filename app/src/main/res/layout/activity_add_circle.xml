@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:id="@+id/mainLayout"
+    android:focusableInTouchMode="true"
+    android:background="@color/background"
+    android:layout_height="match_parent"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.AddCircleActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <include layout="@layout/toolbar_layout"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <EditText
+
+        android:id="@+id/edit"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:gravity="left|top"
+        android:hint="说点什么吧..."
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:maxLength="140"
+
+        />
+
+    <TextView
+        android:id="@+id/wordCount"
+        android:gravity="right"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:layout_gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="140"
+        />
+    <LinearLayout
+        android:background="@color/white"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:button="@null"
+            android:id="@+id/addEmoji"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+             android:background="@drawable/emoji"
+
+            />
+        <ImageView
+            android:onClick="add"
+            android:id="@+id/addImage"
+            android:layout_marginLeft="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/add_image"
+            />
+
+    </LinearLayout>
+       <android.support.v7.widget.RecyclerView
+           android:padding="10dp"
+           android:background="@color/white"
+           android:id="@+id/mRecyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+       </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="正在获取位置信息..."
+            android:drawableLeft="@drawable/red_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+    <FrameLayout
+
+        android:layout_alignParentBottom="true"
+        android:id="@+id/emoji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+</RelativeLayout>

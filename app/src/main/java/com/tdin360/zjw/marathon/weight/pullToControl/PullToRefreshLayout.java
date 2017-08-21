@@ -227,6 +227,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	 */
 	public void refreshFinish(int refreshResult)
 	{
+		if(refreshingView==null)return;
 		refreshingView.clearAnimation();
 		refreshingView.setVisibility(View.GONE);
 		switch (refreshResult)
@@ -238,7 +239,6 @@ public class PullToRefreshLayout extends RelativeLayout
 			refreshStateImageView
 					.setBackgroundResource(R.drawable.refresh_succeed);
 			break;
-
 
 		case FAIL:
 		default:
@@ -340,11 +340,13 @@ public class PullToRefreshLayout extends RelativeLayout
 			break;
 		case RELEASE_TO_REFRESH:
 			// 释放刷新状态
+			if(refreshStateTextView==null)return;
 			refreshStateTextView.setText(R.string.release_to_refresh);
 			pullView.startAnimation(rotateAnimation);
 			break;
 		case REFRESHING:
 
+			if(pullView==null)return;
 			// 正在刷新状态
 			pullView.clearAnimation();
 			refreshingView.setVisibility(View.VISIBLE);

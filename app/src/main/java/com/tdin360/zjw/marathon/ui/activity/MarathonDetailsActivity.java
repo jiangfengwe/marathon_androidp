@@ -5,14 +5,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +28,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.MenuModel;
+import com.tdin360.zjw.marathon.utils.BannerImageLoader;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
@@ -30,11 +37,17 @@ import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.EventDetailsServiceImpl;
 import com.tdin360.zjw.marathon.weight.Carousel;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.MenuView;
 import com.tdin360.zjw.marathon.weight.SpaceItemDecoration;
 import com.umeng.socialize.UMShareAPI;
+import com.youth.banner.Banner;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,31 +55,54 @@ import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.tdin360.zjw.marathon.R.id.errorView;
+import static com.tdin360.zjw.marathon.R.id.isEnable;
+import static com.tdin360.zjw.marathon.R.id.pullup_icon;
 
 /**
  * 赛事详情界面
  * @author zhangzhijun
  */
-public class MarathonDetailsActivity extends BaseActivity implements Carousel.OnCarouselItemClickListener{
+public class MarathonDetailsActivity extends BaseActivity {
 
 
-    private Carousel mCarousel;
     private List<CarouselModel>carouselList=new ArrayList<>();
     private List<CarouselModel>sponsorList= new ArrayList<>();
-    private TextView loadFail;
+    private Banner mBanner;
     private View  isEnableView;
     private EventDetailsServiceImpl service;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+    @ViewInject(R.id.mRecyclerView)
     private RecyclerView mRecyclerView;
     private View headerView;
+    @ViewInject(R.id.main)
+    private LinearLayout main;
     private MyAdapter mAdapter;
-    private LinearLayout panel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+         * 沉侵式导航栏
+         */
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
+
 
         initView();
         initMenu();
@@ -97,28 +133,73 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
     private void initView() {
 
          this.headerView = View.inflate(this,R.layout.marathon_details_header,null);
-         this.mRecyclerView = (RecyclerView) this.findViewById(R.id.mRecyclerView);
-         this.panel = (LinearLayout) this.findViewById(R.id.panel);
+
+         this.isEnableView = this.findViewById(isEnable);
          this.mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
          this.mRecyclerView.addItemDecoration(new SpaceItemDecoration(10,2));
          this.mAdapter=new MyAdapter();
          this.mRecyclerView.setAdapter(mAdapter);
          this.service = new EventDetailsServiceImpl(this);
         setToolBarTitle(MarathonDataUtils.init().getEventName());
-
-
-
         showBackButton();
-        /**
-         * 构建分享内容
-         */
-        ShareInfoManager manager = new ShareInfoManager(this);
-         manager.buildShareWebLink(MarathonDataUtils.init().getEventName(),MarathonDataUtils.init().getShareUrl(),"佰家运动",MarathonDataUtils.init().getEventImageUrl());
 
-        showShareButton(manager);
+
+
+        /**
+         * 设置导航栏透明
+         */
+        navBar().setBackgroundResource(android.R.color.transparent);
+
+
+        /**
+         * 去掉导航栏下边的线条
+         */
+        this.findViewById(R.id.line).setBackgroundResource(android.R.color.transparent);
+
+
+
+        /**
+         * 滑动导航栏颜色渐变
+         */
+
+        this.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int offY = 0;
+            int maxHeight = 300;
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                offY += dy;
+                float alpha = offY * 1f / maxHeight;//百分比
+
+                if(alpha>=1){
+
+                  setToolBarTitleColor(Color.BLACK);
+                   navBack().setImageResource(R.drawable.back);
+                }else {
+
+                   setToolBarTitleColor(Color.WHITE);
+                    navBack().setImageResource(R.drawable.back_white);
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                    findViewById(R.id.navView).setAlpha(alpha);
+
+
+
+                }else {
+
+                    findViewById(R.id.navView).setAlpha(alpha);
+
+                }
+
+            }
+        });
+
 
         //如果报名已结束就显示蒙板
-          this.isEnableView=this.findViewById(R.id.isEnable);
+
          if(!MarathonDataUtils.init().isRegister()){
 
              this.isEnableView.setVisibility(View.VISIBLE);
@@ -136,58 +217,71 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
          });
 
 
-         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-
-         this.mCarousel = (Carousel) headerView.findViewById(R.id.mCarousel);
-        this.mCarousel.setOnCarouselItemClickListener(this);
-
-         this.loadFail.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                loadData();
-             }
-         });
-
+        initBanner();
 
          loadData();
 
+        /**
+         * 加载失败点击重试
+         */
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                switch (mode){
+
+                    case NOT_NETWORK:
+                        httpRequest();
+                        break;
+
+                }
+            }
+        });
 
 
     }
+
 
     /**
-     * 轮播图的点击处理
-     * @param pos
+     * 初始化轮播图
      */
-    @Override
-    public void onClick(int pos) {
+    private void initBanner(){
 
+        this.mBanner= (Banner) headerView.findViewById(R.id.mBanner);
+        //设置图片加载器
+        mBanner.setImageLoader(new BannerImageLoader());
+        mBanner.setBannerAnimation(Transformer.Default);
+        mBanner.setDelayTime(3000);
+        mBanner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                CarouselModel model = carouselList.get(position);
+                if(model.getLinkUrl()==null||model.getLinkUrl().equals("null")){
 
-        CarouselModel model = carouselList.get(pos);
-        if(model.getLinkUrl()==null||model.getLinkUrl().equals("null")){
+                    return;
+                }
+                String url = model.getLinkUrl();
 
-            return;
-        }
-        String url = model.getLinkUrl();
+                if(!url.startsWith("http")){
 
-        if(!url.startsWith("http")){
+                    url="http://"+url;
+                }
+                Intent intent = new Intent(MarathonDetailsActivity.this,ShowHtmlActivity.class);
+                intent.putExtra("title",model.getTitle());
+                intent.putExtra("url",url);
 
-            url="http://"+url;
-        }
-        Intent intent = new Intent(this,ShowHtmlActivity.class);
-        intent.putExtra("title",model.getTitle());
-        intent.putExtra("url",url);
-
-         startActivity(intent);
+                startActivity(intent);
+            }
+        });
 
     }
-
     /**
      * 赞助商列表
      */
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
        private final int HEAD=0x01;
+
 
         @Override
         public int getItemViewType(int position) {
@@ -196,6 +290,8 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
             if(position==0){
                 return HEAD;
             }
+
+
             return super.getItemViewType(position);
         }
 
@@ -308,7 +404,7 @@ public class MarathonDetailsActivity extends BaseActivity implements Carousel.On
                                     Snackbar.make(itemView, "该暂赞助商没有提供链接地址", Snackbar.LENGTH_SHORT).show();
                                 }
                             }catch (Exception e){
-e.printStackTrace();
+                                  e.printStackTrace();
                                 Snackbar.make(itemView, "地址有误无法打开", Snackbar.LENGTH_SHORT).show();
                             }
                         }
@@ -340,7 +436,7 @@ e.printStackTrace();
         }else {
 
             hud.dismiss();
-            panel.setVisibility(View.GONE);
+
             //获取缓存数据
 
             this.carouselList = this.service.getAllEventDetail(MarathonDataUtils.init().getEventId(),"0");
@@ -349,9 +445,8 @@ e.printStackTrace();
 
             //如果获取得到缓存数据则加载本地数据
             if(carouselList.size()==0&&sponsorList.size()==0){
-                panel.setVisibility(View.VISIBLE);
-                loadFail.setText("点击重新加载");
-                loadFail.setVisibility(View.VISIBLE);
+
+                mErrorView.show(main,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
                 //如果缓存数据不存在则需要用户打开网络设置
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -390,6 +485,7 @@ e.printStackTrace();
     /**
      * 初始化菜单选项
      */
+
     private void initMenu(){
       List<MenuModel>  list =  MenuDataUtils.getMenus(this);
       LinearLayout menuLayout = (LinearLayout)  headerView.findViewById(R.id.menuLayout);
@@ -397,7 +493,8 @@ e.printStackTrace();
 
          MenuModel menuModel = list.get(i);
          MenuView menu = new MenuView(this);
-         menu.setMenuTitleColor(Color.WHITE);
+//         menu.setLayoutParams(new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
+         menu.setMenuTitleColorResources(R.color.textBlack);
          menu.setMenuContent(menuModel.getId(),menuModel.getIcon(),menuModel.getTitle());
 
          menuLayout.addView(menu);
@@ -430,14 +527,22 @@ e.printStackTrace();
 
                          intent.putExtra("title","赛事路线");
                          intent.putExtra("url",HttpUrlUtils.MARATHON_INTRO+"?eventId="+MarathonDataUtils.init().getEventId()+"&categoryName=竞赛路线");
+                         break;
 
+                     case  4://酒店预订
+
+                         ToastUtils.show(getBaseContext(),"开始中，敬请期待");
+
+                         //intent = new Intent(MarathonDetailsActivity.this,HotelActivity.class);
 
                          break;
 
                  }
 
-                 startActivity(intent);
+                 if(intent!=null) {
 
+                     startActivity(intent);
+                 }
              }
          });
      }
@@ -450,7 +555,7 @@ e.printStackTrace();
     private void httpRequest(){
 
 
-        loadFail.setVisibility(View.GONE);
+
         final RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -501,23 +606,30 @@ e.printStackTrace();
 
 
                     }
-                   panel.setVisibility(View.GONE);
+
+
+                    if(sponsorList.size()<=0&&carouselList.size()<=0){
+                        setToolBarTitleColor(Color.BLACK);
+                        navBack().setImageResource(R.drawable.back);
+                        mErrorView.show(main,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(main);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-                    loadFail.setVisibility(View.VISIBLE);
-                     panel.setVisibility(View.VISIBLE);
+                    setToolBarTitleColor(Color.BLACK);
+                    navBack().setImageResource(R.drawable.back);
+                    mErrorView.show(main,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                setToolBarTitleColor(Color.BLACK);
+                navBack().setImageResource(R.drawable.back);
+                mErrorView.show(mRecyclerView,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
 
-
-                Toast.makeText(MarathonDetailsActivity.this,"网络错误或访问服务器出错!",Toast.LENGTH_SHORT).show();
-                loadFail.setText("点击重新加载");
-                loadFail.setVisibility(View.VISIBLE);
-                panel.setVisibility(View.VISIBLE);
 
             }
 
@@ -541,26 +653,12 @@ e.printStackTrace();
     //显示轮播图
     private void showCarousel(){
 
-        List<View>views = new ArrayList<>();
-        for(int i=0;i<carouselList.size();i++){
+        //设置图片集合
+        mBanner.setImages(carouselList);
 
-            CarouselModel carouselModel = this.carouselList.get(i);
-            ImageView imageView  =new ImageView(this);
-            imageView.setBackgroundResource(R.drawable.loading_banner_default);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageOptions imageOptions = new ImageOptions.Builder()
-                    //.setSize(DensityUtil.dip2px(1000), DensityUtil.dip2px(320))//图片大小
-//                    .setLoadingDrawableId(R.drawable.loading_banner_default)//加载中默认显示图片
-                    .setUseMemCache(true)//设置使用缓存
-                    .setFailureDrawableId(R.drawable.loading_banner_error)//加载失败后默认显示图片
-                    .build();
-            x.image().bind(imageView, carouselModel.getPicUrl(),imageOptions);
-            views.add(imageView);
+        //banner设置方法全部调用完毕时最后调用
+        mBanner.start();
 
-
-        }
-
-        this.mCarousel.loadCarousel(views);
     }
 
 
@@ -610,15 +708,13 @@ e.printStackTrace();
         }
 
 
-
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCarousel.onDestroy();
-        //内存泄漏
+        //防止内存泄漏
         UMShareAPI.get(this).release();
     }
 }

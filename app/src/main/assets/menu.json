@@ -1,0 +1,28 @@
+[
+    {
+        "id": 0,
+        "icon": "icon_jianjie.png",
+        "title": "赛事介绍"
+    },
+    {
+        "id": 1,
+        "icon": "icon_xinwen.png",
+        "title": "赛事新闻"
+    },
+    {
+        "id": 2,
+        "icon": "icon_gonggao.png",
+        "title": "赛事公告"
+    },
+    {
+        "id": 3,
+        "icon": "icon_luxian.png",
+        "title": "赛事路线"
+    },
+    {
+        "id": 4,
+        "icon": "icon_jiudian.png",
+        "title": "酒店预订"
+    }
+
+]

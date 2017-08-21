@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@color/background"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.HotelOrderSubmitActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <include layout="@layout/toolbar_layout"
+        ></include>
+    <ScrollView
+        android:layout_below="@+id/mToolBar"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <LinearLayout
+
+        android:background="@color/white"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手  机  号:"
+            />
+        <EditText
+            android:id="@+id/phone"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:hint="输入手机号"
+            />
+    </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="0.5dp"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓        名:"
+                    />
+                <EditText
+                    android:id="@+id/name"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="姓名"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="0.5dp"
+                android:gravity="center_vertical"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="性        别:"
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:drawableLeft="@drawable/green_checked_selector"
+                            android:button="@null"
+                            android:drawablePadding="5dp"
+                            android:checked="true"
+                            android:id="@+id/radio1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="男"
+                            />
+                        <RadioButton
+                            android:drawableLeft="@drawable/green_checked_selector"
+                            android:drawablePadding="5dp"
+                            android:button="@null"
+                            android:id="@+id/radio2"
+                            android:layout_marginLeft="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="女"
+                            />
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_marginTop="0.5dp"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="证件类型:"
+                    />
+                <Spinner
+                    style="@android:style/Widget.Spinner"
+                    android:entries="@array/hotel_idCardType"
+                    android:id="@+id/idCardType"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="0.5dp"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="证件号码:"
+                    />
+                <EditText
+                    android:id="@+id/idCardNumber"
+                    android:textSize="14sp"
+                    android:textColor="@color/textBlack"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="证件号码"
+                    />
+            </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="入住时间:"
+            />
+        <TextView
+            android:id="@+id/select_in_date"
+            android:textSize="14sp"
+            android:textColor="@color/textBlack"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="选择"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/down"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:background="@color/white"
+        android:padding="10dp"
+        android:layout_marginTop="0.5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="离开时间:"
+            />
+        <TextView
+            android:id="@+id/select_out_date"
+            android:textSize="14sp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:textColor="@color/textBlack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="选择"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/down"
+            />
+    </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="0.5dp"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="房间数量:"
+                    />
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/down"
+                        android:background="@color/enable"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:gravity="center"
+                        android:text="−"
+                        />
+                    <TextView
+                        android:id="@+id/roomCount_text"
+                       android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        />
+                    <TextView
+                        android:id="@+id/up"
+                        android:background="@color/enable"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:gravity="center"
+                        android:text="+"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"></View>
+        </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tip"
+                android:layout_marginLeft="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/textBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="共计:"
+                />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:id="@+id/total"
+                android:textColor="@color/yellow_color"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0元"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_weight="1"
+            android:background="@drawable/rect_green_button_selector"
+            android:onClick="submit"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="立即预订"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

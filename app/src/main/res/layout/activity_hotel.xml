@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.HotelActivity">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:onClick="back"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            />
+        <RadioGroup
+
+            android:id="@+id/radioGroup"
+            android:background="@drawable/hotel_top_switch_bg"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_width="150dp"
+            android:layout_height="30dp">
+
+            <RadioButton
+                android:id="@+id/tab_hotel"
+                android:textColor="@drawable/hotel_top_text_selector"
+                android:background="@drawable/hotel_top_left_bg_selector"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_weight="1"
+                android:text="酒店预订"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                />
+            <RadioButton
+                android:id="@+id/tab_my"
+                android:textColor="@drawable/hotel_top_text_selector"
+                android:background="@drawable/hotel_top_right_bg_selector"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_weight="1"
+                android:text="我的预订"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                />
+        </RadioGroup>
+    </RelativeLayout>
+  <View
+      android:background="@color/lineColor"
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"></View>
+    <FrameLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+</LinearLayout>

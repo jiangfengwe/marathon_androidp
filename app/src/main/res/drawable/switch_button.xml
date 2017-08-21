@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:drawable="@drawable/mine_set_open" android:state_checked="true"></item>
-    <item android:drawable="@drawable/mine_set_close"></item>
+<item android:drawable="@drawable/switch_on" android:state_checked="true"></item>
+    <item android:drawable="@drawable/switch_off"></item>
 </selector>

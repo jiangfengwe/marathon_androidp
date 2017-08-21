@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:orientation="vertical"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
@@ -17,15 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
     <RelativeLayout
-       android:background="@drawable/person_top_bg"
+       android:background="@drawable/my_top_bg"
         android:layout_width="match_parent"
-        android:layout_height="180dp">
+        android:layout_height="150dp">
         <LinearLayout
             android:id="@+id/myHeader"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -37,28 +38,91 @@
                 <ImageView
 
                     android:id="@+id/myImage"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/signup_photo"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginLeft="5dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight="1"
+
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/userName"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#fff"
+                        android:text="点击登录"
+                        />
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:text="关注  1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:text="关注  1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:text="关注  1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:text="关注  1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_white"
+
                     />
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="#fff"
-                android:text="点击登录"
-                />
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/body_color"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="60dp">
@@ -73,11 +137,11 @@
                    android:layout_height="match_parent">
 
                    <TextView
-                       android:textColor="@color/yellow_color"
+                       android:textColor="@color/textBlack"
                        android:gravity="center"
                        android:id="@+id/signUpSearch"
                        android:drawablePadding="2dp"
-                       android:drawableLeft="@drawable/my_sign_up"
+                       android:drawableLeft="@drawable/my_signup"
                        android:textSize="18sp"
                        android:textStyle="bold"
                        android:layout_width="wrap_content"
@@ -104,7 +168,7 @@
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/yellow_color"
+                android:textColor="@color/textBlack"
                 android:drawablePadding="2dp"
                 android:drawableLeft="@drawable/my_mark"
                 android:layout_width="wrap_content"
@@ -120,13 +184,13 @@
                 android:id="@+id/myTeam"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
-
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:gravity="center"
                     android:textSize="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textBlack"
                     android:drawablePadding="2dp"
                     android:drawableLeft="@drawable/my_team"
                     android:layout_width="wrap_content"
@@ -147,13 +211,13 @@
                 android:id="@+id/myGoods"
                 android:background="@drawable/personal_center_item_selector"
                 android:padding="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:gravity="center"
                     android:textSize="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textBlack"
                     android:drawablePadding="2dp"
                     android:drawableLeft="@drawable/my_goods"
                     android:layout_width="wrap_content"
@@ -181,8 +245,8 @@
                     android:drawablePadding="2dp"
                     android:gravity="center"
                     android:textSize="16dp"
-                    android:textColor="@color/white"
-                    android:drawableLeft="@drawable/my_notice_message"
+                    android:textColor="@color/textBlack"
+                    android:drawableLeft="@drawable/my_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="通知消息"
@@ -207,7 +271,7 @@
                 <TextView
                     android:drawablePadding="2dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textBlack"
                     android:drawableLeft="@drawable/my_setting"
                     android:textSize="16dp"
                     android:layout_width="wrap_content"
@@ -222,31 +286,7 @@
                     android:src="@drawable/arrow_right"
                     />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/about"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="1dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/white"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:drawableLeft="@drawable/my_about"
-                    android:textSize="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="关于我们"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/share"
                 android:background="@drawable/personal_center_item_selector"
@@ -255,7 +295,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textColor="@color/white"
+                    android:textColor="@color/textBlack"
                     android:drawablePadding="2dp"
                     android:gravity="center"
                     android:drawableLeft="@drawable/my_share_app"
@@ -281,8 +321,6 @@
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
                 <TextView
                     android:gravity="center"
                     android:textSize="18sp"

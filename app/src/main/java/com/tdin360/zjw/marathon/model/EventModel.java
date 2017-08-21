@@ -26,8 +26,10 @@ public class EventModel {
 
     private boolean isRegister;
 
+    private boolean isWebPage;
 
-    public EventModel(int id, String name, String status, String picUrl,String signUpStartTime, String startDate,String shardUrl,boolean isRegister) {
+
+    public EventModel(int id, String name, String status, String picUrl,String signUpStartTime, String startDate,String shardUrl,boolean isRegister,boolean isWebPage) {
         this.id=id;
         this.name = name;
         this.status = status;
@@ -36,6 +38,7 @@ public class EventModel {
         this.startDate = startDate;
         this.shardUrl=shardUrl;
         this.isRegister=isRegister;
+        this.isWebPage=isWebPage;
 
     }
 
@@ -104,5 +107,26 @@ public class EventModel {
 
     public void setRegister(boolean register) {
         isRegister = register;
+    }
+
+    public boolean isWebPage() {
+        return isWebPage;
+    }
+
+
+    @Override
+    public String toString() {
+        return "EventModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", picUrl='" + picUrl + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", signUpStartTime='" + signUpStartTime + '\'' +
+                ", time=" + time +
+                ", shardUrl='" + shardUrl + '\'' +
+                ", isRegister=" + isRegister +
+                ", isWebPage=" + isWebPage +
+                '}';
     }
 }

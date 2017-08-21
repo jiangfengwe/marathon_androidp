@@ -2,11 +2,13 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.tdin360.zjw.marathon.R;
@@ -19,7 +21,7 @@ import com.umeng.socialize.UMShareAPI;
  * 程序主界面
  * @author zhangzhijun
  */
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends AppCompatActivity{
 
     private static final String TAB1="tab1";
     private static final String TAB2="tab2";
@@ -27,7 +29,6 @@ public class MainActivity extends FragmentActivity{
     private static  final String TAB4="tab4";
     private EventFragment marathonFragment;//赛事首页
     private CircleFragment circleFragment;//圈子
-
     private MyFragment personalCenterFragment;//我的
     private RadioGroup radioGroup;
 
@@ -36,10 +37,14 @@ public class MainActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+//        startActivity(new Intent(this,WebActivity.class));
+
           //防止旋转屏幕时重叠
           if(savedInstanceState!=null){
               this.marathonFragment= (EventFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
-            //  this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
+           //  this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);
 
               this.personalCenterFragment= (MyFragment) this.getSupportFragmentManager().findFragmentByTag(TAB4);
           }

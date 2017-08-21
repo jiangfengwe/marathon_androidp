@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.tdin360.zjw.marathon"//极光推送配置
         minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 8
-        versionName "1.0.8"
+        targetSdkVersion 25
+        versionCode 10
+        versionName "1.1.1"
         multiDexEnabled true //突破应用方法数的65535的限制
         //不指定渠道时默认添加友盟渠道
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Umeng"]
@@ -89,15 +89,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //    xutils3网络框架依赖库 https://github.com/wyouflf/xUtils3
+
     //    支付宝支付依赖库
     compile files('libs/alipaySdk-20161222.jar')
-    //    极光推送依赖库
     //    微信支付依赖库
     compile files('libs/libammsdk.jar')
-
-    //标签库 https://github.com/2dxgujun/AndroidTagGroup
-    //hud加载提示框 https://github.com/Kaopiz/KProgressHUD
     //友盟分享集成库
     compile files('libs/SocialSDK_QQ_Simplify.jar')
     compile files('libs/SocialSDK_Sina_Simplify.jar')
@@ -107,26 +103,47 @@ dependencies {
     compile files('libs/umeng_social_tool.jar')
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
+
+    //xutils3网络框架依赖库 https://github.com/wyouflf/xUtils3
+    //激光推送
+    //加载动画库 https://github.com/ybq/Android-SpinKit?utm_source=tuicool&utm_medium=referral
+    //标签库 https://github.com/2dxgujun/AndroidTagGroup
+    //hud加载提示框 https://github.com/Kaopiz/KProgressHUD
     //友盟统计
     //高德地图依赖包
-    //加载动画库 https://github.com/ybq/Android-SpinKit?utm_source=tuicool&utm_medium=referral
-    //json解析https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
 
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'org.xutils:xutils:3.3.4'
+//    多图片选择器
+    //    表情
+    //    轮播图
+    //json解析https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
+    //    QQ浏览器内核
+    compile files('libs/tbs_sdk_thirdapp_v3.jar')
+
+//    glide图片加载器
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'org.xutils:xutils:3.4.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'cn.jiguang.sdk:jpush:3.0.0'
     compile 'cn.jiguang.sdk:jcore:1.0.0'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
-    compile 'com.kaopiz:kprogresshud:1.0.5'
+    compile 'com.kaopiz:kprogresshud:1.1.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.amap.api:3dmap:latest.integration'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'cn.finalteam.rxgalleryfinal:library:1.1.0'
+    compile 'com.tb.emoji:yykEmoji:1.1.0'
+    compile 'com.youth.banner:banner:1.4.9'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
 }
+
+
+
 
 
 

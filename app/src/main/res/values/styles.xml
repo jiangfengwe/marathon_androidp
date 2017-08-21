@@ -24,4 +24,15 @@
     </style>
 
 
+    <!--设置tabLayout字体大小-->
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_size_sp</item>
+
+    </style>
+    <!--酒店滑动菜单字体大小-->
+    <style name="HotelTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/hotel_tab_title_size</item>
+
+    </style>
+
 </resources>

@@ -162,7 +162,11 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -195,6 +199,11 @@
                     style="@android:style/Widget.Spinner"
                     />
 
+              <ImageView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:src="@drawable/down"
+                  />
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -257,7 +266,7 @@
                         android:button="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/gander_checked_selector"
+                        android:drawableLeft="@drawable/green_checked_selector"
                         android:text="男"
                         android:drawablePadding="5dp"
                         android:checked="true"
@@ -266,7 +275,7 @@
                     <RadioButton
                         android:id="@+id/radio2"
                         android:button="@null"
-                        android:drawableLeft="@drawable/gander_checked_selector"
+                        android:drawableLeft="@drawable/green_checked_selector"
                         android:layout_marginLeft="50dp"
                         android:drawablePadding="5dp"
                         android:layout_width="wrap_content"
@@ -305,7 +314,11 @@
                     android:entries="@array/bloodList"
                     style="@android:style/Widget.Spinner"
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
 
             <View
@@ -337,7 +350,11 @@
                     android:entries="@array/CountryList"
                     style="@android:style/Widget.Spinner"
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
 
             <View
@@ -371,7 +388,11 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -403,7 +424,11 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -436,7 +461,11 @@
                     android:background="@android:color/transparent"
 
                     />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/down"
+                    />
             </LinearLayout>
             <View
                 android:layout_marginLeft="10dp"
@@ -642,7 +671,7 @@
                     android:layout_gravity="center"
                     android:id="@+id/submitBtn"
                     android:textColor="@android:color/white"
-                    android:background="@drawable/oval_yellow_button_selector"
+                    android:background="@drawable/oval_green_button_selector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"

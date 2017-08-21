@@ -3,32 +3,40 @@
     <!--导航栏颜色-->
     <color name="colorPrimary">#fff</color>
     <!--状态栏颜色-->
-    <color name="colorPrimaryDark">#13bd5a</color>
+    <color name="colorPrimaryDark">#D3D3D3</color>
     <!--底部tabBar的颜色 -->
     <color name="bottomTabBar">#191919</color>
-    <color name="colorAccent">#ffb400</color>
+    <color name="colorAccent">#2974c9</color>
     <color name="province_line_border">#C7C7C7</color>
+    <!--字体颜色-->
     <color name="textBlack">#333</color>
+    <color name="textDark">#bbb</color>
+
     <color name="red">#e41515</color>
-    <color name="background">#2b2b2b</color>
+    <color name="background">#F6F6F6</color>
     <color name="white">#ffffff</color>
     <color name="lineColor">#CCCCCC</color>
     <color name="line">#f2f2f2</color>
-    <color name="home_tab_title_color_normal">#fff</color>
-    <color name="home_tab_title_color_check">#ffb400</color>
+    <color name="home_tab_title_color_normal">#333</color>
+    <color name="home_tab_title_color_check">#13bd5a</color>
     <color name="body_color">#363636</color>
     <color name="green">#13bd5a</color>
-
-    <color name="dark">#b9b9b9</color>
+    <color name="dark">#bbb</color>
     <!--黄色字体颜色-->
     <color name="yellow_color">#ffb400</color>
     <color name="blue">#2974c9</color>
 
-    <!--按钮颜色-->
-    <color name="buttonNColor">#ffb400</color>
-    <color name="buttonPColor">#e1af00</color>
-    <!--轮播图底部背景颜色-->
-    <color name="CarouselPageBarBackgroundColor">#50000000</color>
+    <color name="refresh_backgroundColor">#3C3F41</color>
+
+    <!--绿色按钮颜色-->
+    <color name="green_button_normal">#13bd5a</color>
+    <color name="green_button_press">#11aa51</color>
+    <!--黄色按钮颜色-->
+    <color name="yellow_button_normal">#FFA500</color>
+    <color name="yellow_button_press">#FF7F24</color>
+    <color name="enable">#cccccc</color>
+
     <color name="gray">#aaaaaa</color>
     <color name="light_blue">#6593cb</color>
+    <color name="search_background">#5fcccccc</color>
 </resources>

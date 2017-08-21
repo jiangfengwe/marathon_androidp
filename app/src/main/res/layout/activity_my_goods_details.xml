@@ -173,7 +173,7 @@
         android:visibility="gone"
         android:id="@+id/btn_confirm"
         android:onClick="confirmClick"
-        android:background="@drawable/rect_yellow_button_selector"
+        android:background="@drawable/rect_green_button_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="领取物资"

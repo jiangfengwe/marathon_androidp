@@ -46,10 +46,8 @@ import java.io.File;
  */
 public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.OnMyDatePickerChangeListener{
 
-    private TextView edit;
     private ImageView imageView;
     private EditText editName;
-    private EditText editTel;
     private EditText editEmail;
     private RadioButton gender1,gender2;
     private boolean isCanEdit;
@@ -71,6 +69,8 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         setToolBarTitle("个人信息");
         showBackButton();
 
+        navRightItemTitle().setText("编辑");
+
         initView();
     }
 
@@ -82,10 +82,9 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private void initView() {
 
         this.service = new MyInfoServiceImpl(this);
-        this.edit = (TextView) this.findViewById(R.id.edit);
         this.imageView = (ImageView) this.findViewById(R.id.imageView);
         this.editName = (EditText) this.findViewById(R.id.name);
-        this.editTel = (EditText) this.findViewById(R.id.tel);
+
         this.editEmail = (EditText) this.findViewById(R.id.email);
         this.editBirth = (TextView) this.findViewById(R.id.birthday);
         this.gender1 = (RadioButton) this.findViewById(R.id.radio1);
@@ -105,11 +104,11 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         });
 
 
-        this.edit.setOnClickListener(new View.OnClickListener() {
+        this.navRightItemTitle().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (edit.getText().toString().equals("编辑")) {
+                if (navRightItemTitle().getText().toString().equals("编辑")) {
 
                     setIsEdit(true);
 
@@ -124,7 +123,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
 
 
             //更换头像
-            this.imageView.setOnClickListener(new View.OnClickListener() {
+            this.findViewById(R.id.head_view).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -351,7 +350,6 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private void showUserData(UserModel model){
 
         this.editName.setText((model.getName()==null || model.getName().equals("null"))? "未设置":model.getName());
-        this.editTel.setText(model.getPhone());
         this.editEmail.setText((model.getEmail()==null || model.getEmail().equals("null"))? "未设置":model.getEmail());
         this.editBirth.setText((model.getBirthday()==null || model.getBirthday().equals("null"))? "未设置":model.getBirthday());
         if(model.isGender()){
@@ -650,12 +648,12 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
        if(isEdit){
 
 
-           edit.setText("保存");
+           navRightItemTitle().setText("保存");
 
 
        }else {
 
-           edit.setText("编辑");
+           navRightItemTitle().setText("编辑");
 
 
        }
@@ -663,7 +661,6 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
        this.gender2.setClickable(isEdit);
        this.isCanEdit=isEdit;
        this.isEdit(isEdit,editName);
-       this.isEdit(isEdit,editTel);
        this.isEdit(isEdit,editEmail);
 
    }

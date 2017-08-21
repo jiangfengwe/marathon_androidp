@@ -21,13 +21,18 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.Constants;
+import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
+import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 
-public class SettingActivity extends BaseActivity implements UpdateManager.UpdateListener{
+import org.xutils.view.annotation.ViewInject;
 
+public class SettingActivity extends BaseActivity{
+
+    @ViewInject(R.id.switchBtn)
     private CheckBox switchBtn;
-    private String url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +41,13 @@ public class SettingActivity extends BaseActivity implements UpdateManager.Updat
           setToolBarTitle("系统设置");
           showBackButton();
 
-        TextView version = (TextView) this.findViewById(R.id.version);
-        version.setText("检查更新("+ UpdateManager.getVersionName(this)+")");
-        //是否接收推送通知
-          switchBtn = (CheckBox) this.findViewById(R.id.switchBtn);
+
+
+
+        /**
+         * 是否接收推送通知
+         */
+
           switchBtn.setChecked(SharedPreferencesManager.getOpen(this));
           switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
               @Override
@@ -47,18 +55,49 @@ public class SettingActivity extends BaseActivity implements UpdateManager.Updat
                    SharedPreferencesManager.isOpen(SettingActivity.this,isChecked);
               }
           });
-        //检查更新
-         this.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
 
-              checkUpdate();
+        /**
+         * 关于我们
+         */
+        this.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, AboutUsActivity.class);
+                startActivity(intent);
+            }
+        });
 
-             }
-         });
+        /**
+         * 意见反馈
+         */
+
+        this.findViewById(R.id.quest).setOnClickListener(new View.OnClickListener() {
+            Intent intent=null;
+            @Override
+            public void onClick(View v) {
+
+                if(SharedPreferencesManager.isLogin(getApplicationContext())){
+
+                   intent = new Intent(SettingActivity.this,FeedbackListActivity.class);
+                    startActivity(intent);
+                }else {
+                    intent = new Intent(SettingActivity.this,LoginActivity.class);
+                    startActivity(intent);
 
 
-        //清空记录
+                    /**
+                     *  设置登录成功后跳转到反馈界面
+                     */
+                    LoginNavigationConfig.instance().setNavType(NavType.MyFeed);
+                }
+            }
+        });
+
+
+
+        /**
+         * 清空记录
+         */
         this.findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +110,10 @@ public class SettingActivity extends BaseActivity implements UpdateManager.Updat
                     public void onClick(DialogInterface dialog, int which) {
                        String  msg = SharedPreferencesManager.clearLogin(getApplicationContext());
                         Toast.makeText(SettingActivity.this,msg,Toast.LENGTH_SHORT).show();
-                        //通知个人中心修改登录状态
+
+                        /**
+                         * 通知个人中心修改登录状态
+                         */
                         Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
                         finish();
@@ -87,95 +129,15 @@ public class SettingActivity extends BaseActivity implements UpdateManager.Updat
             }
         });
     }
-    /**
-     * 检查安装包是否有更新
-     */
-    private void checkUpdate(){
 
-        UpdateManager.setUpdateListener(this);
-        UpdateManager.checkNewVersion(getApplicationContext());
-
-    }
     @Override
     public int getLayout() {
         return R.layout.activity_setting;
     }
 
 
-    @Override
-    public void doSDCardPermission() {
-
-        downloadAPK();
-    }
-
-    //下载安装包
-    private void downloadAPK(){
 
 
-        Toast.makeText(this,"已在后台下载",Toast.LENGTH_SHORT).show();
-        //启动下载器下载安装包
-        Intent intent = new Intent(SettingActivity.this, DownloadAPKService.class);
-        intent.putExtra("url",url);
-        startService(intent);
-    }
-
-    @Override
-    public void checkFinished(boolean isUpdate, String content, String url) {
-
-         this.url = url;
-        if(isUpdate){//发现新版本
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-            alert.setTitle("版本更新");
-            alert.setMessage(Html.fromHtml(content));
-            alert.setCancelable(false);
-
-            alert.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    //判断权限
-                    if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-                        downloadAPK();
-
-                    }else {
-                        requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                    }
-
-                }
-            });
-
-            alert.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.dismiss();
-                }
-            });
 
 
-            alert.show();
-
-        }else {//已是最新版本
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(SettingActivity.this);
-
-            alert.setTitle("版本检查");
-            alert.setMessage("当前已是最新版本!");
-            alert.setCancelable(false);
-
-            alert.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.dismiss();
-
-                }
-            });
-
-            alert.show();
-        }
-    }
 }

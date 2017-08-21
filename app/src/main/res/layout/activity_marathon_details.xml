@@ -4,19 +4,18 @@
     android:id="@+id/activity_marathon_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity">
 
 
     <LinearLayout
+        android:id="@id/main"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-    <include layout="@layout/toolbar_layout"></include>
-
 
 
         <android.support.v7.widget.RecyclerView
@@ -47,7 +46,7 @@
            android:textColor="@color/white"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:background="@drawable/rect_yellow_button_selector"
+           android:background="@drawable/rect_green_button_selector"
            />
        <Button
            android:visibility="gone"
@@ -73,22 +72,14 @@
            />
     </RelativeLayout>
     </LinearLayout>
-    <LinearLayout
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:id="@+id/panel"
-        android:layout_marginTop="50dp"
-        android:background="@color/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </LinearLayout>
     <!--加载失败时显示提示-->
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_loadingfail"></include>
-    </LinearLayout>
+    <include layout="@layout/load_fail_layout"></include>
+
+    <View
+        android:id="@+id/navView"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"></View>
+    <include layout="@layout/toolbar_layout"/>
 
 </RelativeLayout>

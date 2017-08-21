@@ -1,21 +1,27 @@
 package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.NewsListViewAdapter;
+import com.tdin360.zjw.marathon.adapter.CommonAdapter;
+import com.tdin360.zjw.marathon.adapter.ViewHolder;
 import com.tdin360.zjw.marathon.model.NewsModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.NewsServiceImpl;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
@@ -23,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -35,16 +42,19 @@ import java.util.List;
 public class MarathonNewsListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener{
 
 
-    private TextView loadFail;
+
+    @ViewInject(R.id.listView)
     private ListView refreshListView;
     private List<NewsModel> newsModelList=new ArrayList<>();
-    private NewsListViewAdapter newsListViewAdapter;
+    private NewsAdapter newsListViewAdapter;
     private int pageNumber=1;
     private int totalPages;
-    private TextView not_found;
-    private boolean isLoadFail;
+    @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
     private NewsServiceImpl service;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +68,30 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
 
     private void initView() {
 
-
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
-        this.refreshListView  = (ListView) this.findViewById(R.id.listView);
         this.refreshListView.setOnItemClickListener(new MyListener());
-        this.not_found = (TextView) this.findViewById(R.id.not_found);
-        this.newsListViewAdapter  =new NewsListViewAdapter(newsModelList,this);
+        this.newsListViewAdapter  =new NewsAdapter(this,newsModelList,R.layout.news_list_item);
         this.refreshListView.setAdapter(this.newsListViewAdapter);
         this.pullToRefreshLayout.setOnRefreshListener(this);
+
+
+
+        /**
+         * 加载失败点击重试
+         */
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                switch (mode){
+
+                    case NOT_NETWORK:
+
+                        loadData();
+                        break;
+
+                }
+            }
+        });
 
          //加载数据
         loadData();
@@ -87,17 +112,20 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             pullToRefreshLayout.autoRefresh();
         } else {
 
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
+
+
+
+
 
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
              newsModelList = service.getAllNews(MarathonDataUtils.init().getEventId());
-             newsListViewAdapter.updateListView(newsModelList);
+             newsListViewAdapter.update(newsModelList);
 
             //如果缓存数据不存在则需要用户打开网络设置
 
             if(newsModelList.size()==0) {
-                loadFail.setVisibility(View.VISIBLE);
+                mErrorView.show(pullToRefreshLayout,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
                 alert.setMessage("网络不可用，是否打开网络设置");
@@ -126,6 +154,28 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
     @Override
     public int getLayout() {
         return R.layout.activity_marathon_news;
+    }
+
+
+    /**
+     * 数据适配器
+     */
+    class NewsAdapter extends CommonAdapter<NewsModel>{
+
+
+        public NewsAdapter(Context context, List<NewsModel> list, @LayoutRes int layoutId) {
+            super(context, list, layoutId);
+        }
+
+        @Override
+        protected void onBind(ViewHolder holder, NewsModel model) {
+
+            holder.setText(R.id.title,model.getTitle());
+            holder.setText(R.id.time,model.getTime());
+            ImageView imageView = holder.getViewById(R.id.imageView);
+            x.image().bind(imageView,model.getPicUrl());
+
+        }
     }
 
 
@@ -172,7 +222,7 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
                         service.addNews(newsModel);
                     }
                     //加载成功隐藏
-                    loadFail.setVisibility(View.GONE);
+
 
                     if (isRefresh){
 
@@ -181,17 +231,25 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                     }
 
+                    if(newsModelList.size()<=0){
+
+                        mErrorView.show(pullToRefreshLayout,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(pullToRefreshLayout);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
 
-                    isLoadFail=true;
-                    loadFail.setVisibility(View.VISIBLE);
+
                     if (isRefresh){
 
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                     }else {
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                     }
+
+                    mErrorView.show(pullToRefreshLayout,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
+
                 }
 
             }
@@ -199,15 +257,18 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-                isLoadFail=true;
-                loadFail.setVisibility(View.VISIBLE);
-                not_found.setVisibility(View.GONE);
                 if (isRefresh){
 
                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                 }else {
                     pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                 }
+
+                if(newsModelList.size()<=0) {
+                    mErrorView.show(pullToRefreshLayout, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                }
+                ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
+
             }
 
             @Override
@@ -219,19 +280,7 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
             public void onFinished() {
 
 
-                    //判断是否有数据
-                    if (newsModelList.size() > 0) {
-                        loadFail.setVisibility(View.GONE);
-                    //如果加载失败且没有数据
-                    } else if(newsModelList.size()>0&&!isLoadFail){
-                        not_found.setVisibility(View.GONE);
-                    }else {
-
-                        not_found.setVisibility(View.VISIBLE);
-                    }
-
-
-                newsListViewAdapter.updateListView(newsModelList);
+                newsListViewAdapter.update(newsModelList);
 
             }
         });

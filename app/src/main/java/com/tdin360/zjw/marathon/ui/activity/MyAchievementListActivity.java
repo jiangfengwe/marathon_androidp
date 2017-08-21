@@ -24,6 +24,8 @@ import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 
+import com.tdin360.zjw.marathon.utils.ToastUtils;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 import org.json.JSONArray;
@@ -32,6 +34,7 @@ import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -42,15 +45,17 @@ import java.util.List;
  */
 public class MyAchievementListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
+
+    @ViewInject(R.id.listView)
     private ListView listView;
-    private TextView loadFail;
+
     private List<MarkModel> data = new ArrayList<>();
     private MyAdapter adapter;
-
-    private TextView not_found;
-    private boolean isLoadFail;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
     private int totalPages;
     private int pageNumber=1;
+    @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +67,8 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
 
 
     private void initView() {
-        this.listView = (ListView) this.findViewById(R.id.listView);
-        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+
         this.pullToRefreshLayout.setOnRefreshListener(this);
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.not_found = (TextView) this.findViewById(R.id.not_found);
         this.adapter = new MyAdapter();
         this.listView.setAdapter(adapter);
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,6 +78,24 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                 Intent intent = new Intent(MyAchievementListActivity.this,MyAchievementDetailsActivity.class);
                 intent.putExtra("model",(MarkModel)parent.getAdapter().getItem(position));
                 startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 加载失败点击重试
+         */
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                switch (mode){
+
+                    case NOT_NETWORK:
+                        pullToRefreshLayout.autoRefresh();
+                        break;
+
+                }
             }
         });
 
@@ -178,12 +198,12 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
         } else {
 
 
-            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            loadFail.setVisibility(View.VISIBLE);
+
             //获取缓存数据
             //如果获取得到缓存数据则加载本地数据
 
 
+            mErrorView.show(pullToRefreshLayout,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
             //如果缓存数据不存在则需要用户打开网络设置
 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -238,7 +258,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
      */
     private void httpRequest(final boolean isRefresh){
 
-        loadFail.setVisibility(View.GONE);
+
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARK_SEARCH);
         requestParams.addBodyParameter("appKey",HttpUrlUtils.appKey);
          requestParams.addBodyParameter("phone", SharedPreferencesManager.getLoginInfo(getApplicationContext()).getName());
@@ -330,6 +350,14 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                     }
 
+
+
+                    if(data.size()<=0){
+
+                        mErrorView.show(pullToRefreshLayout,"暂时没有成绩信息",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(pullToRefreshLayout);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     if (isRefresh){
@@ -338,9 +366,8 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                     }else {
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                     }
-                    loadFail.setVisibility(View.GONE);
-                    isLoadFail=true;
-                    not_found.setVisibility(View.GONE);
+
+                    mErrorView.show(pullToRefreshLayout,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
                 }
             }
 
@@ -352,9 +379,11 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
                 }else {
                     pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                 }
-                isLoadFail=true;
-                loadFail.setVisibility(View.VISIBLE);
-                not_found.setVisibility(View.GONE);
+
+                if(data.size()<=0) {
+                    mErrorView.show(pullToRefreshLayout, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                }
+                 ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
             }
 
             @Override
@@ -366,17 +395,6 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
             public void onFinished() {
 
                 adapter.notifyDataSetChanged();
-
-                if(!isLoadFail) {
-                    if (data.size() == 0) {
-
-                        not_found.setText("目前还没有任何成绩记录!");
-                        not_found.setVisibility(View.VISIBLE);
-                    } else {
-
-                        not_found.setVisibility(View.GONE);
-                    }
-                }
 
 
             }

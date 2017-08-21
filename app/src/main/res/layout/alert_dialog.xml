@@ -36,7 +36,7 @@
         <Button
 
             android:id="@+id/agree"
-            android:background="@drawable/oval_yellow_button_selector"
+            android:background="@drawable/rect_5_green_button_selector"
             android:layout_weight="1"
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"

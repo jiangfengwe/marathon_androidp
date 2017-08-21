@@ -50,6 +50,7 @@ public class SharedPreferencesManager {
         edit.putString(LoginModel.nameKEY,model.getName());
         edit.putString(LoginModel.passKey,model.getPassword());
         edit.putString(LoginModel.imageKey,model.getImageUrl());
+        edit.putString(LoginModel.userId,model.getId());
         edit.commit();
 
     }
@@ -73,7 +74,8 @@ public class SharedPreferencesManager {
         String name = sharedPreferences.getString(LoginModel.nameKEY, "点击登录");
         String password = sharedPreferences.getString(LoginModel.passKey,"");
         String imageUrl = sharedPreferences.getString(LoginModel.imageKey, "");
-        return new LoginModel(name,password,imageUrl);
+        String id = sharedPreferences.getString(LoginModel.userId, "");
+        return new LoginModel(id,name,password,imageUrl);
     }
 
 

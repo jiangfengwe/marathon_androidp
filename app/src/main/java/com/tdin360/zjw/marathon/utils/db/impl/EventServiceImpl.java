@@ -44,13 +44,17 @@ public class EventServiceImpl implements EventService {
             values.put("signUptime",model.getSignUpStartTime());
             values.put("eventTime",model.getStartDate());
             values.put("shareUrl",model.getShardUrl());
-            values.put("enable",model.isRegister());
+            values.put("enable",model.isRegister()?"true":"false");
+            values.put("isWebPage",model.isWebPage() ? "true":"false");
            conn.insert(SQLHelper.EVENT_TABLE, null, values);
+
 
         }
 
         conn.close();
 
+
+         getAllEvent();
 
     }
 
@@ -69,7 +73,9 @@ public class EventServiceImpl implements EventService {
             String eventTime = cursor.getString(cursor.getColumnIndex("eventTime"));
             String shareUrl = cursor.getString(cursor.getColumnIndex("shareUrl"));
             boolean enable = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("enable")));
-            list.add(new EventModel(eventId,eventName,eventStatus,eventImageUrl,signUptime,eventTime,shareUrl,enable));
+            boolean isWebPage = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("isWebPage")));
+            EventModel model = new EventModel(eventId, eventName, eventStatus, eventImageUrl, signUptime, eventTime, shareUrl, enable, isWebPage);
+            list.add(model);
 
 
         }

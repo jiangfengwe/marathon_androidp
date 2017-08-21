@@ -3,12 +3,24 @@ package com.tdin360.zjw.marathon.weight;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tdin360.zjw.marathon.R;
+
+import org.xutils.common.util.DensityUtil;
+
+import jp.wasabeef.glide.transformations.internal.Utils;
+
+import static android.R.attr.id;
 
 /**
  * 自定义赛事详情页菜单选项
@@ -42,7 +54,7 @@ public class MenuView extends LinearLayout {
         this.setOrientation(LinearLayout.VERTICAL);
         this.icon = new ImageView(context);
         this.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        this.iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        this.iconParams = new LayoutParams(DensityUtil.dip2px(50),DensityUtil.dip2px(50));
         this.iconParams.gravity=Gravity.CENTER;
         this.icon.setLayoutParams(iconParams);
         this.titleView = new TextView(context);
@@ -50,7 +62,7 @@ public class MenuView extends LinearLayout {
         this.titleView.setLayoutParams(titleParams);
         this.titleView.setTextSize(14);
         this.titleView.setTextColor(Color.BLACK);
-        titleParams.topMargin=2;
+        titleParams.topMargin=5;
         titleParams.gravity=Gravity.CENTER;
         this.addView(icon);
         this.addView(titleView);
@@ -135,6 +147,21 @@ public class MenuView extends LinearLayout {
 
            this.titleView.setTextColor(color);
 
+    }
+    /**
+     * 设置菜单标题颜色
+     * @param color
+     */
+
+    public void setMenuTitleColorResources(@ColorRes int color){
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+            this.titleView.setTextColor(getResources().getColor(color,null));
+        }else {
+
+          this.titleView.setTextColor(getResources().getColor(color));
+
+        }
     }
 
     /**

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.PhotoBrowseActivity">
+
+    <include layout="@layout/toolbar_layout"></include>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:onClick="click"
+            android:id="@+id/back"
+            android:src="@drawable/photobrows_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            />
+        <TextView
+            android:id="@+id/showCount"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1/1"
+            />
+        <ImageView
+            android:onClick="click"
+            android:id="@+id/save"
+            android:src="@drawable/photobrows_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"
+            />
+    </LinearLayout>
+</RelativeLayout>

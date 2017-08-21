@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -19,10 +20,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.adapter.CommonAdapter;
+import com.tdin360.zjw.marathon.adapter.ViewHolder;
 import com.tdin360.zjw.marathon.model.FeedBackModel;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 
@@ -33,6 +38,7 @@ import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -44,16 +50,19 @@ import java.util.List;
  */
 public class FeedbackListActivity extends BaseActivity  implements PullToRefreshLayout.OnRefreshListener{
 
+    @ViewInject(R.id.listView)
     private ListView listView;
     private List<FeedBackModel>list = new ArrayList<>();
     private int totalPages;
     private MyAdapter myAdapter;
     private int pageNumber=1;
-    private TextView not_found;
-    private TextView loadFail;
-    private boolean isLoadFail;
     public static String ACTION="reLoad";
+    @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +74,29 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     }
 
     private void initView() {
-        this.listView = (ListView) this.findViewById(R.id.listView);
-        this.pullToRefreshLayout = (PullToRefreshLayout) this.findViewById(R.id.pull_Layout);
+
         this.pullToRefreshLayout.setOnRefreshListener(this);
-        this.not_found = (TextView) this.findViewById(R.id.not_found);
-        this.loadFail = (TextView) this.findViewById(R.id.loadFail);
-        this.myAdapter = new MyAdapter();
+        this.myAdapter = new MyAdapter(this,list,R.layout.feedback_list_item);
         this.listView.setAdapter(myAdapter);
+
+
+        /**
+         * 加载失败点击重试
+         */
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+
+                switch (mode){
+
+                    case NOT_NETWORK:
+
+                        httpRequest(true);
+                        break;
+
+                }
+            }
+        });
 
         pullToRefreshLayout.autoRefresh();
     }
@@ -120,8 +145,7 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
      */
     private void httpRequest(final boolean isRefresh){
 
-        loadFail.setVisibility(View.GONE);
-        not_found.setVisibility(View.GONE);
+
         RequestParams params  =new RequestParams(HttpUrlUtils.FEED_LIST);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(FeedbackListActivity.this).getName());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -158,6 +182,13 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
                     }else {
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                     }
+
+                    if(list.size()<=0){
+
+                        mErrorView.show(pullToRefreshLayout,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(pullToRefreshLayout);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     if (isRefresh){
@@ -166,9 +197,8 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
                     }else {
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                     }
-                    isLoadFail=true;
-                    loadFail.setVisibility(View.VISIBLE);
-                    not_found.setVisibility(View.GONE);
+
+                    mErrorView.show(pullToRefreshLayout,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
                 }
             }
 
@@ -180,9 +210,11 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
                 }else {
                     pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
                 }
-                isLoadFail=true;
-                loadFail.setVisibility(View.VISIBLE);
-                not_found.setVisibility(View.GONE);
+
+                if(list.size()<=0) {
+                    mErrorView.show(pullToRefreshLayout, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                }
+                ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
 
             }
 
@@ -194,19 +226,9 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
             @Override
             public void onFinished() {
 
-                myAdapter.notifyDataSetChanged();
+                myAdapter.update(list);
 
-                if(isLoadFail){
-                    loadFail.setVisibility(View.VISIBLE);
-                }else
-                if (!isLoadFail&&list.size() == 0) {
-
-                        not_found.setVisibility(View.VISIBLE);
-                 }else if(!isLoadFail&&list.size()>0){
-
-                        not_found.setVisibility(View.GONE);
-                    }
-                }
+            }
 
         });
 
@@ -240,81 +262,43 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     /**
      * 展示反馈列表以及回复列表
      */
-    private class MyAdapter extends BaseAdapter{
+    private class MyAdapter extends CommonAdapter<FeedBackModel>{
 
 
-
-        @Override
-        public int getCount() {
-            return list==null? 0:list.size();
+        public MyAdapter(Context context, List<FeedBackModel> list, @LayoutRes int layoutId) {
+            super(context, list, layoutId);
         }
 
         @Override
-        public Object getItem(int position) {
-            return list.get(position);
-        }
+        protected void onBind(ViewHolder holder,  FeedBackModel  model) {
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
+             int width=30;
+            ImageView imageView =  holder.getViewById(R.id.imageView);
+            LoginModel info = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+            ImageOptions imageOptions = new ImageOptions.Builder()
+                    .setSize(DensityUtil.dip2px(width), DensityUtil.dip2px(width))//图片大小
+                    //.setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                    .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                    .setRadius(width)
+                    .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                    .setUseMemCache(true)//设置使用缓存
+                    .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
+                    .build();
+            x.image().bind(imageView,info.getImageUrl(),imageOptions);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            MyViewHolder holder=null;
-
-            if(convertView==null){
-
-                holder = new MyViewHolder();
-                convertView = LayoutInflater.from(FeedbackListActivity.this).inflate(R.layout.feedback_list_item,null);
-
-                holder.image = (ImageView) convertView.findViewById(R.id.imageView);
-                LoginModel info = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-                ImageOptions imageOptions = new ImageOptions.Builder()
-                        .setSize(DensityUtil.dip2px(50), DensityUtil.dip2px(50))//图片大小
-                        .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
-                        .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                        .setRadius(50)
-                        .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
-                        .setUseMemCache(true)//设置使用缓存
-                        .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
-                        .build();
-                x.image().bind(holder.image,info.getImageUrl(),imageOptions);
-                holder.time = (TextView) convertView.findViewById(R.id.time);
-                holder.content  = (TextView) convertView.findViewById(R.id.content);
-                holder.answerContent = (TextView) convertView.findViewById(R.id.answerContent);
-                holder.answerTime = (TextView) convertView.findViewById(R.id.answerTime);
-                holder.isAnswer = (LinearLayout) convertView.findViewById(R.id.isAnswer);
-
-                convertView.setTag(holder);
-            }else {
-
-               holder = (MyViewHolder) convertView.getTag();
-            }
+            holder.setText(R.id.time,model.getTime());
+            holder.setText(R.id.content,model.getContent());
 
 
-            FeedBackModel model = list.get(position);
-            holder.time.setText(model.getTime());
-            holder.content.setText(model.getContent());
             //如果答复就显示答复内容，否则不显示
             if(!model.getFromContent().equals("null")&&!model.equals("")){
 
-                holder.answerContent.setText(model.getFromContent());
-                holder.answerTime.setText(model.getFromTime());
-                holder.isAnswer.setVisibility(View.VISIBLE);
+                holder.setText(R.id.answerContent,model.getFromContent());
+                holder.setText(R.id.answerTime,model.getFromTime());
+                holder.getViewById(R.id.isAnswer).setVisibility(View.VISIBLE);
+
             }
-            return convertView;
-        }
 
-        class MyViewHolder{
-
-            private ImageView image;
-            private TextView time;
-            private TextView content;
-            private LinearLayout isAnswer;
-            private TextView answerContent;
-            private TextView answerTime;
         }
     }
 

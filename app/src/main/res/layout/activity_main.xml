@@ -11,8 +11,12 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent">
      </FrameLayout>
+    <View
+        android:background="@color/dark"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
     <LinearLayout
-        android:background="@color/bottomTabBar"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <RadioGroup
@@ -32,11 +36,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <RadioButton
-                android:visibility="gone"
                 android:gravity="center"
                 android:button="@null"
                 android:layout_weight="1"
                 android:id="@+id/tab2"
+                android:visibility="gone"
                 android:drawableTop="@drawable/home_bottom_tab2_selector"
                 android:text="@string/home_tab_title2"
                 android:textColor="@drawable/home_tab_text_selector"

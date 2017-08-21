@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_my_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity">
-  <LinearLayout
-      android:orientation="vertical"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
 
   <include layout="@layout/toolbar_layout"></include>
 
@@ -28,22 +24,7 @@
 
       <include layout="@layout/load_more"></include>
     </com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout>
-  </LinearLayout>
 
+   <include layout="@layout/load_fail_layout"></include>
 
-  <!--加载失败时显示提示-->
-  <LinearLayout
-      android:layout_centerInParent="true"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
-    <include layout="@layout/layout_loadingfail"></include>
-  </LinearLayout>
-  <!--没有数据-->
-  <LinearLayout
-
-      android:layout_centerInParent="true"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
-    <include layout="@layout/not_found_layout"></include>
-  </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

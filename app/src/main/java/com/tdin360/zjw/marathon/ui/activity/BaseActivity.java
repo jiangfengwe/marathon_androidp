@@ -1,6 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.Manifest;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,19 +8,29 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
@@ -32,85 +42,87 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
 
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 /**
- * 母版界面
+ * 基类
  * @author zhangzhijun
  */
+@SuppressWarnings("deprecation")
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @ViewInject(R.id.mToolBar)
     private Toolbar mToolBar;
+    @ViewInject(R.id.toolbar_title)
     private TextView toolBarTitle;
-    private ImageView shareImage;
+    @ViewInject(R.id.navRightItemImage)
+    private ImageView navRightItemImage;
+    @ViewInject(R.id.navRightItemTitle)
+    private TextView navRightItemTitle;
+    @ViewInject(R.id.btn_Back)
     private ImageView btnBack;
-    private ShareAction action;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         /**
          * 设置布局
          */
         setContentView(getLayout());
+
         /**
          * 使用注解框架
          */
         x.view().inject(this);
-        this.mToolBar= (Toolbar) this.findViewById(R.id.mToolBar);
-        this.toolBarTitle= (TextView) this.findViewById(R.id.toolbar_title);
-        this.shareImage= (ImageView) this.findViewById(R.id.share);
-        this.btnBack= (ImageView) this.findViewById(R.id.btn_Back);
 
+
+    }
+
+    public Toolbar navBar(){
+
+        return this.mToolBar;
+    }
+
+    public ImageView navBack(){
+
+        return  this.btnBack;
+    }
+
+    public ImageView navRightItemImage() {
+        return navRightItemImage;
+    }
+
+    public TextView navRightItemTitle() {
+        return navRightItemTitle;
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
+
+    }
+
+
+    @Override
+    public void finish() {
+        super.finish();
+
+        overridePendingTransition(R.anim.anim_in_back_activity,R.anim.anim_out_back_activity);
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
     }
 
-    /**
-     * 初始化分享
-     */
-    private void initUMShare(final ShareInfoManager manager){
 
-           /*使用友盟自带分享模版*/
-        action = new ShareAction(BaseActivity.this).setDisplayList(
-                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE,
-                SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
-        ).setShareboardclickCallback(new ShareBoardlistener() {
-            @Override
-            public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
-
-
-
-//                 分享图片
-                if(manager.getShareType()== ShareInfoManager.ShareType.IMAGE){
-
-
-                    new ShareAction(BaseActivity.this).withText(manager.getTitle())
-                            .setPlatform(share_media)
-                            .setCallback(new CustomUMShareListener())
-                            .withMedia(manager.ShareImage())
-                            .share();
-
-                }else {//分享网页
-
-                    new ShareAction(BaseActivity.this).withText(manager.getTitle())
-                            .setPlatform(share_media)
-                            .setCallback(new CustomUMShareListener())
-                            .withMedia(manager.shareLink())
-                            .share();
-                }
-
-                }
-
-
-
-        });
-
-    }
 
 //    设置标题
     public void setToolBarTitle(CharSequence title){
@@ -121,81 +133,48 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 自定义分享结果监听器
-     */
-    private class CustomUMShareListener implements UMShareListener {
 
-
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-            Toast.makeText(BaseActivity.this,"正在打开分享...",Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-
-            if (platform.name().equals("WEIXIN_FAVORITE")) {
-                Toast.makeText(BaseActivity.this, platform + " 收藏成功啦", Toast.LENGTH_SHORT).show();
-            } else {
-                if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
-                        && platform != SHARE_MEDIA.EMAIL
-                        && platform != SHARE_MEDIA.FLICKR
-                        && platform != SHARE_MEDIA.FOURSQUARE
-                        && platform != SHARE_MEDIA.TUMBLR
-                        && platform != SHARE_MEDIA.POCKET
-                        && platform != SHARE_MEDIA.PINTEREST
-                        && platform != SHARE_MEDIA.INSTAGRAM
-                        && platform != SHARE_MEDIA.GOOGLEPLUS
-                        && platform != SHARE_MEDIA.YNOTE
-                        && platform != SHARE_MEDIA.EVERNOTE) {
-                    Toast.makeText(BaseActivity.this, platform + " 分享成功啦!", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable throwable) {
-            if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
-                    && platform != SHARE_MEDIA.EMAIL
-                    && platform != SHARE_MEDIA.FLICKR
-                    && platform != SHARE_MEDIA.FOURSQUARE
-                    && platform != SHARE_MEDIA.TUMBLR
-                    && platform != SHARE_MEDIA.POCKET
-                    && platform != SHARE_MEDIA.PINTEREST
-
-                    && platform != SHARE_MEDIA.INSTAGRAM
-                    && platform != SHARE_MEDIA.GOOGLEPLUS
-                    && platform != SHARE_MEDIA.YNOTE
-                    && platform != SHARE_MEDIA.EVERNOTE) {
-                Toast.makeText(BaseActivity.this, platform + " 分享失败啦!", Toast.LENGTH_SHORT).show();
-
-            }
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-            Toast.makeText(BaseActivity.this,"分享已取消!",Toast.LENGTH_SHORT).show();
-        }
-    }
 
     /**
      * 设置标题字体颜色
      * @param color
      */
-    public void setToolBarTitleColor(int color){
+    public void setToolBarTitleColor(@ColorInt int color){
 
          this.toolBarTitle.setTextColor(color);
+    }
+
+
+    /**
+     * 设置标题字体颜色
+     * @param resId
+     */
+
+    public void setToolBarTitleColorResource(@ColorRes int resId){
+
+       if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+          this.toolBarTitle.setTextColor(getResources().getColor(resId,null));
+         }else {
+            this.toolBarTitle.setTextColor(getResources().getColor(resId));
+         }
     }
 
     /**
      * 设置导航条颜色
      * @param color
      */
-    public void setmToolBarColor(int color){
+    public void setmToolBarColor(@ColorInt int color){
 
         this.mToolBar.setBackgroundColor(color);
+    }
+   /**
+     * 设置导航条颜色
+     * @param resId
+     */
+    public void setmToolBarColorRes(@ColorRes int resId){
+
+          this.mToolBar.setBackgroundResource(resId);
+
     }
 
     /**
@@ -216,39 +195,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract int getLayout();
 
-
-    //处理分享
-    public void showShareButton(ShareInfoManager manager){
-
-        this.shareImage.setVisibility(View.VISIBLE);
-
-        //初始化分享
-        initUMShare(manager);
-
-        this.shareImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //没有联网不能进行分享
-                if(!NetWorkUtils.isNetworkAvailable(BaseActivity.this)){
-
-                    Toast.makeText(BaseActivity.this,"亲,分享需要联网哦！",Toast.LENGTH_SHORT).show();
-
-                    return;
-                }
-
-                if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-
-                    action.open();
-
-                }else {
-
-                    requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                }
-
-            }
-        });
-
-    }
 
 
 
@@ -324,17 +270,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             alert.setTitle("温馨提示");
             alert.setMessage(message);
-            alert.setCancelable(false);
             alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(getAppDetailSettingIntent(BaseActivity.this));
-                }
-            });
-            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                    CommonUtils.getAppDetailSettingIntent(getBaseContext());
+
                 }
             });
              alert.show();
@@ -359,24 +299,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 获取应用详情页面intent
-     *
-     * @return
-     */
-    public Intent getAppDetailSettingIntent(Context context) {
-        Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction(Intent.ACTION_VIEW);
-            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-            localIntent.putExtra("com.android.settings.ApplicationPkgName", context.getPackageName());
-        }
-        return localIntent;
-    }
 
 
     /**
@@ -384,9 +306,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void doSDCardPermission(){
 
-         if(action!=null) {
-             action.open();
-         }
     }
     /**
      * 打开相机权限授权成功后默认执行改方法供给子类来调用

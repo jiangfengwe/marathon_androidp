@@ -1,14 +1,23 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +37,7 @@ import com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyTeamListActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
+import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.ShareInfoManager;
@@ -45,10 +55,12 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import static com.umeng.socialize.utils.ContextUtil.getPackageName;
+
 /**个人中心
  * Created by Administrator on 2016/8/9.
  */
-public class MyFragment extends Fragment {
+public class MyFragment extends BaseFragment {
 
     public static final String ACTION="LOGIN_STATUS";//广播action
 
@@ -60,6 +72,7 @@ public class MyFragment extends Fragment {
 
         return   new MyFragment();
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -167,7 +180,7 @@ public class MyFragment extends Fragment {
         /**
          * 我的团队
          */
-        view.findViewById(R.id.myTeam).setOnClickListener(new View.OnClickListener() {
+       /* view.findViewById(R.id.myTeam).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
 
@@ -188,7 +201,7 @@ public class MyFragment extends Fragment {
 
            }
        });
-
+*/
         /**
          * 通知消息
          */
@@ -211,28 +224,68 @@ public class MyFragment extends Fragment {
             }
         });
 
-      //关于我们
-        view.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-         Intent intent = new Intent(getContext(), AboutUsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
         //分享给好友
 
         view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                shareApp();
+
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+
+                    shareApp();
+                }else {
+
+                    if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+
+
+                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10001);
+
+                    }else {
+                        shareApp();
+                    }
+
+                }
+
+
             }
         });
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+          switch (requestCode){
+
+              case 10001:
+
+                  if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+
+                      shareApp();
+                    //用户授权成功
+                  }else {
+
+                      //用户没有授权
+                      AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                      alert.setTitle("提示");
+                      alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                      alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialog, int which) {
+
+                              CommonUtils.getAppDetailSettingIntent(getContext());
+                          }
+                      });
+                      alert.show();
+
+                  }
+                  break;
+          }
+
+    }
+
 
     /**
      * 显示个人信息

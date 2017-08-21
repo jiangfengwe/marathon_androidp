@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:drawable="@drawable/match_checked" android:state_checked="true"></item>
-    <item android:drawable="@drawable/match_normal"></item>
+<item android:drawable="@drawable/tab_eventlist_pre" android:state_checked="true"></item>
+    <item android:drawable="@drawable/tab_eventlist"></item>
 </selector>

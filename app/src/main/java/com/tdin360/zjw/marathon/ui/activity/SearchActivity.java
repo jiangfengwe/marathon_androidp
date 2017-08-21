@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.MarathonListViewAdapter;
 import com.tdin360.zjw.marathon.model.EventModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
@@ -197,7 +195,7 @@ public class SearchActivity extends AppCompatActivity {
                         String shareUrl = object.getString("EventSiteUrl");
                          String pictureUrl = object.getString("PictureUrl");
                          boolean isRegister = object.getBoolean("IsRegister");
-                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,"",eventStartTime,shareUrl,isRegister);
+                        EventModel eventModel = new EventModel(id, eventName, status, pictureUrl,"",eventStartTime,shareUrl,isRegister,false);
                         list.add(eventModel);
 
 

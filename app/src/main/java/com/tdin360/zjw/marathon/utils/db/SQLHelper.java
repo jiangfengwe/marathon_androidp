@@ -35,7 +35,7 @@ public class SQLHelper extends SQLiteOpenHelper {
 
     public SQLHelper(Context context){
 
-        super(context,DB_NAME,null,1);
+        super(context,DB_NAME,null,2);
 
     }
 
@@ -58,8 +58,8 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    eventStatus   VARCHAR,\n" +
                 "    signUpTime    VARCHAR,\n" +
                 "    eventTime     VARCHAR,\n" +
-                "    enable  VARCHAR"+
-                ");";
+                "    enable  VARCHAR,"+
+                "    isWebPage VARCHAR);";
 
 //        赛事详情表
         String eventDetailSql="CREATE TABLE  "+EVENT_DETAIL_TABLE+" (\n" +

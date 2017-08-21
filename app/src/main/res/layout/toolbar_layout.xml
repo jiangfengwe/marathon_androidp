@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/toolbarTop"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <android.support.v7.widget.Toolbar
@@ -10,24 +12,23 @@
     android:layout_width="match_parent"
     app:contentInsetStart="0dp"
     android:layout_height="wrap_content">
-    <LinearLayout
-        android:gravity="center_vertical"
+    <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/btn_Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/nav_back"
+            android:src="@drawable/back"
             />
     <TextView
-        android:layout_weight="1"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:id="@+id/toolbar_title"
-        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="1"
@@ -37,18 +38,37 @@
         android:ellipsize="end"
         android:textColor="@color/textBlack"
         android:layout_centerVertical="true"
-        android:text="标题"
+
          />
 
-    <ImageView
-        android:layout_marginRight="15dp"
-        android:id="@+id/share"
+    <LinearLayout
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:layout_marginRight="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/share"
-         android:visibility="invisible"
-        />
+        >
+        <ImageView
+
+            android:id="@+id/navRightItemImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            />
+        <TextView
+            android:textSize="16sp"
+            android:id="@+id/navRightItemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
     </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.Toolbar>
+<View
+    android:id="@+id/line"
+    android:background="@color/lineColor"
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"></View>
 </LinearLayout>

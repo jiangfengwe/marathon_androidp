@@ -344,14 +344,7 @@ public class RegisterActivity extends BaseActivity {
 
                     //注册成功跳转到登录界面
                     if(success){
-                        Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                        setResult(500,intent);
-                        //保存用户登录数据
-                        SharedPreferencesManager.saveLoginInfo(RegisterActivity.this,new LoginModel(tel,password,""));
-                        //通知个人中心修改登录状态
-                        Intent intent2  =new Intent(MyFragment.ACTION);
-                        sendBroadcast(intent2);
-                        finish();
+
 
                  Toast.makeText(RegisterActivity.this,"注册成功!",Toast.LENGTH_SHORT).show();
 
