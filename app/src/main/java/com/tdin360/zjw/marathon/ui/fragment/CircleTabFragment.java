@@ -49,15 +49,10 @@ public class CircleTabFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         if(name!=null&&name.equals("圈友")){
-
-
             addButton.setVisibility(View.VISIBLE);
 
         }else {
-
             addButton.setVisibility(View.GONE);
         }
          this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
