@@ -11,6 +11,7 @@
     android:padding="10dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:background="@color/home_tab_title_color_check"
     android:layout_width="match_parent"
     android:layout_height="50dp">
 
@@ -23,44 +24,35 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/web_back"
-            />
-
+            android:src="@drawable/web_back" />
         <View
             android:layout_marginLeft="10dp"
             android:background="@color/dark"
             android:layout_width="0.5dp"
             android:layout_height="match_parent">
-
         </View>
-
         <ImageView
             android:id="@+id/close"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/web_close"
-            />
-
+            android:src="@drawable/web_close" />
     </LinearLayout>
-
     <TextView
-        android:textColor="@color/textBlack"
+        android:textColor="@color/white"
         android:id="@+id/title"
         android:ellipsize="end"
         android:textSize="16sp"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
+        android:text="2017贵阳马拉松"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        />
+        android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/web_share_selector"
-        />
+        android:src="@drawable/web_share_selector" />
 </LinearLayout>
     <View
         android:background="@color/lineColor"
@@ -71,14 +63,10 @@
         android:id="@+id/progressBar"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-
-        />
-
+        android:layout_height="2dp" />
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/mWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </com.tencent.smtt.sdk.WebView>
 </LinearLayout>

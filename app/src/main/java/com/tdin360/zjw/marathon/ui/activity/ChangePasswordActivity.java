@@ -2,13 +2,19 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -21,7 +27,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.Calendar;
 
 /***
  *
@@ -29,22 +38,39 @@ import org.xutils.x;
  */
 
 
-public class ChangePasswordActivity extends BaseActivity {
+public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener{
 
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
 
-    private EditText editTextOldPass;
+    @ViewInject(R.id.et_change_psw_old)
+    private EditText etOld;
+    @ViewInject(R.id.et_change_psw_new)
+    private EditText etNew;
+    @ViewInject(R.id.iv_change_psw_cancel)
+    private ImageView ivCancel;
+    @ViewInject(R.id.cb_change_psw)
+    private CheckBox cbPsw;
+    @ViewInject(R.id.btn_change_psw_sure)
+    private Button btnSure;
+    /*private EditText editTextOldPass;
     private EditText editTextPass1;
     private EditText editTextPass2;
-    private CheckBox checkBox1,checkBox2,checkBox3;
+    private CheckBox checkBox1,checkBox2,checkBox3;*/
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initToolbar();
+        initView();
 
-        setToolBarTitle("修改登录密码");
+      /*  setToolBarTitle("修改登录密码");
         showBackButton();
-
         this.editTextOldPass = (EditText) this.findViewById(R.id.oldPassword);
         this.editTextPass1= (EditText) this.findViewById(R.id.password1);
         this.editTextPass2= (EditText) this.findViewById(R.id.password2);
@@ -53,27 +79,92 @@ public class ChangePasswordActivity extends BaseActivity {
         this.checkBox2 = (CheckBox) this.findViewById(R.id.showPass2);
         this.checkBox3 = (CheckBox) this.findViewById(R.id.showPass3);
 
-          showOrHidePassword();
-
+          showOrHidePassword();*/
     }
 
+    private void initView() {
+        ivCancel.setOnClickListener(this);
+        btnSure.setOnClickListener(this);
+        //取消图片的显示与隐藏
+        etOld.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    /**
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String name = etOld.getEditableText() + "";
+                if(!TextUtils.isEmpty(name)){
+                    ivCancel.setVisibility(View.VISIBLE);
+                }else{
+                    ivCancel.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        cbPsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //显示密码
+                    etNew.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    etNew.setSelection(etNew.getText().length());
+                }else {
+                    //隐藏密码
+                    etNew.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    etNew.setSelection(etNew.getText().length());
+                }
+            }
+        });
+    }
+
+    private void initToolbar() {
+        imageView.setImageResource(R.drawable.back_black);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        viewline.setVisibility(View.GONE);
+        titleTv.setText("修改密码");
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.activity_change_password;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_change_psw_cancel:
+                //一键清空
+                etOld.setText("");
+                break;
+            case R.id.btn_change_psw_sure:
+                //确定
+                break;
+        }
+
+    }
+   /* *//**
      * 控制显示或者隐藏密码的方法
-     */
+     *//*
     private void showOrHidePassword(){
-
-
         this.checkBox1.setOnCheckedChangeListener(new MyCheckBoxListener());
         this.checkBox2.setOnCheckedChangeListener(new MyCheckBoxListener());
         this.checkBox3.setOnCheckedChangeListener(new MyCheckBoxListener());
     }
-    /**
+    *//**
      * 控制密码的显示与隐藏
-     */
+     *//*
     private class MyCheckBoxListener implements CompoundButton.OnCheckedChangeListener{
-
-
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -229,7 +320,7 @@ public class ChangePasswordActivity extends BaseActivity {
 
 
 
-    }
+    }*/
 
 
 }

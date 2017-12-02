@@ -93,10 +93,6 @@ public class MainActivity extends AppCompatActivity{
                     }else {
                         fragmentTransaction.show(circleFragment);
                     }
-
-                    break;
-                case R.id.tab3:
-
                     break;
                 case R.id.tab4:
                      if(personalCenterFragment==null){
@@ -115,7 +111,6 @@ public class MainActivity extends AppCompatActivity{
 
         //切换时隐藏界面
         private void hide( FragmentTransaction fragmentTransaction){
-
             if(marathonFragment!=null&&marathonFragment.isAdded()){
                 fragmentTransaction.hide(marathonFragment);
             }

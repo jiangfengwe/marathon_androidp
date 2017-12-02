@@ -1,19 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:padding="10dp"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:id="@+id/time"
-        android:textSize="14sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="2017-01-22"
-        />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="102dp"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/notice_portrait"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/theme_text"
+                android:textSize="16sp"
+                android:text="关于百家运动APP升级公告"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/notice_content"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginRight="5dp"
+                android:text="关于百家运动APP升级公告关于百家运动APP升级公告关于百家运动APP升级公告"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2017-09-12"
+                    android:textColor="@color/notice_time"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"/>
+   <!-- <LinearLayout
         android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -26,8 +70,7 @@
             <com.tdin360.zjw.marathon.weight.CircleImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/logo"
-                />
+                android:src="@mipmap/logo" />
             <TextView
                 android:id="@+id/name"
                 android:layout_marginTop="5dp"
@@ -43,7 +86,6 @@
             android:background="@drawable/my_notice_message_left"
             android:layout_width="wrap_content"
             android:gravity="center"
-
             android:layout_height="wrap_content">
             <TextView
                 android:autoLink="all"
@@ -57,5 +99,5 @@
                 />
         </LinearLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
 </LinearLayout>

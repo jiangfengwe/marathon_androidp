@@ -12,10 +12,7 @@
       android:id="@+id/guideViewPager"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_alignParentTop="true"
-     >
-
-  </android.support.v4.view.ViewPager>
+      android:layout_alignParentTop="true"/>
   <RadioGroup
       android:layout_centerInParent="true"
       android:layout_marginBottom="30dp"
@@ -24,11 +21,8 @@
       android:orientation="horizontal"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
-
   </RadioGroup>
   <TextView
-
-
       android:visibility="gone"
       android:id="@+id/btn"
       android:background="@drawable/guide_start_btn_shape"
@@ -41,9 +35,6 @@
       android:textSize="16dp"
       android:padding="5dp"
       android:textColor="@drawable/guide_text_selector"
-      android:text="立即体验"
-
-
-      />
+      android:text="立即体验" />
 
 </RelativeLayout>

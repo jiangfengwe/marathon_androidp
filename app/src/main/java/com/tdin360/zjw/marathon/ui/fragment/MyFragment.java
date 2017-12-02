@@ -8,42 +8,34 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.ui.activity.AboutUsActivity;
-import com.tdin360.zjw.marathon.ui.activity.BaseActivity;
-import com.tdin360.zjw.marathon.ui.activity.MyGoodsListActivity;
-import com.tdin360.zjw.marathon.ui.activity.MyAchievementListActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
-import com.tdin360.zjw.marathon.ui.activity.MySignUpListActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
-import com.tdin360.zjw.marathon.ui.activity.MyTeamListActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyOrderActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
-import com.tdin360.zjw.marathon.utils.ShareInfoManager;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -53,19 +45,35 @@ import com.umeng.socialize.utils.ShareBoardlistener;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
-
-import static com.umeng.socialize.utils.ContextUtil.getPackageName;
 
 /**个人中心
  * Created by Administrator on 2016/8/9.
  */
-public class MyFragment extends BaseFragment {
+public class MyFragment extends BaseFragment implements View.OnClickListener{
 
     public static final String ACTION="LOGIN_STATUS";//广播action
-
-    private  TextView userName;
+    @ViewInject(R.id.my_header)
+    private LinearLayout layoutHeader;
+    @ViewInject(R.id.my_name)
+    private TextView userName;
+    @ViewInject(R.id.my_portrait)
     private ImageView myImageView;
+    @ViewInject(R.id.my_notice)
+    private ImageView myNotice;
+    @ViewInject(R.id.my_order)
+    private LinearLayout layoutOrder;
+    @ViewInject(R.id.my_dynamic)
+    private LinearLayout layoutDynamic;
+    @ViewInject(R.id.my_share)
+    private LinearLayout layoutShare;
+    @ViewInject(R.id.my_setting)
+    private LinearLayout layoutSetting;
+    @ViewInject(R.id.my_phone)
+    private LinearLayout layoutPhone;
+
+
     private ShareAction action;
 
     public static MyFragment newInstance(){
@@ -82,43 +90,15 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        userName  = (TextView) view.findViewById(R.id.userName);
-        myImageView = (ImageView) view.findViewById(R.id.myImage);
-
         //显示信息
         showInfo();
-        userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
-
+        //userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
         //注册广播
          register();
-
-         view.findViewById(R.id.myHeader).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                //判断用户是否登录
-                if(SharedPreferencesManager.isLogin(getContext())){
-
-                    //若登录则显示用户信息
-                    toMyInfo();
-
-                }else {
-                    //用户没有登录则跳转到登录
-                    Intent intent = new Intent(getActivity(),LoginActivity.class);
-                    startActivity(intent);
-                    LoginNavigationConfig.instance().setNavType(NavType.Other);
-
-                }
-
-
-
-            }
-        });
+        initView();
 
       //我的报名
-       view.findViewById(R.id.signUpSearch).setOnClickListener(new View.OnClickListener() {
+      /* view.findViewById(R.id.signUpSearch).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                if(SharedPreferencesManager.isLogin(getContext())){
@@ -134,9 +114,9 @@ public class MyFragment extends BaseFragment {
 
 
            }
-       });
+       });*/
         //我的成绩
-        view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
+       /* view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -153,11 +133,11 @@ public class MyFragment extends BaseFragment {
 
 
             }
-        });
+        });*/
         /**
          * 我的物资
          */
-        view.findViewById(R.id.myGoods).setOnClickListener(new View.OnClickListener() {
+        /*view.findViewById(R.id.myGoods).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -175,7 +155,7 @@ public class MyFragment extends BaseFragment {
 
 
             }
-        });
+        });*/
 
         /**
          * 我的团队
@@ -202,57 +182,104 @@ public class MyFragment extends BaseFragment {
            }
        });
 */
-        /**
-         * 通知消息
-         */
-        view.findViewById(R.id.myNotice).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getContext(), MyNoticeMessageActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        //系统设置
-        view.findViewById(R.id.setting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SettingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //分享给好友
-
-        view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
-
-                    shareApp();
-                }else {
-
-                    if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-
-
-                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10001);
-
-                    }else {
-                        shareApp();
-                    }
-
-                }
-
-
-            }
-        });
 
     }
 
+    private void initView() {
+        myNotice.setOnClickListener(this);
+        layoutHeader.setOnClickListener(this);
+        layoutOrder.setOnClickListener(this);
+        layoutDynamic.setOnClickListener(this);
+        layoutShare.setOnClickListener(this);
+        layoutSetting.setOnClickListener(this);
+        layoutPhone.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()){
+            case R.id.my_notice:
+                //通知消息
+                intent = new Intent(getContext(), MyNoticeMessageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_header:
+                //登录
+               /* intent = new Intent(getContext(), MyInfoActivity.class);
+                startActivity(intent);*/
+                //判断用户是否登录
+               /* if(SharedPreferencesManager.isLogin(getContext())){
+                    //若登录则显示用户信息
+                     intent = new Intent(getContext(), MyInfoActivity.class);
+                    startActivity(intent);
+                }else {
+                    //用户没有登录则跳转到登录
+                    intent = new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
+                    LoginNavigationConfig.instance().setNavType(NavType.Other);
+                }*/
+                intent = new Intent(getActivity(),LoginActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_order:
+                //我的订单
+                intent=new Intent(getActivity(), MyOrderActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_dynamic:
+                //我的动态
+                intent=new Intent(getActivity(), MyCircleActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_share:
+                //分享给好友
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+                shareApp();
+            }else {
+                if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10001);
+                }else {
+                    shareApp();
+                }
+            }
+                break;
+            case R.id.my_setting:
+                //系统设置
+                 intent= new Intent(getContext(), SettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_phone:
+                //联系客服
+               showTelDialog();
+                break;
+        }
+
+    }
+    private void showTelDialog() {
+        android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(getActivity());
+        normalDialog.setMessage("是否拨打18941125702");
+        normalDialog.setPositiveButton("是",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //String phone = textViewhot.getText().toString();
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        Uri data = Uri.parse("tel:" + "18941125702");
+                        intent.setData(data);
+                        startActivity(intent);
+                    }
+                });
+        normalDialog.setNegativeButton("否",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                        dialog.dismiss();
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -286,7 +313,6 @@ public class MyFragment extends BaseFragment {
 
     }
 
-
     /**
      * 显示个人信息
      */
@@ -295,34 +321,24 @@ public class MyFragment extends BaseFragment {
         userName.setText(model.getName());
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getContext())){
-
             //    获取用户头像
             ImageOptions imageOptions = new ImageOptions.Builder()
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                      .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                     .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                      .setRadius(DensityUtil.dip2px(80))
-                     .setLoadingDrawableId(R.drawable.signup_photo)//加载中默认显示图片
+                     .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
-                    .setFailureDrawableId(R.drawable.signup_photo)//加载失败后默认显示图片
+                    .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                     .build();
             x.image().bind(myImageView,model.getImageUrl(),imageOptions);
 
 
         }else {
-            myImageView.setImageResource(R.drawable.signup_photo);
+            myImageView.setImageResource(R.drawable.my_portrait);
+            userName.setText("点击登录");
         }
-
     }
-
-//    跳转到我的信息界面
-    private void toMyInfo(){
-
-        Intent intent = new Intent(getContext(), MyInfoActivity.class);
-        startActivity(intent);
-
-    }
-
     /**
      *  分享给好友
      */
@@ -358,15 +374,10 @@ public class MyFragment extends BaseFragment {
 
       action.open();
     }
-
-
-
     /**
      * 自定义分享结果监听器
      */
     private class MyUMShareListener implements UMShareListener {
-
-
         @Override
         public void onStart(SHARE_MEDIA share_media) {
             Toast.makeText(getActivity(),"正在打开分享...",Toast.LENGTH_SHORT).show();
@@ -410,7 +421,6 @@ public class MyFragment extends BaseFragment {
                     && platform != SHARE_MEDIA.YNOTE
                     && platform != SHARE_MEDIA.EVERNOTE) {
                 Toast.makeText(getActivity(), platform + " 分享失败啦!", Toast.LENGTH_SHORT).show();
-
             }
         }
 
@@ -420,49 +430,35 @@ public class MyFragment extends BaseFragment {
         }
     }
 
-
     private MyBroadcastReceiver receiver ;
-
     /**
      * 注册广播
      */
     private void register(){
-
         receiver = new MyBroadcastReceiver();
         IntentFilter filter  = new IntentFilter(ACTION);
         getActivity().registerReceiver(receiver,filter);
 
     }
-
     /**
      * 注销广播
      */
     public void unRegister(){
-
         getActivity().unregisterReceiver(receiver);
 
     }
-
-
-
     /**
      * 用于监听登录信息变话化的广播
      */
     private class MyBroadcastReceiver extends BroadcastReceiver{
-
-
         @Override
         public void onReceive(Context context, Intent intent) {
-
             showInfo();
-
         }
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         unRegister();
     }
 }

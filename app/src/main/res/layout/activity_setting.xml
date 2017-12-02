@@ -5,94 +5,135 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background"
+    android:background="@color/hotel_division"
     tools:context="com.tdin360.zjw.marathon.ui.activity.SettingActivity">
     <include layout="@layout/toolbar_layout"></include>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textSize="16dp"
-                    android:textColor="@color/textBlack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="接收推送通知"
-                    />
-                <CheckBox
-                    android:id="@+id/switchBtn"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@null"
-                     android:background="@drawable/switch_button"
-                    />
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/about"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="1dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/textBlack"
-                    android:gravity="center"
-                    android:textSize="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="关于我们"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-
             <TextView
-
+                android:id="@+id/tv_about_us"
+                android:layout_marginTop="7dp"
+                android:padding="15dp"
+                android:background="@drawable/personal_center_item_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_about_us"
+                android:textSize="16sp"
+                android:textColor="@color/theme_text"
+                android:drawableRight="@drawable/my_entry" />
+            <TextView
+                android:id="@+id/tv_feedback"
                 android:layout_marginTop="1dp"
                 android:padding="15dp"
                 android:background="@drawable/personal_center_item_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="问题反馈"
+                android:text="@string/setting_feedback"
                 android:textSize="16sp"
-                android:textColor="@color/textBlack"
-                android:drawableRight="@drawable/arrow_right"
-                android:id="@+id/quest" />
+                android:textColor="@color/theme_text"
+                android:drawableRight="@drawable/my_entry" />
+            <TextView
+                android:id="@+id/tv_clear"
+                android:layout_marginTop="1dp"
+                android:padding="15dp"
+                android:background="@drawable/personal_center_item_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_clear"
+                android:textSize="16sp"
+                android:textColor="@color/theme_text" />
+            <RelativeLayout
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_receiver" />
+                <CheckBox
+                    android:id="@+id/cb_switchBtn"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/switch_button" />
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/layout_vision"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:padding="15dp"
+                android:background="@drawable/personal_center_item_selector"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_vision"
+                    android:textSize="16sp"
+                    android:textColor="@color/theme_text"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="14dp"
+                    android:background="@drawable/oval_green_button_selector"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:textSize="9sp"
+                    android:text="@string/setting_update"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="V1.0.0"/>
+            </LinearLayout>
 
+            <RelativeLayout
+                android:id="@+id/layout_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_phone"
+                    android:textSize="16sp"
+                    android:textColor="@color/theme_text" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="021-456667"
+                    android:textSize="16sp"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/hotel_address" />
+            </RelativeLayout>
 
-
-
-
-
-
-    <Button
-        android:layout_marginTop="20dp"
-        android:id="@+id/clear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:textSize="16sp"
-        android:textColor="@color/red"
-        android:text="退出当前账号"
-        />
-
+        <Button
+            android:id="@+id/btn_exit"
+            android:layout_marginTop="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/oval_green_button_selector"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/setting_exit" />
         </LinearLayout>
    </ScrollView>
 </LinearLayout>

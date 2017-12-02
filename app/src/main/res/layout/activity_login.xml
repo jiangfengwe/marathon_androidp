@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,12 +10,155 @@
     android:focusableInTouchMode="true"
     tools:context="com.tdin360.zjw.marathon.ui.activity.LoginActivity">
 
-   <include
-
-       layout="@layout/toolbar_layout"
-       ></include>
-
+ <!--  <include layout="@layout/toolbar_layout"/>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/iv_login_back"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_black"/>
+        <TextView
+            android:id="@+id/tv_login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_title"
+            android:textSize="18sp"
+            android:textColor="@color/theme_text"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="35dp"
+        android:textColor="@color/theme_text"/>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_area"
+            android:textColor="@color/theme_text"/>
+        <EditText
+            android:id="@+id/et_login_phone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/login_phone"
+            android:inputType="phone"
+            android:textSize="14.7sp"
+            android:lines="1"
+            android:maxLength="11"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/hotel_address"/>
+        <ImageView
+            android:id="@+id/iv_login_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:src="@drawable/login_cancel"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <EditText
+            android:id="@+id/et_login_psw"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/login_psw"
+            android:layout_marginBottom="8dp"
+            android:textSize="14.7sp"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:lines="1"
+            android:textColor="@color/hotel_address"/>
+        <CheckBox
+            android:id="@+id/cb_login_psw"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:drawableRight="@drawable/login_psw_chect"/>
+        <ImageView
+            android:id="@+id/iv_login_psw_show"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/login_psw_hide"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/tv_login_forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:text="@string/login_forget"
+        android:layout_marginTop="15dp"
+        android:button="@null"
+        android:layout_gravity="end"
+        android:textColor="@color/hotel_level" />
+    <Button
+        android:id="@+id/btn_login_sure"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_sure"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:background="@drawable/oval_green_button_selector" />
+    <LinearLayout
+        android:id="@+id/layout_login_weixin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_weixin"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_weixin"
+            android:textColor="@color/hotel_address"
+            android:textSize="10sp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+   <!-- <LinearLayout
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
@@ -63,7 +206,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
-
             android:layout_weight="1"
             android:inputType="textPassword"
             android:drawableLeft="@drawable/user_password"
@@ -77,8 +219,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/textBlack"
-            android:hint="密码"
-            />
+            android:hint="密码" />
             <TextView
                 android:id="@+id/forGet"
                 android:onClick="loginClick"
@@ -87,16 +228,12 @@
                 android:layout_height="wrap_content"
                 android:text="忘记密码?"
                 android:button="@null"
-                android:textColor="@color/blue"
-
-                />
-
+                android:textColor="@color/blue" />
         </LinearLayout>
         <View
             android:background="@color/lineColor"
             android:layout_width="match_parent"
             android:layout_height="1dp"></View>
-
         <Button
             android:layout_marginTop="40dp"
             android:layout_weight="1"
@@ -107,10 +244,8 @@
             android:text="登录"
             android:textSize="18sp"
             android:textColor="@color/white"
-            android:background="@drawable/oval_green_button_selector"
-            />
-
-            <TextView
+            android:background="@drawable/oval_green_button_selector" />
+        <TextView
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
@@ -120,12 +255,10 @@
                 android:layout_height="wrap_content"
                 android:text="去注册"
                 android:textSize="16sp"
-                android:textColor="@color/blue"
-
-                />
+                android:textColor="@color/blue" />
 
 
-    </LinearLayout>
+    </LinearLayout>-->
 
-</RelativeLayout>
+</LinearLayout>
 

@@ -36,7 +36,6 @@ import java.util.List;
 import me.gujun.android.taggroup.TagGroup;
 
 /**
- *
  * 搜索
  */
 public class SearchActivity extends AppCompatActivity {
@@ -56,17 +55,18 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         this.editText = (EditText) this.findViewById(R.id.edit);
         this.resultCount = (TextView) this.findViewById(R.id.resultCount);
-        this.clearBtn = (ImageView) this.findViewById(R.id.clear);
+        this.clearBtn = (ImageView) this.findViewById(R.id.btn_exit);
         this.mToolBar= (Toolbar) this.findViewById(R.id.mToolBar);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.setSupportActionBar(this.mToolBar);
-        this.mToolBar.setNavigationIcon(R.drawable.nav_back);
+        this.mToolBar.setNavigationIcon(R.drawable.back);
         this.mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        mToolBar.setBackgroundResource(R.color.home_tab_title_color_check);
         this.mTagGroup = (TagGroup) findViewById(R.id.tag_group);
         this.mTagGroup.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
 

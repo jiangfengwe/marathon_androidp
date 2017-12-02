@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -10,7 +9,6 @@
     android:background="@color/background"
     android:layout_height="match_parent"
     tools:context="com.tdin360.zjw.marathon.ui.activity.AddCircleActivity">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -20,15 +18,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
     <EditText
-
         android:id="@+id/edit"
         android:padding="10dp"
         android:background="@color/white"
@@ -36,9 +30,7 @@
         android:hint="说点什么吧..."
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:maxLength="140"
-
-        />
+        android:maxLength="140" />
 
     <TextView
         android:id="@+id/wordCount"
@@ -48,8 +40,7 @@
         android:layout_gravity="right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="140"
-        />
+        android:text="140" />
     <LinearLayout
         android:background="@color/white"
         android:padding="10dp"
@@ -61,17 +52,14 @@
             android:id="@+id/addEmoji"
             android:layout_width="30dp"
             android:layout_height="30dp"
-             android:background="@drawable/emoji"
-
-            />
+            android:background="@drawable/emoji" />
         <ImageView
             android:onClick="add"
             android:id="@+id/addImage"
             android:layout_marginLeft="20dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/add_image"
-            />
+            android:src="@drawable/add_image"/>
 
     </LinearLayout>
        <android.support.v7.widget.RecyclerView
@@ -96,11 +84,9 @@
     </ScrollView>
     </LinearLayout>
     <FrameLayout
-
         android:layout_alignParentBottom="true"
         android:id="@+id/emoji"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </FrameLayout>
 </RelativeLayout>

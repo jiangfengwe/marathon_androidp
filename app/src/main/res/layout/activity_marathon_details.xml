@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity">
-
-
     <LinearLayout
         android:id="@id/main"
         android:layout_width="match_parent"
@@ -16,8 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-
-
         <android.support.v7.widget.RecyclerView
              android:layout_weight="1"
             android:id="@+id/mRecyclerView"
@@ -30,14 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="45dp">
    <LinearLayout
-
        android:background="@color/white"
        android:orientation="horizontal"
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
-
        <Button
-
            android:layout_weight="1"
            android:id="@+id/signBtn"
            android:onClick="toSignUp"

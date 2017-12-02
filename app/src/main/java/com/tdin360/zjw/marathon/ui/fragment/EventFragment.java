@@ -1,43 +1,31 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
 
-
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.util.Log;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.CommonAdapter;
+import com.tdin360.zjw.marathon.adapter.EventTabLayoutAdapter;
 import com.tdin360.zjw.marathon.adapter.ViewHolder;
-import com.tdin360.zjw.marathon.service.DownloadAPKService;
-import com.tdin360.zjw.marathon.ui.activity.MarathonDetailsActivity;
-import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.model.EventModel;
-import com.tdin360.zjw.marathon.ui.activity.WebActivity;
+import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
+import com.tdin360.zjw.marathon.ui.activity.ZxingActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
-import com.tdin360.zjw.marathon.utils.Constants;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
 import com.tdin360.zjw.marathon.utils.MessageEvent;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
@@ -49,13 +37,7 @@ import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,22 +45,35 @@ import java.util.List;
 /**赛事列表
  * Created by Administrator on 2016/8/9.
  */
-public class EventFragment extends BaseFragment implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener {
+public class EventFragment extends BaseFragment implements View.OnClickListener {
+    //implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener
 
-    private List<EventModel>list = new ArrayList<>();
-    @ViewInject(R.id.listView)
-    private ListView listView;
+    private List<EventModel> list = new ArrayList<>();
+  /*  @ViewInject(R.id.listView)
+    private ListView listView;*/
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
-    private EventAdapter marathonListViewAdapter;
+    //private EventAdapter marathonListViewAdapter;
     private int pageNumber=1;
     private int pageCount;
     private EventServiceImpl impl;
-    @ViewInject(R.id.pull_Layout)
-    private PullToRefreshLayout pullToRefreshLayout;
+    /*@ViewInject(R.id.pull_Layout)
+    private PullToRefreshLayout pullToRefreshLayout;*/
     @ViewInject(R.id.navRightItemImage)
     private ImageView rightImage;
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
 
+    @ViewInject(R.id.tabs_event)
+    private TabLayout tabLayout;
+    @ViewInject(R.id.vp_event)
+    private ViewPager viewPagerEvent;
     public static EventFragment newInstance(){
 
         return new EventFragment();
@@ -87,8 +82,8 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       return  inflater.inflate(R.layout.fragment_event,container,false);
 
-        return  inflater.inflate(R.layout.fragment_event,container,false);
     }
 
 
@@ -97,40 +92,13 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         super.onViewCreated(view, savedInstanceState);
           EventBus.getDefault().register(this);
          this.impl  = new EventServiceImpl(getContext());
-         this.marathonListViewAdapter = new EventAdapter(getActivity(),list,R.layout.marathon_list_item);
+         /*this.marathonListViewAdapter = new EventAdapter(getActivity(),list,R.layout.marathon_list_item);
          this.listView.setAdapter(marathonListViewAdapter);
          this.pullToRefreshLayout.setOnRefreshListener(this);
-         this.listView.setOnItemClickListener(this);
-
-        this.mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
-            @Override
-            public void onErrorClick(ErrorView.ViewShowMode mode) {
-
-                if(mode== ErrorView.ViewShowMode.NOT_NETWORK){
-
-                   pullToRefreshLayout.autoRefresh();
-                }
-            }
-        });
-
-        TextView titleTv = (TextView) view.findViewById(R.id.toolbar_title);
-        titleTv.setText("赛事");
-        this.rightImage.setImageResource(R.drawable.search_big);
-           this.rightImage.setVisibility(View.VISIBLE);
-
-        //搜索
-            this.rightImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-
+         this.listView.setOnItemClickListener(this);*/
+        initView(view);
         //加载数据
-         loadData();
-
-
+         //loadData();
         /**
          * 检查更新
          *
@@ -139,18 +107,61 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         if(NetWorkUtils.isNetworkAvailable(getContext())){
 
             UpdateManager.checkNewVersion(getContext());
-            UpdateManager.setUpdateListener(this);
+           // UpdateManager.setUpdateListener(this);
 
+        }
+    }
+
+    private void initView(View view) {
+        //首页toolbar
+        this.mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+                if(mode== ErrorView.ViewShowMode.NOT_NETWORK){
+
+                   //pullToRefreshLayout.autoRefresh();
+                }
+            }
+        });
+
+        titleTv.setText("赛事");
+        titleTv.setTextColor(Color.WHITE);
+        viewline.setBackgroundResource(R.color.home_tab_title_color_check);
+        imageView.setImageResource(R.drawable.qr_code);
+        imageView.setOnClickListener(this);
+
+        toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
+        this.rightImage.setImageResource(R.drawable.search_big);
+        this.rightImage.setVisibility(View.VISIBLE);
+        //搜索
+        this.rightImage.setOnClickListener(this);
+        //赛事状态tablayout
+        viewPagerEvent.setAdapter(new EventTabLayoutAdapter(getChildFragmentManager()));
+        tabLayout.setupWithViewPager(viewPagerEvent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()){
+            case R.id.btn_Back:
+                intent=new Intent(getActivity(), ZxingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.navRightItemImage:
+                intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
 
     //加载数据(包括缓存数据和网络数据)
-    private void loadData(){
+    /*private void loadData(){
 
-        /**
+        *//**
          * 判断网络是否处于可用状态
-         */
+         *//*
         if(NetWorkUtils.isNetworkAvailable(getActivity())){
 
             //加载网络数据
@@ -202,21 +213,16 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         }
 
 
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
             EventModel eventInfo = (EventModel) parent.getAdapter().getItem(position);
-
            if(eventInfo.isWebPage()){
-
                Intent intent = new Intent(getContext(), WebActivity.class);
                intent.putExtra("url",eventInfo.getShardUrl());
                intent.putExtra("imageUrl",eventInfo.getPicUrl());
                startActivity(intent);
-
            }else {
                //为单例成员赋值
                MarathonDataUtils.init().setEventId(eventInfo.getId() + "");
@@ -229,13 +235,13 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
                startActivity(intent);
            }
 
-    }
+    }*/
 
     /**
      * 数据适配器
      */
 
-    class EventAdapter extends CommonAdapter<EventModel>{
+    class EventAdapter extends CommonAdapter<EventModel> {
 
 
         public EventAdapter(Context context, List<EventModel> list, @LayoutRes int layoutId) {
@@ -245,7 +251,7 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         @Override
         protected void onBind(ViewHolder holder, EventModel model) {
 
-            holder.setText(R.id.eventName,model.getName());
+            /*holder.setText(R.id.eventName,model.getName());
             holder.setText(R.id.signUpTime,model.getSignUpStartTime());
             holder.setText(R.id.eventTime,model.getStartDate());
             holder.setText(R.id.status,model.getStatus());
@@ -257,9 +263,7 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
             }else {
 
               holder.getViewById(R.id.status).setEnabled(true);
-            }
-
-
+            }*/
         }
     }
 
@@ -268,7 +272,7 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
     private void httpRequest(final boolean isRefresh){
 
 
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
+       /* RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_HOME);
         params.addQueryStringParameter("pageNumber",pageNumber+"");
         params.addBodyParameter("appKey","eventkeyfdsfds520tdzh123456");
         params.setConnectTimeout(5*1000);
@@ -379,10 +383,10 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
 
              marathonListViewAdapter.update(list);
             }
-        });
+        });*/
     }
 
-    @Override
+   /* @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -415,19 +419,19 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
                downloadAPK();
 
            }
-    }
+    }*/
 
 
-    @Override
+    /*@Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
 
 
         pageNumber=1;
         httpRequest(true);
 
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
 
         if(pageNumber==pageCount){
@@ -443,10 +447,10 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
 
-    }
+    }*/
 
 
-    private String url;
+   /* private String url;
     @Override
     public void checkFinished(boolean isUpdate, String content, String url) {
         //检查更新
@@ -498,14 +502,14 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
 
             alert.show();
         }
-    }
+    }*/
 
     private ProgressBar progressBar;
     private TextView currentTv;
     private TextView totalTv;
     private AlertDialog dialog;
     //下载安装包
-    private void downloadAPK(){
+   /* private void downloadAPK(){
 
 
         if(url==null&&url.equals("")){
@@ -520,9 +524,9 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         getActivity().startService(intent);
 
 
-        /**
+        *//**
          * 下载更新进度提示框
-         */
+         *//*
         this.dialog = new AlertDialog.Builder(getActivity()).create();
         dialog.setCancelable(false);
         View view = View.inflate(getActivity(), R.layout.update_download_dialog,null);
@@ -539,7 +543,7 @@ public class EventFragment extends BaseFragment implements PullToRefreshLayout.O
         dialog.show();
 
     }
-
+*/
 
     /**
      * 下载更新进度条处理

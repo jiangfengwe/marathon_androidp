@@ -1,89 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.RegisterOneActivity">
-
-    <include layout="@layout/toolbar_layout"></include>
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-       <EditText
-           android:text=""
-           android:maxLines="1"
-           android:id="@+id/phone"
-           android:drawableLeft="@drawable/user_phone"
-           android:layout_weight="1"
-           android:drawablePadding="5dp"
-           android:paddingBottom="5dp"
-           android:hint="手机号"
-           android:inputType="phone"
-           android:maxLength="11"
-           android:background="@android:color/transparent"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+        android:layout_height="50dp">
         <ImageView
-            android:visibility="gone"
-            android:id="@+id/clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/clear"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <View
-
-            android:background="@color/lineColor"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"></View>
+            android:id="@+id/iv_register_back"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_black"/>
         <TextView
-            android:id="@+id/textCount"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="right"
-            android:textColor="@color/dark"
+            android:id="@+id/tv_register_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0/11"
-            />
-
-        <Button
-            android:enabled="false"
-            android:id="@+id/nextBtn"
-            android:onClick="nextClick"
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="下一步"
-            android:textColor="@color/white"
+            android:text="@string/login"
             android:textSize="18sp"
-            android:background="@drawable/oval_green_button_selector"
-            />
-
-
+            android:textColor="@color/theme_text"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_title"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="35dp"
+        android:textColor="@color/theme_text"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
         <TextView
-            android:id="@+id/toLogin"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:textSize="16sp"
-            android:textColor="@color/blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已有账号"
-            />
+            android:text="@string/login_area"
+            android:textColor="@color/theme_text"/>
+        <EditText
+            android:id="@+id/et_register_phone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/login_phone"
+            android:inputType="phone"
+            android:textSize="14.7sp"
+            android:lines="1"
+            android:maxLength="11"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/hotel_address"/>
+        <ImageView
+            android:id="@+id/iv_register_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:src="@drawable/login_cancel"/>
     </LinearLayout>
-
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:paddingRight="10dp">
+        <EditText
+            android:id="@+id/et_input_code"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/register_input_code"
+            android:layout_marginBottom="8dp"
+            android:textSize="14.7sp"
+            android:inputType="phone"
+            android:maxLength="6"
+            android:layout_marginTop="5dp"
+            android:lines="1"
+            android:textColor="@color/hotel_address"/>
+        <TextView
+            android:id="@+id/tv_get_code"
+            android:layout_width="82dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:background="@drawable/shape_hotel_order"
+            android:text="@string/register_get_code"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <EditText
+            android:id="@+id/et_register_psw"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/login_psw"
+            android:layout_marginBottom="8dp"
+            android:textSize="14.7sp"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:lines="1"
+            android:textColor="@color/hotel_address"/>
+        <CheckBox
+            android:id="@+id/cb_register_psw"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:drawableRight="@drawable/login_psw_chect"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/hotel_division"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_agree"
+            android:textSize="12sp"
+            android:textColor="@color/hotel_address" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/register_service"
+            android:textColor="@color/hotel_level" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_register_sure"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:background="@drawable/oval_green_button_selector" />
 </LinearLayout>

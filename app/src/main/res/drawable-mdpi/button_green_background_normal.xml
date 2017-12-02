@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
- >
-<corners
-    android:radius="200dp"
-    >
-
-</corners>
-    <solid android:color="@color/green_button_normal"></solid>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="200dp"/>
+    <size android:height="48dp" android:width="253dp"/>
+    <solid android:color="@color/home_tab_title_color_check"/>
 
 </shape>

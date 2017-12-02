@@ -4,17 +4,18 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
@@ -35,81 +36,98 @@ import org.xutils.x;
  * @ahthor zzj
  * @time 17/7/30 上午9:32
  */
-public class RegisterOneActivity extends BaseActivity {
+public class RegisterOneActivity extends BaseActivity implements View.OnClickListener{
+    @ViewInject(R.id.iv_register_back)
+    private ImageView ivBack;
+    @ViewInject(R.id.tv_register_login)
+    private TextView tvLogin;
+    @ViewInject(R.id.et_register_phone)
+    private EditText etPhone;
+    @ViewInject(R.id.iv_register_cancel)
+    private ImageView ivCancel;
+    @ViewInject(R.id.et_input_code)
+    private EditText etCode;
+    @ViewInject(R.id.tv_get_code)
+    private TextView tvCode;
+    @ViewInject(R.id.cb_register_psw)
+    private CheckBox cbPsw;
+    @ViewInject(R.id.et_register_psw)
+    private EditText etPsw;
+    @ViewInject(R.id.btn_register_sure)
+    private Button btnSure;
 
      public static Activity instance;
-    @ViewInject(R.id.phone)
-    private EditText editTextPhone;
-    @ViewInject(R.id.textCount)
-    private TextView textCount;
-    @ViewInject(R.id.clear)
-    private ImageView clear;
-    @ViewInject(R.id.nextBtn)
-    private Button nextBtn;
+
+
     private String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
           instance=this;
-
         Intent intent = this.getIntent();
         if(intent==null)return;
-
         String title = intent.getStringExtra("title");
         this.type = getIntent().getStringExtra("type");
 
-        setToolBarTitle(title);
-        showBackButton();
+        initView();
 
-        editTextPhone.addTextChangedListener(new TextWatcher() {
+
+
+    }
+
+    private void initView() {
+        ivBack.setOnClickListener(this);
+        tvLogin.setOnClickListener(this);
+        ivCancel.setOnClickListener(this);
+        tvCode.setOnClickListener(this);
+        btnSure.setOnClickListener(this);
+        //取消按钮的隐藏
+        etPhone.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                textCount.setText(s.length()+"/11");
+                String name = etPhone.getEditableText() + "";
+                if(!TextUtils.isEmpty(name)){
+                    ivCancel.setVisibility(View.VISIBLE);
+                }else{
+                    ivCancel.setVisibility(View.GONE);
+                }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(s.toString().trim().length()>0){
+                /*if(s.toString().trim().length()>0){
 
-                  clear.setVisibility(View.VISIBLE);
+                    ivCancel.setVisibility(View.VISIBLE);
                 }else {
 
-                  clear.setVisibility(View.GONE);
+                    ivCancel.setVisibility(View.GONE);
                 }
 
                 if(s.toString().length()==11){
 
-                    nextBtn.setEnabled(true);
+                    btnSure.setEnabled(true);
                 }else {
 
-                   nextBtn.setEnabled(false);
+                    btnSure.setEnabled(false);
+                }*/
+
+            }
+        });
+        //密码的显示和隐藏
+        cbPsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //显示密码
+                    etPsw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    etPsw.setSelection(etPsw.getText().length());
+                }else {
+                    //隐藏密码
+                    etPsw.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    etPsw.setSelection(etPsw.getText().length());
                 }
-
-            }
-        });
-
-        /**
-         * 一键清空
-         */
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextPhone.setText(null);
-
-            }
-        });
-
-        this.findViewById(R.id.toLogin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 
@@ -121,14 +139,41 @@ public class RegisterOneActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_register_back:
+                //跳转到登录
+                finish();
+                break;
+            case R.id.tv_register_login:
+                //跳转到登录
+                finish();
+                break;
+            case R.id.iv_register_cancel:
+                //意见清空
+                etPhone.setText("");
+                break;
+            case R.id.tv_get_code:
+                //获取验证码
+                ToastUtils.show(getApplicationContext(),"get code");
+                break;
+            case R.id.btn_register_sure:
+                //确定
+                break;
+
+        }
+
+    }
+
 
     /**
      * 下一步
      * @param view
      */
-    public void nextClick(View view) {
+   /* public void nextClick(View view) {
 
-        final String phone = editTextPhone.getText().toString().trim();
+        final String phone = etPhone.getText().toString().trim();
 
         if(phone.length()==0){
 
@@ -157,9 +202,9 @@ public class RegisterOneActivity extends BaseActivity {
 
 
 
-        /**
+        *//**
          * 验证手机号并发送验证码
-         */
+         *//*
         RequestParams params = new RequestParams(HttpUrlUtils.REGISTER_ONE);
         params.addBodyParameter("phone",phone);
         params.addBodyParameter("type",type);
@@ -178,9 +223,9 @@ public class RegisterOneActivity extends BaseActivity {
                     if(success){
 
 
-                        /**
+                        *//**
                          *  验证成功进行注册第二步
-                         */
+                         *//*
 
                         String type = getIntent().getStringExtra("type");
                         Intent intent = new Intent(RegisterOneActivity.this,GetCodeActivity.class);
@@ -225,6 +270,6 @@ public class RegisterOneActivity extends BaseActivity {
 
 
 
-    }
+    }*/
 
 }

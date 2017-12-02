@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="钢铁侠"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/my_circle_head_name"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="让心碎成为一种艺术"
+        android:textSize="18sp"
+        android:layout_marginBottom="13dp"
+        android:textColor="@color/my_circle_head_sign"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="佰家星球孵化32天，为星球增加1382重力"
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

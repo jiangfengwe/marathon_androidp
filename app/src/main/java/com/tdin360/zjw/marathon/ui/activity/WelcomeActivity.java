@@ -15,7 +15,7 @@ import java.lang.ref.SoftReference;
 import cn.jpush.android.api.JPushInterface;
 
 /**
- * 启动页
+ * 启动页，闪屏
  */
 public class WelcomeActivity extends Activity {
 
@@ -27,7 +27,6 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         handler = new Handler();
-
 
          runnable = new Runnable() {
              @Override

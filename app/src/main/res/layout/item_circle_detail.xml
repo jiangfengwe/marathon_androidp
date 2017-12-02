@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_circle_portrait"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/circle_portrait"
+        android:layout_margin="10dp"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="11dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="荐客家"
+                android:layout_gravity="center"
+                android:layout_marginRight="18dp"
+                android:textSize="12sp"
+                android:textColor="@color/home_tab_title_color_check"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12-12"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textColor="@color/circle_head_time"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"
+            android:textSize="13.3sp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/theme_text"/>
+        <TextView
+            android:id="@+id/tv_circle_detail_response"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="就部分vgayt6t66trt"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/circle_head_time"/>
+    </LinearLayout>
+
+
+</LinearLayout>

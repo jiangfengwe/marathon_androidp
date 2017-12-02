@@ -3,22 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.tdin360.zjw.marathon.ui.activity.AboutUsActivity">
     <include layout="@layout/toolbar_layout"></include>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:gravity="center"
         android:orientation="vertical"
+        android:background="@color/theme_text"
         android:padding="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/about_logo" />
+            android:src="@mipmap/logo" />
 
         <TextView
             android:id="@+id/version1"
@@ -26,121 +27,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="当前版本 V 1.0"
-            android:textColor="@color/gray"
+            android:text="V 1.0.0"
+            android:textColor="@color/hotel_level"
             android:textSize="16sp" />
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:orientation="vertical"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="14dp"
+        android:textColor="@color/about_us_content"
+        android:text="ggggggggggggggggggggggggggg"/>
 
-        <RelativeLayout
-            android:background="@drawable/personal_center_item_selector"
-            android:onClick="click"
-            android:id="@+id/gw"
-            android:padding="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="官方网站"
-                android:textSize="16sp"
-                android:textColor="@color/textBlack"
-                />
-            <TextView
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/blue"
-                android:text="@string/webAddress"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_marginTop="0.5dp"
-            android:background="@drawable/personal_center_item_selector"
-            android:onClick="click"
-            android:id="@+id/kf"
-            android:padding="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="客服热线"
-                android:textSize="16sp"
-                android:textColor="@color/textBlack"
-                />
-            <TextView
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark"
-                android:text="@string/tel"
-                />
-        </RelativeLayout>
-
-        <TextView
-            android:onClick="click"
-            android:id="@+id/xy"
-            android:layout_marginTop="0.5dp"
-            android:background="@drawable/personal_center_item_selector"
-             android:padding="15dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text="服务协议"
-            android:textSize="16sp"
-            android:textColor="@color/textBlack"
-             android:drawableRight="@drawable/arrow_right"
-             />
-
-
-
-        <TextView
-            android:visibility="gone"
-            android:onClick="click"
-            android:layout_marginTop="0.5dp"
-             android:padding="15dp"
-             android:background="@drawable/personal_center_item_selector"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text="帮助"
-            android:textSize="16sp"
-            android:textColor="@color/textBlack"
-             android:drawableRight="@drawable/arrow_right"
-            android:id="@+id/help" />
-
-        <RelativeLayout
-            android:id="@+id/update"
-            android:background="@drawable/personal_center_item_selector"
-            android:padding="15dp"
-            android:layout_marginTop="1dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="16dp"
-                android:textColor="@color/textBlack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="检查更新"
-                />
-            <TextView
-                android:drawablePadding="5dp"
-                android:drawableRight="@drawable/arrow_right"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text="1.0.8"
-                android:id="@+id/version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                />
-        </RelativeLayout>
-    </LinearLayout>
 
 </LinearLayout>

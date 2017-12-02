@@ -3,12 +3,23 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
@@ -24,43 +35,47 @@ import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-/***
- *
- *
+/**
  * 用户登录
- * @author zhangzhijun
- *
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener{
+    @ViewInject(R.id.iv_login_back)
+    private ImageView ivBack;
+    @ViewInject(R.id.tv_login_register)
+    private TextView tvRegester;
+    @ViewInject(R.id.et_login_phone)
+    private EditText etPhone;
+    @ViewInject(R.id.iv_login_cancel)
+    private ImageView ivCancel;
+    @ViewInject(R.id.et_login_psw)
+    private EditText etPsw;
+    @ViewInject(R.id.iv_login_psw_show)
+    private ImageView ivPsw;
+    @ViewInject(R.id.tv_login_forget)
+    private TextView tvForget;
+    @ViewInject(R.id.btn_login_sure)
+    private Button btnSure;
+    @ViewInject(R.id.layout_login_weixin)
+    private LinearLayout layoutWeixin;
+    private boolean flag;
+    @ViewInject(R.id.cb_login_psw)
+    private CheckBox cbPsw;
 
-     @ViewInject(R.id.tel)
+
+   /* @ViewInject(R.id.tel)
     private EditText editTextName;
     @ViewInject(R.id.password)
     private EditText editTextPass;
     @ViewInject(R.id.clear)
-    private ImageView clearBtn;
+    private ImageView clearBtn;*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setToolBarTitle("登录");
-          showBackButton();
-
-        /**
-         * 清空手机号
-         */
-        this.clearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                editTextName.setText(null);
-            }
-        });
-
-
+        initView();
         /**
          * 监听输入框值的变化
          */
-        this.editTextName.addTextChangedListener(new TextWatcher() {
+       /* this.editTextName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -80,7 +95,7 @@ public class LoginActivity extends BaseActivity {
                     clearBtn.setVisibility(View.INVISIBLE);
                 }
             }
-        });
+        });*/
 
 
         /**
@@ -106,53 +121,104 @@ public class LoginActivity extends BaseActivity {
 //        });
     }
 
+    private void initView() {
+        ivBack.setOnClickListener(this);
+        tvRegester.setOnClickListener(this);
+        ivCancel.setOnClickListener(this);
+        ivPsw.setOnClickListener(this);
+        tvForget.setOnClickListener(this);
+        btnSure.setOnClickListener(this);
+        layoutWeixin.setOnClickListener(this);
+        //监听输入框值的变化
+        etPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String name = etPhone.getEditableText() + "";
+                if(!TextUtils.isEmpty(name)){
+                    ivCancel.setVisibility(View.VISIBLE);
+                }else{
+                    ivCancel.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        cbPsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //显示密码
+                    etPsw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    etPsw.setSelection(etPsw.getText().length());
+                }else {
+                    //隐藏密码
+                    etPsw.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    etPsw.setSelection(etPsw.getText().length());
+                }
+            }
+        });
+
+    }
+
     @Override
     public int getLayout() {
         return R.layout.activity_login;
     }
-
-    public void loginClick(View view) {
-
-        Intent intent;
-        switch (view.getId()){
-
-            case R.id.loginBtn://登录
-              this.login();
-
-                break;
-            case R.id.registerBtn://注册
-
-                intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
-                intent.putExtra("type","zc");
-                intent.putExtra("title","注册");
-                startActivity(intent);
-                break;
-            case R.id.forGet://忘记密码
-
-                intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
-                intent.putExtra("type","zhmm");
-                intent.putExtra("title","找回密码");
-                startActivity(intent);
-
-                break;
-        }
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         if(requestCode==200){
-
             finish();
         }
 
     }
 
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+        switch (view.getId()){
+            case R.id.iv_login_back:
+                //返回
+                finish();
+                break;
+            case R.id.tv_login_register:
+                //注册
+                intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
+                intent.putExtra("type","zc");
+                intent.putExtra("title","注册");
+                startActivity(intent);
+                break;
+            case R.id.iv_login_cancel:
+                //清空手机号
+                etPhone.setText("");
+                break;
+            case R.id.tv_login_forget:
+                //忘记密码
+                intent = new Intent(LoginActivity.this,ForgetPswActivity.class);
+                intent.putExtra("type","zhmm");
+                intent.putExtra("title","找回密码");
+                startActivity(intent);
+                break;
+            case R.id.btn_login_sure:
+                //登录
+                //this.login();
+                break;
+            case R.id.layout_login_weixin:
+                //微信登录
+                //this.login();
+
+                break;
+        }
+    }
+
     //用户登录
-    private void login(){
+    /*private void login(){
 
     //验证用户输入
 
@@ -278,7 +344,7 @@ public class LoginActivity extends BaseActivity {
         });
 
 
-    }
+    }*/
 
 
 }

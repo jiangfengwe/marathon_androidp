@@ -81,10 +81,8 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         showBackButton();
         setToolBarTitle("发表动态");
-
         navRightItemTitle().setText("发表");
         int color = getResources().getColor(R.color.blue);
         navRightItemTitle().setTextColor(color);
@@ -156,10 +154,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
 
                     layout.setVisibility(View.VISIBLE);
                     if(faceFragment==null){
-
-
                         faceFragment=FaceFragment.Instance();
-
                         transaction.add(R.id.emoji,faceFragment);
                         isFirst=true;
 
@@ -246,8 +241,6 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
      * @param view
      */
     public void add(View view) {
-
-
                 //自定义方法的多选
      RxGalleryFinal.with(AddCircleActivity.this)
                         .image()
@@ -257,7 +250,6 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
                         .subscribe(new RxBusResultDisposable<ImageMultipleResultEvent>() {
                             @Override
                             protected void onEvent(ImageMultipleResultEvent imageMultipleResultEvent) throws Exception {
-
                          list.addAll(imageMultipleResultEvent.getResult());
                          adapter.update(list);
                                 //选择结果

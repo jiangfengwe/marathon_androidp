@@ -5,6 +5,7 @@ package com.tdin360.zjw.marathon.model;
  * Created by Administrator on 2016/7/5.
  */
 public class CarouselModel {
+
     private String title;
     private String eventId;
     private String picUrl;

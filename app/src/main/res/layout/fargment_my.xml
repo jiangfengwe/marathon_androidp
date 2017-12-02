@@ -1,336 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:orientation="vertical"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:background="@color/background"
+    android:background="@color/hotel_division"
     android:layout_height="match_parent">
-
     <!--导航栏部分-->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    <RelativeLayout
-       android:background="@drawable/my_top_bg"
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-        <LinearLayout
-            android:id="@+id/myHeader"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:padding="3dp"
-                android:background="@drawable/image_oval_border"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-
-                    android:id="@+id/myImage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/signup_photo"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_marginLeft="5dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_weight="1"
-
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/userName"
-                        android:layout_marginTop="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#fff"
-                        android:text="点击登录"
-                        />
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:textSize="12sp"
-                            android:textColor="@color/white"
-                            android:text="关注  1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                        <TextView
-                            android:textSize="12sp"
-                            android:textColor="@color/white"
-                            android:text="关注  1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:textSize="12sp"
-                            android:textColor="@color/white"
-                            android:text="关注  1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                        <TextView
-                            android:textSize="12sp"
-                            android:textColor="@color/white"
-                            android:text="关注  1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <ImageView
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_white"
-
-                    />
-            </LinearLayout>
-
-
-        </LinearLayout>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_height="60dp">
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:orientation="horizontal"
-               android:layout_height="match_parent">
-               <LinearLayout
-                   android:layout_weight="1"
-                   android:gravity="center"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent">
-
-                   <TextView
-                       android:textColor="@color/textBlack"
-                       android:gravity="center"
-                       android:id="@+id/signUpSearch"
-                       android:drawablePadding="2dp"
-                       android:drawableLeft="@drawable/my_signup"
-                       android:textSize="18sp"
-                       android:textStyle="bold"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="我的报名"
-                       />
-               </LinearLayout>
-
-               <View
-                   android:layout_marginTop="20dp"
-                   android:background="@color/dark"
-                   android:layout_width="0.5dp"
-                   android:layout_height="20dp"
-                   >
-
-               </View>
-               <LinearLayout
-                   android:gravity="center"
-                   android:layout_weight="1"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/search_bar"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/textBlack"
-                android:drawablePadding="2dp"
-                android:drawableLeft="@drawable/my_mark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的成绩"
-                />
-
-           </LinearLayout>
-           </LinearLayout>
-    </LinearLayout>
-            <RelativeLayout
-                android:visibility="gone"
-                android:id="@+id/myTeam"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:gravity="center"
-                    android:textSize="16dp"
-                    android:textColor="@color/textBlack"
-                    android:drawablePadding="2dp"
-                    android:drawableLeft="@drawable/my_team"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我的团队"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-            <RelativeLayout
-
-                android:id="@+id/myGoods"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="1dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:gravity="center"
-                    android:textSize="16dp"
-                    android:textColor="@color/textBlack"
-                    android:drawablePadding="2dp"
-                    android:drawableLeft="@drawable/my_goods"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我的物资"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/myNotice"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:textSize="16dp"
-                    android:textColor="@color/textBlack"
-                    android:drawableLeft="@drawable/my_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="通知消息"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/setting"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="1dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:textColor="@color/textBlack"
-                    android:drawableLeft="@drawable/my_setting"
-                    android:textSize="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="系统设置"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/share"
-                android:background="@drawable/personal_center_item_selector"
-                android:padding="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/textBlack"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:drawableLeft="@drawable/my_share_app"
-                    android:textSize="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="推荐给好友"
-                    />
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right"
-                    />
-            </RelativeLayout>
-                </LinearLayout>
-            </ScrollView>
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/home_tab_title_color_check">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <TextView
                     android:gravity="center"
                     android:textSize="18sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/home_tab_title4"
-                    android:textColor="@color/white"
-                    />
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white" />
+                <ImageView
+                    android:id="@+id/my_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_notice"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"/>
+            </RelativeLayout>
+
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/hotel_division"/>
+        <LinearLayout
+            android:id="@+id/my_header"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="90dp">
+            <ImageView
+                android:id="@+id/my_portrait"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:layout_gravity="center"
+                android:src="@drawable/my_portrait"/>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/my_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="中华小烟嗓"
+                    android:layout_marginTop="25dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/theme_text"/>
+                <TextView
+                    android:id="@+id/my_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="简简单单，随随便便"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/hotel_size"/>
+            </LinearLayout>
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/my_entry" />
+
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/hotel_division"/>
+            <LinearLayout
+                android:id="@+id/my_order"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_order"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:drawablePadding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的订单" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/hotel_division"/>
+            <LinearLayout
+                android:id="@+id/my_dynamic"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_dynamic"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:drawablePadding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的动态" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/hotel_division"/>
+            <LinearLayout
+                android:id="@+id/my_share"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_share"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:drawablePadding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分享好友" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/hotel_division"/>
+            <LinearLayout
+                android:id="@+id/my_phone"
+                android:background="@drawable/personal_center_item_selector"
+                android:padding="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_phone"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:drawablePadding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系客服" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:background="@color/hotel_division"/>
+            <LinearLayout
+                android:id="@+id/my_setting"
+                android:padding="15dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_setting"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@color/theme_text"
+                    android:drawablePadding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设置" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </LinearLayout>

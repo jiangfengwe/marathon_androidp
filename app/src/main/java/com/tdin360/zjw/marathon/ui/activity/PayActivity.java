@@ -4,15 +4,19 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
 import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +38,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 /**
  * 支付中心
  * @author zhangzhijun
  */
-public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPAYResultListener{
+public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPAYResultListener,View.OnClickListener{
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
+
+    @ViewInject(R.id.select1)
+    private LinearLayout layoutAlipay;
+    @ViewInject(R.id.select2)
+    private LinearLayout layoutWeixinPay;
+    @ViewInject(R.id.select3)
+    private LinearLayout layoutUnionPay;
 
     public static final String PAY_ACTION="PAY_OK";
     private IWXAPI api;
@@ -54,13 +74,23 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setToolBarTitle("支付中心");
-        showBackButton();
+         initToolbar();
          initView();
          WXPayEntryActivity.listener=this;
 
 
     }
+
+    private void initToolbar() {
+        toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
+        viewline.setBackgroundResource(R.color.home_tab_title_color_check);
+        imageView.setImageResource(R.drawable.back);
+        titleTv.setText("支付");
+        titleTv.setTextColor(Color.WHITE);
+        showBack(toolbar,imageView);
+
+    }
+
 
     @Override
     public int getLayout() {
@@ -68,13 +98,17 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     }
 
     private void initView() {
+        layoutAlipay.setOnClickListener(this);
+        layoutWeixinPay.setOnClickListener(this);
+        layoutUnionPay.setOnClickListener(this);
+
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         this.api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         this.aliPay = (RadioButton) this.findViewById(R.id.zhifubao);
         this.wXPay = (RadioButton) this.findViewById(R.id.weixin);
         this.yLPay = (RadioButton) this.findViewById(R.id.yinlian);
         TextView priceView = (TextView) this.findViewById(R.id.price);
-        TextView subjectView = (TextView) this.findViewById(R.id.subject);
+        //TextView subjectView = (TextView) this.findViewById(R.id.subject);
 
         Intent intent = getIntent();
 
@@ -86,8 +120,8 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         url = isHotel ? HttpUrlUtils.HOTEL_PAY:HttpUrlUtils.PAY;
 
         //显示支付费用及描述
-        priceView.setText("¥ "+money);
-        subjectView.setText(subject);
+        //priceView.setText("¥ "+money);
+       // subjectView.setText(subject);
 
 
 
@@ -282,9 +316,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     //银联支付
     private void toUnionpay(){
 
-
-
-
     }
 
 
@@ -324,12 +355,8 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
      * @param view
      */
     public void onSelect(View view) {
-
-
         switch (view.getId()){
-
             case R.id.select1:
-
                 aliPay.setChecked(true);
                 wXPay.setChecked(false);
                 yLPay.setChecked(false);
@@ -521,5 +548,27 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.select1:
+                aliPay.setChecked(true);
+                wXPay.setChecked(false);
+                yLPay.setChecked(false);
+                break;
+            case R.id.select2:
+                aliPay.setChecked(false);
+                wXPay.setChecked(true);
+                yLPay.setChecked(false);
+                break;
+
+            case R.id.select3:
+                aliPay.setChecked(false);
+                wXPay.setChecked(false);
+                yLPay.setChecked(true);
+                break;
+        }
     }
 }

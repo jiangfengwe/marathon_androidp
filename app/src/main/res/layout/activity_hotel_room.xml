@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.HotelRoomActivity">
+    <include layout="@layout/toolbar_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <include layout="@layout/item_hotel_room"/>
+    </ScrollView>
+    <TextView
+        android:id="@+id/tv_hotel_room_order"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:text="@string/hotel_room_order"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@color/home_tab_title_color_check"/>
+
+
+</LinearLayout>

@@ -1,9 +1,103 @@
 <resources>
     <string name="app_name">佰家运动</string>
     <string name="home_tab_title1">赛事</string>
-    <string name="home_tab_title2">圈子</string>
+    <string name="home_tab_title2">佰家圈</string>
     <string name="home_tab_title3">运动</string>
     <string name="home_tab_title4">我的</string>
+
+    <string name="event_apply_time">报名时间：</string>
+    <string name="event_competition_time">竞赛时间：</string>
+
+    <string name="hotel_screen">筛选</string>
+    <string name="hotel_event">赛事酒店</string>
+
+    <string name="hotel_detail">酒店详情</string>
+    <string name="hotel_detail_intro">酒店介绍</string>
+    <string name="hotel_detail_comment">查看全部评价</string>
+    <string name="hotel_detail_order">预定</string>
+    <string name="hotel_travel">周边旅游</string>
+
+    <string name="my_order">我的订单</string>
+    <string name="my_dynamic">我的动态</string>
+    <string name="my_share">分享好友</string>
+    <string name="my_setting">设置</string>
+
+    <string name="notice_title">通知消息</string>
+
+    <string name="login_title">注册</string>
+    <string name="login">登录</string>
+    <string name="login_area">+86</string>
+    <string name="login_phone">请输入你的手机号</string>
+    <string name="login_psw">请输入密码</string>
+    <string name="login_forget">忘记密码?</string>
+    <string name="login_sure">确定</string>
+    <string name="login_weixin">微信登录</string>
+
+    <string name="forget_psw">忘记密码</string>
+
+    <string name="register_input_code">请输入验证码</string>
+    <string name="register_get_code">发送验证码</string>
+    <string name="register_agree">注册即视为同意</string>
+    <string name="register_service">佰家运动服务协议</string>
+
+    <string name="my_order_cancel">取消订单</string>
+    <string name="my_order_pay">去支付</string>
+
+    <string name="my_order_hotel">酒店订单</string>
+    <string name="my_order_travel">旅游订单</string>
+    <string name="order_detail">预定详情</string>
+    <string name="order_hotel_room">房型名称:</string>
+    <string name="order_hotel_people">入住人:</string>
+    <string name="order_hotel_phone">联系手机:</string>
+    <string name="order_hotel_enter_time">入住时间:</string>
+    <string name="order_hotel_time">离店时间:</string>
+    <string name="order_hotel_order_time">下单时间:</string>
+    <string name="order_hotel_number">订单号:</string>
+
+    <string name="order_travel_date">旅游日程</string>
+    <string name="order_travel_people">乘客信息</string>
+    <string name="order_travel_phone">手机号:</string>
+
+    <string name="setting_title">设置</string>
+    <string name="setting_about_us">关于我们</string>
+    <string name="setting_feedback">反馈建议</string>
+    <string name="setting_clear">清除缓存</string>
+    <string name="setting_receiver">接收消息通知</string>
+    <string name="setting_vision">软件版本</string>
+    <string name="setting_phone">客服电话</string>
+    <string name="setting_update">更新</string>
+    <string name="setting_exit">退出当前账号</string>
+
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">谢谢大人的宝贵建议</string>
+    <string name="feedback_add">添加图片</string>
+    <string name="feedback_submit">提交</string>
+
+    <string name="change_sign_hint">感谢帝国时代故事</string>
+
+    <string name="change_phone_old">请输入原手机号</string>
+    <string name="change_phone_new">请输入新手机号</string>
+    <string name="change_phone_sure">确定更改</string>
+
+    <string name="change_psw_old">原密码</string>
+    <string name="change_psw_new">新密码</string>
+
+    <string name="hotel_room_type">类型：</string>
+    <string name="hotel_room_floor">楼层：</string>
+    <string name="hotel_room_facility">设施：</string>
+    <string name="hotel_room_bed">床型：</string>
+    <string name="hotel_room_breakfast">早餐：</string>
+    <string name="hotel_room_residue">剩余房间数：</string>
+    <string name="hotel_room_instructions">使用说明：</string>
+    <string name="hotel_room_order">立即预定</string>
+    <string name="hotel_room_sum">订单总额：</string>
+    <string name="money">￥</string>
+    <string name="hotel_room_phone">手机号</string>
+    <string name="hotel_room_msg">便于发送预订消息</string>
+
+    <string name="circle_publish">小佰提醒：请不要发布暴力色情信息、攻击性语言、否则将可能被系统员自动屏蔽，谢谢配合!</string>
+
+
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="release_to_refresh">释放立即刷新</string>
@@ -282,4 +376,7 @@
         <item>身份证</item>
         <item>护照</item>
     </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

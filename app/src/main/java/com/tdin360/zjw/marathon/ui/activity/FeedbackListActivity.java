@@ -1,56 +1,44 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
-import android.support.annotation.LayoutRes;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.CommonAdapter;
-import com.tdin360.zjw.marathon.adapter.ViewHolder;
-import com.tdin360.zjw.marathon.model.FeedBackModel;
-import com.tdin360.zjw.marathon.model.LoginModel;
-import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
-import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
-import com.tdin360.zjw.marathon.weight.ErrorView;
-import com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.common.util.DensityUtil;
-import org.xutils.http.RequestParams;
-import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *  意见反馈列表
- * @author zhangzhijun
+ *
  */
-public class FeedbackListActivity extends BaseActivity  implements PullToRefreshLayout.OnRefreshListener{
+public class FeedbackListActivity extends BaseActivity  implements View.OnClickListener{
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
 
-    @ViewInject(R.id.listView)
+
+    @ViewInject(R.id.layout_feedback_add)
+    private LinearLayout layoutAdd;
+    @ViewInject(R.id.btn_feedback_sure)
+    private Button btnFeedback;
+
+//implements PullToRefreshLayout.OnRefreshListener
+   /* @ViewInject(R.id.listView)
     private ListView listView;
     private List<FeedBackModel>list = new ArrayList<>();
     private int totalPages;
@@ -60,29 +48,47 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     @ViewInject(R.id.pull_Layout)
     private PullToRefreshLayout pullToRefreshLayout;
     @ViewInject(R.id.errorView)
-    private ErrorView mErrorView;
+    private ErrorView mErrorView;*/
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showBackButton();
+        /*showBackButton();
         setToolBarTitle("意见反馈");
         initView();
-        register();
+        register();*/
+        initToolbar();
+        initView();
 
     }
 
     private void initView() {
+        layoutAdd.setOnClickListener(this);
+        btnFeedback.setOnClickListener(this);
+    }
+
+    private void initToolbar() {
+        toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
+        viewline.setBackgroundResource(R.color.home_tab_title_color_check);
+        imageView.setImageResource(R.drawable.back);
+        titleTv.setText(R.string.feedback_title);
+        titleTv.setTextColor(Color.WHITE);
+        showBack(toolbar,imageView);
+
+    }
+
+
+   /* private void initView() {
 
         this.pullToRefreshLayout.setOnRefreshListener(this);
         this.myAdapter = new MyAdapter(this,list,R.layout.feedback_list_item);
         this.listView.setAdapter(myAdapter);
 
 
-        /**
+        *//**
          * 加载失败点击重试
-         */
+         *//*
         mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
             @Override
             public void onErrorClick(ErrorView.ViewShowMode mode) {
@@ -99,7 +105,7 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
         });
 
         pullToRefreshLayout.autoRefresh();
-    }
+    }*/
 
 
 
@@ -131,18 +137,34 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
         return R.layout.activity_list_feedback;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.layout_feedback_add:
+                //添加图片
+                ToastUtils.show(getApplicationContext(),"添加图片");
+                break;
+            case R.id.btn_feedback_sure:
+                //反馈意见提交
+                ToastUtils.show(getApplicationContext(),"反馈意见提交");
+                break;
+        }
+
+
+    }
+
 
     //添加新的意见反馈
-    public void add(View view) {
+  /*  public void add(View view) {
 
         Intent intent  = new Intent(FeedbackListActivity.this,AddFeedbackActivity.class);
        startActivity(intent);
     }
 
 
-    /**
+    *//**
      * 获取网络数据
-     */
+     *//*
     private void httpRequest(final boolean isRefresh){
 
 
@@ -259,9 +281,9 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
             pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.NOT_MORE);
         }
     }
-    /**
+    *//**
      * 展示反馈列表以及回复列表
-     */
+     *//*
     private class MyAdapter extends CommonAdapter<FeedBackModel>{
 
 
@@ -303,9 +325,9 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
     }
 
 
-    /**
+    *//**
      * 用广播接收更新通知
-     */
+     *//*
     private MyBroadcastReceiver receiver;
     private void register(){this.receiver = new MyBroadcastReceiver();
 
@@ -321,13 +343,13 @@ public class FeedbackListActivity extends BaseActivity  implements PullToRefresh
             list.clear();
             httpRequest(true);
         }
-    }
+    }*/
 
-    @Override
+   /* @Override
     protected void onDestroy() {
         super.onDestroy();
         if(receiver!=null){
             unregisterReceiver(receiver);
         }
-    }
+    }*/
 }

@@ -1,33 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <!--导航栏部分-->
+    <include layout="@layout/toolbar_layout"></include>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs_event"
+        app:tabIndicatorHeight="1.5dp"
+        android:background="@color/home_tab_title_color_check"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorColor="@color/white"
+        app:tabMode="scrollable"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:tabTextColor="@color/white_event"
+        app:tabTextAppearance="@style/TabLayoutTextStyle">
+    </android.support.design.widget.TabLayout>
+    <View
+        android:id="@+id/line"
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        <include layout="@layout/toolbar_layout"></include>
+   <!-- <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        <!--内容部分-->
+        &lt;!&ndash;内容部分&ndash;&gt;
         <com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout
             android:id="@+id/pull_Layout"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/refresh_head">
-            </include>
+            <include layout="@layout/refresh_head"/>
             <com.tdin360.zjw.marathon.weight.pullToControl.PullableListView
                 android:id="@+id/listView"
-
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-             >
-
+                android:layout_height="match_parent">
             </com.tdin360.zjw.marathon.weight.pullToControl.PullableListView>
 
             <include layout="@layout/load_more"></include>
 
-        </com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout>
+        </com.tdin360.zjw.marathon.weight.pullToControl.PullToRefreshLayout>-->
 
-    <include android:visibility="gone" layout="@layout/load_fail_layout"></include>
+    <include android:visibility="gone"
+        layout="@layout/load_fail_layout"></include>
 </LinearLayout>

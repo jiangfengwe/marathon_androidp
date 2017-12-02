@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_event"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/event"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_event_time"
+        android:gravity="center"
+        android:layout_alignBottom="@id/iv_event">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="@string/event_apply_time"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="12sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="09-11"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_marginRight="20dp"
+            android:layout_alignBottom="@id/iv_event"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="@string/event_competition_time"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="09-11"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_alignBottom="@id/iv_event"/>
+    </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@color/black_event_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="2017贵阳马拉松"/>
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="23dp"
+            android:layout_gravity="center"
+            android:background="@color/division"/>
+        <TextView
+            android:id="@+id/tv_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="正在报名 >>"
+            android:textSize="14.7sp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/home_tab_title_color_check"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:background="@color/background"/>
+
+
+</LinearLayout>

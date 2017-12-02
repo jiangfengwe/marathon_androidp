@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.tdin360.zjw.marathon.ui.activity.HotelOrderDetailActivity">
+    <include layout="@layout/toolbar_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <include layout="@layout/item_hotel_order"/>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="@string/my_order_cancel"
+            android:background="@color/travel_detail_service"/>
+        <TextView
+            android:id="@+id/tv_hotel_pay"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="@string/my_order_pay"
+            android:background="@color/home_tab_title_color_check"/>
+    </LinearLayout>
+</LinearLayout>

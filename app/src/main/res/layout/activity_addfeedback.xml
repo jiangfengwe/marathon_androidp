@@ -26,9 +26,7 @@
                 android:background="@drawable/edittext_border_color"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:hint="请输入您的宝贵意见或建议"
-                />
-
+                android:hint="请输入您的宝贵意见或建议" />
             <Button
                 style="?android:attr/borderlessButtonStyle"
                 android:background="@drawable/oval_green_button_selector"
@@ -38,9 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="提交"
                 android:textColor="#fff"
-                android:textSize="18sp"
-
-                />
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

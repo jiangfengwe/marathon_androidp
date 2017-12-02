@@ -7,7 +7,6 @@
         android:id="@+id/mRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </android.support.v7.widget.RecyclerView>
     <ImageView
         android:id="@+id/addBtn"

@@ -42,7 +42,6 @@ public class HotelFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         this.viewPager.setAdapter(new HotelTabAdapter(getChildFragmentManager()));
         this.tabLayout.setupWithViewPager(viewPager);
 

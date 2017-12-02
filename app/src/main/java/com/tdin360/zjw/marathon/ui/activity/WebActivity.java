@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,9 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
-
+/**
+ *  赛事详情
+ */
 public class WebActivity extends AppCompatActivity {
 
     private WebView webView;
@@ -49,19 +52,21 @@ public class WebActivity extends AppCompatActivity {
     private String url;
     private String imageUrl;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+
 
         this.webView= (WebView) this.findViewById(R.id.mWebView);
         this.progressBar= (ProgressBar) this.findViewById(R.id.progressBar);
         this.titleTv= (TextView) this.findViewById(R.id.title);
 
 
+
         Intent intent = getIntent();
         if(intent!=null){
-
             url = intent.getStringExtra("url");
             this.imageUrl=intent.getStringExtra("imageUrl");
         }
@@ -83,7 +88,9 @@ public class WebActivity extends AppCompatActivity {
         this.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent=new Intent(WebActivity.this,ApplyActivity.class);
+                startActivity(intent);
+                //finish();
             }
         });
 
@@ -97,7 +104,6 @@ public class WebActivity extends AppCompatActivity {
 
 //                android 6.0兼容
                 if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
-
                     share();
                 }else {
 
@@ -188,7 +194,7 @@ public class WebActivity extends AppCompatActivity {
         @Override
         public void onReceivedTitle(WebView webView, String s) {
             super.onReceivedTitle(webView, s);
-            titleTv.setText(s);
+           // titleTv.setText(s);
 
 
         }
@@ -212,7 +218,7 @@ public class WebActivity extends AppCompatActivity {
         public void onPageFinished(WebView webView, String s) {
             super.onPageFinished(webView, s);
             progressBar.setVisibility(View.GONE);
-            titleTv.setText(webView.getTitle());
+            //titleTv.setText(webView.getTitle());
 
 
         }
@@ -277,7 +283,6 @@ public class WebActivity extends AppCompatActivity {
      * 分享
      */
     private void share(){
-
 
                   /*使用友盟自带分享模版*/
         action = new ShareAction(this).setDisplayList(
@@ -390,7 +395,6 @@ public class WebActivity extends AppCompatActivity {
      */
     private void back(){
         if(webView.canGoBack()){
-
             webView.goBack();
         }else {
             overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);

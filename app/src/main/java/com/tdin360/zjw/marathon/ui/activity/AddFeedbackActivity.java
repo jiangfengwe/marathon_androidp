@@ -89,8 +89,8 @@ public class AddFeedbackActivity extends BaseActivity {
                     if(success){
                         Toast.makeText(AddFeedbackActivity.this,"提交成功!",Toast.LENGTH_SHORT).show();
                         //更新列表
-                        Intent intent = new Intent(FeedbackListActivity.ACTION);
-                        sendBroadcast(intent);
+                        //Intent intent = new Intent(FeedbackListActivity.ACTION);
+                        //sendBroadcast(intent);
                         finish();
 
                     }else {

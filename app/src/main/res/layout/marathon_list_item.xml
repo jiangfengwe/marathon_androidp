@@ -10,17 +10,13 @@
           android:scaleType="centerCrop"
           android:layout_width="match_parent"
           android:layout_height="180dp"
-          android:src="@drawable/item"
-      />
-
+          android:src="@drawable/item" />
           <LinearLayout
-
               android:padding="10dp"
               android:layout_weight="1"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
-
               <TextView
                   android:ellipsize="end"
                   android:id="@+id/eventName"
@@ -28,9 +24,7 @@
                   android:layout_height="wrap_content"
                   android:textColor="@color/textBlack"
                   android:text="2016贵阳国际马拉松"
-                  android:textSize="16sp"
-                  />
-
+                  android:textSize="16sp" />
               <LinearLayout
                   android:layout_marginTop="2dp"
                   android:orientation="horizontal"
@@ -43,9 +37,7 @@
                       android:textSize="14sp"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="报名:"
-                      />
-
+                      android:text="报名:" />
                   <TextView
                       android:layout_marginLeft="5dp"
                       android:gravity="center_vertical"
@@ -54,8 +46,7 @@
                       android:id="@+id/signUpTime"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:text="2017年7月5日"
-                      />
+                      android:text="2017年7月5日" />
 
               </LinearLayout>
 
@@ -86,8 +77,7 @@
                       android:id="@+id/eventTime"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="2017年7月5日"
-                      />
+                      android:text="2017年7月5日" />
 
 
               </LinearLayout>
@@ -101,8 +91,7 @@
                       android:textColor="@drawable/text_rect_color_selector"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="报行中"
-                      />
+                      android:text="报行中" />
               </LinearLayout>
           </LinearLayout>
 

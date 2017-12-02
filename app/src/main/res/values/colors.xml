@@ -13,12 +13,54 @@
     <color name="textDark">#bbb</color>
 
     <color name="red">#e41515</color>
+
+
+
     <color name="background">#F6F6F6</color>
     <color name="white">#ffffff</color>
+    <color name="white_event">#6fffffff</color>
+    <color name="white_event_time">#60000000</color>
+    <color name="black_event_time">#000000</color>
+    <color name="home_tab_title_color_check">#ff621a</color>
+    <color name="home_tab_title_color">#fc4f00</color>
+    <color name="division">#c8c8c8</color>
+    <color name="day_division">#707070</color>
+    <color name="theme_text">#222335</color>
+    <color name="hotel_room">#353333</color>
+    <color name="theme_division">#959595</color>
+    <color name="hotel_level">#13bd5a</color>
+    <color name="hotel_division">#eeeeee</color>
+    <color name="hotel_address">#9b9b9b</color>
+    <color name="hotel_intro_title">#393939</color>
+    <color name="hotel_phone_division">#bfbfbf</color>
+    <color name="hotel_goods_division">#ebebeb</color>
+    <color name="hotel_size">#9b9b9b</color>
+    <color name="hotel_date">#bbbbbb</color>
+    <color name="hotel_comment">#1f213e</color>
+    <color name="hotel_detail_intro">#7f7f7f</color>
+    <color name="travel_detail_intro">#676767</color>
+    <color name="travel_detail_service">#ffa01a</color>
+    <color name="travel_detail_service_click">#ff9601</color>
+    <color name="notice_content">#939393</color>
+    <color name="notice_time">#d0d0d0</color>
+    <color name="about_us_content">#6e6e6e</color>
+    <color name="travel_out_time">#fae007</color>
+    <color name="pay_lines">#bfbfbf</color>
+    <color name="circle_head_time">#8b999c</color>
+    <color name="circle_message_add">#cbc5c5</color>
+    <color name="my_circle_bg">#30000000</color>
+    <color name="my_circle_head_name">#fae007</color>
+    <color name="my_circle_head_sign">#13bd5a</color>
+    <color name="circle_detail_comment">#d9d9d9</color>
+
+
+
+
+
     <color name="lineColor">#CCCCCC</color>
     <color name="line">#f2f2f2</color>
     <color name="home_tab_title_color_normal">#333</color>
-    <color name="home_tab_title_color_check">#13bd5a</color>
+
     <color name="body_color">#363636</color>
     <color name="green">#13bd5a</color>
     <color name="dark">#bbb</color>

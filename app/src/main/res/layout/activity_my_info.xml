@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_my_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/hotel_division"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyInfoActivity">
-    <LinearLayout
+    <include layout="@layout/toolbar_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/item_my_info_modify"/>
+    </ScrollView>
+
+
+   <!-- <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/toolbar_layout"></include>
+        <include layout="@layout/toolbar_layout"/>
     <LinearLayout
-
         android:id="@+id/main"
         android:visibility="visible"
         android:orientation="vertical"
@@ -27,7 +37,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:id="@+id/head_view"
             android:layout_marginTop="10dp"
@@ -37,15 +46,13 @@
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <TextView
                 android:textSize="16sp"
                 android:textColor="@color/textBlack"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="头像:"
-                />
+                android:text="头像:" />
             <ImageView
                 android:layout_marginRight="10dp"
                 android:background="@color/white"
@@ -53,36 +60,27 @@
                 android:id="@+id/imageView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/signup_photo"
-
-                />
+                android:src="@drawable/signup_photo" />
            <ImageView
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:src="@drawable/arrow_right"
-               />
-
+               android:src="@drawable/arrow_right" />
         </LinearLayout>
-
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:shrinkColumns="0"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
        <TableRow
            android:layout_marginTop="1dp"
            android:background="@color/white"
-           android:padding="10dp"
-           >
+           android:padding="10dp">
          <TextView
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:textSize="16sp"
              android:textColor="@color/textBlack"
-             android:text="姓名:"
-             />
+             android:text="姓名:" />
          <EditText
              android:id="@+id/name"
              android:background="@android:color/transparent"
@@ -90,33 +88,23 @@
              android:textSize="15sp"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
+             android:layout_height="wrap_content" />
        </TableRow>
-
-
         <TableRow
             android:layout_marginTop="1dp"
             android:background="@color/white"
-            android:padding="10dp"
-            >
-
+            android:padding="10dp">
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="性别:"
-                android:textColor="@color/textBlack"
-                />
+                android:textColor="@color/textBlack" />
             <RadioGroup
                 android:layout_marginLeft="10dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
+                android:layout_height="wrap_content">
                 <RadioButton
                     android:clickable="false"
                     android:id="@+id/radio1"
@@ -126,9 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="男"
-                    android:checked="true"
-
-                    />
+                    android:checked="true" />
                 <RadioButton
                     android:clickable="false"
                     android:id="@+id/radio2"
@@ -138,27 +124,20 @@
                     android:button="@null"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="女"
-
-                    />
+                    android:text="女" />
             </RadioGroup>
         </TableRow>
-
         <TableRow
             android:layout_marginTop="1dp"
             android:background="@color/white"
             android:id="@+id/birthdayBtn"
-            android:padding="10dp"
-            >
-
+            android:padding="10dp">
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="生日:"
-                android:textColor="@color/textBlack"
-                />
+                android:textColor="@color/textBlack" />
             <TextView
                 android:textSize="15sp"
                 android:textColor="@color/textBlack"
@@ -167,26 +146,18 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                />
+                android:layout_height="wrap_content"/>
         </TableRow>
-
-
         <TableRow
             android:layout_marginTop="1dp"
             android:background="@color/white"
-            android:padding="10dp"
-            >
-
+            android:padding="10dp">
          <TextView
-
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:textSize="16sp"
              android:text="邮箱:"
-             android:textColor="@color/textBlack"
-             />
+             android:textColor="@color/textBlack" />
          <EditText
              android:id="@+id/email"
              android:background="@android:color/transparent"
@@ -194,26 +165,19 @@
              android:textSize="15sp"
              android:layout_marginLeft="10dp"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-
-             />
+             android:layout_height="wrap_content" />
        </TableRow>
-
-
     </TableLayout>
-
-    </LinearLayout
->
-    </ScrollView>
-</LinearLayout>
     </LinearLayout>
-
-    <!--加载失败时显示提示-->
+    </ScrollView>
+    </LinearLayout>
+    </LinearLayout>
+    &lt;!&ndash;加载失败时显示提示&ndash;&gt;
     <LinearLayout
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <include layout="@layout/layout_loadingfail"></include>
-    </LinearLayout>
+    </LinearLayout>-->
 
-</RelativeLayout>
+</LinearLayout>

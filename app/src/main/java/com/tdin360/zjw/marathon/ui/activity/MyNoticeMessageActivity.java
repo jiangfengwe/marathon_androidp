@@ -1,24 +1,21 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.model.NoticeMessageModel;
+import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
+
+import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,23 +24,44 @@ import java.util.List;
  * 通知消息
  */
 public class MyNoticeMessageActivity extends BaseActivity {
+    @ViewInject(R.id.navRightItemImage)
+    private ImageView rightImage;
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
 
-    private List<NoticeMessageModel> list = new ArrayList<>();
-    private LinearLayout tip;
-    private   NoticeMessageListAdapter adapter;
+   // private List<NoticeMessageModel> list = new ArrayList<>();
+    @ViewInject(R.id.tip)
+    private LinearLayout layoutTip;
+    @ViewInject(R.id.rv_notice)
+    private RecyclerView rvNotice;
+    private List<String> list=new ArrayList<>();
+    private RecyclerViewBaseAdapter adapter;
+
+    //private   NoticeMessageListAdapter adapter;
     private NoticeMessageServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.service = new NoticeMessageServiceImpl(this);
-        setToolBarTitle("通知消息");
-        showBackButton();
+        initToolbar();
         initView();
-
         loadData();
     }
 
-
+    private void initToolbar() {
+        toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
+        viewline.setBackgroundResource(R.color.home_tab_title_color_check);
+        imageView.setImageResource(R.drawable.back);
+        titleTv.setText(R.string.notice_title);
+        titleTv.setTextColor(Color.WHITE);
+        showBack(toolbar,imageView);
+    }
 
 
     @Override
@@ -52,43 +70,44 @@ public class MyNoticeMessageActivity extends BaseActivity {
     }
 
     private void initView() {
+        for (int i = 0; i <9 ; i++) {
+            list.add(""+i);
+        }
+        adapter=new RecyclerViewBaseAdapter<String>(getApplicationContext(),list,R.layout.my_notice_mesage_list_item) {
+            @Override
+            protected void onBindNormalViewHolder(NormalViewHolder holder, String model) {
+                TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
 
-        RecyclerView  mRecyclerView = (RecyclerView) this.findViewById(R.id.mMessageView);
-        this.tip = (LinearLayout) this.findViewById(R.id.tip);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        this.adapter = new NoticeMessageListAdapter();
-        mRecyclerView.setAdapter(adapter);
+            }
+        };
+        rvNotice.setAdapter(adapter);
+        rvNotice.setLayoutManager(new LinearLayoutManager(this));
+       // this.adapter = new NoticeMessageListAdapter();
+       // mRecyclerView.setAdapter(adapter);
 
 
 
     }
     //从数据中获取所以通知消息
     private void loadData() {
-
-        list = service.getAllNotice();
+        //list = service.getAllNotice();
         checkIsNoMessage();
     }
     //判断是否有消息
     private void checkIsNoMessage(){
         if(list.size()==0){
-
-        tip.setVisibility(View.VISIBLE);
+        layoutTip.setVisibility(View.VISIBLE);
         }else {
-        tip.setVisibility(View.GONE);
-            adapter.notifyDataSetChanged();
+        layoutTip.setVisibility(View.GONE);
+            //adapter.notifyDataSetChanged();
         }
-
     }
-
-
-
     /**
      * 通知消息列表适配器
      */
 
-    private class NoticeMessageListAdapter extends RecyclerView.Adapter<NoticeMessageListAdapter.MyHolderView>{
+   /* private class NoticeMessageListAdapter extends RecyclerView.Adapter<NoticeMessageListAdapter.MyHolderView>{
 
 
         @Override
@@ -174,7 +193,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
 
 
 
-    }
+    }*/
 
 
 

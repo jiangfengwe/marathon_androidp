@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -83,7 +84,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public Toolbar navBar(){
-
         return this.mToolBar;
     }
 
@@ -106,7 +106,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
 
     }
-
+    public void showBack(Toolbar toolbar, ImageView view){
+        setSupportActionBar(toolbar);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               /* InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);*/
+                overridePendingTransition(R.anim.anim_in_activity, R.anim.anim_out_activity);
+                finish();
+            }
+        });
+    }
 
     @Override
     public void finish() {
@@ -181,7 +192,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 显示返回按钮
      */
     public void showBackButton(){
-
         this.btnBack.setVisibility(View.VISIBLE);
         this.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

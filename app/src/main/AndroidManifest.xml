@@ -285,26 +285,23 @@
         <activity
             android:name="com.umeng.socialize.media.WBShareCallBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            >
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
             android:launchMode="singleTask"
-            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <!-- QQ精简版分享配置 -->
         <activity
@@ -386,7 +383,30 @@
         <activity
             android:name=".ui.activity.HotelOrderDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.WebActivity"></activity>
+        <activity android:name=".ui.activity.WebActivity" />
+        <activity android:name=".ui.activity.EventActivity" />
+        <activity android:name=".ui.activity.ApplyActivity" />
+        <activity android:name=".ui.activity.CreateTeamActivity" />
+        <activity android:name=".ui.activity.ZxingActivity" />
+        <activity android:name=".ui.activity.TravelActivity" />
+        <activity android:name=".ui.activity.TravelDetailActivity" />
+        <activity android:name=".ui.activity.MyOrderActivity" />
+        <activity android:name=".ui.activity.TravelOrderDetailActivity" />
+        <activity android:name=".ui.activity.HotelOrderDetailActivity" />
+        <activity android:name=".ui.activity.ChangeSignActivity" />
+        <activity android:name=".ui.activity.ChangePhoneActivity" />
+        <activity android:name=".ui.activity.ForgetPswActivity" />
+        <activity android:name=".ui.activity.TravelOrderActivity" />
+        <activity android:name=".ui.activity.HotelRoomActivity" />
+        <activity android:name=".ui.activity.HotelRoomInActivity" />
+        <activity android:name=".ui.activity.HotelRoomSubmitActivity" />
+        <activity android:name=".ui.activity.TravelOrderSubmitActivity" />
+        <activity android:name=".ui.activity.CircleDetailActivity" />
+        <activity android:name=".ui.activity.PublishActivity" />
+        <activity android:name=".ui.activity.CircleMessageActivity" />
+        <activity android:name=".ui.activity.MyCircleActivity" />
+        <activity android:name=".ui.activity.CircleDetailPraiseActivity" />
+        <activity android:name=".ui.activity.HotelMoreCommentActivity"></activity>
     </application>
 
 </manifest>

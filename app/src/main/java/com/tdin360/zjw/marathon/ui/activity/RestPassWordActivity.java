@@ -60,7 +60,7 @@ public class RestPassWordActivity extends BaseActivity {
         this.editTextCode= (EditText) this.findViewById(R.id.code);
         this.editTextPass1= (EditText) this.findViewById(R.id.password1);
         this.editTextPass2= (EditText) this.findViewById(R.id.password2);
-        this.clearBtn = (ImageView) this.findViewById(R.id.clear);
+        this.clearBtn = (ImageView) this.findViewById(R.id.btn_exit);
         this.showPass1 = (CheckBox) this.findViewById(R.id.showPass1);
         this.showPass2 = (CheckBox) this.findViewById(R.id.showPass2);
         this.showPass1.setOnCheckedChangeListener(new MyCheckBoxListener());

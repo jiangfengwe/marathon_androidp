@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,17 +38,16 @@ import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 import java.io.File;
-
-
 /**
  *
  * 我的个人资料
  */
-public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.OnMyDatePickerChangeListener{
-
-    private ImageView imageView;
+public class MyInfoActivity extends BaseActivity implements View.OnClickListener{
+//implements MyDatePickerDialog.OnMyDatePickerChangeListener
+   /* private ImageView imageView;
     private EditText editName;
     private EditText editEmail;
     private RadioButton gender1,gender2;
@@ -56,22 +57,68 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     //出生日期选择相关
     private TextView editBirth;
     //用于存储用户选择裁剪后的头像
-    private KProgressHUD hud;
+    //private KProgressHUD hud;
 
-    private MyInfoServiceImpl service;
+    private MyInfoServiceImpl service;*/
+
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
+    @ViewInject(R.id.btn_Back)
+    private ImageView imageView;
+    @ViewInject(R.id.line)
+    private View viewline;
+    @ViewInject(R.id.toolbar_title)
+    private TextView titleTv;
+
+
+    @ViewInject(R.id.layout_modify_portrait)
+    private LinearLayout layoutPortrait;
+    @ViewInject(R.id.layout_modify_sign)
+    private LinearLayout layoutSign;
+    @ViewInject(R.id.rg_modify_sex)
+    private RadioGroup rgSex;
+    @ViewInject(R.id.rb_boy)
+    private RadioButton rbBoy;
+    @ViewInject(R.id.rb_girl)
+    private RadioButton rbgirl;
+    @ViewInject(R.id.tv_modify_psw)
+    private TextView tvPsw;
+    @ViewInject(R.id.layout_modify_phone)
+    private LinearLayout layoutPhone;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initToolbar();
+        initView();
 
-        setToolBarTitle("个人信息");
+       /* setToolBarTitle("个人信息");
         showBackButton();
 
         navRightItemTitle().setText("编辑");
+*/
+        //initView();
+    }
 
-        initView();
+    private void initView() {
+        layoutPortrait.setOnClickListener(this);
+        layoutSign.setOnClickListener(this);
+        layoutPhone.setOnClickListener(this);
+        tvPsw.setOnClickListener(this);
+    }
+
+    private void initToolbar() {
+        imageView.setImageResource(R.drawable.back_black);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        viewline.setVisibility(View.GONE);
+        titleTv.setText("修改个人资料");
     }
 
     @Override
@@ -79,7 +126,174 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         return R.layout.activity_my_info;
     }
 
-    private void initView() {
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()){
+            case R.id.layout_modify_portrait:
+                //修改头像
+                AlertDialog.Builder alert = new AlertDialog.Builder(MyInfoActivity.this);
+                alert.setTitle("更改头像");
+                alert.setCancelable(false);
+                alert.setItems(new String[]{"拍照", "相册", "取消"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                //android 6.0 判断是否拥有打开照相机的权限
+                                if(hasPermission(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                                    openCamera();
+                                }else {
+                                    requestPermission(Constants.CAMERA_CODE,Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                }
+                                break;
+                            case 1:
+                                //检查sd卡读取权限
+                                if(hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+                                    selectPic();
+                                }else {
+
+                                    requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                }
+                                break;
+                            case 2:
+                                dialog.dismiss();
+                                break;
+
+                        }
+                    }
+                });
+                alert.show();
+                break;
+            case R.id.layout_modify_sign:
+                //修改签名
+                intent=new Intent(MyInfoActivity.this,ChangeSignActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_modify_psw:
+                //修改密码
+                intent=new Intent(MyInfoActivity.this,ChangePasswordActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.layout_modify_phone:
+                //修改手机号
+                intent=new Intent(MyInfoActivity.this,ChangePhoneActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+    }
+    //打开相机
+    private static  final  int OpenCameraRequestCode =1;
+    private void openCamera(){
+
+        try {
+
+
+            Uri u = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.jpg"));
+            //调用照相机
+            Intent intent=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.Images.Media.ORIENTATION,OpenCameraRequestCode);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,u);
+            startActivityForResult(intent,OpenCameraRequestCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(MyInfoActivity.this,"sd卡不可用",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    //打开相册选择图片
+    private static  final  int SelectRequestCode =2;
+    private void selectPic(){
+
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent,SelectRequestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if(resultCode!= RESULT_OK){
+
+            return;
+        }
+
+//通过照相或者选择本地相册返回这里调用系统图片裁剪
+        if(requestCode==SelectRequestCode)
+
+        {
+            //将选择回来的照片进行裁剪
+            Uri uri = data.getData();
+            startPhotoZoom(uri);
+        }else if(requestCode==OpenCameraRequestCode){
+
+            Uri uri = Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.png"));
+            startPhotoZoom(uri);
+        }
+
+        //图片裁剪后返回这里
+        if(requestCode==Constants.EDIT_IMAGE_CODE){
+
+           // upLoadFile(new File(getExternalFilesDir("images").getPath()+"/temp.png"));
+
+        }
+
+    }
+
+
+    /**
+            * 打开相机权限授权成功
+     */
+    @Override
+    public void doCameraPermission() {
+
+        openCamera();
+    }
+
+    /**
+            * sd卡读取权限授权成功
+      */
+    @Override
+    public void doSDCardPermission() {
+
+        selectPic();
+    }
+    /**
+     * 裁剪图片方法实现
+     * @param uri
+     */
+    public void startPhotoZoom(Uri uri) {
+
+
+        /*
+         * 至于下面这个Intent的ACTION是怎么知道的，大家可以看下自己路径下的如下网页
+         * yourself_sdk_path/docs/reference/android/content/Intent.html
+         * 直接在里面Ctrl+F搜：CROP ，之前小马没仔细看过，其实安卓系统早已经有自带图片裁剪功能,
+         * 是直接调本地库的，小马不懂C C++  这个不做详细了解去了，有轮子就用轮子，不再研究轮子是怎么
+         * 制做的了...吼吼
+         */
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image*//*");
+        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
+        intent.putExtra("return-data", true);
+        intent.putExtra("output", Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.png")));
+        intent.putExtra("outputFormat", "PNG");
+        startActivityForResult(intent,Constants.EDIT_IMAGE_CODE);
+    }
+
+    /*private void initView() {
 
         this.service = new MyInfoServiceImpl(this);
         this.imageView = (ImageView) this.findViewById(R.id.imageView);
@@ -92,7 +306,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         this.main = (LinearLayout) this.findViewById(R.id.main);
         this.loadFail = (TextView) this.findViewById(R.id.loadFail);
 
-        initHUD();
+        //initHUD();
 
         //加载失败点击重新加载
         this.loadFail.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +316,6 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
                loadData();
             }
         });
-
 
         this.navRightItemTitle().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,10 +403,10 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         loadData();
 
         }
-    /**
+    *//**
      * 初始化提示框
-     */
-    private void initHUD(){
+     *//*
+    *//*private void initHUD(){
 
         //显示提示框
         this.hud = KProgressHUD.create(this);
@@ -202,10 +415,10 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         hud.setAnimationSpeed(1);
         hud.setDimAmount(0.5f);
 
-    }
-    /**
+    }*//*
+    *//**
      * 显示头像
-     */
+     *//*
     private void showHeadImage(){
 
         ImageOptions imageOptions = new ImageOptions.Builder()
@@ -225,9 +438,9 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     private void loadData() {
 
 
-        /**
+        *//**
          * 判断网络是否处于可用状态
-         */
+         *//*
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
             //加载网络数据
@@ -279,15 +492,15 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         }
     }
 
-    /**
+    *//**
      * 获取网络数据
-     */
+     *//*
     private void httpRequest(){
 
         service.delete();
          loadFail.setVisibility(View.GONE);
 
-         hud.show();
+         //hud.show();
         RequestParams params = new RequestParams(HttpUrlUtils.GET_MYINFO);
         params.addQueryStringParameter("phone",SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -335,7 +548,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             @Override
             public void onFinished() {
 
-                hud.dismiss();
+                //hud.dismiss();
 
 
 
@@ -423,32 +636,32 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     }
 
 
-    /**
+    *//**
      * 打开相机权限授权成功
-     */
+     *//*
     @Override
     public void doCameraPermission() {
 
         openCamera();
     }
 
-    /**
+    *//**
      * sd卡读取权限授权成功
-      */
+      *//*
     @Override
     public void doSDCardPermission() {
 
          selectPic();
     }
 
-    /**
+    *//**
      * 上传文件
      * @param file 文件路径
-     */
+     *//*
     private void upLoadFile(final File file){
 
 
-        hud.show();
+        //hud.show();
         RequestParams params = new RequestParams(HttpUrlUtils.UPLOAD_IMAGE);
         LoginModel info = SharedPreferencesManager.getLoginInfo(this);
         params.addQueryStringParameter("phone",info.getName());
@@ -480,9 +693,9 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
                         //显示上传的头像
                         showHeadImage();
 
-                        /**
+                        *//**
                          * 通知个人中心更新头像
-                         */
+                         *//*
                          Intent intent = new Intent(MyFragment.ACTION);
                          sendBroadcast(intent);
 
@@ -511,7 +724,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             @Override
             public void onFinished() {
 
-                hud.dismiss();
+                //hud.dismiss();
 
             }
         });
@@ -539,7 +752,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
              gender=false;//女
          }
 
-         hud.show();
+         //hud.show();
 
         RequestParams params = new RequestParams(HttpUrlUtils.CHANGE_MYINFO);
         params.addBodyParameter("phone", SharedPreferencesManager.getLoginInfo(MyInfoActivity.this).getName());
@@ -588,7 +801,7 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
             @Override
             public void onFinished() {
 
-                hud.dismiss();
+                //hud.dismiss();
 
             }
         });
@@ -721,22 +934,22 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
     }
 
 
-    /**
+    *//**
      * 裁剪图片方法实现
      * @param uri
-     */
+     *//*
     public void startPhotoZoom(Uri uri) {
 
 
-        /*
+        *//*
          * 至于下面这个Intent的ACTION是怎么知道的，大家可以看下自己路径下的如下网页
          * yourself_sdk_path/docs/reference/android/content/Intent.html
          * 直接在里面Ctrl+F搜：CROP ，之前小马没仔细看过，其实安卓系统早已经有自带图片裁剪功能,
          * 是直接调本地库的，小马不懂C C++  这个不做详细了解去了，有轮子就用轮子，不再研究轮子是怎么
          * 制做的了...吼吼
-         */
+         *//*
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(uri, "image*//*");
         //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");
         // aspectX aspectY 是宽高的比例
@@ -749,6 +962,6 @@ public class MyInfoActivity extends BaseActivity implements MyDatePickerDialog.O
         intent.putExtra("output", Uri.fromFile(new File(getExternalFilesDir("images").getPath()+"/temp.png")));
         intent.putExtra("outputFormat", "PNG");
         startActivityForResult(intent,Constants.EDIT_IMAGE_CODE);
-    }
+    }*/
 
 }
