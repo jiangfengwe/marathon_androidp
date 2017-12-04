@@ -4,13 +4,19 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 
 import org.xutils.view.annotation.ViewInject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 旅游立即预定
@@ -23,6 +29,13 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     private View viewline;
     @ViewInject(R.id.toolbar_title)
     private TextView titleTv;
+    //日期选择
+    @ViewInject(R.id.rv_travel_month)
+    private RecyclerView rvMonth;
+    @ViewInject(R.id.rv_travel_day)
+    private RecyclerView rvDay;
+    private List<String> listMonth=new ArrayList<>();
+    private List<String> listDay=new ArrayList<>();
 
     @ViewInject(R.id.tv_travel_choose_submit)
     private TextView tvSubimit;
@@ -46,6 +59,31 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     private void initView() {
         tvDec.setOnClickListener(this);
         tvAdd.setOnClickListener(this);
+        for (int i = 1; i <= 12; i++) {
+            listMonth.add(i+"月");
+        }
+        for (int i = 1; i <= 30; i++) {
+            listDay.add(i+"日");
+        }
+        //选择月份
+        rvMonth.setAdapter(new RecyclerViewBaseAdapter<String>(getApplicationContext(),listMonth,R.layout.item_travel_day) {
+            @Override
+            protected void onBindNormalViewHolder(NormalViewHolder holder, String model) {
+                TextView viewById = (TextView) holder.getViewById(R.id.tv_month);
+                holder.setText(R.id.tv_month,model);
+
+            }
+        });
+        rvMonth.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        //选择日期
+        rvDay.setAdapter(new RecyclerViewBaseAdapter<String>(getApplicationContext(),listDay,R.layout.item_travel_day) {
+            @Override
+            protected void onBindNormalViewHolder(NormalViewHolder holder, String model) {
+                holder.setText(R.id.tv_month,model);
+
+            }
+        });
+        rvDay.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
 
     }
 

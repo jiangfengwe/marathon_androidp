@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:visibility="gone"
+
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -64,73 +64,14 @@
         android:layout_marginBottom="10dp"
         android:paddingLeft="10dp"
         android:textColor="@color/circle_head_time"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/circle_portrait"
-            android:layout_margin="5dp"/>
-
-        <ImageView
-            android:id="@+id/iv_circle_detail_head_enter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <android.support.v7.widget.RecyclerView
             android:layout_margin="5dp"
-            android:paddingLeft="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/circle_detail_enter"/>
-    </LinearLayout>
+            android:id="@+id/rv_circle_detail_head_portrait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <com.tencent.smtt.sdk.WebView
+        android:visibility="gone"
         android:id="@+id/wb_circle_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

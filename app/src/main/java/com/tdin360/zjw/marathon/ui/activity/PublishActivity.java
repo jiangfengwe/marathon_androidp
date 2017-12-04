@@ -26,8 +26,6 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     private TextView tvPublish;
     @ViewInject(R.id.et_publish_content)
     private EditText etContent;
-    @ViewInject(R.id.tv_publish_count)
-    private TextView tvCount;
     @ViewInject(R.id.layout_publish)
     private LinearLayout layoutAdd;
 

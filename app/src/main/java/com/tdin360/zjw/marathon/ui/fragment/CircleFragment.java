@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -175,6 +176,20 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 });
 
             }
+
+            @Override
+            public void onBindHeaderViewHolder(HeaderViewHolder holder) {
+                super.onBindHeaderViewHolder(holder);
+                LinearLayout layoutHead = (LinearLayout) holder.getViewById(R.id.layout_circle);
+                layoutHead.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(getActivity(), CircleDetailActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+            }
         };
         adapter.addHeaderView(R.layout.item_circle_head);
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
@@ -187,6 +202,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         });
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
+
     }
     /**
      *  分享给好友

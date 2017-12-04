@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
+import com.tdin360.zjw.marathon.ui.activity.CommentActivity;
 import com.tdin360.zjw.marathon.ui.activity.EventActivity;
 import com.tdin360.zjw.marathon.ui.activity.WebActivity;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
@@ -58,6 +59,13 @@ public class EventStateFragment extends BaseFragment {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, String model) {
                 TextView apply = (TextView) holder.getViewById(R.id.tv_apply);
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(getActivity(), CommentActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         };
         rvEventState.setAdapter(adapter);

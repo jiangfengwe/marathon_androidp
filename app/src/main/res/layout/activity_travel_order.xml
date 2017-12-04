@@ -14,23 +14,35 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="@drawable/travel_time_order"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="15dp">
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:text="选择出发时间"
+            android:layout_gravity="center"
             android:textSize="16sp"
             android:textColor="@color/travel_out_time"/>
-    </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_travel_month"
+            android:layout_margin="30dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_travel_day"
+            android:layout_margin="30dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"

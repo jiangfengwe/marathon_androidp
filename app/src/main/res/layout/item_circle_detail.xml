@@ -23,8 +23,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="11dp">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="荐客家"
                 android:layout_gravity="center"
@@ -32,9 +31,18 @@
                 android:textSize="12sp"
                 android:textColor="@color/home_tab_title_color_check"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="12-12"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textColor="@color/circle_head_time"/>
+            <TextView
+                android:id="@+id/tv_circle_detail_callback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回复"
                 android:textSize="12sp"
                 android:layout_gravity="center"
                 android:textColor="@color/circle_head_time"/>

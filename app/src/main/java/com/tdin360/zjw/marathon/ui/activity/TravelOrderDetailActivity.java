@@ -31,7 +31,6 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         initToolbar();
         initView();
-
     }
 
     private void initView() {

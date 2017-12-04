@@ -406,7 +406,10 @@
         <activity android:name=".ui.activity.CircleMessageActivity" />
         <activity android:name=".ui.activity.MyCircleActivity" />
         <activity android:name=".ui.activity.CircleDetailPraiseActivity" />
-        <activity android:name=".ui.activity.HotelMoreCommentActivity"></activity>
+        <activity android:name=".ui.activity.HotelMoreCommentActivity" />
+        <activity android:name=".ui.activity.CallBackActivity" />
+        <activity android:name=".ui.activity.PictureActivity" />
+        <activity android:name=".ui.activity.CommentActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -125,6 +126,15 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onBindHeaderViewHolder(HeaderViewHolder holder) {
                 super.onBindHeaderViewHolder(holder);
+                LinearLayout layout = (LinearLayout) holder.getViewById(R.id.layout_hotel_detail_pic);
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(HotelDetailsActivity.this,PictureActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
             }
 
             @Override

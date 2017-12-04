@@ -48,7 +48,6 @@ public class EventActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initToolbar();
         initView();
-
     }
 
     private void initView() {

@@ -36,10 +36,10 @@
                     android:id="@+id/cb_hotel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/hotel_select"
+                    android:drawableRight="@drawable/hotel_select"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:button="@null"
-                    android:text="@string/hotel_screen"
                     android:textColor="@color/white"
                     android:textSize="7sp"
                     android:layout_marginRight="15dp"/>

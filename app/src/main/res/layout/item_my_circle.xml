@@ -1,13 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
-    <ImageView
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shape_my_circle"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="@color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:src="@drawable/aaa"/>
+        android:background="@drawable/aaa"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017/10/25"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="18dp"
+                android:textSize="10sp"
+                android:textColor="@color/my_circle_time"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="09:23"
+                android:textSize="10sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/my_circle_time"/>
+            <TextView
+                android:id="@+id/tv_my_circle_delete"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除"
+                android:textSize="10sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/my_circle_time"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_my_circle_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="14.7sp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/circle_head_time"/>
+        <com.lzy.ninegrid.NineGridView
+            android:id="@+id/my_circle_nineGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"/>
+    </LinearLayout>
+
 
 </LinearLayout>

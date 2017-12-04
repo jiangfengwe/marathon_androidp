@@ -25,8 +25,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
 
     @ViewInject(R.id.tv_hotel_pay)
     private TextView tvPay;
-    @ViewInject(R.id.tv_hotel_order_detail)
-    private TextView tvOrderText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +39,8 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
 
     private void initView() {
         tvPay.setOnClickListener(this);
-        String str="订单已完成，<font color='#ff621a'>再次预定</font>";
-        tvOrderText.setText(Html.fromHtml(str));
+       /* String str="订单已完成，<font color='#ff621a'>再次预定</font>";
+        tvOrderText.setText(Html.fromHtml(str));*/
 
     }
 

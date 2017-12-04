@@ -1,7 +1,9 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -42,8 +48,13 @@ public class HotelActivity extends BaseActivity {
     private Toolbar toolbarBack;
     @ViewInject(R.id.iv_hotel_back)
     private ImageView imageViewBack;
+    @ViewInject(R.id.tv_hotel_title)
+    private TextView tvTitle;
     @ViewInject(R.id.cb_hotel)
     private CheckBox checkBoxHot;
+
+
+
 
 
 
@@ -100,6 +111,73 @@ public class HotelActivity extends BaseActivity {
 
     private void initToolbar() {
         showBack(toolbarBack,imageViewBack);
+
+        checkBoxHot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    imageViewBack.setImageResource(R.drawable.back_black);
+                    toolbarBack.setBackgroundColor(Color.WHITE);
+                    tvTitle.setTextColor(Color.BLACK);
+
+                    final View popupView = HotelActivity.this.getLayoutInflater().inflate(R.layout.item_hotel_mydialog, null);
+                    final PopupWindow window = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    RadioGroup rgRoomLevel = (RadioGroup) popupView.findViewById(R.id.rg_room_level);
+                    RadioGroup rgPriceLevel = (RadioGroup) popupView.findViewById(R.id.rg_price_level);
+                    //房型
+                    rgRoomLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+
+                        }
+                    });
+                    rgRoomLevel.check(R.id.rg_room_haohua);
+                    //价格
+                    rgPriceLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+
+                        }
+                    });
+                    rgPriceLevel.check(R.id.rg_room_one);
+
+
+
+                    // TODO: 2016/5/17 设置动画
+                    // window.setAnimationStyle(R.style.popup_window_anim);
+                    // TODO: 2016/5/17 设置背景颜色
+                    window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F8F8F8")));
+               /* if(window.isShowing()){
+                    checkBoxHot.setChecked(true);
+                }else{
+                    checkBoxHot.setChecked(false);
+                }*/
+                    // TODO: 2016/5/17 设置可以获取焦点
+                    // window.setFocusable(true);
+                    // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+                    window.setOutsideTouchable(true);
+                    //popupWindow消失是下拉图片变化
+                    window.setTouchInterceptor(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            //点击PopupWindow以外区域时PopupWindow消失
+                            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                                checkBoxHot.setChecked(false);
+                            }
+                            return false;
+                        }
+                    });
+                    // TODO：更新popupwindow的状态
+                    window.update();
+                    // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+                    window.showAsDropDown(checkBoxHot, 0, 20);
+                }else{
+                    imageViewBack.setImageResource(R.drawable.back);
+                    toolbarBack.setBackgroundColor(Color.parseColor("#ff621a"));
+                    tvTitle.setTextColor(Color.WHITE);
+                }
+            }
+        });
     }
 
 

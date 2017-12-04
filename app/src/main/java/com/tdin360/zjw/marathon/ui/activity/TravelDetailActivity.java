@@ -111,6 +111,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.layout_travel_detail_pic:
                 //图片浏览
+                intent=new Intent(TravelDetailActivity.this,PictureActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_travel_detail_consult:
                 //客服咨询
