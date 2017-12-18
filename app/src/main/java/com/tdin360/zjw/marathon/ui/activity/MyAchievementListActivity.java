@@ -234,7 +234,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
 
         pageNumber=1;
-        httpRequest(true);
+        //httpRequest(true);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
 
         }else if(pageNumber<totalPages){
             pageNumber++;
-            httpRequest(false);
+            //httpRequest(false);
 
         }else {
 
@@ -256,7 +256,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
     /**
      * 请求网络数据
      */
-    private void httpRequest(final boolean isRefresh){
+ /*   private void httpRequest(final boolean isRefresh){
 
 
         RequestParams requestParams = new RequestParams(HttpUrlUtils.MARK_SEARCH);
@@ -400,7 +400,7 @@ public class MyAchievementListActivity extends BaseActivity implements PullToRef
             }
         });
 
-    }
+    }*/
 
 
 }
