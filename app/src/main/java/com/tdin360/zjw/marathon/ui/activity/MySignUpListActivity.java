@@ -207,7 +207,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
 
 
         pageNumber=1;
-        httpRequest(true);
+        //httpRequest(true);
 
     }
 
@@ -220,7 +220,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
 
         }else if(pageNumber<totalPages){
             pageNumber++;
-            httpRequest(false);
+            //httpRequest(false);
 
         }else {
 
@@ -230,7 +230,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
     /**
      * 请求网络数据
      */
-    private void httpRequest(final boolean isRefresh) {
+    /*private void httpRequest(final boolean isRefresh) {
 
         RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGNUP_SEARCH);
         params.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
@@ -398,7 +398,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
                 myAdapter.notifyDataSetChanged();
             }
         });
-    }
+    }*/
 
 
     private MyBroadcastReceiver receiver;
@@ -419,7 +419,7 @@ public class MySignUpListActivity extends BaseActivity implements PullToRefreshL
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            httpRequest(true);
+            //httpRequest(true);
 
         }
     }
