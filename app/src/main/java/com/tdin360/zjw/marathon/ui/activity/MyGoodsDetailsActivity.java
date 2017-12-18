@@ -107,7 +107,7 @@ public class MyGoodsDetailsActivity extends BaseActivity {
              public void onClick(DialogInterface dialog, int which) {
                  dialog.dismiss();
 
-                 httpRequest();
+                 //httpRequest();
              }
          });
         alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -123,7 +123,7 @@ public class MyGoodsDetailsActivity extends BaseActivity {
     /**
      * 网络请求
      */
-    private void httpRequest(){
+ /*   private void httpRequest(){
 
         RequestParams params = new RequestParams(HttpUrlUtils.CONFIRM_GOODS);
         params.addBodyParameter("id",model.getId()+"");
@@ -175,7 +175,7 @@ public class MyGoodsDetailsActivity extends BaseActivity {
             }
         });
 
-    }
+    }*/
 
 
 //    /**
