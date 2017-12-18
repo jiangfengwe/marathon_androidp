@@ -102,7 +102,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
 
 
         pageNumber=1;
-        httpRequest(true);
+        //httpRequest(true);
 
     }
 
@@ -115,7 +115,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
 
         }else if(pageNumber<totalPages){
             pageNumber++;
-            httpRequest(false);
+           // httpRequest(false);
 
         }else {
 
@@ -243,7 +243,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
     /**
      * 请求网络数据
      */
-    private void httpRequest(final boolean isRefresh){
+   /* private void httpRequest(final boolean isRefresh){
 
         final RequestParams requestParams = new RequestParams(HttpUrlUtils.MY_GOODS);
         requestParams.addQueryStringParameter("phone", SharedPreferencesManager.getLoginInfo(this).getName());
@@ -359,7 +359,7 @@ public class MyGoodsListActivity extends BaseActivity implements PullToRefreshLa
             }
         });
 
-    }
+    }*/
 
 
 
