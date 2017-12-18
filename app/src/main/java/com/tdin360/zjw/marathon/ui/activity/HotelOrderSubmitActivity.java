@@ -325,7 +325,7 @@ public class HotelOrderSubmitActivity extends BaseActivity {
      * 提交
      * @param view
      */
-    public void submit(View view) {
+   /* public void submit(View view) {
 
 
         if(b){
@@ -425,5 +425,5 @@ public class HotelOrderSubmitActivity extends BaseActivity {
 
         }
 
-    }
+    }*/
 }
