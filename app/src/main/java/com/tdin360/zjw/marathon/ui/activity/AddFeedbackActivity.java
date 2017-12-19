@@ -60,7 +60,7 @@ public class AddFeedbackActivity extends BaseActivity {
      *
      * @param view
      */
-    public void submit(View view) {
+   /* public void submit(View view) {
 
 
         String content = editText.getText().toString().trim();
@@ -125,7 +125,7 @@ public class AddFeedbackActivity extends BaseActivity {
                 hud.dismiss();
             }
         });
-    }
+    }*/
 
 
 }
