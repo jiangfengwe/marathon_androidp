@@ -91,7 +91,7 @@ public class MyHotelOrderFragment extends BaseFragment {
                 switch (mode){
 
                     case NOT_NETWORK:
-                        httpRequest();
+                        //httpRequest();
                         break;
 
                 }
@@ -114,7 +114,7 @@ public class MyHotelOrderFragment extends BaseFragment {
         });
 
 
-         httpRequest();
+        // httpRequest();
 
     }
 
@@ -128,11 +128,11 @@ public class MyHotelOrderFragment extends BaseFragment {
         if(event.getType()== MessageEvent.MessageType.HOTEL_STATS_UPDATE) {
 
             list.clear();
-            httpRequest();
+            //httpRequest();
         }
     }
 
-    private void httpRequest(){
+    /*private void httpRequest(){
 
         final KProgressHUD hud = KProgressHUD.create(getContext());
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -212,7 +212,7 @@ public class MyHotelOrderFragment extends BaseFragment {
         });
 
 
-    }
+    }*/
 
 
 
@@ -342,7 +342,7 @@ public class MyHotelOrderFragment extends BaseFragment {
                    String reason = message.getString("Reason");
                    if(success){
                        list.clear();
-                       httpRequest();
+                       //httpRequest();
                        ToastUtils.show(getContext(),"取消成功");
 
 
