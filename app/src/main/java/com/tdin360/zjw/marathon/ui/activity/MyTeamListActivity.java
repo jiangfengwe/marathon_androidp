@@ -20,7 +20,7 @@ public class MyTeamListActivity extends BaseActivity {
 
     private void initView() {
 
-        this.recyclerView = (RecyclerView) this.findViewById(R.id.listView);
+        this.recyclerView = (RecyclerView) this.findViewById(R.id.rv_search);
 
 
     }
