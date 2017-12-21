@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.CommonAdapter;
@@ -45,7 +43,7 @@ import java.util.List;
 public class MarathonNoticeListActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
 
 
-    @ViewInject(R.id.listView)
+    @ViewInject(R.id.rv_search)
     private ListView refreshListView;
     private List<NoticeModel> noticeModelList=new ArrayList<>();
     private NoticeAdapter adapter;
