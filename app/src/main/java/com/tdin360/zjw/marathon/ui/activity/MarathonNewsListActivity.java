@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.CommonAdapter;
@@ -43,7 +41,7 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
 
 
 
-    @ViewInject(R.id.listView)
+    @ViewInject(R.id.rv_search)
     private ListView refreshListView;
     private List<NewsModel> newsModelList=new ArrayList<>();
     private NewsAdapter newsListViewAdapter;
