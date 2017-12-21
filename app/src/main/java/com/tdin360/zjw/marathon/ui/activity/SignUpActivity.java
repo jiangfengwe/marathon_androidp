@@ -568,7 +568,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
         if (NetWorkUtils.isNetworkAvailable(this)) {
 
             //加载网络数据
-            httpRequest();
+            //httpRequest();
         } else {
 
             hud.dismiss();
@@ -622,7 +622,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
     /**
      * 请求报名相关数据
      */
-    private void httpRequest(){
+    /*private void httpRequest(){
 
         loadFail.setVisibility(View.GONE);
         RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_SIGNUP);
@@ -783,7 +783,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
             }
         });
-    }
+    }*/
 
 
     /**
@@ -1292,7 +1292,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             public void onClick(DialogInterface dialog, int which) {
 
                 //执行提交
-                submit2Server();
+                //submit2Server();
             }
         });
         dialog.setNegativeButton("仔细检查", new DialogInterface.OnClickListener() {
@@ -1308,7 +1308,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
     }
     //提交到服务器
-    private void submit2Server(){
+   /* private void submit2Server(){
 
         hud.show();
 
@@ -1442,6 +1442,6 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
             }
 
         });
-    }
+    }*/
 
 }
