@@ -2,22 +2,16 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -27,11 +21,9 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.offlinemap.OfflineMapManager;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.MapPointNode;
 import com.tdin360.zjw.marathon.model.MapProjectModel;
@@ -225,7 +217,7 @@ public class MarathonMapActivity extends BaseActivity {
         // 一个自定义的布局，作为显示的内容
         View contentView = LayoutInflater.from(this).inflate(
                 R.layout.marathon_map_popwindow, null);
-        ListView listView  = (ListView) contentView.findViewById(R.id.listView);
+        ListView listView  = (ListView) contentView.findViewById(R.id.rv_search);
 
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,datas));
 
