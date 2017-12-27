@@ -553,9 +553,6 @@ public class MarathonDetailsActivity extends BaseActivity {
      * 请求网络数据
      */
     private void httpRequest(){
-
-
-
         final RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
