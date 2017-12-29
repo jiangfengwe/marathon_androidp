@@ -167,7 +167,7 @@ public class RestPassWordActivity extends BaseActivity {
         button.setEnabled(false);
         handler.sendEmptyMessage(0);
 
-        final RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
+      /*  final RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
         params.addBodyParameter("tel",tel);
         params.addBodyParameter("type","zhmm");
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -216,7 +216,7 @@ public class RestPassWordActivity extends BaseActivity {
 
 
             }
-        });
+        });*/
 
 
     }
