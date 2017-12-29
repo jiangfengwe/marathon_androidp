@@ -503,7 +503,7 @@ public class MarathonDetailsActivity extends BaseActivity {
              @Override
              public void onMenuClick(MenuView itemView) {
 
-                 Intent intent=null;
+               /*  Intent intent=null;
                  switch ((int)itemView.getMenuId()){
 
                      case 0://赛事简介
@@ -542,7 +542,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                  if(intent!=null) {
 
                      startActivity(intent);
-                 }
+                 }*/
              }
          });
      }
@@ -553,7 +553,7 @@ public class MarathonDetailsActivity extends BaseActivity {
      * 请求网络数据
      */
     private void httpRequest(){
-        final RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
+       /* final RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_DETAILS);
         params.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params,new Callback.CommonCallback<String>() {
@@ -569,9 +569,9 @@ public class MarathonDetailsActivity extends BaseActivity {
                     service.deleteAll(MarathonDataUtils.init().getEventId());
                     sponsorList.clear();
                     carouselList.clear();
-                    /**
+                    *//**
                      * 获取轮播图数据
-                     */
+                     *//*
                     JSONArray array1  =json.getJSONArray("CarouselPictures");
                     for(int i=0;i<array1.length();i++){
 
@@ -586,9 +586,9 @@ public class MarathonDetailsActivity extends BaseActivity {
                         service.addEventDetail(model);
 
                     }
-                    /**
+                    *//**
                      * 获取赞助商数据
-                     */
+                     *//*
 
                     JSONArray array2  =json.getJSONArray("Sponsors");
                     for(int i=0;i<array2.length();i++){
@@ -644,7 +644,7 @@ public class MarathonDetailsActivity extends BaseActivity {
                 mAdapter.notifyDataSetChanged();
 
             }
-        });
+        });*/
     }
 
     //显示轮播图
