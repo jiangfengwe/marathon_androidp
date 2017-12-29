@@ -71,7 +71,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
      */
     private void httpRequest(String orderNo) {
 
-        RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
+      /*  RequestParams params = new RequestParams(HttpUrlUtils.MY_SIGN_UP_DETAILS);
         params.addQueryStringParameter("orderNo",orderNo);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -194,7 +194,7 @@ public class MySigUpDetailActivity extends BaseActivity implements ViewPager.OnP
 
 
             }
-        });
+        });*/
     }
     @Override
     public int getLayout() {
