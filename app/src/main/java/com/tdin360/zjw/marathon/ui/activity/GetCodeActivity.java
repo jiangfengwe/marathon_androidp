@@ -64,19 +64,19 @@ public class GetCodeActivity extends BaseActivity {
         /**
          * 重新获取验证码
          */
-        getCode.setOnClickListener(new View.OnClickListener() {
+       /* getCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCode();
             }
-        });
+        });*/
 
     }
 
     /**
      * 获取验证码
      */
-    private void  getCode(){
+    /*private void  getCode(){
 
         startTaskTimer();
 
@@ -131,7 +131,7 @@ public class GetCodeActivity extends BaseActivity {
         });
 
 
-    }
+    }*/
 
 
     /**
