@@ -120,7 +120,7 @@ public class HotelTabFragment extends BaseFragment {
                 .setDimAmount(0.5f)
                 .show();
 
-        RequestParams params = new RequestParams(HttpUrlUtils.HOTEL_LIST);
+       /* RequestParams params = new RequestParams(HttpUrlUtils.HOTEL_LIST);
         params.addBodyParameter("type",title);
         params.addBodyParameter("eventId", MarathonDataUtils.init().getEventId());
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -177,7 +177,7 @@ public class HotelTabFragment extends BaseFragment {
                 hud.dismiss();
                 adapter.update(list);
             }
-        });
+        });*/
 
 
     }
