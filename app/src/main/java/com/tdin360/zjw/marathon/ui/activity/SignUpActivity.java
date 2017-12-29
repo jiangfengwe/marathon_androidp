@@ -323,7 +323,7 @@ public class SignUpActivity extends BaseActivity implements  OnWheelChangedListe
 
         });
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl(HttpUrlUtils.ANNOUNCE+MarathonDataUtils.init().getEventId());
+       // webView.loadUrl(HttpUrlUtils.ANNOUNCE+MarathonDataUtils.init().getEventId());
         dialog.show();
         //获取屏幕宽高　
         DisplayMetrics metric = new DisplayMetrics();
