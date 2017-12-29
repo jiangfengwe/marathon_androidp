@@ -146,7 +146,7 @@ public class SettingPasswordActivity extends BaseActivity {
                     .setDimAmount(0.5f)
                     .show();
 
-            RequestParams params = new RequestParams(HttpUrlUtils.SET_PASSWORD);
+           /* RequestParams params = new RequestParams(HttpUrlUtils.SET_PASSWORD);
             params.addBodyParameter("phone",phone);
             params.addBodyParameter("validCode",code);//验证码
             params.addBodyParameter("password",newPass);
@@ -210,7 +210,7 @@ public class SettingPasswordActivity extends BaseActivity {
 
                     hud.dismiss();
                 }
-            });
+            });*/
 
 
         }
