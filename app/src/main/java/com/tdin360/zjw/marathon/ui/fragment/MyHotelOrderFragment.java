@@ -325,7 +325,7 @@ public class MyHotelOrderFragment extends BaseFragment {
                 .setDimAmount(0.5f)
                 .show();
 
-        RequestParams params = new RequestParams(HttpUrlUtils.CANCEL_HOTEL_ORDER);
+        /*RequestParams params = new RequestParams(HttpUrlUtils.CANCEL_HOTEL_ORDER);
         params.addBodyParameter("orderNo",orderNo);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
 
@@ -372,7 +372,7 @@ public class MyHotelOrderFragment extends BaseFragment {
 
                hud.dismiss();
            }
-       });
+       });*/
     }
 
     @Override
