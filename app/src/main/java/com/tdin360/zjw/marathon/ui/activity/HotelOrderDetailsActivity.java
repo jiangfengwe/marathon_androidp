@@ -122,7 +122,7 @@ public class HotelOrderDetailsActivity extends BaseActivity {
                 .setDimAmount(0.5f)
                 .show();
 
-        RequestParams params = new RequestParams(HttpUrlUtils.HOTEL_ORDER_DETAILS);
+       /* RequestParams params = new RequestParams(HttpUrlUtils.HOTEL_ORDER_DETAILS);
         params.addBodyParameter("reservationId",id);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -170,7 +170,7 @@ public class HotelOrderDetailsActivity extends BaseActivity {
 
                 hud.dismiss();
             }
-        });
+        });*/
 
     }
 
@@ -283,7 +283,7 @@ public class HotelOrderDetailsActivity extends BaseActivity {
                 .show();
 
 //        Log.d("-------订单号---->", "onSuccess: "+orderNo);
-        RequestParams params = new RequestParams(HttpUrlUtils.CANCEL_HOTEL_ORDER);
+      /*  RequestParams params = new RequestParams(HttpUrlUtils.CANCEL_HOTEL_ORDER);
         params.addBodyParameter("orderNo",orderNo);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
 
@@ -341,7 +341,7 @@ public class HotelOrderDetailsActivity extends BaseActivity {
 
                 hud.dismiss();
             }
-        });
+        });*/
     }
 
 }
