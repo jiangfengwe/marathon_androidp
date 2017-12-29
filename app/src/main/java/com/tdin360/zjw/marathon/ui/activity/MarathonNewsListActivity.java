@@ -184,7 +184,7 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
      */
     private void httpRequest(final boolean isRefresh){
 
-        RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
+       /* RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
         requestParams.addQueryStringParameter("eventId",MarathonDataUtils.init().getEventId());
         requestParams.addQueryStringParameter("newsOrNoticeName","赛事新闻");
         requestParams.addQueryStringParameter("PageNumber",pageNumber+"");
@@ -281,7 +281,7 @@ public class MarathonNewsListActivity extends BaseActivity implements PullToRefr
                 newsListViewAdapter.update(newsModelList);
 
             }
-        });
+        });*/
 
     }
 
