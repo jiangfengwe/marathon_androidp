@@ -162,7 +162,7 @@ public class RegisterActivity extends BaseActivity {
         handler.sendEmptyMessage(0);
 
         //发送验证码
-        RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
+       /* RequestParams params = new RequestParams(HttpUrlUtils.SEND_SMS);
         params.addBodyParameter("tel",tel);
         params.addBodyParameter("type","zc");
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
@@ -214,7 +214,7 @@ public class RegisterActivity extends BaseActivity {
 
            }
        });
-
+*/
 
     }
 
