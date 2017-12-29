@@ -181,7 +181,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
     private void httpRequest(final boolean isRefresh){
 
 
-        RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
+        /*RequestParams requestParams = new RequestParams(HttpUrlUtils.MARATHON_NewsOrNotice);
         requestParams.addQueryStringParameter("eventId", MarathonDataUtils.init().getEventId());
         requestParams.addQueryStringParameter("newsOrNoticeName","赛事公告");
         requestParams.addQueryStringParameter("PageNumber",pageNumber+"");
@@ -195,9 +195,9 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
             public void onSuccess(String result) {
 
                 try {
-                    /*
+                    *//*
                      * 获取公告数据列表
-                      */
+                      *//*
 
                     service.deleteNotice(MarathonDataUtils.init().getEventId());
                     if(isRefresh){
@@ -276,7 +276,7 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
                 adapter.notifyDataSetChanged();
 
             }
-        });
+        });*/
 
     }
 
