@@ -77,7 +77,7 @@ public class MarathonMapActivity extends BaseActivity {
      */
     private void httpRequest(){
 
-
+/*
         RequestParams params = new RequestParams(HttpUrlUtils.PROJECT_MAP);
 
         params.addBodyParameter("eventid", MarathonDataUtils.init().getEventId());
@@ -182,7 +182,7 @@ public class MarathonMapActivity extends BaseActivity {
             public boolean onCache(String result) {
                 return false;
             }
-        });
+        });*/
 
     }
 
