@@ -1,19 +1,27 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="20dp"
+
     tools:context="com.tdin360.zjw.marathon.ui.fragment.TravelStateFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_travel_state"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_travel_state"
+            android:layout_width="match_parent"
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            android:layout_height="match_parent"/>
+    </com.liaoinstan.springview.widget.SpringView>
+    <include layout="@layout/load_fail_layout"/>
+    <include layout="@layout/item_loading"/>
 
-</FrameLayout>
+
+
+</RelativeLayout>

@@ -6,14 +6,16 @@
     android:layout_height="wrap_content"
     android:gravity="center">
     <TextView
+        android:id="@+id/tv_mycircle_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="钢铁侠"
         android:textSize="18sp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/my_circle_head_name"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="70dp"/>
     <TextView
+        android:id="@+id/tv_mycircle_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="让心碎成为一种艺术"
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="佰家星球孵化32天，为星球增加1382重力"
         android:textSize="18sp"
+        android:visibility="gone"
         android:layout_marginBottom="40dp"
         android:textColor="@color/white"/>
 

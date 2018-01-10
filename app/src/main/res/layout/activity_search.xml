@@ -2,17 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.tdin360.zjw.marathon.ui.activity.SearchActivity">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/mToolBar"
         android:background="@color/home_tab_title_color_check"
@@ -21,13 +20,66 @@
         android:gravity="center_vertical"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_search_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/back_white"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/edit"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:hint="输入搜索关键字"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/iv_clean"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/search_clean"/>
+                    <ImageView
+                        android:id="@+id/iv_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/search_big"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+       <!-- <LinearLayout
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
         <LinearLayout
             android:padding="5dp"
             android:gravity="center_vertical"
@@ -50,24 +102,21 @@
             android:textColorHint="@color/lineColor"
             android:hint="搜索赛事" />
             <ImageView
-                android:visibility="invisible"
                 android:id="@+id/btn_exit"
-                android:onClick="clear"
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/clear" />
         </LinearLayout>
             <TextView
-            android:onClick="search"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:text="搜索" />
-
-        </LinearLayout>
-
+                android:id="@+id/tv_search"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text="搜索" />
+        </LinearLayout>-->
     </android.support.v7.widget.Toolbar>
         <View
             android:background="@color/lineColor"
@@ -85,18 +134,21 @@
                 android:textColor="@color/textBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="共搜到0条结果"
-                />
+                android:text="共搜到0条结果" />
 
         </LinearLayout>
-
-        <ListView
-            android:divider="@android:color/transparent"
-            android:id="@+id/listView"
+        <com.liaoinstan.springview.widget.SpringView
+            android:id="@+id/springView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_search"
+                android:background="@color/white"
+                android:paddingBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.liaoinstan.springview.widget.SpringView>
 
-        </ListView>
     </LinearLayout>
     <!--搜索标签-->
     <me.gujun.android.taggroup.TagGroup
@@ -106,5 +158,21 @@
         android:layout_gravity="center"
         android:id="@+id/tag_group"
         style="@style/TagGroup.Large" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:orientation="vertical">
+        <include layout="@layout/load_fail_layout" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:orientation="vertical">
+        <include layout="@layout/item_loading"/>
+    </LinearLayout>
+
+
 
 </RelativeLayout>

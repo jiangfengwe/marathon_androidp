@@ -9,8 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.model.HotelDetailBean;
 
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
 /**
  * 酒店详情
  */
@@ -28,24 +33,86 @@ public class HotelRoomActivity extends BaseActivity {
     @ViewInject(R.id.tv_hotel_room_order)
     private TextView tvOrder;
 
+    @ViewInject(R.id.iv_room_detail_piv)
+    private ImageView ivPic;
+    @ViewInject(R.id.tv_room_detail_name)
+    private TextView tvName;
+    @ViewInject(R.id.tv_room_detail_classes)
+    private TextView tvClasses;
+    @ViewInject(R.id.tv_room_detail_price)
+    private TextView tvPrice;
+    @ViewInject(R.id.tv_room_detail_floor)
+    private TextView tvFloor;
+    @ViewInject(R.id.tv_room_detail_free)
+    private TextView tvFree;
+    @ViewInject(R.id.tv_room_detail_bed)
+    private TextView tvBed;
+    @ViewInject(R.id.tv_room_detail_breakfast)
+    private TextView tvBreakfrast;
+    @ViewInject(R.id.tv_room_detail_residue)
+    private TextView tvResidue;
+
+    ImageOptions imageOptions;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
+                //ImageOptions.Builder()的一些其他属性：
+                //.setCircular(true) //设置图片显示为圆形
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                //.setSquare(true) //设置图片显示为正方形
+                //.setCrop(true).setSize(130,130) //设置大小
+                //.setAnimation(animation) //设置动画
+                .setFailureDrawableId(R.drawable.add_lose_square) //设置加载失败的动画
+                // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
+                //.setLoadingDrawable(Drawable loadingDrawable) //设置加载中的动画
+                .setLoadingDrawableId(R.drawable.add_lose_square) //以资源id设置加载中的动画
+                .setIgnoreGif(false) //忽略Gif图片
+                //.setRadius(10)
+                .setUseMemCache(true).build();
         initToolbar();
         initView();
 
     }
 
     private void initView() {
+        String name = getIntent().getStringExtra("name");
+        HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        x.image().bind(ivPic,bjHotelRoomListModelBean.getPictureUrl(),imageOptions);
+        tvName.setText(name);
+        tvPrice.setText(bjHotelRoomListModelBean.getPrice()+"");
+        tvClasses.setText(bjHotelRoomListModelBean.getName());
+        tvFree.setText(bjHotelRoomListModelBean.getWindow()+"、"+bjHotelRoomListModelBean.getNetwork()+"、"+bjHotelRoomListModelBean.getBathroom());
+        tvBed.setText(bjHotelRoomListModelBean.getBedType());
+        tvBreakfrast.setText(bjHotelRoomListModelBean.getBreakfast());
+        boolean isBooking = bjHotelRoomListModelBean.isIsBooking();
+        if(isBooking){
+            tvOrder.setText("立即支付");
+            tvOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(HotelRoomActivity.this,PayActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }else{
+            tvOrder.setText("立即预定");
+            tvOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(HotelRoomActivity.this,HotelRoomInActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+
         String str="<font color='#ff621a'>使用说明：</font>觉得广播课题句话暖宫尽快帮您UR局UI人进步并不能杰克马门口v模具费没看见";
         tvIntro.setText(Html.fromHtml(str));
-        tvOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(HotelRoomActivity.this,HotelRoomInActivity.class);
-                startActivity(intent);
-            }
-        });
+
     }
 
     private void initToolbar() {

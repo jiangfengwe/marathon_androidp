@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/iv_praise_list_portrait"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/circle_portrait"
@@ -14,13 +15,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tv_praise_list_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14.7sp"
             android:textColor="@color/home_tab_title_color_check"
             android:text="掌声"
-            android:layout_marginBottom="7dp"/>
+            android:layout_marginBottom="5dp"/>
         <TextView
+            android:id="@+id/tv_praise_list_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14.7sp"

@@ -62,6 +62,7 @@ public class MyReceiver extends BroadcastReceiver {
            // Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 			String content = bundle.getString("cn.jpush.android.ALERT");
         	 saveMessage(context,content);
+			//获取数据并保存到sharepreference
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
            // Log.d(TAG, "[MyReceiver] 用户点击打开了通知");

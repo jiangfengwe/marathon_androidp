@@ -24,8 +24,4 @@ public class Constants {
      * 用户选择照片调用系统裁剪头像的申请码
      */
     public static final int EDIT_IMAGE_CODE=10;
-
-
-
-
 }

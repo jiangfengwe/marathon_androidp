@@ -15,6 +15,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
@@ -58,6 +61,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     private LinearLayout layoutHeader;
     @ViewInject(R.id.my_name)
     private TextView userName;
+    @ViewInject(R.id.my_sign)
+    private TextView tvSign;
     @ViewInject(R.id.my_portrait)
     private ImageView myImageView;
     @ViewInject(R.id.my_notice)
@@ -91,10 +96,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //显示信息
-        showInfo();
-        //userName.setText(SharedPreferencesManager.getLoginInfo(getContext()).getName());
+       showInfo();
         //注册广播
-         register();
+        register();
         initView();
 
       //我的报名
@@ -196,6 +200,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View v) {
+        LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getContext());
+        String customerId = model.getId() + "";
         Intent intent;
         switch (v.getId()){
             case R.id.my_notice:
@@ -208,7 +214,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                /* intent = new Intent(getContext(), MyInfoActivity.class);
                 startActivity(intent);*/
                 //判断用户是否登录
-               /* if(SharedPreferencesManager.isLogin(getContext())){
+                if(SharedPreferencesManager.isLogin(getContext())){
                     //若登录则显示用户信息
                      intent = new Intent(getContext(), MyInfoActivity.class);
                     startActivity(intent);
@@ -217,19 +223,29 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     intent = new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
                     LoginNavigationConfig.instance().setNavType(NavType.Other);
-                }*/
-                intent = new Intent(getActivity(),LoginActivity.class);
-                startActivity(intent);
+                }
+                /*intent = new Intent(getActivity(),LoginActivity.class);
+                startActivity(intent);*/
                 break;
             case R.id.my_order:
                 //我的订单
+                if(TextUtils.isEmpty(customerId)){
+                    intent=new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
+                }else{
                 intent=new Intent(getActivity(), MyOrderActivity.class);
                 startActivity(intent);
+                }
                 break;
             case R.id.my_dynamic:
                 //我的动态
-                intent=new Intent(getActivity(), MyCircleActivity.class);
-                startActivity(intent);
+                if(TextUtils.isEmpty(customerId)){
+                    intent=new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    intent=new Intent(getActivity(), MyCircleActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.my_share:
                 //分享给好友
@@ -245,12 +261,18 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.my_setting:
                 //系统设置
-                 intent= new Intent(getContext(), SettingActivity.class);
+                intent= new Intent(getContext(), SettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.my_phone:
                 //联系客服
-               showTelDialog();
+                if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},2);
+                    //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},1);
+                }else{
+                    showTelDialog();
+                }
+
                 break;
         }
 
@@ -283,15 +305,32 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
           switch (requestCode){
-
               case 10001:
-
                   if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-
                       shareApp();
                     //用户授权成功
+                  }else {
+
+                      //用户没有授权
+                      AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                      alert.setTitle("提示");
+                      alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                      alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialog, int which) {
+
+                              CommonUtils.getAppDetailSettingIntent(getContext());
+                          }
+                      });
+                      alert.show();
+
+                  }
+                  break;
+              case 2:
+                  if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                      showTelDialog();
+                      //用户授权成功
                   }else {
 
                       //用户没有授权
@@ -317,8 +356,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
      * 显示个人信息
      */
     private void showInfo(){
-        LoginModel model = SharedPreferencesManager.getLoginInfo(getContext());
-        userName.setText(model.getName());
+        LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getContext());
+        userName.setText(model.getNickName());
+        Log.d("model.getNickName()", "showInfo: "+model.getNickName());
+        Log.d("model.getCustomerSign()", "showInfo: "+model.getCustomerSign());
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getContext())){
             //    获取用户头像
@@ -331,12 +372,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                     .build();
-            x.image().bind(myImageView,model.getImageUrl(),imageOptions);
-
-
+            x.image().bind(myImageView,model.getHeadImg(),imageOptions);
+            tvSign.setText(model.getCustomerSign());
         }else {
             myImageView.setImageResource(R.drawable.my_portrait);
             userName.setText("点击登录");
+            tvSign.setText("");
         }
     }
     /**

@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/iv_hotel_pic"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:src="@drawable/hotel"
@@ -17,20 +18,39 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
         <TextView
+            android:id="@+id/tv_hotel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black_event_time"
             android:text="贵阳7天连锁酒店"
             android:layout_centerVertical="true"
             android:layout_gravity="center" />
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/hotel_level"
-            android:text="豪华型 4.8分"
-            android:textSize="12sp"
             android:layout_centerInParent="true"
-            android:layout_gravity="center" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_hotel_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hotel_level"
+                android:text="豪华型"
+                android:textSize="12sp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center" />
+            <TextView
+                android:id="@+id/tv_hotel_score"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hotel_level"
+                android:text="4.8分"
+                android:textSize="12sp"
+
+                android:layout_gravity="center" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +66,7 @@
                 android:textSize="12sp"
                 android:layout_gravity="center" />
             <TextView
+                android:id="@+id/tv_hotel_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/home_tab_title_color_check"

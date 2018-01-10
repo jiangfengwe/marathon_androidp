@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,42 +8,37 @@
     android:layout_height="match_parent"
     android:background="@color/hotel_division"
     tools:context="com.tdin360.zjw.marathon.ui.activity.ChangeSignActivity">
-    <include layout="@layout/toolbar_layout"/>
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:padding="10dp">
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"/>
         <EditText
+            android:id="@+id/et_change_sign"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:hint="@string/change_sign_hint"
             android:textSize="16sp"
+            android:padding="10dp"
             android:textColor="@color/theme_text"
             android:gravity="top"
             android:maxLength="100"
-            android:background="@null"/>
-        <TextView
+            android:background="@color/white"/>
+        <Button
+            android:id="@+id/btn_change_sign_sure"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="8"
-            android:textColor="@color/hotel_address"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
-    <Button
-        android:id="@+id/btn_change_sign_sure"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_sure"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:background="@drawable/oval_green_button_selector" />
+            android:text="@string/login_sure"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:background="@drawable/oval_green_button_selector" />
+    </LinearLayout>
+    <include layout="@layout/item_loading"/>
 
 
-</LinearLayout>
+
+</RelativeLayout>

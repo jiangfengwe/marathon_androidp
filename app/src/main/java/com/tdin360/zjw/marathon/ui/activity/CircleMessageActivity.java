@@ -1,19 +1,25 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +46,41 @@ public class CircleMessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
+        initata();
         initView();
 
+    }
+
+    private void initata() {
+        /*Intent intent=getIntent();
+        String dynamicId = intent.getStringExtra("dynamicId");
+        RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE_PRAISE_LIST);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("dynamicId",dynamicId);
+        params.addBodyParameter("pageSize","5");
+        params.addBodyParameter("pageIndex","1");
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("circlemessage", "onSuccess: "+result);
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });*/
     }
 
     private void initView() {

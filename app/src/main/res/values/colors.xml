@@ -52,7 +52,10 @@
     <color name="my_circle_bg">#30000000</color>
     <color name="my_circle_head_name">#fae007</color>
     <color name="my_circle_head_sign">#13bd5a</color>
-    <color name="circle_detail_comment">#d9d9d9</color>
+    <color name="circle_detail_comment">#8a8a8a</color>
+    <color name="pay_success">#00d8ff</color>
+    <color name="pay_success_order">#eed500</color>
+    <color name="pay_success_hotel">#fff4d2</color>
 
 
 

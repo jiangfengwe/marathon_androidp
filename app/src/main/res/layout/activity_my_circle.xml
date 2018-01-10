@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:id="@+id/layout_bg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/my_circle_bg"
     tools:context="com.tdin360.zjw.marathon.ui.activity.MyCircleActivity">
+    <ImageView
+        android:id="@+id/iv_mycircle_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/my_circle_bg"
+        android:scaleType="centerCrop"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/my_circle_bg">
-        <ImageView
-            android:id="@+id/iv_my_circle_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/my_circle_back"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"/>
-        <ImageView
-            android:id="@+id/iv_my_circle_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/my_circle_pic"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_my_circle"
-        android:layout_width="match_parent"
-        android:background="@color/my_circle_bg"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <com.liaoinstan.springview.widget.SpringView
+            android:id="@+id/springView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_my_circle"
+                android:layout_width="match_parent"
+                android:background="@color/my_circle_bg"
+                android:layout_height="match_parent"/>
+        </com.liaoinstan.springview.widget.SpringView>
+        <RelativeLayout
+            android:id="@+id/layout_my_circle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000">
+            <ImageView
+                android:id="@+id/iv_my_circle_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/my_circle_back"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"/>
+            <ImageView
+                android:id="@+id/iv_my_circle_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/my_circle_pic"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
 
-</LinearLayout>
+    </RelativeLayout>
+
+
+    <include layout="@layout/load_fail_layout"/>
+    <include layout="@layout/item_loading"/>
+
+
+
+</RelativeLayout>

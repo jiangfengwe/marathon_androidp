@@ -1,6 +1,9 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,14 +17,22 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.ChangePswBean;
+import com.tdin360.zjw.marathon.model.LoginBean;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +50,10 @@ import java.util.Calendar;
 
 
 public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener{
+    @ViewInject(R.id.layout_lading)
+    private RelativeLayout layoutLoading;
+    @ViewInject(R.id.iv_loading)
+    private ImageView ivLoading;
 
     @ViewInject(R.id.btn_Back)
     private ImageView imageView;
@@ -57,11 +72,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     private CheckBox cbPsw;
     @ViewInject(R.id.btn_change_psw_sure)
     private Button btnSure;
-    /*private EditText editTextOldPass;
-    private EditText editTextPass1;
-    private EditText editTextPass2;
-    private CheckBox checkBox1,checkBox2,checkBox3;*/
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +79,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         initToolbar();
         initView();
 
-      /*  setToolBarTitle("修改登录密码");
-        showBackButton();
-        this.editTextOldPass = (EditText) this.findViewById(R.id.oldPassword);
-        this.editTextPass1= (EditText) this.findViewById(R.id.password1);
-        this.editTextPass2= (EditText) this.findViewById(R.id.password2);
-        //初始化控制密码显示以隐藏的checkbox
-        this.checkBox1 = (CheckBox) this.findViewById(R.id.showPass1);
-        this.checkBox2 = (CheckBox) this.findViewById(R.id.showPass2);
-        this.checkBox3 = (CheckBox) this.findViewById(R.id.showPass3);
-
-          showOrHidePassword();*/
     }
-
     private void initView() {
         ivCancel.setOnClickListener(this);
         btnSure.setOnClickListener(this);
@@ -122,7 +120,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             }
         });
     }
-
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -134,12 +131,10 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         viewline.setVisibility(View.GONE);
         titleTv.setText("修改密码");
     }
-
     @Override
     public int getLayout() {
         return R.layout.activity_change_password;
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -149,8 +144,125 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.btn_change_psw_sure:
                 //确定
+                if(NetWorkUtils.isNetworkAvailable(this)){
+                    //加载网络数据
+                    initData();
+                }else {
+                    layoutLoading.setVisibility(View.GONE);
+                    //如果缓存数据不存在则需要用户打开网络设置
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setMessage("网络不可用，是否打开网络设置");
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //打开网络设置
+
+                            startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+
+                        }
+                    });
+                    alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+
+                }
+
                 break;
         }
+
+    }
+    /**
+      * 验证手机格式
+      */
+    public static boolean isMobileNO(String mobiles) {
+     /*
+        移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+        联通：130、131、132、152、155、156、185、186
+        电信：133、153、180、189、（1349卫通）
+        总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+        */
+        String telRegex = "[1][3578]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。  
+        if (TextUtils.isEmpty(mobiles)) return false;
+        else return mobiles.matches(telRegex);
+    }
+    private void initData() {
+
+        try{
+            byte[] mBytes=null;
+            String newPsw = etNew.getText().toString().trim();
+            String oldPsw = etOld.getText().toString().trim();
+            LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+            String customerId = loginInfo.getId()+"";
+            if(TextUtils.isEmpty(newPsw)){
+                ToastUtils.showCenter(getApplicationContext(),"新密码不能为空");
+                return;
+            }
+            if(TextUtils.isEmpty(oldPsw)){
+                ToastUtils.showCenter(getApplicationContext(),"原密码不能为空");
+                return;
+            }
+            if(newPsw.length()<6){
+                ToastUtils.showCenter(getApplicationContext(),"密码长度应大于6");
+                return;
+            }
+            final KProgressHUD hud = KProgressHUD.create(this);
+            hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setCancellable(true)
+                    .setAnimationSpeed(1)
+                    .setDimAmount(0.5f)
+                    .show();
+            /*layoutLoading.setVisibility(View.VISIBLE);
+            ivLoading.setBackgroundResource(R.drawable.loading_before);
+            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+            background.start();*/
+            String string="{'customerId':'"+customerId+"','newPassword':'"+newPsw+"','oldPassword':'"+oldPsw+"','appKey': 'BJYDAppV-2'}";
+            mBytes=string.getBytes("UTF8");
+            String enString= AES.encrypt(mBytes);
+            RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_PSW);
+            params.addBodyParameter("secretMessage",enString);
+            x.http().post(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    Log.d("psw", "onSuccess: "+result);
+                    Gson gson=new Gson();
+                    ChangePswBean changePswBean = gson.fromJson(result, ChangePswBean.class);
+                    boolean state = changePswBean.isState();
+                    if(state){
+                        ToastUtils.showCenter(getApplicationContext(),changePswBean.getMessage());
+                        finish();
+                    }else{
+                        ToastUtils.showCenter(getApplicationContext(),changePswBean.getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    ToastUtils.showCenter(getBaseContext(),"网络不给力,连接服务器异常!");
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+                    //layoutLoading.setVisibility(View.GONE);
+                    hud.dismiss();
+
+                }
+            });
+        }catch(Exception e){
+            Log.d("error", "initData: "+e.getMessage());
+        }
+
 
     }
    /* *//**
@@ -164,58 +276,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     *//**
      * 控制密码的显示与隐藏
      *//*
-    private class MyCheckBoxListener implements CompoundButton.OnCheckedChangeListener{
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            switch (buttonView.getId()){
-
-                case R.id.showPass1:
-                    if(isChecked){
-
-                        //显示密码
-                        editTextOldPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        editTextOldPass.setSelection(editTextOldPass.getText().length());
-                    }else {
-                        //隐藏密码
-
-                        editTextOldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        editTextOldPass.setSelection(editTextOldPass.getText().length());
-                    }
-
-                    break;
-                case R.id.showPass2:
-                    if(isChecked){
-
-                        editTextPass1.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        editTextPass1.setSelection(editTextPass1.getText().length());
-                    }else {
-
-                        editTextPass1.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        editTextPass1.setSelection(editTextPass1.getText().length());
-                    }
-                    break;
-
-                case R.id.showPass3:
-                    if(isChecked){
-
-                        editTextPass2.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        editTextPass2.setSelection(editTextPass2.getText().length());
-                    }else {
-
-                        editTextPass2.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        editTextPass2.setSelection(editTextPass2.getText().length());
-                    }
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.activity_change_password;
-    }
-
 
     //提交
     public void submit(View view) {

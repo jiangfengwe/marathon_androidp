@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>测试</title>
+    <meta charset="utf-8">
+	 <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <script type="text/javascript">
+        	
+
+             //判断是否为安卓系统
+            function isAndroid() {  
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+               
+               return isAndroid
+            }
+                     
+           //判断是否mac／iOS系统                           
+          function isIOS(){
+             var u = navigator.userAgent;
+             var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        
+           return isiOS 
+            }
+
+            //跳转到酒店列表
+        	function toHotel() {
+                
+                 if (isIOS()) {//执行iOS native
+                  window.webkit.messageHandlers.swift.postMessage({"type":"hotel"});
+                   } else if (isAndroid()) {
+                     //执行安卓native
+
+                      window.android.toHotel();
+                                   
+                  }
+ 
+              
+        	}
+
+             //跳转到旅游列表
+        	function toTravel() {
+                                   
+                      if (isIOS()) {//执行iOS native
+                window.webkit.messageHandlers.swift.postMessage({"type":"travel"});
+                   }else if(isAndroid()){
+                                   
+                    //执行安卓native
+                    window.android.toTravel();
+                                   
+                  }
+        	}
+        </script>
+</head>
+<body>
+
+<button onclick="toHotel()">酒店预定</button>
+<button onclick="toTravel()">周边旅游</button>
+</body>
+</html>

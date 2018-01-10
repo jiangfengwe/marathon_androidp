@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import android.widget.ImageView;
 
 import com.lzy.ninegrid.NineGridView;
+import com.tdin360.zjw.marathon.CrashHander;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.db.DbManager;
 import com.tencent.smtt.sdk.QbSdk;
@@ -39,8 +40,8 @@ public class App extends MultiDexApplication {
     public static ImageOptions xUtilsOptions = new ImageOptions.Builder()//
             .setIgnoreGif(false)                                //是否忽略GIF格式的图片
             .setImageScaleType(ImageView.ScaleType.CENTER_CROP)  //缩放模式
-            .setLoadingDrawableId(R.drawable.travel)  //下载中显示的图片
-            .setFailureDrawableId(R.drawable.travel)  //下载失败显示的图片
+            .setLoadingDrawableId(R.drawable.event_bg)  //下载中显示的图片
+            .setFailureDrawableId(R.drawable.event_bg)  //下载失败显示的图片
             .build();
     // 在application的onCreate中初始化
     /** XUtils 加载 */
@@ -60,6 +61,9 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        //全局异常捕捉
+        //CrashHander crashHandler= CrashHander.getInstance();
+       // crashHandler.init(getApplicationContext());
         //社交图片
         NineGridView.setImageLoader(new XUtilsImageLoader());
         // 初始化

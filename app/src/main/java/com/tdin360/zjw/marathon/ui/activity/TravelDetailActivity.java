@@ -1,24 +1,43 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Build;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
-import com.tdin360.zjw.marathon.adapter.TravelDetailTabLayoutAdapter;
-import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
+import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.TravelDetailBean;
+import com.tdin360.zjw.marathon.model.TravelPictureBean;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
+import com.tdin360.zjw.marathon.weight.ErrorView;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -27,49 +46,352 @@ import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
 
+import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 旅游详情
  */
 
 public class TravelDetailActivity extends BaseActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.layout_lading)
+    private RelativeLayout layoutLoading;
+    @ViewInject(R.id.iv_loading)
+    private ImageView ivLoading;
+
     @ViewInject(R.id.iv_travel_detail_back)
     private ImageView ivBack;
     @ViewInject(R.id.iv_travel_detail_share)
     private ImageView ivShare;
     @ViewInject(R.id.layout_travel_detail_pic)
     private LinearLayout layoutPic;
+    @ViewInject(R.id.iv_travel_detail_pic)
+    private ImageView ivPic;
+    @ViewInject(R.id.tv_travel_detail_count)
+    private TextView tvCount;
     @ViewInject(R.id.tv_travel_detail_name)
     private TextView tvName;
     @ViewInject(R.id.tv_travel_detail_price)
     private TextView tvPrice;
-    @ViewInject(R.id.tv_travel_detail_address)
-    private TextView tvAddress;
-    @ViewInject(R.id.tv_travel_detail_route)
-    private TextView tvRoute;
     @ViewInject(R.id.tv_travel_detail_consult)
     private TextView tvConsult;
     @ViewInject(R.id.tv_travel_detail_order)
     private TextView tvOrder;
 
+
     private ShareAction action;
+    @ViewInject(R.id.webView_travel)
+    private WebView webView;
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
+    @ViewInject(R.id.rv_hotel_detail_foot)
+    private RecyclerView rvDetail;
 
+    private List<String> list=new ArrayList<>();
 
+    @ViewInject(R.id.iv_comment_head_pic)
+    private ImageView ivHeadPic;
+    @ViewInject(R.id.tv_comment_name)
+    private TextView tvCommentName;
+    @ViewInject(R.id.tv_comment_time)
+    private TextView tvCommentTime;
+    @ViewInject(R.id.tv_comment_content)
+    private TextView tvComment;
+    private RecyclerViewBaseAdapter adapter;
+    @ViewInject(R.id.tv_check_more_comment)
+    private TextView tvMore;
+    @ViewInject(R.id.tv_travel_comment_count)
+    private TextView tvCommentCount;
+    @ViewInject(R.id.tv_travel_comment_level)
+    private TextView tvLevel;
+    @ViewInject(R.id.layout_hotel_detail)
+    private LinearLayout layout;
 
-    @ViewInject(R.id.tabs_travel_detail)
-    private TabLayout tabsTravel;
-    @ViewInject(R.id.vp_travel_detail)
-    private ViewPager vpTravel;
+    private TravelDetailBean.ModelBean.BJTravelModelBean bjTravelModel=new TravelDetailBean.ModelBean.BJTravelModelBean();
+    private List<TravelPictureBean.ModelBean.BJTravelPictureListModelBean> bjTravelPictureListModel=new ArrayList<>();
+    private List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.BJTravelEvaluatePictureListModelBean>
+            bjTravelEvaluatePictureListModel=new ArrayList<>();
+    ImageOptions imageOptions,imageOptionsCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
+                //ImageOptions.Builder()的一些其他属性：
+                //.setCircular(true) //设置图片显示为圆形
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                //.setSquare(true) //设置图片显示为正方形
+                //.setCrop(true).setSize(130,130) //设置大小
+                //.setAnimation(animation) //设置动画
+                .setFailureDrawableId(R.drawable.event_bg) //设置加载失败的动画
+                // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
+                //.setLoadingDrawable(Drawable loadingDrawable) //设置加载中的动画
+                .setLoadingDrawableId(R.drawable.event_bg) //以资源id设置加载中的动画
+                .setIgnoreGif(false) //忽略Gif图片
+                //.setRadius(10)
+                .setUseMemCache(true).build();
+        imageOptionsCircle= new ImageOptions.Builder()
+//                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+                .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setRadius(DensityUtil.dip2px(80))
+                .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
+                .setUseMemCache(true)//设置使用缓存
+                .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
+                .build();
+        //initData();
+        initNet();
         initView();
-        initTabLayout();
+        initInfo();
+        initPicture();
+        initFoor();
+        //http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId=1
 
     }
 
+    private void initFoor() {
+        for (int i = 0; i <7 ; i++) {
+            list.add(""+i);
+        }
+        if(bjTravelEvaluatePictureListModel.size()<=0){
+            layout.setVisibility(View.GONE);
+           return;
+        }else{
+            layout.setVisibility(View.VISIBLE);
+            final ArrayList<String> image= new ArrayList<>();
+            for(int i=0;i<bjTravelEvaluatePictureListModel.size();i++){
+                image.add(bjTravelEvaluatePictureListModel.get(i).getPictureUrl());
+            }
+            adapter=new RecyclerViewBaseAdapter<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.BJTravelEvaluatePictureListModelBean>
+                    (getApplicationContext(),bjTravelEvaluatePictureListModel,R.layout.item_hotel_detail_pic) {
+                @Override
+                protected void onBindNormalViewHolder(NormalViewHolder holder, TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.BJTravelEvaluatePictureListModelBean model) {
+                    ImageView imageView = (ImageView) holder.getViewById(R.id.iv_comment_pic);
+                    x.image().bind(imageView,model.getThumbPictureUrl(),imageOptions);
+                }
+            };
+
+            adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    ImageView imageView1=new ImageView(TravelDetailActivity.this);
+                    MNImageBrowser.showImageBrowser(TravelDetailActivity.this,imageView1,position, image);
+                }
+            });
+            rvDetail.setAdapter(adapter);
+            rvDetail.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false));
+        }
+
+        //查看更多评价
+        tvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eventId = SingleClass.getInstance().getEventId();
+                String travelId = getIntent().getStringExtra("travelId");
+                Intent intent=new Intent(TravelDetailActivity.this,TravelMoreCommentActivity.class);
+                intent.putExtra("eventId",eventId);
+                intent.putExtra("travelId",travelId);
+                startActivity(intent);
+
+            }
+        });
+    }
+
+    private void initNet() {
+        //加载失败点击重试
+        mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
+            @Override
+            public void onErrorClick(ErrorView.ViewShowMode mode) {
+                switch (mode){
+                    case NOT_NETWORK:
+                        //initData();
+                        break;
+
+                }
+            }
+        });
+        //判断网络是否处于可用状态
+        if(NetWorkUtils.isNetworkAvailable(this)){
+            //加载网络数据
+           //initData();
+        }else {
+            layoutLoading.setVisibility(View.GONE);
+            //如果缓存数据不存在则需要用户打开网络设置
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage("网络不可用，是否打开网络设置");
+            alert.setCancelable(false);
+            alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //打开网络设置
+
+                    startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+
+                }
+            });
+            alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+            alert.show();
+
+        }
+    }
+
+    private void initPicture() {
+        layoutLoading.setVisibility(View.VISIBLE);
+        ivLoading.setBackgroundResource(R.drawable.loading_before);
+        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+        background.start();
+        String eventId = SingleClass.getInstance().getEventId();
+        String travelId = getIntent().getStringExtra("travelId");
+        RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_DETAIL_PICTURE);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("eventId",eventId);
+        params.addBodyParameter("travelId",travelId);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("travelpicture", "onSuccess: "+result);
+                Gson gson=new Gson();
+                TravelPictureBean travelPictureBean = gson.fromJson(result, TravelPictureBean.class);
+                boolean state = travelPictureBean.isState();
+                if(state){
+                    TravelPictureBean.ModelBean model = travelPictureBean.getModel();
+                    bjTravelPictureListModel= model.getBJTravelPictureListModel();
+                    SingleClass.getInstance().setBjTravelPictureListModel(bjTravelPictureListModel);
+                    tvCount.setText(bjTravelPictureListModel.size()+"");
+                    if(bjTravelPictureListModel.size()<=0){
+                        mErrorView.show(tvCount,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(tvCount);
+                    }
+                }else{
+                    ToastUtils.showCenter(getApplicationContext(),travelPictureBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                mErrorView.show(webView,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                ToastUtils.show(TravelDetailActivity.this,"网络不给力,连接服务器异常!");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                layoutLoading.setVisibility(View.GONE);
+                //hud.dismiss();
+
+            }
+        });
+    }
+
+    private void initInfo() {
+        String travelId = getIntent().getStringExtra("travelId");
+        this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setAllowFileAccess(true);
+        this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.setWebChromeClient(null);
+        this.webView.setWebViewClient(null);
+       // String url = HttpUrlUtils.TRAVEL_DETAIL_INFO + "?" + "appKey" + "=" + "BJYDAppV-2" + "&" + "travelId" + travelId;
+        String url="http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
+        webView.loadUrl(url);
+    }
+
+    private void initData() {
+        layoutLoading.setVisibility(View.VISIBLE);
+        ivLoading.setBackgroundResource(R.drawable.loading_before);
+        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+        background.start();
+        String eventId = SingleClass.getInstance().getEventId();
+        String travelId = getIntent().getStringExtra("travelId");
+        RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_DETAIL);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("eventId",eventId);
+        params.addBodyParameter("travelId",travelId);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("traveldetail", "onSuccess: "+result);
+               /* Gson gson=new Gson();
+                TravelDetailBean travelDetailBean = gson.fromJson(result, TravelDetailBean.class);
+                boolean state = travelDetailBean.isState();
+                if(state){
+                    TravelDetailBean.ModelBean model = travelDetailBean.getModel();
+                    bjTravelModel= model.getBJTravelModel();
+                    List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList = model.getApiTravelMonthDateList();
+                    List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean> bjTravelEvaluateListModel = model.getBJTravelEvaluateListModel();
+                    tvCommentCount.setText("一共"+bjTravelEvaluateListModel.size()+"条评论");
+                    SingleClass.getInstance().setApiTravelMonthDateList(apiTravelMonthDateList);
+                    x.image().bind(ivPic,bjTravelModel.getPictureUrl(),imageOptions);
+                    tvPrice.setText(bjTravelModel.getPrice()+"");
+                    tvName.setText(bjTravelModel.getStartPlace()+"——"+bjTravelModel.getEndPlace());
+
+                    //TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean bjTravelEvaluateListModelBean = bjTravelEvaluateListModel.get(0);
+                    tvLevel.setText(bjTravelEvaluateListModelBean.getScoring()+"");
+                    TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel
+                            = bjTravelEvaluateListModelBean.getEvaluationUserModel();
+                    String headImg = evaluationUserModel.getHeadImg();
+                    String nickName = evaluationUserModel.getNickName();
+                    String evaluateContent = bjTravelEvaluateListModelBean.getEvaluateContent();
+                    String evaluateTimeStr = bjTravelEvaluateListModelBean.getEvaluateTimeStr();
+                    bjTravelEvaluatePictureListModel= bjTravelEvaluateListModelBean.getBJTravelEvaluatePictureListModel();
+                    x.image().bind(ivHeadPic,headImg,imageOptionsCircle);
+                    tvCommentName.setText(nickName);
+                    tvCommentTime.setText(evaluateTimeStr);
+                    tvComment.setText(evaluateContent);
+                    Log.d("apiTravelMonthDateList", "onSuccess: "+apiTravelMonthDateList.size());
+                    if(apiTravelMonthDateList.size()<=0){
+                        mErrorView.show(tvCount,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(tvCount);
+                    }
+                }else{
+                    ToastUtils.showCenter(getApplicationContext(),travelDetailBean.getMessage());
+                }*/
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                mErrorView.show(webView,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                ToastUtils.show(TravelDetailActivity.this,"网络不给力,连接服务器异常!");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                adapter.update(bjTravelEvaluatePictureListModel);
+                layoutLoading.setVisibility(View.GONE);
+               // hud.dismiss();
+
+            }
+        });
+
+    }
     private void initView() {
         ivBack.setOnClickListener(this);
         ivShare.setOnClickListener(this);
@@ -77,12 +399,9 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         tvConsult.setOnClickListener(this);
         tvOrder.setOnClickListener(this);
 
+
     }
 
-    private void initTabLayout() {
-        vpTravel.setAdapter(new TravelDetailTabLayoutAdapter(getSupportFragmentManager()));
-        tabsTravel.setupWithViewPager(vpTravel);
-    }
 
     @Override
     public int getLayout() {
@@ -112,19 +431,58 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.layout_travel_detail_pic:
                 //图片浏览
                 intent=new Intent(TravelDetailActivity.this,PictureActivity.class);
+                intent.putExtra("picture","travelPic");
                 startActivity(intent);
                 break;
             case R.id.tv_travel_detail_consult:
                 //客服咨询
+                tellDialog();
                 break;
             case R.id.tv_travel_detail_order:
                 //立即预定
+                LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+                String customerId = loginInfo.getId();
+                if(TextUtils.isEmpty(customerId)){
+                    intent=new Intent(TravelDetailActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                }else{
                 intent=new Intent(TravelDetailActivity.this,TravelOrderActivity.class);
-                startActivity(intent);
+                    String travelId = bjTravelModel.getId() + "";
+                    double price = bjTravelModel.getPrice();
+                    intent.putExtra("travelId",travelId);
+                    intent.putExtra("price",price);
+                    startActivity(intent);
+                }
                 break;
         }
 
     }
+
+    private void tellDialog() {
+        android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(TravelDetailActivity.this);
+        normalDialog.setMessage("是否拨打");
+        normalDialog.setPositiveButton("是",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        Uri data = Uri.parse("tel:" + bjTravelModel.getPhone1());
+                        intent.setData(data);
+                        startActivity(intent);
+                    }
+                });
+        normalDialog.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                        dialog.dismiss();
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
+
     /**
      *  分享给好友
      */

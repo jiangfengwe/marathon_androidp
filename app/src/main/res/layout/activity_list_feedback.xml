@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,51 +8,68 @@
     android:orientation="vertical"
     android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.AddFeedbackActivity">
-    <include layout="@layout/toolbar_layout"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/white"
-        android:layout_marginTop="7dp"
-        android:padding="10dp"
-        android:textColor="@color/hotel_address"
-        android:maxLength="140"
-        android:gravity="top"
-        android:hint="@string/feedback_hint"/>
     <LinearLayout
-        android:id="@+id/layout_feedback_add"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingBottom="20dp"
-        android:orientation="vertical">
-        <ImageView
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"/>
+        <EditText
+            android:id="@+id/et_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/white"
+            android:layout_marginTop="7dp"
+            android:padding="10dp"
+            android:textColor="@color/hotel_address"
+            android:maxLength="140"
+            android:gravity="top"
+            android:hint="@string/feedback_hint"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_feedback"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="10dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:id="@+id/layout_feedback_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/add_pic"
-            android:scaleType="centerCrop"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feedback_add"
-            android:textSize="12sp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/circle_message_add"/>
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/add_pic"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/feedback_add"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/circle_message_add"/>
 
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_feedback_sure"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feedback_submit"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:background="@drawable/oval_green_button_selector" />
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_feedback_sure"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/feedback_submit"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:background="@drawable/oval_green_button_selector" />
+    <include layout="@layout/load_fail_layout"/>
+    <include layout="@layout/item_loading"/>
+
    <!-- <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -91,4 +108,4 @@
 
     <include layout="@layout/load_fail_layout"></include>-->
 
-</LinearLayout>
+</RelativeLayout>

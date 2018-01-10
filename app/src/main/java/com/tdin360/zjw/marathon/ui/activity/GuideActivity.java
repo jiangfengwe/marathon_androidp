@@ -71,7 +71,6 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
            RadioButton radioButton = new RadioButton(this);
            radioButton.setId(i);
            radioButton.setButtonDrawable(R.drawable.guide_item_selector);
-           radioButton.setGravity(Gravity.CENTER);
            radioButton.setPadding(10,10,10,10);
            group.addView(radioButton);
            if(i==0){
@@ -95,10 +94,10 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
         if(position==ids.length-1){
 
            this.btn.setVisibility(View.VISIBLE);
-            this.group.setVisibility(View.GONE);
+            //this.group.setVisibility(View.GONE);
 
         }else {
-            this.group.setVisibility(View.VISIBLE);
+           // this.group.setVisibility(View.VISIBLE);
             this.btn.setVisibility(View.GONE);
         }
     }

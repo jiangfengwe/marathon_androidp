@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/iv_event"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         android:scaleType="centerCrop"
         android:src="@drawable/event"/>
     <LinearLayout
@@ -28,6 +28,7 @@
         android:gravity="center"
         android:textSize="12sp" />
         <TextView
+            android:id="@+id/tv_event_time_apply"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="09-11"
@@ -42,9 +43,9 @@
             android:text="@string/event_competition_time"
             android:textColor="@color/white"
             android:gravity="center"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
         <TextView
+            android:id="@+id/tv_event_time_competition"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="09-11"
@@ -59,6 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp">
         <TextView
+            android:id="@+id/tv_event_name"
             android:textSize="16sp"
             android:textColor="@color/black_event_time"
             android:layout_width="0dp"

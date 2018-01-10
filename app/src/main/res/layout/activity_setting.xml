@@ -96,6 +96,7 @@
                     android:textSize="9sp"
                     android:text="@string/setting_update"/>
                 <TextView
+                    android:id="@+id/tv_vision"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -125,7 +126,7 @@
             </RelativeLayout>
 
         <Button
-            android:id="@+id/btn_exit"
+            android:id="@+id/iv_clean"
             android:layout_marginTop="35dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -12,7 +12,7 @@ import com.tdin360.zjw.marathon.ui.fragment.EventStateFragment;
  */
 
 public class EventTabLayoutAdapter extends FragmentPagerAdapter{
-    private String[] titles={"全部","进行中","已结束"};
+    private String[] titles={"进行中","已结束","全部"};
     public EventTabLayoutAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -23,21 +23,20 @@ public class EventTabLayoutAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-       /* switch (position){
+        switch (position){
+
             case 0:
-                OrderFoodAllFragment orderFoodAllFragment1 = OrderFoodAllFragment.newInstance("all");
-                return orderFoodAllFragment1;
+                EventStateFragment eventStateFragment2 = EventStateFragment.newInstance("true");
+                return eventStateFragment2;
             case 1:
-                OrderFoodAllFragment orderFoodAllFragment2 = OrderFoodAllFragment.newInstance("notPay");
-                return orderFoodAllFragment2;
+                EventStateFragment eventStateFragment3 = EventStateFragment.newInstance("false");
+                return eventStateFragment3;
             case 2:
-                OrderFoodAllFragment orderFoodAllFragment3 = OrderFoodAllFragment.newInstance("hasPay");
-                return orderFoodAllFragment3;
-            case 3:
-                OrderFoodAllFragment orderFoodAllFragment4 = OrderFoodAllFragment.newInstance("hasFinish");
-                return orderFoodAllFragment4;
-        }*/
-        return new EventStateFragment();
+                EventStateFragment eventStateFragment1 = EventStateFragment.newInstance("");
+                return eventStateFragment1;
+
+        }
+        return null;
     }
 
     @Override

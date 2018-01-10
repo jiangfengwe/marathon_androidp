@@ -28,6 +28,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
 
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
@@ -361,10 +363,9 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
+       <!-- <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".ui.activity.HotelActivity"
             android:screenOrientation="portrait" />
@@ -409,7 +410,23 @@
         <activity android:name=".ui.activity.HotelMoreCommentActivity" />
         <activity android:name=".ui.activity.CallBackActivity" />
         <activity android:name=".ui.activity.PictureActivity" />
-        <activity android:name=".ui.activity.CommentActivity"></activity>
+        <activity android:name=".ui.activity.HotelCommentActivity" />
+        <activity android:name=".ui.activity.ChangePhoneNewActivity" />
+        <activity android:name=".ui.activity.BindPhoneActivity" />
+        <activity android:name=".ui.activity.TravelCommentActivity" />
+        <activity android:name=".ui.activity.TravelMoreCommentActivity"></activity>
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

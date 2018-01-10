@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,36 +8,53 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context="com.tdin360.zjw.marathon.ui.activity.TravelOrderDetailActivity">
-    <include layout="@layout/toolbar_layout"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <include layout="@layout/item_travel_order"/>
-    </ScrollView>
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:textSize="18sp"
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <include layout="@layout/item_travel_order"/>
+        </ScrollView>
+        <LinearLayout
+            android:id="@+id/layout_order_travel_detail"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_order_travel_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="@string/my_order_cancel"
+                android:background="@color/travel_detail_service"/>
+            <TextView
+                android:id="@+id/tv_order_travel_pay"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="@string/my_order_pay"
+                android:background="@color/home_tab_title_color_check"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_travel_order_detail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:textColor="@color/white"
-            android:gravity="center"
-            android:text="@string/my_order_cancel"
-            android:background="@color/travel_detail_service"/>
-        <TextView
-            android:id="@+id/tv_travel_pay"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
             android:textSize="18sp"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:text="@string/my_order_pay"
+            android:visibility="gone"
             android:background="@color/home_tab_title_color_check"/>
-
     </LinearLayout>
-</LinearLayout>
+    <include layout="@layout/load_fail_layout"/>
+
+</RelativeLayout>

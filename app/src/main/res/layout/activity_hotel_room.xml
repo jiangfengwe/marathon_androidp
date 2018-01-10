@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:textSize="16sp"
-        android:text="@string/hotel_room_order"
+        android:text="11"
         android:gravity="center"
         android:textColor="@color/white"
         android:background="@color/home_tab_title_color_check"/>

@@ -18,10 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
@@ -40,14 +43,29 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
+
+import org.xutils.view.annotation.ViewInject;
+
 /**
  *  赛事详情
  */
-public class WebActivity extends AppCompatActivity {
-
+public class WebActivity extends BaseActivity implements View.OnClickListener{
+    @ViewInject(R.id.mWebView)
     private WebView webView;
+    @ViewInject(R.id.progressBar)
     private ProgressBar progressBar;
+    @ViewInject(R.id.title)
     private TextView titleTv;
+    @ViewInject(R.id.back)
+    private ImageView back;
+    @ViewInject(R.id.close)
+    private ImageView close;
+    @ViewInject(R.id.more)
+    private ImageView more;
+
+
+
+
     private ShareAction action;
     private String url;
     private String imageUrl;
@@ -56,95 +74,61 @@ public class WebActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
-
-
-        this.webView= (WebView) this.findViewById(R.id.mWebView);
-        this.progressBar= (ProgressBar) this.findViewById(R.id.progressBar);
-        this.titleTv= (TextView) this.findViewById(R.id.title);
-
-
-
-        Intent intent = getIntent();
+        initView();
+       /* Intent intent = getIntent();
         if(intent!=null){
             url = intent.getStringExtra("url");
             this.imageUrl=intent.getStringExtra("imageUrl");
-        }
-
-
-
-        /**
-         * 返回上一页
-         */
-        this.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                back();
-            }
-        });
-        /**
-         * 关闭
-         */
-        this.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(WebActivity.this,ApplyActivity.class);
-                startActivity(intent);
-                //finish();
-            }
-        });
-
-        /**
-         * 分享
-         */
-        this.findViewById(R.id.more).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-//                android 6.0兼容
-                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
-                    share();
-                }else {
-
-                    if (ContextCompat.checkSelfPermission(WebActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                        ActivityCompat.requestPermissions(WebActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
-
-                    } else {
-
-                        share();
-
-                    }
-                }
-
-
-            }
-        });
-
-
+        }*/
+        initWeb();
+    }
+    private void initWeb() {
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
         this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.getSettings().setDomStorageEnabled(true);
         this.webView.setWebChromeClient(new MyWebChromeClient());
         this.webView.setWebViewClient(new MyWebViewClient());
-
-
-        LoginModel model = SharedPreferencesManager.getLoginInfo(getBaseContext());
-        String loginParams="";
-        if(!model.getPassword().equals("")){
-
-           loginParams = "?um="+model.getName()+"&"+"pw="+model.getPassword();
-        }
-
-        this.webView.loadUrl(url+loginParams);
- 
+        //String url="file:///android_asset/test.html";
+        String url = getIntent().getStringExtra("url");
+        webView.loadUrl(url);
+        webView.addJavascriptInterface(WebActivity.this,"android");
     }
+    private void initView() {
+        back.setOnClickListener(this);
+        close.setOnClickListener(this);
+        more.setOnClickListener(this);
+    }
+    //给js调用的方法
+    @JavascriptInterface
+    public void toHotel(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
+                Intent intent=new Intent(WebActivity.this,HotelActivity.class);
 
+                startActivity(intent);
+
+            }
+        });
+    }
+    @JavascriptInterface
+    public void toTravel(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                Intent intent=new Intent(WebActivity.this,TravelActivity.class);
+
+                startActivity(intent);
+
+            }
+        });
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -181,10 +165,47 @@ public class WebActivity extends AppCompatActivity {
 
 
     }
-
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back:
+                //返回
+                if(webView.canGoBack()){
+                    webView.goBack();
+                }else {
+                    overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
+                    finish();
+                }
+                break;
+            case R.id.close:
+                //关闭
+                finish();
+               /* Intent intent=new Intent(WebActivity.this,ApplyActivity.class);
+                startActivity(intent);*/
+                break;
+            case R.id.more:
+                //分享
+                final KProgressHUD hud = KProgressHUD.create(this);
+                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                        .setCancellable(true)
+                        .setAnimationSpeed(1)
+                        .setDimAmount(0.5f)
+                        .show();
+                webView.reload();
+                hud.dismiss();
+             /*   if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
+                    share();
+                }else {
+                    if (ContextCompat.checkSelfPermission(WebActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(WebActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
+                    } else {
+                        share();
+                    }
+                }*/
+                break;
+        }
+    }
     private class MyWebChromeClient extends WebChromeClient{
-
         @Override
         public void onProgressChanged(WebView webView, int i) {
             super.onProgressChanged(webView, i);
@@ -195,63 +216,38 @@ public class WebActivity extends AppCompatActivity {
         public void onReceivedTitle(WebView webView, String s) {
             super.onReceivedTitle(webView, s);
            // titleTv.setText(s);
-
-
         }
 
 
     }
-
-
-
     private class MyWebViewClient extends WebViewClient{
-
-
-
         @Override
         public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
             super.onPageStarted(webView, s, bitmap);
             progressBar.setVisibility(View.VISIBLE);
         }
-
         @Override
         public void onPageFinished(WebView webView, String s) {
             super.onPageFinished(webView, s);
             progressBar.setVisibility(View.GONE);
             //titleTv.setText(webView.getTitle());
-
-
         }
-
         @Override
         public void onReceivedError(WebView webView, int i, String s, String s1) {
             super.onReceivedError(webView, i, s, s1);
-
-
-
         }
-
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String s) {
-
-
             Log.d("------url--->", "shouldOverrideUrlLoading: "+s);
-
-            /**
-             * 微信支付
-             */
+            //微信支付
             if(s!=null&&s.startsWith("weixin://wap/pay?")){
-
                 Log.d("------支付--->", "shouldOverrideUrlLoading: "+s);
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(s));
                     startActivity(intent);
-
                 }catch (ActivityNotFoundException e){
                     ToastUtils.show(WebActivity.this, "请安装微信最新版客户端");
-
                 }
-
                 return true;
 
 
@@ -277,8 +273,6 @@ public class WebActivity extends AppCompatActivity {
             return  false;
         }
     }
-
-
     /**
      * 分享
      */
@@ -314,18 +308,14 @@ public class WebActivity extends AppCompatActivity {
         action.open();
 
     }
-
     /**
      * 自定义分享结果监听器
      */
     private class CustomUMShareListener implements UMShareListener {
-
-
         @Override
         public void onStart(SHARE_MEDIA share_media) {
             Toast.makeText(WebActivity.this,"正在打开分享...",Toast.LENGTH_SHORT).show();
         }
-
         @Override
         public void onResult(SHARE_MEDIA platform) {
 
@@ -349,7 +339,6 @@ public class WebActivity extends AppCompatActivity {
 
             }
         }
-
         @Override
         public void onError(SHARE_MEDIA platform, Throwable throwable) {
             if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
@@ -370,42 +359,34 @@ public class WebActivity extends AppCompatActivity {
 
             }
         }
-
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
             Toast.makeText(WebActivity.this,"分享已取消!",Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
     }
-
+    @Override
+    public int getLayout() {
+        return R.layout.activity_web;
+    }
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
         overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
     }
-
-    /**
-     * 返回操作
-     */
-    private void back(){
+    @Override
+    public void onBackPressed() {
         if(webView.canGoBack()){
             webView.goBack();
         }else {
             overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
             finish();
         }
-
-    }
-    @Override
-    public void onBackPressed() {
-
-        back();
 
     }
 }

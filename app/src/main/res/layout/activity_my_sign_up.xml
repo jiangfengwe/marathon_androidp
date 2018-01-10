@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
       <include layout="@layout/refresh_head"></include>
       <com.tdin360.zjw.marathon.weight.pullToControl.PullableListView
-          android:id="@+id/listView"
+          android:id="@+id/rv_search"
           android:layout_width="match_parent"
           android:layout_height="match_parent">
 

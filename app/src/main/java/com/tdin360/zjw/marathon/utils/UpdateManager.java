@@ -5,6 +5,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.tdin360.zjw.marathon.model.UpdateBean;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -21,19 +24,13 @@ import org.xutils.x;
 
 public class UpdateManager {
     public interface UpdateListener{
-
-
        void checkFinished(boolean isUpdate,String content,String url);
-
     }
-
     private static boolean isUpdate;
     private static UpdateListener listener;
     private static String url;
     private static String content;
-
     public static void setUpdateListener(UpdateListener listener1){
-
           listener=listener1;
     }
     /**
@@ -41,27 +38,34 @@ public class UpdateManager {
      *
      */
     public static void checkNewVersion(final Context context){
-
-
         /**
          * 如果网络不可用就不检查
          */
         if(!NetWorkUtils.isNetworkAvailable(context)){
-
             return;
-
         }
-
         RequestParams params = new RequestParams(HttpUrlUtils.UPDATE_URL);
-
-
+        params.addBodyParameter("style","android");
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
                 //获取服务器版本
+                Log.d("update", "onSuccess: "+result);
+                Gson gson=new Gson();
+                UpdateBean updateBean = gson.fromJson(result, UpdateBean.class);
+                url= updateBean.getAppUpdateLink();
+                int appVersion = updateBean.getAppVersion();
+                //获取当前版本
+                int currentVersion = getVersion(context);
+                if(appVersion<=0|currentVersion<=0){
+                    return;
+                }
+                //检查到新版本
+                if(appVersion>currentVersion){
+                    isUpdate=true;
+                }
 
-                try {
+               /* try {
                     JSONObject obj = new JSONObject(result);
                      url = obj.getString("AndoroidUrl");
                     content = obj.getString("UpdateContent");
@@ -84,22 +88,15 @@ public class UpdateManager {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
-
-
+                }*/
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onFinished() {
 
@@ -110,8 +107,6 @@ public class UpdateManager {
                 }
             }
         });
-
-
     }
 
     /**

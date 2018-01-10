@@ -2,6 +2,7 @@ package com.tdin360.zjw.marathon.weight;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -57,6 +58,10 @@ public class ErrorView extends LinearLayout {
         });
         this.rootView.setVisibility(GONE);
         this.imageView= (ImageView) rootView.findViewById(R.id.imageView);
+
+        imageView.setBackgroundResource(R.drawable.loading_error);
+        AnimationDrawable background =(AnimationDrawable) imageView.getBackground();
+        background.start();
         this.textView = (TextView) rootView.findViewById(R.id.not_found);
         LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         params.gravity= Gravity.CENTER;

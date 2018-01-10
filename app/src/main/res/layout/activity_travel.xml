@@ -8,10 +8,24 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.TravelActivity">
-    <include layout="@layout/toolbar_layout"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_travel"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"/>
+        <com.liaoinstan.springview.widget.SpringView
+            android:id="@+id/springView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_travel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.liaoinstan.springview.widget.SpringView>
+    </LinearLayout>
+    <include layout="@layout/load_fail_layout"/>
+    <include layout="@layout/item_loading"/>
+
+
 
 </LinearLayout>

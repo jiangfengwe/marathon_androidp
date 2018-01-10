@@ -44,11 +44,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
-import cn.finalteam.rxgalleryfinal.bean.MediaBean;
-import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
-import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
-import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
 
 
 /**
@@ -67,7 +62,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
     private RecyclerView mRecyclerView;
     private LocationManager manager;
     private MyLocationListener listener;
-    private PhotosAdapter adapter;
+    //private PhotosAdapter adapter;
     private FaceFragment faceFragment;
     //软件盘弹起后所占高度阀值
     private int keyHeight = 0;
@@ -77,7 +72,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
     private InputMethodManager imm;
     @ViewInject(R.id.emoji)
     private FrameLayout layout;
-    private List<MediaBean>list=new ArrayList<>();
+    //private List<MediaBean>list=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +85,8 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
         this.mRecyclerView.addItemDecoration(new SpaceItemDecoration(5,3));
         //添加动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        this.adapter =new PhotosAdapter(AddCircleActivity.this,list,R.layout.image_list_item);
-        this.mRecyclerView.setAdapter(adapter);
+       // this.adapter =new PhotosAdapter(AddCircleActivity.this,list,R.layout.image_list_item);
+        //this.mRecyclerView.setAdapter(adapter);
         this.imm = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
 
         this.findViewById(R.id.mainLayout).addOnLayoutChangeListener(this);
@@ -242,7 +237,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
      */
     public void add(View view) {
                 //自定义方法的多选
-     RxGalleryFinal.with(AddCircleActivity.this)
+    /* RxGalleryFinal.with(AddCircleActivity.this)
                         .image()
                         .multiple()
                         .maxSize(8)
@@ -255,7 +250,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
                                 //选择结果
                             }
 
-                        }).openGallery();
+                        }).openGallery();*/
 
     }
 
@@ -460,7 +455,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
     /**
      * 图片展示
      */
-    class PhotosAdapter extends RecyclerViewBaseAdapter<MediaBean> {
+    /*class PhotosAdapter extends RecyclerViewBaseAdapter<MediaBean> {
 
 
         public PhotosAdapter(Context context, List<MediaBean> list, int layoutId) {
@@ -471,9 +466,9 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
         protected void onBindNormalViewHolder(final NormalViewHolder holder, MediaBean model) {
 
             holder.setBitmap(R.id.imageView,BitmapFactory.decodeFile(model.getOriginalPath()));
-            /**
+            *//**
              * 删除选择的图片
-             */
+             *//*
             holder.getViewById(R.id.remove).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -483,7 +478,7 @@ public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEm
             });
 
         }
-    }
+    }*/
 
 
     @Override

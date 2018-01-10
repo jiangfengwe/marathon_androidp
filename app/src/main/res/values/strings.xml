@@ -5,8 +5,8 @@
     <string name="home_tab_title3">运动</string>
     <string name="home_tab_title4">我的</string>
 
-    <string name="event_apply_time">报名时间：</string>
-    <string name="event_competition_time">竞赛时间：</string>
+    <string name="event_apply_time">报名开始时间：</string>
+    <string name="event_competition_time">报名结束时间：</string>
 
     <string name="hotel_screen">筛选</string>
     <string name="hotel_event">赛事酒店</string>
@@ -39,6 +39,7 @@
     <string name="register_get_code">发送验证码</string>
     <string name="register_agree">注册即视为同意</string>
     <string name="register_service">佰家运动服务协议</string>
+    <string name="register_next">下一步</string>
 
     <string name="my_order_cancel">取消订单</string>
     <string name="my_order_pay">去支付</string>
@@ -73,7 +74,7 @@
     <string name="feedback_add">添加图片</string>
     <string name="feedback_submit">提交</string>
 
-    <string name="change_sign_hint">感谢帝国时代故事</string>
+    <string name="change_sign_hint">佰家运动</string>
 
     <string name="change_phone_old">请输入原手机号</string>
     <string name="change_phone_new">请输入新手机号</string>
@@ -97,6 +98,10 @@
 
     <string name="circle_publish">小佰提醒：请不要发布暴力色情信息、攻击性语言、否则将可能被系统员自动屏蔽，谢谢配合!</string>
 
+    <string name="comment_hint">请输入评论内容..</string>
+    <string name="comment_sure">评论</string>
+    <string name="comment_back">回复</string>
+
 
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>
@@ -119,6 +124,7 @@
     <string name="not_data">暂时还没有数据</string>
     <string name="error">加载失败，点击空白处加载</string>
     <string name="not_network">网络连接错误,点击设置网络</string>
+
 
     <string-array name="CountryList">
         <item>中国</item>

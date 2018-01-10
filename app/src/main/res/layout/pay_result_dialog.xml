@@ -1,74 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_pay_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:orientation="vertical"
- >
-        <TextView
-            android:layout_marginTop="10dp"
+    android:background="@color/hotel_detail_intro"
+    android:orientation="vertical">
+        <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="支付结果"
-            />
-        <TextView
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center"
-            android:layout_centerHorizontal="true"
-            android:drawablePadding="2dp"
-            android:drawableLeft="@drawable/label_selector_icon"
+            android:orientation="vertical">
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="支付结果"/>
+                <TextView
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:drawablePadding="2dp"
+                    android:drawableLeft="@drawable/label_selector_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="支付成功" />
+                <TextView
+                    android:id="@+id/free"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="¥ 170"
+                    android:textSize="30sp" />
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                        <Button
+                            android:layout_weight="1"
+                            android:background="@drawable/rect_red_btn_selector"
+                            android:id="@+id/home"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="返回首页" />
+                        <Button
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rect_5_green_button_selector"
+                            android:id="@+id/details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="查看详情" />
+
+                </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_centerInParent="true">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="恭喜你，支付成功!"
+                    android:gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/home_tab_title_color_check"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+                        <LinearLayout
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="185dp"
+                            android:layout_height="80dp"
+                            android:background="@drawable/shape_hotel_pay"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:padding="10dp"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/home_tab_title_color_check"
+                                    android:text="预定酒店，提供免费赛事直通车直达赛事现场"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+
+                                    android:textColor="@color/pay_success"
+                                    android:text="立即预定"/>
+                                <View
+                                    android:layout_width="48dp"
+                                    android:layout_height="1dp"
+                                    android:layout_gravity="center"
+                                    android:paddingBottom="10dp"
+                                    android:background="@color/pay_success"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/hotel_pay_result"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+                        <LinearLayout
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="185dp"
+                            android:layout_height="65dp"
+                            android:background="@drawable/shape_hotel_pay"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:padding="10dp"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/home_tab_title_color_check"
+                                    android:text="赛事周边游，车子免费接送"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:textColor="@color/pay_success_order"
+                                    android:text="立即预定"/>
+                                <View
+                                    android:layout_width="48dp"
+                                    android:layout_height="1dp"
+                                    android:layout_gravity="center"
+                                    android:paddingBottom="10dp"
+                                    android:background="@color/pay_success_order"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/travel_pay_result"/>
+                </RelativeLayout>
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="126dp"
+                    android:layout_height="32dp"
+                    android:text="查看报名详情"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:background="@drawable/oval_green_button_selector" />
+        </LinearLayout>
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="支付成功"
-
-            />
-        <TextView
-            android:id="@+id/free"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¥ 170"
-            android:textSize="30sp"
-            />
-        <LinearLayout
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-                <Button
-                    android:layout_weight="1"
-                    android:background="@drawable/rect_red_btn_selector"
-                    android:id="@+id/home"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="返回首页"
-                    />
-
-
-                <Button
-                    android:layout_marginLeft="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rect_5_green_button_selector"
-                    android:id="@+id/details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="查看详情"
-                    />
-
-        </LinearLayout>
-
-
-</LinearLayout>
+            android:src="@drawable/pay_result"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"/>
+</RelativeLayout>

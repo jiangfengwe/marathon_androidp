@@ -44,7 +44,7 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
     private TextView tip;
     private int count;
     private int index;
-    private List<String>imagesUrl;
+    private List<String> imagesUrl=new ArrayList<>();
     private List<View>list=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +106,7 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
                 finish();
                 break;
             case R.id.save:
-
-
               if(!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-
                   requestPermission(Constants.WRITE_EXTERNAL_CODE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
               }  else {
 
@@ -129,10 +126,6 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
     }
 
     class PhotoAdapter extends PagerAdapter{
-
-
-
-
         @Override
         public int getCount() {
             return imagesUrl==null? 0:imagesUrl.size();
@@ -149,7 +142,6 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
 
             View view = list.get(position);
             container.addView(view);
-
             return view;
         }
 

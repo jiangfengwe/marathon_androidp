@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="wrap_content"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_marginBottom="8dp">
     <LinearLayout
         android:orientation="horizontal"
@@ -12,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
         <TextView
+            android:id="@+id/tv_order_hotel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="贵阳林中悦酒店"
@@ -23,19 +26,12 @@
             android:layout_weight="1"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/tv_order_hotel_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:layout_centerVertical="true"
             android:text="2018-09-09 09:00"/>
-
-       <!-- <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/hotel_level"
-            android:text="536"/>-->
 
     </LinearLayout>
     <LinearLayout
@@ -46,12 +42,14 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
         <TextView
+            android:id="@+id/tv_order_hotel_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="豪华总统套房"
             android:textSize="14.7sp"
             android:textColor="@color/day_division"/>
         <TextView
+            android:id="@+id/tv_order_hotel_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="6间"
@@ -63,6 +61,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/tv_order_hotel_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="待付款"
@@ -90,6 +89,7 @@
             android:textColor="@color/hotel_level"
             android:text="￥"/>
         <TextView
+            android:id="@+id/tv_order_hotel_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
@@ -101,11 +101,13 @@
             android:layout_weight="1"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/tv_order_hotel_pay_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/home_tab_title_color_check"
             android:textSize="12sp"
             android:layout_gravity="center"
+            android:visibility="gone"
             android:text="剩余支付时间：1天23小时56分32秒"/>
     </LinearLayout>
 

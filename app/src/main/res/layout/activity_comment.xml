@@ -1,103 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:background="@color/background"
-    tools:context="com.tdin360.zjw.marathon.ui.activity.CommentActivity">
-    <include layout="@layout/toolbar_layout"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/white"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="好感度"
-            android:textSize="14.7sp"
-            android:layout_marginRight="20dp"
-            android:textColor="@color/home_tab_title_color_check"
-            android:layout_centerVertical="true"/>
-        <RatingBar
-            android:id="@+id/ratingBar_order_comment_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="15dp"
-            android:stepSize="1"
-            style="@style/diningRatingBar"/>
-        <TextView
-            android:id="@+id/tv_comment_score"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:text="1.5"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            android:textSize="16sp"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/home_tab_title_color_check"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分"
-            android:layout_alignRight="@id/tv_comment_score"
-            android:textSize="13.3sp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/home_tab_title_color_check"
-            android:layout_gravity="center"/>
-
-    </RelativeLayout>
-    <EditText
-        android:id="@+id/et_comment_content"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:background="@color/white"
-        android:layout_marginTop="7dp"
-        android:padding="10dp"
-        android:textColor="@color/hotel_address"
-        android:maxLength="140"
-        android:gravity="top"
-        android:hint="谢谢大人的宝贵意见"/>
+    tools:context="com.tdin360.zjw.marathon.ui.activity.HotelCommentActivity">
     <LinearLayout
-        android:id="@+id/layout_comment"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingBottom="20dp"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add_pic"
-            android:scaleType="centerCrop"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="添加图片"
-            android:textSize="12sp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/circle_message_add"/>
-
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_layout"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/item_hotel_comment"/>
+        </ScrollView>
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_feedback_sure"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/feedback_submit"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:background="@drawable/oval_green_button_selector" />
 
-</LinearLayout>
+    <include layout="@layout/item_loading"/>
+
+
+</RelativeLayout>

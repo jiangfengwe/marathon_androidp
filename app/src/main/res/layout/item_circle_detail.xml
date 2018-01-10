@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
-        android:id="@+id/iv_circle_portrait"
+        android:id="@+id/iv_circle_detail_comment_portrait"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/circle_portrait"
@@ -14,30 +14,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="11dp">
+            android:layout_marginBottom="5dp">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="荐客家"
-                android:layout_gravity="center"
-                android:layout_marginRight="18dp"
-                android:textSize="12sp"
-                android:textColor="@color/home_tab_title_color_check"/>
-            <TextView
+                android:id="@+id/tv_circle_detail_comment_name"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="12-12"
-                android:textSize="12sp"
+                android:text="荐客家"
                 android:layout_gravity="center"
-                android:textColor="@color/circle_head_time"/>
+                android:layout_marginRight="10dp"
+                android:textSize="12sp"
+                android:textColor="@color/home_tab_title_color_check"/>
             <TextView
                 android:id="@+id/tv_circle_detail_callback"
                 android:layout_width="wrap_content"
@@ -48,6 +44,15 @@
                 android:textColor="@color/circle_head_time"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_circle_detail_comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12-12"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/circle_head_time"/>
+        <TextView
+            android:id="@+id/tv_circle_detail_comment_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"
@@ -58,6 +63,7 @@
             android:id="@+id/tv_circle_detail_response"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="就部分vgayt6t66trt"
             android:textSize="12sp"
             android:ellipsize="end"

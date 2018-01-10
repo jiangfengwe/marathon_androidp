@@ -29,8 +29,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import cn.finalteam.rxgalleryfinal.ui.fragment.MediaGridFragment;
-
 /**
  * 设置密码
  */

@@ -62,7 +62,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
 					if(listener!=null){
 						listener.onWXPaySuccess();
-
 					}
 					break;
 				case -1:

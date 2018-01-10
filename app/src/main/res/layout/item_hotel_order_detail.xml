@@ -14,6 +14,7 @@
         android:background="@drawable/order_bg"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/order_hotel_pic"
             android:layout_width="100dp"
             android:layout_height="80dp"
             android:src="@drawable/hotel"
@@ -25,6 +26,7 @@
             android:orientation="vertical"
             android:layout_gravity="center">
             <TextView
+                android:id="@+id/order_hotel_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -36,6 +38,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="20dp">
                 <TextView
+                    android:id="@+id/order_hotel_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -52,6 +55,7 @@
                     android:textColor="@color/home_tab_title_color_check"
                     android:text="@string/money"/>
                 <TextView
+                    android:id="@+id/order_hotel_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -82,6 +86,7 @@
                 android:paddingTop="10dp"
                 android:textColor="@color/theme_text"/>
             <TextView
+                android:id="@+id/order_hotel_room_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="豪华总统套房"
@@ -104,6 +109,7 @@
                 android:paddingTop="10dp"
                 android:textColor="@color/theme_text"/>
             <TextView
+                android:id="@+id/order_hotel_live_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="客房一：张果果、张果果
@@ -128,6 +134,7 @@
                 android:textColor="@color/theme_text"
                 android:layout_marginRight="10dp"/>
             <TextView
+                android:id="@+id/order_hotel_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14.7sp"
@@ -152,6 +159,7 @@
                 android:textColor="@color/theme_text"
                 android:layout_marginRight="10dp"/>
             <TextView
+                android:id="@+id/order_hotel_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14.7sp"
@@ -174,6 +182,7 @@
                 android:textColor="@color/theme_text"
                 android:layout_marginRight="10dp"/>
             <TextView
+                android:id="@+id/order_hotel_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14.7sp"
@@ -196,6 +205,7 @@
                 android:textColor="@color/theme_text"
                 android:layout_marginRight="10dp"/>
             <TextView
+                android:id="@+id/order_hotel_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14.7sp"
@@ -220,6 +230,7 @@
                 android:textColor="@color/theme_text"
                 android:layout_marginRight="10dp"/>
             <TextView
+                android:id="@+id/order_hotel_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14.7sp"

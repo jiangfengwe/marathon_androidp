@@ -5,16 +5,20 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="wrap_content"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_marginBottom="5dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="128dp">
         <ImageView
+            android:id="@+id/iv_order_travel_pic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/travel"
             android:scaleType="centerCrop"/>
         <TextView
+            android:id="@+id/tv_order_travel_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="贵阳------千户苗寨"
@@ -29,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
         <TextView
-            android:id="@+id/tv_travel_count"
+            android:id="@+id/tv_order_travel_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="6"
@@ -61,6 +65,7 @@
             android:textColor="@color/hotel_level"
             android:text="￥"/>
         <TextView
+            android:id="@+id/tv_order_travel_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -83,6 +88,7 @@
             android:textSize="12sp"
             android:textColor="@color/day_division"/>
         <TextView
+            android:id="@+id/tv_order_travel_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2018-09-09 09:00"
@@ -93,6 +99,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/tv_order_travel_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="待付款"
@@ -114,6 +121,7 @@
             android:textSize="12sp"
             android:textColor="@color/day_division"/>
         <TextView
+            android:id="@+id/tv_order_travel_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="09w789615456266655"
@@ -122,10 +130,12 @@
 
     </LinearLayout>
     <TextView
+        android:id="@+id/tv_order_travel_pay_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/home_tab_title_color_check"
         android:textSize="12sp"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:layout_marginBottom="15dp"
         android:text="剩余支付时间：1天23小时56分32秒"/>

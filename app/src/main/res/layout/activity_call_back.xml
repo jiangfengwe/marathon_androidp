@@ -1,9 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.CallBackActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+            <include layout="@layout/toolbar_layout"/>
+            <LinearLayout
+                android:id="@+id/layout_comment_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/iv_all_comment_portrait"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/circle_portrait"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:scaleType="centerCrop"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="11dp">
+                        <TextView
+                            android:id="@+id/tv_all_comment_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="荐客家"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="18dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/home_tab_title_color_check"/>
+                        <TextView
+                            android:id="@+id/tv_all_comment_time"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="12-12"
+                            android:textSize="12sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/circle_head_time"/>
+                        <TextView
+                            android:id="@+id/tv_all_callback"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/comment_back"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            android:layout_gravity="center"
+                            android:textColor="@color/circle_head_time"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_all_comment_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"
+                        android:textSize="13.3sp"
+                        android:textColor="@color/theme_text"/>
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="所有评论"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"/>
+            <com.liaoinstan.springview.widget.SpringView
+                android:id="@+id/springView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_all_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.liaoinstan.springview.widget.SpringView>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/hotel_division"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+            <EditText
+                android:id="@+id/et_all_comment"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:textSize="14.7sp"
+                android:textColor="@color/circle_detail_comment"
+                android:hint="@string/comment_hint"/>
+            <Button
+                android:id="@+id/btn_all_comment"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:text="@string/comment_sure"
+                android:textColor="@color/white"
+                android:textSize="13.3sp"
+                android:background="@drawable/shape_hotel_order"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/load_fail_layout"/>
+    <include layout="@layout/item_loading"/>
 
-</android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

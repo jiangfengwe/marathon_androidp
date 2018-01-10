@@ -11,6 +11,7 @@
         android:layout_margin="10dp"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/iv_all_travel_comment_portrait"
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginRight="10dp"
@@ -20,12 +21,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_all_travel_comment_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="小李"
                 android:textSize="12sp"
                 android:textColor="@color/home_tab_title_color_check"/>
             <TextView
+                android:id="@+id/tv_all_travel_comment_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2017-06-08"
@@ -33,6 +36,7 @@
                 android:layout_marginTop="5dp"
                 android:textColor="@color/hotel_date"/>
             <TextView
+                android:id="@+id/tv_all_travel_comment_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/hotel_comment"

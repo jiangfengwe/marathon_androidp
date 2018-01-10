@@ -34,34 +34,37 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_mycircle_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="2017/10/25"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="18dp"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 android:textColor="@color/my_circle_time"/>
             <TextView
+                android:id="@+id/tv_mycircle_time"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="09:23"
+                android:visibility="gone"
                 android:textSize="10sp"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/my_circle_time"/>
             <TextView
                 android:id="@+id/tv_my_circle_delete"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="删除"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 android:layout_marginTop="15dp"
-                android:textColor="@color/my_circle_time"/>
+                android:textColor="@color/home_tab_title_color_check"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/tv_my_circle_content"
+            android:id="@+id/tv_mycircle_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"

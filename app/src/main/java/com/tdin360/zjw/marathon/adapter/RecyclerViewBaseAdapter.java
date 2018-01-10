@@ -219,6 +219,7 @@ public abstract class RecyclerViewBaseAdapter<T> extends RecyclerView.Adapter<Re
     }
 
     public void onBindHeaderViewHolder(HeaderViewHolder holder){
+
     }
 
     protected abstract void onBindNormalViewHolder(NormalViewHolder holder,T model);
