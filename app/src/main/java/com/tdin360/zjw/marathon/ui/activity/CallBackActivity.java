@@ -206,7 +206,8 @@ public class CallBackActivity extends BaseActivity {
                     params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                     params.addBodyParameter("customerId",customerId);
                     params.addBodyParameter("dynamicId",dynamicId);
-                    if(commentId==index){
+                    //params.addBodyParameter("commentId",commentId+"");
+                    if(index==0){
                         params.addBodyParameter("commentId",commentId+"");
                     }else{
                         params.addBodyParameter("commentId",index+"");
@@ -391,6 +392,7 @@ public class CallBackActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 etComment.setHint("评论");
+                index=0;
             }
         });
     }

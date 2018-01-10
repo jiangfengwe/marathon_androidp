@@ -212,7 +212,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        //initData();
+                        initData();
                         break;
 
                 }
@@ -221,7 +221,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(this)){
             //加载网络数据
-           //initData();
+           initData();
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -272,11 +272,11 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     bjTravelPictureListModel= model.getBJTravelPictureListModel();
                     SingleClass.getInstance().setBjTravelPictureListModel(bjTravelPictureListModel);
                     tvCount.setText(bjTravelPictureListModel.size()+"");
-                    if(bjTravelPictureListModel.size()<=0){
+                  /*  if(bjTravelPictureListModel.size()<=0){
                         mErrorView.show(tvCount,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
                     }else {
                         mErrorView.hideErrorView(tvCount);
-                    }
+                    }*/
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),travelPictureBean.getMessage());
                 }
@@ -332,22 +332,27 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onSuccess(String result) {
                 Log.d("traveldetail", "onSuccess: "+result);
-               /* Gson gson=new Gson();
+                Gson gson=new Gson();
                 TravelDetailBean travelDetailBean = gson.fromJson(result, TravelDetailBean.class);
                 boolean state = travelDetailBean.isState();
                 if(state){
                     TravelDetailBean.ModelBean model = travelDetailBean.getModel();
-                    bjTravelModel= model.getBJTravelModel();
+                   bjTravelModel= model.getBJTravelModel();
                     List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList = model.getApiTravelMonthDateList();
-                    List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean> bjTravelEvaluateListModel = model.getBJTravelEvaluateListModel();
-                    tvCommentCount.setText("一共"+bjTravelEvaluateListModel.size()+"条评论");
+                    tvCommentCount.setText("一共"+model.getEvaluationCount()+"条评论");
                     SingleClass.getInstance().setApiTravelMonthDateList(apiTravelMonthDateList);
                     x.image().bind(ivPic,bjTravelModel.getPictureUrl(),imageOptions);
                     tvPrice.setText(bjTravelModel.getPrice()+"");
                     tvName.setText(bjTravelModel.getStartPlace()+"——"+bjTravelModel.getEndPlace());
+                    tvLevel.setText(bjTravelModel.getScoring()+"");
+                    List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean> bjTravelEvaluateListModel = model.getBJTravelEvaluateListModel();
 
-                    //TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean bjTravelEvaluateListModelBean = bjTravelEvaluateListModel.get(0);
-                    tvLevel.setText(bjTravelEvaluateListModelBean.getScoring()+"");
+                    if(bjTravelEvaluateListModel.size()<=0){
+                        layout.setVisibility(View.GONE);
+                       return;
+                    }else{
+                        layout.setVisibility(View.VISIBLE);
+                        TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean bjTravelEvaluateListModelBean = bjTravelEvaluateListModel.get(0);
                     TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel
                             = bjTravelEvaluateListModelBean.getEvaluationUserModel();
                     String headImg = evaluationUserModel.getHeadImg();
@@ -360,14 +365,10 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     tvCommentTime.setText(evaluateTimeStr);
                     tvComment.setText(evaluateContent);
                     Log.d("apiTravelMonthDateList", "onSuccess: "+apiTravelMonthDateList.size());
-                    if(apiTravelMonthDateList.size()<=0){
-                        mErrorView.show(tvCount,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
-                    }else {
-                        mErrorView.hideErrorView(tvCount);
                     }
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),travelDetailBean.getMessage());
-                }*/
+                }
 
             }
 
@@ -384,7 +385,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFinished() {
-                adapter.update(bjTravelEvaluatePictureListModel);
+                //adapter.update(bjTravelEvaluatePictureListModel);
                 layoutLoading.setVisibility(View.GONE);
                // hud.dismiss();
 

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
             Log.d("code", "gotResult: "+code);
             switch (code) {
                 case 0:
-                    ToastUtils.showCenter(getApplicationContext(),"codeeeee");
+                    //ToastUtils.showCenter(getApplicationContext(),"codeeeee");
                     logs = "Set tag and alias success";
                    // Log.i(TAG, logs);
                     // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
         String alias = SharedPreferencesManager.getAlias(getApplicationContext());
         Log.d("alias", "onSuccess: "+alias);
         if(TextUtils.isEmpty(alias)){
-            ToastUtils.showCenter(getApplicationContext(),"alias为空");
+            //ToastUtils.showCenter(getApplicationContext(),"alias为空");
             if(savedInstanceState!=null){
                 this.marathonFragment= (EventFragment) this.getSupportFragmentManager().findFragmentByTag(TAB1);
                 this.circleFragment = (CircleFragment) this.getSupportFragmentManager().findFragmentByTag(TAB2);

@@ -122,6 +122,7 @@ public class Bean {
              * Share : 0
              * CustomerId : 0
              * Id : 35
+             * IsTag: true
              * CustomProperties : {}
              */
 
@@ -152,6 +153,16 @@ public class Bean {
             private int Share;
             private int CustomerId;
             private int Id;
+            private boolean IsTag;
+
+            public boolean isTag() {
+                return IsTag;
+            }
+
+            public void setTag(boolean tag) {
+                IsTag = tag;
+            }
+
             private CustomPropertiesBeanX CustomProperties;
             private List<BJDynamicsPictureListModel> BJDynamicsPictureListModel;
 

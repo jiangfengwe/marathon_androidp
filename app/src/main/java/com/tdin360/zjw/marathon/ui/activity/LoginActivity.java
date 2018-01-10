@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private EditText editTextPass;
     @ViewInject(R.id.clear)
     private ImageView clearBtn;*/
-   private static final int MSG_SET_ALIAS = 1001;
+   private static final int MSG_SET_ALIAS = 1002;
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {

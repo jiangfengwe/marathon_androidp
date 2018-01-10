@@ -319,71 +319,21 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onWaiting() {
-
+                ToastUtils.showCenter(getContext(),"onWaiting");
             }
 
             @Override
             public void onStarted() {
-
+                ToastUtils.showCenter(getContext(),"onStarted");
             }
 
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
+                ToastUtils.showCenter(getContext(),"current");
                 Log.d("long", "onLoading: "+current);
 
             }
         });
-        /*x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d("publish", "onSuccess: "+result);
-                Gson gson=new Gson();
-                PublishBean publishBean = gson.fromJson(result, PublishBean.class);
-                boolean state = publishBean.isState();
-                if(state){
-                   // ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
-                    CircleFragment.instance.initData();
-                    clearPic();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
-                    imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
-                    finish();
-                    //layoutRefresh.setVisibility(View.GONE);
-                   *//* new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(1500);
-                                finish();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();*//*
-                }else{
-                    ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                ToastUtils.showCenter(PublishActivity.this,"网络不给力,连接服务器异常!");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                adapterPic.notifyDataSetChanged();
-                //layoutLoading.setVisibility(View.GONE);
-               hud.dismiss();
-
-            }
-
-
-        });*/
     }
     private void clearPic() {
         // 清空图片缓存，包括裁剪、压缩后的图片 注意:必须要在上传完成后调用 必须要获取权限

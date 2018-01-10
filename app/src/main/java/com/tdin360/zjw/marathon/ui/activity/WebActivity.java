@@ -101,6 +101,15 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         back.setOnClickListener(this);
         close.setOnClickListener(this);
         more.setOnClickListener(this);
+        more.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                webView.clearHistory();
+                webView.clearFormData();
+                webView.reload();
+                return false;
+            }
+        });
     }
     //给js调用的方法
     @JavascriptInterface

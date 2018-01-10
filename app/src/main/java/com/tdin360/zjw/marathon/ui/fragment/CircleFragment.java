@@ -325,8 +325,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 final TextView tvPraise = (TextView) holder.getViewById(R.id.tv_circle_praise);
                 ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_circle_portrait);
                 final CheckBox checkBox = (CheckBox) holder.getViewById(R.id.cb_circle);
-               /* LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
-                String customerId = loginInfo.getId() + "";*/
+                LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
+                String customerId = loginInfo.getId() + "";
+                if((!TextUtils.isEmpty(customerId))&&model.isTag()){
+                    checkBox.setChecked(true);
+                }else{
+                    checkBox.setChecked(false);
+                }
+
                 boolean isRecommend = model.isIsRecommend();
                 if(isRecommend){
                     layoutRecommend.setVisibility(View.VISIBLE);
@@ -438,9 +444,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                     ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
+                                    initData(0);
                                     model.setTagsNumber(tagsNumber);
                                     tvPraise.setText(tagsNumber+"");
                                     checkBox.setChecked(true);
+                                    model.setTag(true);
                                     adapter.notifyDataSetChanged();
                                 }else {
                                     ToastUtils.showCenter(getContext(),praiseBean.getMessage());
@@ -469,11 +477,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                     }
                 });
-                /*if(TextUtils.isEmpty(customerId)){
-                    checkBox.setChecked(true);
-                }else{
-                    checkBox.setChecked(false);
-                }*/
+
                 layoutShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

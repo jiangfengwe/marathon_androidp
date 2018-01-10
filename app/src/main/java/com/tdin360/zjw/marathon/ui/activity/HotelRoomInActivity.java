@@ -3,6 +3,7 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -100,7 +101,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private List<EditText> name=new ArrayList<>();
     private List<EditText> ic=new ArrayList<>();
     private String str;
-
+    @ViewInject(R.id.list_Lin)
+    private LinearLayout listLayout;
+    private static int id = 100;
 
 
 
@@ -128,8 +131,56 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         initDateLive();
         initToolbar();
         initView();
-       // addView();
+        //final LinearLayout lin = (LinearLayout) findViewById(R.id.list_Lin);
 
+       // addView();
+        LinearLayout.LayoutParams LP_FW = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout newSingleRL=new RelativeLayout(this);
+
+        for(int i=0;i<5;)
+        {
+            newSingleRL=generateSingleLayout(id,"第"+(++i)+"个动态列表");
+            listLayout.addView(newSingleRL,LP_FW);//全部用父结点的布局参数
+        }
+
+    }
+    private RelativeLayout generateSingleLayout(int imageID,String str)
+    {
+        RelativeLayout layout_root_relative=new RelativeLayout(this);
+        LinearLayout layout_sub_Lin=new LinearLayout(this);
+        layout_sub_Lin.setBackgroundColor(Color.argb(0xff, 0x00, 0xff, 0x00));
+        layout_sub_Lin.setOrientation(LinearLayout.VERTICAL);
+        layout_sub_Lin.setPadding(5, 5, 5, 5);
+
+        TextView tv = new TextView(this);
+        LinearLayout.LayoutParams LP_WW = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv.setText(str);
+        tv.setTextColor(Color.argb(0xff, 0x00, 0x00, 0x00));
+        tv.setTextSize(20);
+        tv.setLayoutParams(LP_WW);
+        layout_sub_Lin.addView(tv);
+
+        RelativeLayout.LayoutParams RL_MW = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);//尤其注意这个位置，用的是父容器的布局参数
+        RL_MW.setMargins(5, 5, 10, 5);
+        RL_MW.addRule(RelativeLayout.LEFT_OF,imageID);
+        layout_root_relative.addView(layout_sub_Lin,RL_MW);
+
+
+        ImageView imageView = new ImageView(this);
+        RelativeLayout.LayoutParams RL_WW = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        imageView.setPadding(5, 5, 5, 5);
+        RL_WW.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        imageView.setLayoutParams(RL_WW);
+        imageView.setClickable(true);
+        imageView.setId(imageID);
+        imageView.setImageResource(R.mipmap.logo);
+        layout_root_relative.addView(imageView);
+
+        return layout_root_relative;
 
     }
 
@@ -175,6 +226,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         });
         viewline.setVisibility(View.GONE);
         titleTv.setText("入住信息");
+
 
     }
     @Override
@@ -502,10 +554,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
        // String trimName = etName.getText().toString().trim();
         //Log.d("name", "addView: "+trim);
         name.add(etName);
-       //
-        //
-        // LinearLayout layout=new LinearLayout(getApplicationContext());
         layoutName.addView(etName);
+        LinearLayout layout=new LinearLayout(getApplicationContext());
+        setContentView(layout);
         final EditText etIC = new EditText(this);
         ic.add(etIC);
         etIC.setHint("身份证");

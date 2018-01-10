@@ -13,8 +13,8 @@
         android:background="@color/home_tab_title_color_check">
         <ImageView
             android:id="@+id/iv_my_order_back"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/back"
             android:layout_centerVertical="true"/>
         <RadioGroup
