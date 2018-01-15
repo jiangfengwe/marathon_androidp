@@ -118,7 +118,7 @@ public class FeedbackListActivity extends BaseActivity  implements View.OnClickL
 
     private void initView() {
         layoutAdd.setOnClickListener(this);
-        btnFeedback.setOnClickListener(this);
+        //btnFeedback.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -129,6 +129,7 @@ public class FeedbackListActivity extends BaseActivity  implements View.OnClickL
         btnFeedback.setText("提交");
         titleTv.setTextColor(Color.WHITE);
         showBack(toolbar,imageView);
+        btnFeedback.setOnClickListener(this);
 
     }
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener=new GridImageAdapter.onAddPicClickListener() {
@@ -200,7 +201,7 @@ public class FeedbackListActivity extends BaseActivity  implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_feedback_sure:
+            case R.id.navRightItemTitle:
                 //反馈意见提交
                 //ToastUtils.show(getApplicationContext(),"反馈意见提交");
                 if(NetWorkUtils.isNetworkAvailable(this)){

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
@@ -41,8 +42,9 @@ public class MyReceiver extends BroadcastReceiver {
 
 
         Bundle bundle = intent.getExtras();
+		Log.d("mynotice", "onReceive: "+bundle);
 
-		//Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
+		Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 		
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
@@ -50,14 +52,15 @@ public class MyReceiver extends BroadcastReceiver {
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-        	//Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+        	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	//processCustomMessage(context, bundle);
 			String content =  bundle.getString(JPushInterface.EXTRA_MESSAGE);
+			Log.d("notice", "onReceive: "+content);
 			saveMessage(context,content);
 
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-         //   Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
+           Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
            // Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 			String content = bundle.getString("cn.jpush.android.ALERT");
@@ -96,7 +99,6 @@ public class MyReceiver extends BroadcastReceiver {
 
 	// 打印所有的 intent extra 数据
 	private static String printBundle(Bundle bundle) {
-
 		StringBuilder sb = new StringBuilder();
 		for (String key : bundle.keySet()) {
 			if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
@@ -105,7 +107,7 @@ public class MyReceiver extends BroadcastReceiver {
 				sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
 			} else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
 				if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
-					//Log.i(TAG, "This message has no Extra data");
+					Log.i(TAG, "This message has no Extra data");
 					continue;
 				}
 
@@ -119,13 +121,14 @@ public class MyReceiver extends BroadcastReceiver {
 								myKey + " - " +json.optString(myKey) + "]");
 					}
 				} catch (JSONException e) {
-					//Log.e(TAG, "Get message extra JSON error!");
+					Log.e(TAG, "Get message extra JSON error!");
 				}
 
 			} else {
 				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
 			}
 		}
+		Log.d("mynoticesb", "printBundle: "+sb.toString());
 		return sb.toString();
 	}
 	

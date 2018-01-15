@@ -2,8 +2,10 @@ package com.tdin360.zjw.marathon;
 
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.HotelOrderInfoBean;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.model.OrderHotelBean;
 import com.tdin360.zjw.marathon.model.OrderTravelBean;
+import com.tdin360.zjw.marathon.model.OtherLoginUserInfoBean;
 import com.tdin360.zjw.marathon.model.TravelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelOrderInfoBean;
 import com.tdin360.zjw.marathon.model.TravelPictureBean;
@@ -49,6 +51,16 @@ public class SingleClass {
     private OrderHotelBean.ModelBean.BJHotelOrderListModelBean bjHotelOrderListModelBean;
     //我的订单，旅游订单详情
     private OrderTravelBean.ModelBean.BJTravelOrderListModelBean bjTravelOrderListModelBean;
+
+    private OtherLoginUserInfoBean.UserBean user;
+
+    public OtherLoginUserInfoBean.UserBean getUser() {
+        return user;
+    }
+
+    public void setUser(OtherLoginUserInfoBean.UserBean user) {
+        this.user = user;
+    }
 
     public List<TravelPictureBean.ModelBean.BJTravelPictureListModelBean> getBjTravelPictureListModel() {
         return bjTravelPictureListModel;

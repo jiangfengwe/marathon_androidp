@@ -37,6 +37,7 @@ import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.Bean;
 import com.tdin360.zjw.marathon.model.CircleDetailBean;
@@ -481,7 +482,7 @@ public class CircleDetailActivity extends BaseActivity {
             }
         };
         rvCircle.setAdapter(adapter);
-        rvCircle.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         adapter.addHeaderView(R.layout.item_circle_detail_head);
 
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {

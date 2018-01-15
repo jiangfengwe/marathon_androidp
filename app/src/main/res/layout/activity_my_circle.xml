@@ -50,10 +50,18 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
-
-    <include layout="@layout/load_fail_layout"/>
-    <include layout="@layout/item_loading"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+        <include layout="@layout/load_fail_layout"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+        <include layout="@layout/item_loading"/>
+    </LinearLayout>
 
 
 

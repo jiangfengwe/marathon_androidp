@@ -40,6 +40,7 @@ import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.NineGridViewAdapter;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.ChangeHeadPicBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -127,19 +128,9 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         initView();
-        initBg();
         initNet();
         //initData();
         //initNet();
-    }
-    private void initBg() {
-          String pictureUrl = SharedPreferencesManager.readBgPath(getApplicationContext());
-        if(TextUtils.isEmpty(pictureUrl)){
-            layoutBg.setImageResource(R.drawable.my_circle_bg);
-        }else{
-            x.image().bind(layoutBg,pictureUrl,imageOptions);
-        }
-
     }
     private void initNet() {
         //加载失败点击重试
@@ -186,13 +177,18 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     }
     private void initData() {
        // bjDynamicListModel.clear();
+        final String customerId1 = getIntent().getStringExtra("customerId");
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-        String customerId = model.getId() + "";
+        final String customerId = model.getId() + "";
         RequestParams params=new RequestParams(HttpUrlUtils.MY_CIRCLE);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
-        params.addBodyParameter("customerId",customerId);
+        if(TextUtils.isEmpty(customerId1)){
+            params.addBodyParameter("customerId",customerId);
+        }else{
+            params.addBodyParameter("customerId",customerId1);
+        }
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -202,6 +198,22 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 boolean state = myCircleBean.isState();
                 if(state){
                     model1= myCircleBean.getModel();
+                    String pictureUrl = SharedPreferencesManager.readBgPath(getApplicationContext());
+                    if(customerId.equals(customerId1)){
+                        if(TextUtils.isEmpty(pictureUrl)){
+                            layoutBg.setImageResource(R.drawable.my_circle_bg);
+                        }else{
+                            x.image().bind(layoutBg,pictureUrl,imageOptions);
+                        }
+                    }else{
+                        String pictureUrl1 = model1.getPictureUrl();
+                        if(TextUtils.isEmpty(pictureUrl)){
+                            layoutBg.setImageResource(R.drawable.my_circle_bg);
+                        }else{
+                            x.image().bind(layoutBg,pictureUrl1,imageOptions);
+                        }
+                    }
+
                     totalPage=model1.getTotalPages();
                     bjDynamicListModel.addAll(model1.getBJDynamicListModel()) ;
                   /*  if(bjDynamicListModel.size()<=0){
@@ -232,6 +244,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onFinished() {
                 adapter.update(bjDynamicListModel);
+                //adapter.notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
                 //hud.dismiss();
 
@@ -241,7 +254,19 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         ivBack.setOnClickListener(this);
-        ivPic.setOnClickListener(this);
+        final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+        String customerId = model.getId() + "";
+        String customerId1 = getIntent().getStringExtra("customerId");
+        if(customerId.equals(customerId1)){
+            if(customerId.equals(customerId1)){
+                ivPic.setOnClickListener(this);
+            }else{
+              ivPic.setClickable(false);
+            }
+        }else{
+
+        }
+
         adapter=new RecyclerViewBaseAdapter<MyCircleBean.ModelBean.BJDynamicListModelBean>(getApplicationContext(),
                 bjDynamicListModel,R.layout.item_my_circle) {
             @Override
@@ -368,10 +393,11 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 holder.setText(R.id.tv_mycircle_sign,model1.getSign());
 
             }
+
         };
         adapter.addHeaderView(R.layout.item_my_circle_head);
         rvCircle.setAdapter(adapter);
-        rvCircle.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         rvCircle.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

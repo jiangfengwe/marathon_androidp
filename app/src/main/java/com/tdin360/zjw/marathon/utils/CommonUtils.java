@@ -17,8 +17,6 @@ import static com.umeng.socialize.utils.ContextUtil.getPackageName;
  */
 
 public class CommonUtils {
-
-
     /**
      * 根据指定格式获取当前时间字符串
      * @param format

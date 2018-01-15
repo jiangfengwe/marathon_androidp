@@ -11,8 +11,9 @@
         android:layout_height="150dp"
         android:gravity="top"
         android:padding="10dp"
+        android:maxLength="5"
+        android:ellipsize="end"
         android:textSize="14sp"
-        android:maxLength="10"
         android:background="@null"
         android:hint="输入新的昵称"/>
     <Button

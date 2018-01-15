@@ -38,6 +38,9 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.tools.PictureFileUtils;
+import com.maning.mndialoglibrary.MProgressBarDialog;
+import com.maning.mndialoglibrary.MProgressDialog;
+import com.maning.mndialoglibrary.MToast;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.GridImageAdapter;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -86,6 +89,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     private RecyclerView rvPublish;
     private GridImageAdapter adapterPic;
     private List<LocalMedia> localMedias=new ArrayList<>();
+
+    private String picPath;
 
     //private KProgressHUD hud;
 
@@ -265,7 +270,13 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         params.addBodyParameter("dynamicContent",dynamicContent);
         params.addBodyParameter("customerId",customerId);
         for(int i=0;i<localMedias.size();i++ ){
-            params.addBodyParameter("file"+i,new File(localMedias.get(i).getCompressPath()),"image/jpeg",i+".jpg");
+            String compressPath = localMedias.get(i).getCompressPath();
+            Log.d("compressPath", "initSure: "+compressPath);
+          /*  if(compressPath.equals(".jpg")){
+                picPath
+            }*/
+
+            params.addBodyParameter("file"+i,new File(compressPath),"image/jpeg",i+".jpg");
         }
         x.http().post(params, new Callback.ProgressCallback<String>() {
             @Override
@@ -312,19 +323,18 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onFinished() {
                 adapterPic.notifyDataSetChanged();
-                //layoutLoading.setVisibility(View.GONE);
                 hud.dismiss();
 
             }
 
             @Override
             public void onWaiting() {
-                ToastUtils.showCenter(getContext(),"onWaiting");
+                //ToastUtils.showCenter(getContext(),"onWaiting");
             }
 
             @Override
             public void onStarted() {
-                ToastUtils.showCenter(getContext(),"onStarted");
+               // ToastUtils.showCenter(getContext(),"onStarted");
             }
 
             @Override

@@ -154,6 +154,7 @@ dependencies {
     compile 'com.liaoinstan.springview:library:1.3.0'
     testCompile 'junit:junit:4.12'
     //compile 'com.github.maning0303:MNImageBrowser:V1.0.3'
+    compile 'com.github.maning0303:MNProgressHUD:V1.0.5'
     compile project(path: ':imagebrowserlibrary')
 }
 

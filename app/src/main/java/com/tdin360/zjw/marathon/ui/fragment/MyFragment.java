@@ -238,8 +238,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 }
                 break;
             case R.id.my_dynamic:
+                LoginUserInfoBean.UserBean model1 = SharedPreferencesManager.getLoginInfo(getContext());
+                String customerId1 = model1.getId() + "";
                 //我的动态
-                if(TextUtils.isEmpty(customerId)){
+                if(TextUtils.isEmpty(customerId1)){
                     intent=new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
                 }else{

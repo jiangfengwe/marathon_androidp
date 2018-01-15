@@ -22,6 +22,7 @@ import com.liaoinstan.springview.widget.SpringView;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.HotelMoreCommentBean;
 import com.tdin360.zjw.marathon.model.TravelMoreCommentBean;
@@ -257,7 +258,7 @@ public class HotelMoreCommentActivity extends BaseActivity {
             }
         };
         rvComment.setAdapter(adapter);
-        rvComment.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvComment.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
 
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {

@@ -24,6 +24,7 @@ import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.EventBean;
 import com.tdin360.zjw.marathon.ui.activity.ApplyActivity;
@@ -95,7 +96,7 @@ public class EventStateFragment extends BaseFragment {
         imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
                 //ImageOptions.Builder()的一些其他属性：
                 //.setCircular(true) //设置图片显示为圆形
-                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setImageScaleType(ImageView.ScaleType.FIT_XY)
                 //.setSquare(true) //设置图片显示为正方形
                 .setCrop(true).setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
@@ -124,7 +125,7 @@ public class EventStateFragment extends BaseFragment {
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData();
+                        initData(0);
                         break;
 
                 }
@@ -133,7 +134,7 @@ public class EventStateFragment extends BaseFragment {
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(getContext())){
             //加载网络数据
-            initData();
+            initData(0);
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -160,7 +161,7 @@ public class EventStateFragment extends BaseFragment {
 
         }
     }
-    private void initData() {
+    private void initData(int i) {
         //bjEventSystemListModel.clear();
        /* final KProgressHUD hud = KProgressHUD.create(getContext());
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -168,6 +169,9 @@ public class EventStateFragment extends BaseFragment {
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();*/
+       if(i==1){
+           bjEventSystemListModel.clear();
+       }
         Bundle arguments = this.getArguments();
         String Status = (String) arguments.get("Status");
         RequestParams params=new RequestParams(HttpUrlUtils.EVENT);
@@ -268,7 +272,7 @@ public class EventStateFragment extends BaseFragment {
             }
         };
         rvEventState.setAdapter(adapter);
-        rvEventState.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rvEventState.setLayoutManager(new WrapContentLinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -291,7 +295,7 @@ public class EventStateFragment extends BaseFragment {
                 springView.onFinishFreshAndLoad();
                 bjEventSystemListModel.clear();
                 pageIndex=1;
-                initData();
+                initData(0);
             }
 
             @Override
@@ -302,7 +306,7 @@ public class EventStateFragment extends BaseFragment {
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData();
+                    initData(0);
                 }
 
             }

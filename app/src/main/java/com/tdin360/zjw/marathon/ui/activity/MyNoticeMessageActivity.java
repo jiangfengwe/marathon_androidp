@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
 
@@ -82,7 +83,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
             }
         };
         rvNotice.setAdapter(adapter);
-        rvNotice.setLayoutManager(new LinearLayoutManager(this));
+        rvNotice.setLayoutManager(new WrapContentLinearLayoutManager(this));
        // this.adapter = new NoticeMessageListAdapter();
        // mRecyclerView.setAdapter(adapter);
 

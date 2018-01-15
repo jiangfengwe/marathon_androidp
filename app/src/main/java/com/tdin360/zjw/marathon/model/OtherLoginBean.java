@@ -9,7 +9,7 @@ public class OtherLoginBean {
     /**
      * state : true
      * message : 登陆成功
-     * userSecretMessage : V0G9urLbQ0BplFmql9F9GLuZbtDoy5yga9LWGFYBQKUz68IVB8HKvgmaGzhP77NOEqzYeJ3+obzo1cRJSkHM13CqSULXhRZVx28SuHpWSpoQiyVcrTxSNvg69rOOg+kkszeUNAtBDHfK7P8r1xzv8I66H7pM7fJxTYhkg5xOkef8N1A+m6uYJZfQDLbXihQ5RoPl5QrOm85z5gYMG6URPqFz7KYy+uhD68w6Huh0XGQ=
+     * userSecretMessage : psE5YoOh0ehJXYXemd0iEmQ0i5DeNsYQPbNLoWvIA9p4sp5626cBlVoMluN5OqtC/mhRHUrH2yqFcBfAapgkZL4ejrTx1br0awmCLuwfakxzGd1KWCbx1pQf++BbtQTIqW2bXLDlG//MuywOBNHpxbjVxQFT/4pgyUGX88TSGJsUT24d+x+tCU2YIBuxN/bZn84mvdNw0A33hABtTtq2f7cnveDLZtJddJL8nwpm2+AM7mEuEHEUrRIpzf7pjy15I2xASb8OadyC5uzGyS6slA==
      */
 
     private boolean state;

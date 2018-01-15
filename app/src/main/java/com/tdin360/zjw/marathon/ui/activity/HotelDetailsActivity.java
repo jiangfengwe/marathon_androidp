@@ -32,6 +32,7 @@ import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -192,9 +193,9 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     bjHotelPictureListModel = model.getBJHotelPictureListModel();
                     SingleClass.getInstance().setBjHotelPictureListModel(bjHotelPictureListModel);
                     bjHotelRoomListModel= model.getBJHotelRoomListModel();
-                    //bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
-                 /*  evaluationUserModel= bjHotelEvaluateListModelBean.getEvaluationUserModel();
-                     if(bjHotelRoomListModel.size()<=0){
+                    bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
+                   evaluationUserModel= bjHotelEvaluateListModelBean.getEvaluationUserModel();
+                    /* if(bjHotelRoomListModel.size()<=0){
                         mErrorView.show(recyclerView,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
                     }else {
                         mErrorView.hideErrorView(recyclerView);
@@ -227,7 +228,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         });
     }
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         adapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelRoomListModelBean>(getApplicationContext(),
                 bjHotelRoomListModel,R.layout.item_hotel_detail_rv) {
             @Override
@@ -328,7 +329,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     }
                     RecyclerView rvDetail = (RecyclerView) holder.getViewById(R.id.rv_hotel_detail_foot);
                     rvAdapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean>(getApplicationContext(),
-                            HotelDetailsActivity.this.bjHotelEvaluatePictureListModel,R.layout.item_hotel_detail_pic) {
+                           bjHotelEvaluatePictureListModel,R.layout.item_hotel_detail_pic) {
                         @Override
                         protected void onBindNormalViewHolder(NormalViewHolder holder, HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean model) {
                             ImageView imageView = (ImageView) holder.getViewById(R.id.iv_comment_pic);

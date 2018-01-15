@@ -30,6 +30,7 @@ import com.liaoinstan.springview.widget.SpringView;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.CircleDetailAllCommentBean;
 import com.tdin360.zjw.marathon.model.CircleDetailCommentBean;
@@ -212,8 +213,8 @@ public class CallBackActivity extends BaseActivity {
                     }else{
                         params.addBodyParameter("commentId",index+"");
                     }
-
                     params.addBodyParameter("commentContent",commentContent);
+                    params.addBodyParameter("platform","android");
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -222,11 +223,7 @@ public class CallBackActivity extends BaseActivity {
                             CircleDetailAllCommentBean circleDetailAllCommentBean = gson.fromJson(result, CircleDetailAllCommentBean.class);
                             boolean state = circleDetailAllCommentBean.isState();
                             if(state){
-                                ToastUtils.showCenter(getApplicationContext(),circleDetailAllCommentBean.getMessage());
                                 initData(1);
-                               /* commentCount = bjDynamicsCommentListModel.size();
-                                commentCount++;
-                                initData(1);*/
                                 etComment.setText("");
                                 EnumEventBus em = EnumEventBus.CIRCLEDETAILCOMMENT;
                                 EventBus.getDefault().post(new EventBusClass(em));
@@ -280,7 +277,7 @@ public class CallBackActivity extends BaseActivity {
             }
         };
         rvComment.setAdapter(adapter);
-        rvComment.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvComment.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

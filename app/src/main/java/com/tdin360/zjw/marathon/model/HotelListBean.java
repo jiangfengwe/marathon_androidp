@@ -11,7 +11,7 @@ public class HotelListBean {
     /**
      * state : true
      * message : 请求成功
-     * model : {"pageIndex":1,"totalPages":1,"BJHotelStyleListModel":[{"Name":"舒适型","Introduce":null,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}],"BJHotelListModel":[{"Name":"花溪酒店","HotelStyle":"舒适型","EvaluationCount":0,"Scoring":5,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":200,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001045.png","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":2,"CustomProperties":{}},{"Name":"国际酒店","HotelStyle":"舒适型","EvaluationCount":0,"Scoring":4.7,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":200,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001044.jpeg","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}],"Id":0,"CustomProperties":{}}
+     * model : {"pageIndex":1,"totalPages":1,"BJHotelStyleListModel":[{"Name":"舒适型","Introduce":null,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}],"BJHotelListModel":[{"Name":"佰家酒店","HotelStyle":null,"EvaluationCount":0,"Scoring":3,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":0.01,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002389.jpeg","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":3,"CustomProperties":{}}],"Id":0,"CustomProperties":{}}
      */
 
     private boolean state;
@@ -48,7 +48,7 @@ public class HotelListBean {
          * pageIndex : 1
          * totalPages : 1
          * BJHotelStyleListModel : [{"Name":"舒适型","Introduce":null,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}]
-         * BJHotelListModel : [{"Name":"花溪酒店","HotelStyle":"舒适型","EvaluationCount":0,"Scoring":5,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":200,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001045.png","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":2,"CustomProperties":{}},{"Name":"国际酒店","HotelStyle":"舒适型","EvaluationCount":0,"Scoring":4.7,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":200,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001044.jpeg","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}]
+         * BJHotelListModel : [{"Name":"佰家酒店","HotelStyle":null,"EvaluationCount":0,"Scoring":3,"Description":null,"Phone1":null,"Phone2":null,"Address":null,"LowestPrice":0.01,"IsUsing":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002389.jpeg","EventId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":3,"CustomProperties":{}}]
          * Id : 0
          * CustomProperties : {}
          */
@@ -80,16 +80,16 @@ public class HotelListBean {
             return Id;
         }
 
-        public void setId(int id) {
-            Id = id;
+        public void setId(int Id) {
+            this.Id = Id;
         }
 
         public CustomPropertiesBean getCustomProperties() {
             return CustomProperties;
         }
 
-        public void setCustomProperties(CustomPropertiesBean customProperties) {
-            CustomProperties = customProperties;
+        public void setCustomProperties(CustomPropertiesBean CustomProperties) {
+            this.CustomProperties = CustomProperties;
         }
 
         public List<BJHotelStyleListModelBean> getBJHotelStyleListModel() {
@@ -108,9 +108,10 @@ public class HotelListBean {
             this.BJHotelListModel = BJHotelListModel;
         }
 
-        public static class CustomPropertiesBean {}
-        public static class BJHotelStyleListModelBean {
+        public static class CustomPropertiesBean {
+        }
 
+        public static class BJHotelStyleListModelBean {
             /**
              * Name : 舒适型
              * Introduce : null
@@ -125,7 +126,7 @@ public class HotelListBean {
             private String CreateTime;
             private Object Note;
             private int Id;
-            private CustomPropertiesBean CustomProperties;
+            private CustomPropertiesBeanX CustomProperties;
 
             public String getName() {
                 return Name;
@@ -167,49 +168,48 @@ public class HotelListBean {
                 this.Id = Id;
             }
 
-            public CustomPropertiesBean getCustomProperties() {
+            public CustomPropertiesBeanX getCustomProperties() {
                 return CustomProperties;
             }
 
-            public void setCustomProperties(CustomPropertiesBean CustomProperties) {
+            public void setCustomProperties(CustomPropertiesBeanX CustomProperties) {
                 this.CustomProperties = CustomProperties;
             }
 
-            public static class CustomPropertiesBean {
+            public static class CustomPropertiesBeanX {
             }
         }
-        public static class BJHotelListModelBean {
 
+        public static class BJHotelListModelBean {
             /**
-             * Name : 花溪酒店
-             * HotelStyle : 舒适型
+             * Name : 佰家酒店
+             * HotelStyle : null
              * EvaluationCount : 0
-             * Scoring : 5
+             * Scoring : 3
              * Description : null
              * Phone1 : null
              * Phone2 : null
              * Address : null
-             * LowestPrice : 200
+             * LowestPrice : 0.01
              * IsUsing : false
              * Picture : 0
-             * PictureUrl : http://www.baijar.com/content/images/thumbs/0001045.png
+             * PictureUrl : http://www.baijar.com/content/images/thumbs/0002389.jpeg
              * EventId : 0
              * CreateTime : /Date(-62135596800000)/
              * Note : null
-             * Id : 2
+             * Id : 3
              * CustomProperties : {}
              */
 
             private String Name;
             private String HotelStyle;
             private int EvaluationCount;
-            private String Scoring;
+            private int Scoring;
             private Object Description;
             private Object Phone1;
             private Object Phone2;
-
             private Object Address;
-            private int LowestPrice;
+            private double LowestPrice;
             private boolean IsUsing;
             private int Picture;
             private String PictureUrl;
@@ -217,15 +217,7 @@ public class HotelListBean {
             private String CreateTime;
             private Object Note;
             private int Id;
-            private CustomPropertiesBean CustomProperties;
-
-            public String getScoring() {
-                return Scoring;
-            }
-
-            public void setScoring(String scoring) {
-                Scoring = scoring;
-            }
+            private CustomPropertiesBeanXX CustomProperties;
 
             public String getName() {
                 return Name;
@@ -251,13 +243,13 @@ public class HotelListBean {
                 this.EvaluationCount = EvaluationCount;
             }
 
-           /* public int getScoring() {
+            public int getScoring() {
                 return Scoring;
             }
 
             public void setScoring(int Scoring) {
                 this.Scoring = Scoring;
-            }*/
+            }
 
             public Object getDescription() {
                 return Description;
@@ -291,11 +283,11 @@ public class HotelListBean {
                 this.Address = Address;
             }
 
-            public int getLowestPrice() {
+            public double getLowestPrice() {
                 return LowestPrice;
             }
 
-            public void setLowestPrice(int LowestPrice) {
+            public void setLowestPrice(double LowestPrice) {
                 this.LowestPrice = LowestPrice;
             }
 
@@ -355,15 +347,15 @@ public class HotelListBean {
                 this.Id = Id;
             }
 
-            public CustomPropertiesBean getCustomProperties() {
+            public CustomPropertiesBeanXX getCustomProperties() {
                 return CustomProperties;
             }
 
-            public void setCustomProperties(CustomPropertiesBean CustomProperties) {
+            public void setCustomProperties(CustomPropertiesBeanXX CustomProperties) {
                 this.CustomProperties = CustomProperties;
             }
 
-            public static class CustomPropertiesBean {
+            public static class CustomPropertiesBeanXX {
             }
         }
     }

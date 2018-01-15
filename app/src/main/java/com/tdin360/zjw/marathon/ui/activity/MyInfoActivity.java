@@ -137,7 +137,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout layoutNickName;
 
     private ImageOptions imageOptions;
-    boolean isgender;
+    private boolean isgender;
     private String flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,16 +169,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                         flag = "true";
                         break;
                 }
-                /*layoutLoading.setVisibility(View.VISIBLE);
-                ivLoading.setBackgroundResource(R.drawable.loading_before);
-                AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                background.start();*/
-                /*final KProgressHUD hud = KProgressHUD.create(MyInfoActivity.this);
-                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                        .setCancellable(true)
-                        .setAnimationSpeed(1)
-                        .setDimAmount(0.5f)
-                        .show();*/
+                //rgSex.check(R.id.rb_girl);
                 LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                 String customerId = loginInfo.getId() + "";
                 RequestParams params=new RequestParams(HttpUrlUtils.USER_INFO_SEX);
@@ -194,9 +185,9 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                         boolean state = myInfoSexBean.isState();
                         if(state){
                             if(flag.equals("true")){
-                                isgender=true;
-                            }else{
                                 isgender=false;
+                            }else{
+                                isgender=true;
                             }
                             ToastUtils.showCenter(getApplicationContext(),myInfoSexBean.getMessage());
                             LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
@@ -272,11 +263,12 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
             }
             tvPhone.setText(sb.toString());
         }
-        if(loginInfo.isGender()){
+        if( loginInfo.isGender()){
             rgSex.check(R.id.rb_boy);
         }else{
             rgSex.check(R.id.rb_girl);
         }
+        Log.d("loginInfoisGender", "initView: "+loginInfo.isGender());
         layoutPortrait.setOnClickListener(this);
         layoutNickName.setOnClickListener(this);
         layoutSign.setOnClickListener(this);
@@ -593,7 +585,6 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         View inflate = View.inflate(MyInfoActivity.this, R.layout.item_mydialog_nickname, null);
         dialog.setContentView(inflate);
         final EditText etNickname = (EditText) inflate.findViewById(R.id.et_nickname);
-
         Button btnNickname = (Button) inflate.findViewById(R.id.btn_nickname);
         btnNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -603,6 +594,10 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 //修改昵称
                 if(TextUtils.isEmpty(nickName)){
                     ToastUtils.showCenter(getApplicationContext(),"修改昵称不能为空");
+                    return;
+                }
+                if(nickName.length()>5){
+                    ToastUtils.showCenter(getApplicationContext(),"昵称长度不能超过5哦空");
                     return;
                 }
                /* layoutLoading.setVisibility(View.VISIBLE);

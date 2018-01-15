@@ -33,7 +33,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
 import com.tdin360.zjw.marathon.model.LoginBean;
 import com.tdin360.zjw.marathon.model.LoginModel;
@@ -53,6 +56,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -146,7 +150,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             Log.d("code", "gotResult: "+code);
             switch (code) {
                 case 0:
-                    ToastUtils.showCenter(getApplicationContext(),"codeeeee");
+                    //ToastUtils.showCenter(getApplicationContext(),"codeeeee");
                     logs = "Set tag and alias success";
                     // Log.i(TAG, logs);
                     // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
@@ -164,9 +168,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             ExampleUtil.showToast(logs, getApplicationContext());
         }
     };
+    @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()== EnumEventBus.BIND){
+          finish();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         initView();
         initOtherLogin();
     }
@@ -231,6 +242,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         UMShareAPI.get(this).release();
     }
     @Override
@@ -250,8 +262,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.tv_login_register:
                 //注册
                 intent = new Intent(LoginActivity.this,RegisterOneActivity.class);
-                //intent.putExtra("type","zc");
-                //intent.putExtra("title","注册");
                 startActivity(intent);
                 break;
             case R.id.iv_login_cancel:
@@ -346,7 +356,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            Intent intent=getIntent();
+           //Intent intent=new Intent()
             //final String detail = intent.getStringExtra("detail");
             //Toast.makeText(LoginActivity.this, "成功了", Toast.LENGTH_LONG).show();
             if(share_media==SHARE_MEDIA.WEIXIN){
@@ -359,14 +369,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 String unionid = map.get("unionid");
                 map.get("gender");
 
-                LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+               /* LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                 LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(uid,profile_image_url,
                         screen_name,loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
                         loginInfo.getCustomerSign(), loginInfo.getPhone());
                 //保存用户登录数据
-                SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
+                SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);*/
                 //layoutRefresh.setVisibility(View.GONE);
-                ToastUtils.showCenter(getApplicationContext(),"登录成功");
+               /* ToastUtils.showCenter(getApplicationContext(),"登录成功");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -379,7 +389,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                             e.printStackTrace();
                         }
                     }
-                }).start();
+                }).start();*/
 
             }
             if(profile_image_url!=null&&!profile_image_url.equals("")){
@@ -448,16 +458,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     }
     private void headImg(byte[] data) {
-       /* final KProgressHUD hud = KProgressHUD.create(LoginActivity.this);
+        /*final KProgressHUD hud = KProgressHUD.create(LoginActivity.this);
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setCancellable(true)
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();*/
-       /* layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_OTHERLOGIN);
         params.addBodyParameter("uId",uid);
         params.addBodyParameter("nickName",screen_name);
@@ -479,25 +485,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     Log.d("decrypt", "onSuccess: "+decrypt);
                     OtherLoginUserInfoBean loginUserInfoBean = gson.fromJson(decrypt, OtherLoginUserInfoBean.class);
                     OtherLoginUserInfoBean.UserBean user = loginUserInfoBean.getUser();
-                    //String id = user.getUnionid();
-                   // String userUnionid = user.getUnionid();
-                    String id = user.getId()+"";
-                    String headImg = user.getHeadImg();
-                    String nickName = user.getNickName();
-                    boolean gender = user.isGender();
-                    String unionid = user.getUnionid();
                     boolean isBindPhone = user.isIsBindPhone();
-                    String customerSign = user.getCustomerSign();
-                    String phone = user.getPhone();
-                    LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone);
-                    //保存用户登录数据
-                    SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
-                    //通知个人中心修改登录状态
-                    Intent intent  =new Intent(MyFragment.ACTION);
-                    sendBroadcast(intent);
+                    String unionid = user.getUnionid();
                     if(isBindPhone){
+                        String id = user.getId()+"";
+                        String headImg = user.getHeadImg();
+                        Log.d("headImg", "onSuccess: "+headImg);
+                        String nickName = user.getNickName();
+                        boolean gender = user.isGender();
+                        String customerSign = user.getCustomerSign();
+                        String customerAlias = user.getCustomerAlias();
+                        String phone = user.getPhone();
+                        // 调用 Handler 来异步设置别名
+                        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id,profile_image_url, nickName, gender, unionid, isBindPhone, customerSign, phone);
+                        //保存用户登录数据
+                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
+
+                        //通知个人中心修改登录状态
+                        Intent intent  =new Intent(MyFragment.ACTION);
+                        sendBroadcast(intent);
+                        //通知webActivity修改登录状态
+                        Intent intent1 = getIntent();
+                        int webview = intent1.getIntExtra("webview", -1);
+                        if(webview==1){
+                            EnumEventBus em = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(em));
+                        }
                         finish();
                     }else{
+                        SingleClass.getInstance().setUser(user);
                         Intent intent1=new Intent(LoginActivity.this,BindPhoneActivity.class);
                         intent1.putExtra("uId",unionid);
                         startActivity(intent1);
@@ -521,7 +538,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
             @Override
             public void onFinished() {
-                layoutLoading.setVisibility(View.GONE);
+                //layoutLoading.setVisibility(View.GONE);
                 //hud.dismiss();
 
             }
@@ -571,7 +588,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     .setAnimationSpeed(1)
                     .setDimAmount(0.5f)
                     .show();
-            String string="{'userPhone':'"+phone+"','password':'"+psw+"','appKey': 'BJYDAppV-2'}";
+            String string="{'userPhone':'"+phone+"','password':'"+psw+"','platform': 'android','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
@@ -584,12 +601,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     LoginBean loginBean = gson.fromJson(result, LoginBean.class);
                     boolean state = loginBean.isState();
                     if(state){
-                        String userSecretMessage = loginBean.getUserSecretMessage();
+                       String userSecretMessage = loginBean.getUserSecretMessage();
                         String decrypt = AES.decrypt(userSecretMessage);
                         Log.d("decrypt", "onSuccess: "+decrypt);
-
                         LoginUserInfoBean loginUserInfoBean = gson.fromJson(decrypt, LoginUserInfoBean.class);
-                        LoginUserInfoBean.UserBean user = loginUserInfoBean.getUser();
+                         LoginUserInfoBean.UserBean user = loginUserInfoBean.getUser();
                         String id = user.getId()+"";
                         String headImg = user.getHeadImg();
                         String nickName = user.getNickName();
@@ -608,6 +624,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         //通知个人中心修改登录状态
                         Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
+                        //通知webActivity修改登录状态
+                        Intent intent1 = getIntent();
+                        int webview = intent1.getIntExtra("webview", -1);
+                        if(webview==1){
+                            EnumEventBus em = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(em));
+                        }
                         finish();
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),loginBean.getMessage());
@@ -639,136 +662,4 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
 
     }
-
-
-    //用户登录
-    /*private void login(){
-
-    //验证用户输入
-
-        final String tel = this.editTextName.getText().toString().trim();
-        final String pass  =this.editTextPass.getText().toString().trim();
-
-        if(tel.length()<11){
-
-            Toast.makeText(this,"手机号输入有误!",Toast.LENGTH_SHORT).show();
-            editTextName.requestFocus();
-            return;
-        }
-
-        if(pass.length()==0){
-
-            Toast.makeText(this,"密码不能为空!",Toast.LENGTH_SHORT).show();
-            editTextPass.requestFocus();
-            return;
-        }
-
-     //显示提示框
-        final KProgressHUD hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();
-
-        //提交到服务器验证
-        RequestParams params = new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
-        params.addQueryStringParameter("phone",tel);
-        params.addQueryStringParameter("password",pass);
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String s) {
-
-                Log.d("-----登录--->", "onSuccess: "+s);
-                try {
-                    JSONObject json = new JSONObject(s);
-
-                    JSONObject message = json.getJSONObject("EventMobileMessage");
-
-                    boolean success = message.getBoolean("Success");
-                    String reason = message.getString("Reason");
-
-                    String avatarUrl = json.getString("AvatarUrl");
-
-                    String customerId = json.getString("CustomerId");
-                    //报名成功跳转到登录界面
-                    if(success){
-
-                        //保存用户登录数据
-                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,new LoginModel(customerId,tel,pass,avatarUrl));
-                        Toast.makeText(LoginActivity.this,"登录成功!",Toast.LENGTH_SHORT).show();
-                        //通知个人中心修改登录状态
-                        Intent intent  =new Intent(MyFragment.ACTION);
-                        sendBroadcast(intent);
-                        hud.dismiss();
-
-                        //登录成功后根据指定目标跳转到指定界面
-                        switch (LoginNavigationConfig.instance().getNavType()){
-
-                            case SignUp://跳转到报名界面
-                                intent = new Intent(LoginActivity.this,SignUpActivity.class);
-                                startActivity(intent);
-                            break;
-                            case MySignUp://跳转到我的报名界面
-                                intent = new Intent(LoginActivity.this,MySignUpListActivity.class);
-                                startActivity(intent);
-                                break;
-                            case MyMark://跳转到我的成绩界面
-                                intent = new Intent(LoginActivity.this,MyAchievementListActivity.class);
-                                startActivity(intent);
-                                break;
-                            case MyFeed://跳转到我的反馈界面
-                                intent = new Intent(LoginActivity.this,FeedbackListActivity.class);
-                                startActivity(intent);
-                                break;
-
-                            case MyGoods://跳转到我的物资界面
-
-                                intent = new Intent(LoginActivity.this,MyGoodsListActivity.class);
-                                startActivity(intent);
-                                break;
-
-                            case Team://团队报名
-                                intent = new Intent(LoginActivity.this,TeamSignUpActivity.class);
-                                startActivity(intent);
-                                break;
-
-                        }
-
-                            finish();
-
-                    }else {
-                        Toast.makeText(LoginActivity.this,reason,Toast.LENGTH_SHORT).show();
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable throwable, boolean b) {
-                Toast.makeText(LoginActivity.this, "网络错误或访问服务器失败!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException e) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-                hud.dismiss();
-
-            }
-        });
-
-
-    }*/
-
-
 }

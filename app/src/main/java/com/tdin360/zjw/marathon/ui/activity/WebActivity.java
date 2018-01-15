@@ -1,8 +1,10 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,8 +18,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -25,12 +31,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -44,6 +54,8 @@ import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.view.annotation.ViewInject;
 
 /**
@@ -64,16 +76,28 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
     private ImageView more;
 
 
+    private ValueCallback<Uri> uploadMessage;
+    private ValueCallback<Uri[]> uploadMessageAboveL;
+    private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+
+
+
 
 
     private ShareAction action;
-    private String url;
+    private String webUrl;
     private String imageUrl;
+    @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()== EnumEventBus.WEBVIEW){
+            initWeb();
 
-
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         initView();
        /* Intent intent = getIntent();
         if(intent!=null){
@@ -82,10 +106,11 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         }*/
         initWeb();
     }
-    private void initWeb() {
+  private void initWeb() {
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
         this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.getSettings().setBuiltInZoomControls(false);
@@ -93,10 +118,49 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         this.webView.setWebChromeClient(new MyWebChromeClient());
         this.webView.setWebViewClient(new MyWebViewClient());
         //String url="file:///android_asset/test.html";
+        LoginUserInfoBean.UserBean modelInfo= SharedPreferencesManager.getLoginInfo(getApplicationContext());
+        String id = modelInfo.getId();
         String url = getIntent().getStringExtra("url");
-        webView.loadUrl(url);
+        if(TextUtils.isEmpty(id)){
+            webUrl= url + "?customerId=" +0;
+        }else{
+            webUrl = url + "?customerId=" +id;
+        }
+
+        Log.d("webUrl", "initWeb: "+webUrl);
+        webView.loadUrl(webUrl);
         webView.addJavascriptInterface(WebActivity.this,"android");
     }
+  private void openImageChooserActivity() {
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("image/*");
+        startActivityForResult(Intent.createChooser(i, "Image Chooser"), FILE_CHOOSER_RESULT_CODE);
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void onActivityResultAboveL(int requestCode, int resultCode, Intent intent) {
+        if (requestCode != FILE_CHOOSER_RESULT_CODE || uploadMessageAboveL == null)
+            return;
+        Uri[] results = null;
+        if (resultCode == Activity.RESULT_OK) {
+            if (intent != null) {
+                String dataString = intent.getDataString();
+                ClipData clipData = intent.getClipData();
+                if (clipData != null) {
+                    results = new Uri[clipData.getItemCount()];
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        results[i] = item.getUri();
+                    }
+                }
+                if (dataString != null)
+                    results = new Uri[]{Uri.parse(dataString)};
+            }
+        }
+        uploadMessageAboveL.onReceiveValue(results);
+        uploadMessageAboveL = null;
+    }
+
     private void initView() {
         back.setOnClickListener(this);
         close.setOnClickListener(this);
@@ -104,6 +168,16 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         more.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                //刷新旋转动画
+                Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
+                if (animation != null) {
+                    more.startAnimation(animation);
+                }  else {
+                    more.setAnimation(animation);
+                    more.startAnimation(animation);
+                }
+                LinearInterpolator lin = new LinearInterpolator();
+                animation.setInterpolator(lin);
                 webView.clearHistory();
                 webView.clearFormData();
                 webView.reload();
@@ -130,9 +204,19 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 Intent intent=new Intent(WebActivity.this,TravelActivity.class);
+                startActivity(intent);
 
+            }
+        });
+    }
+    @JavascriptInterface
+    public void toLogin(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(WebActivity.this,LoginActivity.class);
+                intent.putExtra("webview","1");
                 startActivity(intent);
 
             }
@@ -194,14 +278,19 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.more:
                 //分享
-                final KProgressHUD hud = KProgressHUD.create(this);
-                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                        .setCancellable(true)
-                        .setAnimationSpeed(1)
-                        .setDimAmount(0.5f)
-                        .show();
+                //webView.reload();
+                //刷新旋转动画
+                Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
+                if (animation != null) {
+                    more.startAnimation(animation);
+                }  else {
+                    more.setAnimation(animation);
+                    more.startAnimation(animation);
+                }
+                LinearInterpolator lin = new LinearInterpolator();
+                animation.setInterpolator(lin);
                 webView.reload();
-                hud.dismiss();
+
              /*   if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
                     share();
                 }else {
@@ -214,11 +303,14 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
-    private class MyWebChromeClient extends WebChromeClient{
+   private class MyWebChromeClient extends WebChromeClient{
         @Override
         public void onProgressChanged(WebView webView, int i) {
             super.onProgressChanged(webView, i);
              progressBar.setProgress(i);
+            if(i==100){
+                more.clearAnimation();
+            }
         }
 
         @Override
@@ -226,10 +318,35 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
             super.onReceivedTitle(webView, s);
            // titleTv.setText(s);
         }
+       // For Android < 3.0
+       public void openFileChooser(ValueCallback<Uri> valueCallback) {
+           uploadMessage = valueCallback;
+           openImageChooserActivity();
+       }
+
+       // For Android  >= 3.0
+       public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+           uploadMessage = valueCallback;
+           openImageChooserActivity();
+       }
+
+       //For Android  >= 4.1
+       public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
+           uploadMessage = valueCallback;
+           openImageChooserActivity();
+       }
+
+       // For Android >= 5.0
+       @Override
+       public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+           uploadMessageAboveL = filePathCallback;
+           openImageChooserActivity();
+           return true;
+       }
 
 
     }
-    private class MyWebViewClient extends WebViewClient{
+     private class MyWebViewClient extends WebViewClient{
         @Override
         public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
             super.onPageStarted(webView, s, bitmap);
@@ -261,7 +378,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
 
 
             }
-            /**
+           /**
              * 支付宝支付
              */
             if(s!=null&&s.contains("alipays://platformapi/startApp?")){
@@ -378,6 +495,17 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
+//
+        if (requestCode == FILE_CHOOSER_RESULT_CODE) {
+            if (null == uploadMessage && null == uploadMessageAboveL) return;
+            Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
+            if (uploadMessageAboveL != null) {
+                onActivityResultAboveL(requestCode, resultCode, data);
+            } else if (uploadMessage != null) {
+                uploadMessage.onReceiveValue(result);
+                uploadMessage = null;
+            }
+        }
     }
     @Override
     public int getLayout() {
@@ -397,5 +525,11 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
             finish();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -36,7 +36,6 @@ import java.util.List;
  */
 public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
 
-
     @ViewInject(R.id.viewPager)
     private ViewPager mViewPager;
 
@@ -56,8 +55,6 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
 
 
         if(imagesUrl==null)return;
-
-
         count = imagesUrl.size();
         tip.setText("1/"+count);
         for(int i=0;i<imagesUrl.size();i++){
@@ -157,7 +154,6 @@ public class PhotoBrowseActivity extends BaseActivity implements ViewPager.OnPag
 
         //保存图片到相册
    public  void saveImageToGallery() {
-
 
            if(imagesUrl==null||imagesUrl.size()<=0)return;
             x.image().loadFile(imagesUrl.get(index), null, new Callback.CacheCallback<File>() {

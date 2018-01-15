@@ -21,9 +21,10 @@
             android:hint="@string/change_sign_hint"
             android:textSize="16sp"
             android:padding="10dp"
+            android:maxLines="20"
+            android:ellipsize="end"
             android:textColor="@color/theme_text"
             android:gravity="top"
-            android:maxLength="100"
             android:background="@color/white"/>
         <Button
             android:id="@+id/btn_change_sign_sure"

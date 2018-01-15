@@ -38,11 +38,13 @@ import com.liaoinstan.springview.widget.SpringView;
 import com.lzy.ninegrid.ImageInfo;
 import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.NineGridViewAdapter;
+import com.lzy.ninegrid.NineGridViewWrapper;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.Bean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -51,6 +53,7 @@ import com.tdin360.zjw.marathon.ui.activity.CircleDetailActivity;
 import com.tdin360.zjw.marathon.ui.activity.CircleMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
+import com.tdin360.zjw.marathon.ui.activity.PhotoBrowseActivity;
 import com.tdin360.zjw.marathon.ui.activity.PublishActivity;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -174,7 +177,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 //.setCircular(true) //设置图片显示为圆形
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 //.setSquare(true) //设置图片显示为正方形
-                .setCrop(true).setSize(130,130) //设置大小
+                .setCrop(true)
+                .setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
                 .setFailureDrawableId(R.drawable.event_bg) //设置加载失败的动画
                 // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
@@ -275,8 +279,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         boolean isChecked = bjDynamicListModel.get(i).getIsChecked();
                         Log.d("ischecked", "onSuccess: "+isChecked);
                     }
-                    bjDynamicListModelBean= bjDynamicListModel.get(0);
-                    Log.d("wwwwwww22222", "onBindHeaderViewHolder: "+bjDynamicListModelBean.getDynamicsTitle());
+                    //bjDynamicListModelBean= bjDynamicListModel.get(0);
+                    //Log.d("wwwwwww22222", "onBindHeaderViewHolder: "+bjDynamicListModelBean.getDynamicsTitle());
                     if(bjDynamicListModel.size()<=0){
                         mErrorView.show(rvCircle,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
                     }else {
@@ -302,8 +306,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onFinished() {
                 adapter.update(bjDynamicListModel);
-                //adapter1.notifyDataSetChanged();
-                //hud.dismiss();
+                adapter.notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
 
 
@@ -317,7 +320,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         }
         adapter=new RecyclerViewBaseAdapter<Bean.ModelBean.BJDynamicListModelBean>(getContext(),bjDynamicListModel,R.layout.item_circle) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, final Bean.ModelBean.BJDynamicListModelBean model) {
+            protected void onBindNormalViewHolder(final NormalViewHolder holder, final Bean.ModelBean.BJDynamicListModelBean model) {
                 LinearLayout layoutRecommend = (LinearLayout) holder.getViewById(R.id.layout_circle_recommend);
                 LinearLayout layoutCircle = (LinearLayout) holder.getViewById(R.id.layout_circle);
                 final LinearLayout layoutShare = (LinearLayout) holder.getViewById(R.id.layout_circle_share);
@@ -364,7 +367,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     layoutRecommend.setVisibility(View.GONE);
                     NineGridView nineGridView = (NineGridView) holder.getViewById(R.id.circle_nineGrid);
                     //用户设置
-                    Bean.ModelBean.BJDynamicListModelBean.UserModelBean userModel = model.getUserModel();
+                    final Bean.ModelBean.BJDynamicListModelBean.UserModelBean userModel = model.getUserModel();
                     x.image().bind(ivPortrait,userModel.getHeadImg(),imageOptionsCircle);
                     holder.setText(R.id.tv_circle_name,userModel.getNickName());
                     String releaseTimeStr = model.getReleaseTimeStr();
@@ -397,21 +400,42 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         @Override
                         protected void onImageItemClick(Context context, NineGridView nineGridView, int index, List<ImageInfo> imageInfo) {
                             super.onImageItemClick(context, nineGridView, index, imageInfo);
-                            ImageView imageView1=new ImageView(getActivity());
+                           /* Intent intent=new Intent(getActivity(), PhotoBrowseActivity.class);
+                            intent.putExtra("list",image);
+                            startActivity(intent);*/
+                            ImageView imageView1=new ImageView(context);
+
+
                             //Log.d("pictureList.size()", "onEvent: "+pictureList.size());
                             MNImageBrowser.showImageBrowser(getActivity(),imageView1,index, image);
+                        }
+
+                        @Override
+                        protected ImageView generateImageView(Context context) {
+                            NineGridViewWrapper imageView = new NineGridViewWrapper(context);
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    ToastUtils.showCenter(getContext(),"save");
+                                    return false;
+                                }
+                            });
+                            return super.generateImageView(context);
+                        }
+                    });
+                    //头像跳转到我的动态
+                    ivPortrait.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String id = userModel.getId()+"";
+                            Intent intent=new Intent(getActivity(), MyCircleActivity.class);
+                            intent.putExtra("customerId",id);
+                            startActivity(intent);
                         }
                     });
                 }
 
-                //头像跳转到我的动态
-                ivPortrait.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(getActivity(), MyCircleActivity.class);
-                        startActivity(intent);
-                    }
-                });
                 //点赞
                 LayoutPraise.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -441,7 +465,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                 PraiseBean praiseBean = gson.fromJson(result, PraiseBean.class);
                                 boolean state = praiseBean.isState();
                                 if(state){
-                                    ToastUtils.showCenter(getContext(),praiseBean.getMessage());
+                                    //ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
                                     initData(0);
@@ -501,6 +525,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent=new Intent(getActivity(), CircleDetailActivity.class);
+                if(bjDynamicListModel.size()<=0){
+                    return;
+                }
                 Bean.ModelBean.BJDynamicListModelBean bjDynamicListModelBean= bjDynamicListModel.get(position);
                 String dynamicId1 = bjDynamicListModelBean.getId() + "";
                 boolean isRecommend = bjDynamicListModelBean.isIsRecommend();
@@ -511,7 +538,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             }
         });
         rvCircle.setAdapter(adapter);
-        rvCircle.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         rvCircle.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -550,6 +577,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onRefresh() {
                 springView.onFinishFreshAndLoad();
+                if(bjDynamicListModel.size()<=0){
+                    return;
+                }
                 bjDynamicListModel.clear();
                 pageIndex=1;
                 initData(0);

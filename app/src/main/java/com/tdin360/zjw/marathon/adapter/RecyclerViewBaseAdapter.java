@@ -300,7 +300,6 @@ public abstract class RecyclerViewBaseAdapter<T> extends RecyclerView.Adapter<Re
                @Override
                public void onClick(View v) {
                    if(listener!=null){
-
                        listener.onItemClick(v, headerView==null? getAdapterPosition():getAdapterPosition()-1);
                    }
                }

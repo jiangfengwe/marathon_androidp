@@ -3,7 +3,6 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -55,7 +54,8 @@ import java.util.List;
  * 酒店预定，入住信息填写
  */
 
-public class HotelRoomInActivity extends BaseActivity implements View.OnClickListener{
+public class HotelRoomInActivity extends BaseActivity implements View.OnClickListener {
+    //
     @ViewInject(R.id.layout_lading)
     private RelativeLayout layoutLoading;
     @ViewInject(R.id.iv_loading)
@@ -89,6 +89,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     @ViewInject(R.id.et_hotel_order_phone)
     private EditText etPhone;
     private int count=1;
+    private int countRoom=1;
 
     @ViewInject(R.id.tv_hotel_room_money)
     private TextView tvMoney;
@@ -101,8 +102,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private List<EditText> name=new ArrayList<>();
     private List<EditText> ic=new ArrayList<>();
     private String str;
-    @ViewInject(R.id.list_Lin)
-    private LinearLayout listLayout;
+    /*@ViewInject(R.id.list_Lin)
+    private LinearLayout listLayout;*/
     private static int id = 100;
 
 
@@ -120,6 +121,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
         Calendar c=Calendar.getInstance();
         //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
@@ -131,58 +133,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         initDateLive();
         initToolbar();
         initView();
-        //final LinearLayout lin = (LinearLayout) findViewById(R.id.list_Lin);
-
-       // addView();
-        LinearLayout.LayoutParams LP_FW = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        RelativeLayout newSingleRL=new RelativeLayout(this);
-
-        for(int i=0;i<5;)
-        {
-            newSingleRL=generateSingleLayout(id,"第"+(++i)+"个动态列表");
-            listLayout.addView(newSingleRL,LP_FW);//全部用父结点的布局参数
-        }
 
     }
-    private RelativeLayout generateSingleLayout(int imageID,String str)
-    {
-        RelativeLayout layout_root_relative=new RelativeLayout(this);
-        LinearLayout layout_sub_Lin=new LinearLayout(this);
-        layout_sub_Lin.setBackgroundColor(Color.argb(0xff, 0x00, 0xff, 0x00));
-        layout_sub_Lin.setOrientation(LinearLayout.VERTICAL);
-        layout_sub_Lin.setPadding(5, 5, 5, 5);
 
-        TextView tv = new TextView(this);
-        LinearLayout.LayoutParams LP_WW = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv.setText(str);
-        tv.setTextColor(Color.argb(0xff, 0x00, 0x00, 0x00));
-        tv.setTextSize(20);
-        tv.setLayoutParams(LP_WW);
-        layout_sub_Lin.addView(tv);
-
-        RelativeLayout.LayoutParams RL_MW = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);//尤其注意这个位置，用的是父容器的布局参数
-        RL_MW.setMargins(5, 5, 10, 5);
-        RL_MW.addRule(RelativeLayout.LEFT_OF,imageID);
-        layout_root_relative.addView(layout_sub_Lin,RL_MW);
-
-
-        ImageView imageView = new ImageView(this);
-        RelativeLayout.LayoutParams RL_WW = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        imageView.setPadding(5, 5, 5, 5);
-        RL_WW.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        imageView.setLayoutParams(RL_WW);
-        imageView.setClickable(true);
-        imageView.setId(imageID);
-        imageView.setImageResource(R.mipmap.logo);
-        layout_root_relative.addView(imageView);
-
-        return layout_root_relative;
-
-    }
 
     private void initDateLive() {
         try {
@@ -226,8 +179,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         });
         viewline.setVisibility(View.GONE);
         titleTv.setText("入住信息");
-
-
     }
     @Override
     public int getLayout() {
@@ -343,9 +294,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                       /* tomorrow = getTime(date);
+                        tomorrow = getTime(date);
                         tvOut.setText(tomorrow);
-                        initDateLive();*/
+                        initDateLive();
                     }
                 });
                 dialog.show();
@@ -355,23 +306,28 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 if(count<=1){
                     return;
                 }
-                count--;
+                count=count-2;
+                countRoom--;
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-                for (int i = 0; i < count; i++) {
+                for (int i = count; i < count; i--) {
                     addView();
                 }
                 setSum();
                 break;
             case R.id.tv_hotel_room_add:
                 //入住房间增加
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
+               // layoutName.removeAllViews();
+               // layoutIC.removeAllViews();
+                layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);
+
                 //layoutIC.removeViewAt(count-1);
                 if(count>99){
                     return;
                 }
-                count++;
+                countRoom++;
+                count=count+2;
                 for (int i =0; i < count; i++) {
                     addView();
                 }
@@ -421,12 +377,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         }
 
     }
-    /**
-      * 验证手机格式
-      */
+   /**
+     * 验证手机格式
+     */
     public static boolean isMobileNO(String mobiles) {
-     /*
-        移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+
+    /** 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
         联通：130、131、132、152、155、156、185、186
         电信：133、153、180、189、（1349卫通）
         总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
@@ -442,6 +398,57 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String hotelRoomId = getIntent().getStringExtra("hotelRoomId");
             byte[] mBytes=null;
             final String phone = etPhone.getText().toString().trim();
+
+            JSONArray jsonArray=new JSONArray();
+            JSONObject jsonObject=new JSONObject();
+            JSONObject tmpObj =null;
+            for (int i = 0; i < name.size(); i++) {
+                try {
+                  /*  for (int j = 0; j <ic.size(); j++) {
+                        if(i==j){
+                            if(TextUtils.isEmpty(trimName)&&TextUtils.isEmpty(trimIc)){
+                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
+                                return;
+                            }
+                            if(TextUtils.isEmpty(trimName)||TextUtils.isEmpty(trimIc)){
+                                ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
+                                return;
+                            }
+                        }
+                    }*/
+                    tmpObj=new JSONObject();
+                    String nameJson = name.get(i).getText().toString();
+                    String icJson = ic.get(i).getText().toString();
+                    if(TextUtils.isEmpty(nameJson)&&TextUtils.isEmpty(icJson)){
+                        ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
+                        return;
+                    }
+                    if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
+                        ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
+                        return;
+                    }
+                    /*for (int j = 0; j <ic.size(); j++) {
+                        if(i==j){
+                            if(TextUtils.isEmpty(nameJson)&&TextUtils.isEmpty(icJson)){
+                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
+                                return;
+                            }
+                            if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
+                                ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
+                                return;
+                            }
+                        }
+                    }*/
+                    tmpObj.put("userName",nameJson);
+                    tmpObj.put("userDocument",icJson);
+                    jsonArray.put(tmpObj);
+                    tmpObj=null;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             if(TextUtils.isEmpty(phone)){
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不能为空");
                 return;
@@ -451,35 +458,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
                 return;
             }
-            JSONArray jsonArray=new JSONArray();
-            JSONObject jsonObject=new JSONObject();
-            JSONObject tmpObj =null;
-            for (int i = 0; i < name.size(); i++) {
-                try {
-                  /*  String trimName = name.get(i).getText().toString().trim();
-                    String trimIc= ic.get(i).getText().toString().trim();
-                    if(TextUtils.isEmpty(trimName)&&TextUtils.isEmpty(trimIc)){
-                        ToastUtils.showCenter(getApplicationContext(),"姓名不能为空");
-                        return;
-                    }*/
-                    tmpObj=new JSONObject();
-                    String nameJson = name.get(i).getText().toString();
-                    String icJson = ic.get(i).getText().toString();
-                    tmpObj.put("userName",nameJson);
-                    tmpObj.put("userDocument",icJson);
-                    jsonArray.put(tmpObj);
-                    tmpObj=null;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
             String userList = jsonArray.toString();
             Log.d("wwwwname2", "initToolbar: "+userList);
 
-            /*layoutLoading.setVisibility(View.VISIBLE);
+            layoutLoading.setVisibility(View.VISIBLE);
             ivLoading.setBackgroundResource(R.drawable.loading_before);
             AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
+            background.start();
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -487,10 +472,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                     .setDimAmount(0.5f)
                     .show();
             Log.d("222222222222", "initData: "+customerId);
-            String string1="{"+"'enterDate':"+"'2017-12-13'"+",'leaveDate':"+tomorrow+",'roomNumber':"+roomNumber+",'userPhone':"+phone+"," +
-                    "'hotelRoomId':"+hotelRoomId+",'customerId':"+customerId+",'appKey': 'BJYDAppV-2'," +
-                    "'userList':[{'userName':'user1','userDocument':'123456'}]}";
-
             String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\",\"userList\":"+userList+"}";
             Log.d("----------", "initData: "+string);
             mBytes=string.getBytes("UTF8");
@@ -551,37 +532,21 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         final EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
-       // String trimName = etName.getText().toString().trim();
-        //Log.d("name", "addView: "+trim);
         name.add(etName);
         layoutName.addView(etName);
-        LinearLayout layout=new LinearLayout(getApplicationContext());
-        setContentView(layout);
         final EditText etIC = new EditText(this);
         ic.add(etIC);
         etIC.setHint("身份证");
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
-       /* etName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtils.showCenter(getApplicationContext(),"name");
-                String trim1 = etName.getText().toString().trim();
-                etIC.setText(trim1);
-            }
-        });*/
     }
     private void setSum() {
         //订单金额
-        tvSum.setText(""+count);
+        tvSum.setText(""+countRoom);
         double price = getIntent().getDoubleExtra("hotelprice", 0.0);
         double money = count * price;
         Log.d("44", "initView: "+money);
         Log.d("442", "initView: "+count);
         tvMoney.setText(money+"");
-        //int goodCount = Integer.parseInt(textViewCount.getText().toString());
-        //priceSum = goodCount * price ;
-        //String c=""+priceSum;
-        //textViewSum.setText(c);
     }
 }

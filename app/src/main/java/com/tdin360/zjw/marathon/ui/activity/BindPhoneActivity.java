@@ -23,12 +23,17 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.alipay.PayResult;
+import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
 import com.tdin360.zjw.marathon.model.BindPhoneBean;
 import com.tdin360.zjw.marathon.model.BindPhoneSureBean;
 import com.tdin360.zjw.marathon.model.LoginBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.OtherLoginUserInfoBean;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -36,10 +41,16 @@ import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 绑定手机号
@@ -74,6 +85,50 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     private static final int CODE=0x0104;
     private int time;
+    private static final int MSG_SET_ALIAS = 1003;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    // Log.d(TAG, "Set alias in handler.");
+                    // 调用 JPush 接口来设置别名。
+                    JPushInterface.setAliasAndTags(getApplicationContext(),
+                            (String) msg.obj,
+                            null,
+                            mAliasCallback);
+                    break;
+                default:
+                    //Log.i(TAG, "Unhandled msg - " + msg.what);
+            }
+        }
+    };
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            Log.d("code", "gotResult: "+code);
+            switch (code) {
+                case 0:
+                    ToastUtils.showCenter(getApplicationContext(),"codeeeee");
+                    logs = "Set tag and alias success";
+                    // Log.i(TAG, logs);
+                    // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    // Log.i(TAG, logs);
+                    // 延迟 60 秒来调用 Handler 设置别名
+                    mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    break;
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    //Log.e(TAG, logs);
+            }
+            ExampleUtil.showToast(logs, getApplicationContext());
+        }
+    };
 
     private Handler handler = new Handler(){
 
@@ -227,12 +282,12 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             Intent intent=getIntent();
             String uId = intent.getStringExtra("uId");
             byte[] mBytes=null;
-            final String phone = etPhone.getText().toString().trim();
-            if(TextUtils.isEmpty(phone)){
+            final String phone1 = etPhone.getText().toString().trim();
+            if(TextUtils.isEmpty(phone1)){
                 ToastUtils.showCenter(getApplicationContext(),"手机号不能为空");
                 return;
             }
-            if(!isMobileNO(phone)){
+            if(!isMobileNO(phone1)){
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
                 return;
             }
@@ -252,7 +307,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     .setDimAmount(0.5f)
                     .show();
             Log.d("uid", "initData: "+uId);
-            String string="{'userPhone':'"+phone+"','appKey': 'BJYDAppV-2','validCode':'"+code+"','uId':'"+uId+"'}";
+            String string="{'userPhone':'"+phone1+"','appKey': 'BJYDAppV-2','validCode':'"+code+"','uId':'"+uId+"'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.OTHER_PHONE);
@@ -266,22 +321,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     boolean state = bindPhoneSureBean.isState();
                     if(state){
                         ToastUtils.showCenter(getApplicationContext(),bindPhoneSureBean.getMessage());
-                       /* LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone);
-                        //保存用户登录数据
-                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);*/
-                        finish();
-                    }else{
-                        ToastUtils.showCenter(getApplicationContext(),bindPhoneSureBean.getMessage());
-                    }
-                   /* Gson gson=new Gson();
-                    LoginBean loginBean = gson.fromJson(result, LoginBean.class);
-                    boolean state = loginBean.isState();
-                    if(state){
-                        String userSecretMessage = loginBean.getUserSecretMessage();
-                        String decrypt = AES.decrypt(userSecretMessage);
-                        Log.d("decrypt", "onSuccess: "+decrypt);
-                        LoginUserInfoBean loginUserInfoBean = gson.fromJson(decrypt, LoginUserInfoBean.class);
-                        LoginUserInfoBean.UserBean user = loginUserInfoBean.getUser();
+                        OtherLoginUserInfoBean.UserBean user = SingleClass.getInstance().getUser();
                         String id = user.getId()+"";
                         String headImg = user.getHeadImg();
                         String nickName = user.getNickName();
@@ -289,19 +329,29 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         String unionid = user.getUnionid();
                         boolean isBindPhone = user.isIsBindPhone();
                         String customerSign = user.getCustomerSign();
-                        Log.d("phone", "onSuccess: "+phone);
-                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone);
+                        String customerAlias = user.getCustomerAlias();
+                        String phone = user.getPhone();
+                        // 调用 Handler 来异步设置别名
+                        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS,customerAlias));
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone1);
                         //保存用户登录数据
-                        SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
-
+                        SharedPreferencesManager.saveLoginInfo(BindPhoneActivity.this,userBean);
+                        EnumEventBus em = EnumEventBus.BIND;
+                        EventBus.getDefault().post(new EventBusClass(em));
                         //通知个人中心修改登录状态
                         Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
+                        //通知webActivity修改登录状态
+                        Intent intent1 = getIntent();
+                        int webview = intent1.getIntExtra("webview", -1);
+                        if(webview==1){
+                            EnumEventBus em1 = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(em1));
+                        }
                         finish();
                     }else{
-                        ToastUtils.show(getApplicationContext(),loginBean.getMessage());
-                    }*/
-
+                        ToastUtils.showCenter(getApplicationContext(),bindPhoneSureBean.getMessage());
+                    }
                 }
 
                 @Override
@@ -364,16 +414,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 return;
             }
             startTaskTimer();
-            /*final KProgressHUD hud = KProgressHUD.create(this);
-            hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                    .setCancellable(true)
-                    .setAnimationSpeed(1)
-                    .setDimAmount(0.5f)
-                    .show();*/
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             String string="{'userPhone':'"+phone+"','uId':'"+uId+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);

@@ -6,9 +6,9 @@ package com.tdin360.zjw.marathon.model;
 
 public class OtherLoginUserInfoBean {
 
+
     /**
-     * user : {"Id":2197,"HeadImg":"","Phone":null,"NickName":"小维","Gender":false,
-     * "Unionid":"oPyIvv4euVFaE0JCNlKhQVBn8A78","IsBindPhone":false,"CustomerSign":null}
+     * user : {"Id":5396,"HeadImg":"","Phone":null,"NickName":"小维","Gender":false,"Unionid":"oPyIvv4euVFaE0JCNlKhQVBn8A78","IsBindPhone":true,"CustomerSign":null,"CustomerAlias":"FGF0lbuqD5BmqLi"}
      */
 
     private UserBean user;
@@ -23,14 +23,15 @@ public class OtherLoginUserInfoBean {
 
     public static class UserBean {
         /**
-         * Id : 2197
+         * Id : 5396
          * HeadImg :
          * Phone : null
          * NickName : 小维
          * Gender : false
          * Unionid : oPyIvv4euVFaE0JCNlKhQVBn8A78
-         * IsBindPhone : false
+         * IsBindPhone : true
          * CustomerSign : null
+         * CustomerAlias : FGF0lbuqD5BmqLi
          */
 
         private int Id;
@@ -41,6 +42,7 @@ public class OtherLoginUserInfoBean {
         private String Unionid;
         private boolean IsBindPhone;
         private String CustomerSign;
+        private String CustomerAlias;
 
         public int getId() {
             return Id;
@@ -104,6 +106,14 @@ public class OtherLoginUserInfoBean {
 
         public void setCustomerSign(String CustomerSign) {
             this.CustomerSign = CustomerSign;
+        }
+
+        public String getCustomerAlias() {
+            return CustomerAlias;
+        }
+
+        public void setCustomerAlias(String CustomerAlias) {
+            this.CustomerAlias = CustomerAlias;
         }
     }
 }

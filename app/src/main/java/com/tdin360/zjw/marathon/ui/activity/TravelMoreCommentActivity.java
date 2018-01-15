@@ -22,6 +22,7 @@ import com.liaoinstan.springview.widget.SpringView;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.TravelMoreCommentBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -235,7 +236,7 @@ public class TravelMoreCommentActivity extends BaseActivity {
                     }
                 };
                 rvComment.setAdapter(rvAdapter);
-                rvComment.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+                rvComment.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
                 rvAdapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {

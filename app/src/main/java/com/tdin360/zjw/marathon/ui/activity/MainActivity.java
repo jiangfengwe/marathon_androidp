@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity{
                     logs = "Failed with errorCode = " + code;
                     //Log.e(TAG, logs);
             }
-            ExampleUtil.showToast(logs, getApplicationContext());
+           ExampleUtil.showToast(logs, getApplicationContext());
         }
     };
     @Override

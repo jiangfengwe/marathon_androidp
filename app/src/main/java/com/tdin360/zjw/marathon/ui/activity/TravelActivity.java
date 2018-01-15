@@ -22,6 +22,7 @@ import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.TravelBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -210,7 +211,7 @@ public class TravelActivity extends BaseActivity {
                 holder.setText(R.id.tv_travel_data,model.getDay()+"日游");
             }
         };
-        rvTravel.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvTravel.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         rvTravel.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override

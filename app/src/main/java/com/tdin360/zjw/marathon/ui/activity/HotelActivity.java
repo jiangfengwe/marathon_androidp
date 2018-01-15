@@ -30,6 +30,7 @@ import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.HotelListBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
@@ -106,10 +107,10 @@ public class HotelActivity extends BaseActivity {
                 //.setSquare(true) //设置图片显示为正方形
                 //.setCrop(true).setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
-                .setFailureDrawableId(R.drawable.add_lose_square) //设置加载失败的动画
+                .setFailureDrawableId(R.drawable.event_bg) //设置加载失败的动画
                 // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
                 //.setLoadingDrawable(Drawable loadingDrawable) //设置加载中的动画
-                .setLoadingDrawableId(R.drawable.add_lose_square) //以资源id设置加载中的动画
+                .setLoadingDrawableId(R.drawable.event_bg) //以资源id设置加载中的动画
                 .setIgnoreGif(false) //忽略Gif图片
                 //.setRadius(10)
                 .setUseMemCache(true).build();
@@ -121,6 +122,7 @@ public class HotelActivity extends BaseActivity {
         initNet();
         initToolbar();
         initView();
+
     }
     private void initNet() {
         //加载失败点击重试
@@ -172,7 +174,6 @@ public class HotelActivity extends BaseActivity {
         if(i==1){
             bjHotelListModel.clear();
         }
-
         RequestParams params=new RequestParams(HttpUrlUtils.HOTEL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("pageSize",""+pageSize);
@@ -242,7 +243,7 @@ public class HotelActivity extends BaseActivity {
             }
         };
         rvHotel.setAdapter(adapter);
-        rvHotel.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        rvHotel.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
