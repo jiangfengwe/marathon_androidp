@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -164,12 +165,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         Log.d("44", "initView: "+money);
         Log.d("442", "initView: "+count);
         tvMoney.setText(money+"");
-
-
     }
 
     private void initToolbar() {
-        addView();
+        addLayout();
         imageView.setImageResource(R.drawable.back_black);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,33 +302,52 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.tv_hotel_room_dec:
                 //入住房间减少
-                if(count<=1){
+                if(countRoom<=1){
                     return;
                 }
-                count=count-2;
+                count--;
                 countRoom--;
+                name.clear();
+                ic.clear();
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-                for (int i = count; i < count; i--) {
-                    addView();
+             /*  if(count>=2){
+                   layoutName.removeViewAt(count-2);
+                   layoutIC.removeViewAt(count-2);
+            }else{
+                   return;
+               }*/
+               /* layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);*/
+               /* for (int i = count; i < count; i--) {
+                    addLayout();
+                }*/
+                for (int i =0; i < count; i++) {
+                    addLayout();
                 }
                 setSum();
                 break;
             case R.id.tv_hotel_room_add:
                 //入住房间增加
-               // layoutName.removeAllViews();
-               // layoutIC.removeAllViews();
-                layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);
-
+                layoutName.removeAllViews();
+                layoutIC.removeAllViews();
+               /* if(count>=2){
+                    layoutName.removeViewAt(count-2);
+                    layoutIC.removeViewAt(count-2);
+                }else{
+                    return;
+                }
+*/
                 //layoutIC.removeViewAt(count-1);
-                if(count>99){
+                if(countRoom>99){
                     return;
                 }
                 countRoom++;
-                count=count+2;
+                count++;
+                name.clear();
+                ic.clear();
                 for (int i =0; i < count; i++) {
-                    addView();
+                    addLayout();
                 }
                 for (int i = 0; i < name.size(); i++) {
                     String string = name.get(i).getText().toString();
@@ -404,18 +422,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             JSONObject tmpObj =null;
             for (int i = 0; i < name.size(); i++) {
                 try {
-                  /*  for (int j = 0; j <ic.size(); j++) {
-                        if(i==j){
-                            if(TextUtils.isEmpty(trimName)&&TextUtils.isEmpty(trimIc)){
-                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
-                                return;
-                            }
-                            if(TextUtils.isEmpty(trimName)||TextUtils.isEmpty(trimIc)){
-                                ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
-                                return;
-                            }
-                        }
-                    }*/
+
                     tmpObj=new JSONObject();
                     String nameJson = name.get(i).getText().toString();
                     String icJson = ic.get(i).getText().toString();
@@ -427,18 +434,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
                         return;
                     }
-                    /*for (int j = 0; j <ic.size(); j++) {
-                        if(i==j){
-                            if(TextUtils.isEmpty(nameJson)&&TextUtils.isEmpty(icJson)){
-                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
-                                return;
-                            }
-                            if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
-                                ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
-                                return;
-                            }
-                        }
-                    }*/
                     tmpObj.put("userName",nameJson);
                     tmpObj.put("userDocument",icJson);
                     jsonArray.put(tmpObj);
@@ -461,10 +456,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String userList = jsonArray.toString();
             Log.d("wwwwname2", "initToolbar: "+userList);
 
-            layoutLoading.setVisibility(View.VISIBLE);
+            /*layoutLoading.setVisibility(View.VISIBLE);
             ivLoading.setBackgroundResource(R.drawable.loading_before);
             AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();
+            background.start();*/
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -539,6 +534,40 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         etIC.setHint("身份证");
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
+    }
+    private void addLayout(){
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final LinearLayout layout1 = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        final EditText etName = new EditText(this);
+        etName.setHint("姓名");
+        etName.setTextSize(16);
+        name.add(etName);
+        layoutName.addView(etName);
+        final EditText etIC = new EditText(this);
+        ic.add(etIC);
+        etIC.setHint("身份证");
+        etIC.setTextSize(16);
+        layoutIC.addView(etIC);
+
+        final LinearLayout layout2 = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        final EditText etName2 = new EditText(this);
+        etName2.setHint("姓名");
+        etName2.setTextSize(16);
+        name.add(etName2);
+        layoutName.addView(etName2);
+        final EditText etIC2 = new EditText(this);
+        ic.add(etIC2);
+        etIC2.setHint("身份证");
+        etIC2.setTextSize(16);
+        layoutIC.addView(etIC2);
+
+        layout.addView(layout1);
+        layout.addView(layout2);
+        //layout.addView(layout1);
     }
     private void setSum() {
         //订单金额

@@ -95,19 +95,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @ViewInject(R.id.iv_loading)
     private ImageView ivLoading;
 
-    @ViewInject(R.id.navRightItemImage)
+    @ViewInject(R.id.iv_circle_publish)
     private ImageView rightImage;
-    @ViewInject(R.id.mToolBar)
-    private Toolbar toolbar;
-    @ViewInject(R.id.btn_Back)
-    private ImageView imageView;
-    @ViewInject(R.id.line)
-    private View viewline;
-    @ViewInject(R.id.toolbar_title)
-    private TextView titleTv;
-
+    @ViewInject(R.id.iv_circle_notice_show)
+    private ImageView ivShow;
     @ViewInject(R.id.iv_circle_back_top)
     private ImageView mImageViewRebackTop;
+    @ViewInject(R.id.iv_circle_notice)
+    private ImageView imageView;
 
     @ViewInject(R.id.rv_circle)
     private RecyclerView rvCircle;
@@ -124,6 +119,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     private int pageSize=10;
     @ViewInject(R.id.springView)
     private SpringView springView;
+
 
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
@@ -143,15 +139,30 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     }
     @Subscribe
     public void onEvent(EventBusClass event){
-     /*   if(event.getEnumEventBus()== EnumEventBus.PUBLISH){
-            initData();
-        }*/
         if(event.getEnumEventBus()==EnumEventBus.CIRCLECOMMENT){
-            int  index =Integer.parseInt(event.getMsg()) ;
-            Log.d("circleCommentNumber", "onEvent: "+index);
             initData(1);
-            //adapter.notifyItemChanged(index);
-
+        }
+        if(event.getEnumEventBus()==EnumEventBus.CIRCLE){
+            initData(1);
+        }
+        if(event.getEnumEventBus()==EnumEventBus.NOTICE){
+            boolean open = SharedPreferencesManager.getNotice(getContext());
+            if(open){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
+        if(event.getEnumEventBus()==EnumEventBus.CIRCLENOTICE){
+            boolean open = SharedPreferencesManager.getNotice(getContext());
+            if(open){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
+        if(event.getEnumEventBus()==EnumEventBus.EXIT){
+            initData(1);
         }
     }
 
@@ -169,7 +180,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
         customerId= loginInfo.getId()+"";
         imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
@@ -200,6 +210,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
+        boolean open = SharedPreferencesManager.getNotice(getContext());
+        if(open){
+            ivShow.setVisibility(View.VISIBLE);
+        }else{
+            ivShow.setVisibility(View.GONE);
+        }
         initNet();
         initToolbar();
         initView();
@@ -409,20 +425,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             //Log.d("pictureList.size()", "onEvent: "+pictureList.size());
                             MNImageBrowser.showImageBrowser(getActivity(),imageView1,index, image);
                         }
-
-                        @Override
-                        protected ImageView generateImageView(Context context) {
-                            NineGridViewWrapper imageView = new NineGridViewWrapper(context);
-                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            imageView.setOnLongClickListener(new View.OnLongClickListener() {
-                                @Override
-                                public boolean onLongClick(View v) {
-                                    ToastUtils.showCenter(getContext(),"save");
-                                    return false;
-                                }
-                            });
-                            return super.generateImageView(context);
-                        }
                     });
                     //头像跳转到我的动态
                     ivPortrait.setOnClickListener(new View.OnClickListener() {
@@ -451,6 +453,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                        String customerId= loginInfo.getId()+"";
                       if(TextUtils.isEmpty(customerId)){
                           Intent intent=new Intent(getActivity(),LoginActivity.class);
+                          intent.putExtra("webview","2");
                           startActivity(intent);
                       }else {
                         RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE_PRAISE);
@@ -696,28 +699,22 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initToolbar() {
-        titleTv.setText("佰家圈");
-        titleTv.setTextColor(Color.WHITE);
-        viewline.setBackgroundResource(R.color.home_tab_title_color_check);
-        imageView.setImageResource(R.drawable.circle_notice);
+        //消息通知
         imageView.setOnClickListener(this);
-
-        toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
-        this.rightImage.setImageResource(R.drawable.circle_publish);
-        this.rightImage.setVisibility(View.VISIBLE);
         //发布动态
         this.rightImage.setOnClickListener(this);
+
     }
     @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()){
-            case R.id.btn_Back:
+            case R.id.iv_circle_notice:
                 //通知
                 intent=new Intent(getActivity(), CircleMessageActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.navRightItemImage:
+            case R.id.iv_circle_publish:
                 //发布动态
                 LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getActivity());
                 String customerId = loginInfo.getId()+"";

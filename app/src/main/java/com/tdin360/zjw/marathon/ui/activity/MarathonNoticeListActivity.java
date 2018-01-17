@@ -67,8 +67,6 @@ public class MarathonNoticeListActivity extends BaseActivity implements PullToRe
     }
 
     private void initView() {
-
-
         this.pullToRefreshLayout.setOnRefreshListener(this);
         this.refreshListView.setOnItemClickListener(new MyListener());
         this.adapter = new NoticeAdapter(this,noticeModelList,R.layout.notice_list_item);

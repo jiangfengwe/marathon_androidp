@@ -30,7 +30,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void addEvent(EventModel model) {
-
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
         //判断数据库中不存在才插入
         Cursor cursor = conn.query(SQLHelper.EVENT_TABLE, null,"eventId=?",new String[]{model.getId()+""}, null, null, null);
@@ -60,7 +59,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventModel> getAllEvent() {
-
         List<EventModel>list=new ArrayList<>();
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
         Cursor cursor = conn.query(SQLHelper.EVENT_TABLE, null, null, null, null, null, null);

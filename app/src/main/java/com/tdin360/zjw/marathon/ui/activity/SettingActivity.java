@@ -25,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.Manifest;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -36,6 +38,7 @@ import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.view.annotation.ViewInject;
 
 import static com.umeng.socialize.utils.ContextUtil.getPackageName;
@@ -225,6 +228,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 //通知个人中心修改登录状态
                 Intent intent  =new Intent(MyFragment.ACTION);
                 sendBroadcast(intent);
+                EnumEventBus exit = EnumEventBus.EXIT;
+                EventBus.getDefault().post(new EventBusClass(exit));
                 finish();
             }
         });

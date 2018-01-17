@@ -272,10 +272,6 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         for(int i=0;i<localMedias.size();i++ ){
             String compressPath = localMedias.get(i).getCompressPath();
             Log.d("compressPath", "initSure: "+compressPath);
-          /*  if(compressPath.equals(".jpg")){
-                picPath
-            }*/
-
             params.addBodyParameter("file"+i,new File(compressPath),"image/jpeg",i+".jpg");
         }
         x.http().post(params, new Callback.ProgressCallback<String>() {
@@ -339,8 +335,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
-                ToastUtils.showCenter(getContext(),"current");
-                Log.d("long", "onLoading: "+current);
+                ToastUtils.showCenter(getContext(),current+"");
+                Log.d("long", "onLoading: "+current+"pppppppppppp"+total);
 
             }
         });

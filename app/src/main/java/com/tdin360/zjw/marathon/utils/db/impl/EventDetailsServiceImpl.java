@@ -31,8 +31,6 @@ public class EventDetailsServiceImpl implements EventDetailService{
 
     @Override
     public void addEventDetail(CarouselModel model) {
-
-
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
         //判断数据库中不存在才插入
         Cursor cursor = conn.query(SQLHelper.EVENT_DETAIL_TABLE, null,"imageUrl=?",new String[]{model.getPicUrl()}, null, null, null);
@@ -55,8 +53,6 @@ public class EventDetailsServiceImpl implements EventDetailService{
 
     @Override
     public List<CarouselModel> getAllEventDetail(String eventId,String type) {
-
-
         List<CarouselModel>list=new ArrayList<>();
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
         Cursor cursor = conn.query(SQLHelper.EVENT_DETAIL_TABLE, null, "eventId=? and type=?", new String[]{eventId, type}, null, null, null);

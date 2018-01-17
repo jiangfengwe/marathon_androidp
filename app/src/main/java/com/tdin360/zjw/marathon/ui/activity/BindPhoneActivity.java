@@ -126,7 +126,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     logs = "Failed with errorCode = " + code;
                     //Log.e(TAG, logs);
             }
-            ExampleUtil.showToast(logs, getApplicationContext());
+            //ExampleUtil.showToast(logs, getApplicationContext());
         }
     };
 
@@ -281,6 +281,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         try{
             Intent intent=getIntent();
             String uId = intent.getStringExtra("uId");
+            final String img = intent.getStringExtra("img");
             byte[] mBytes=null;
             final String phone1 = etPhone.getText().toString().trim();
             if(TextUtils.isEmpty(phone1)){
@@ -333,7 +334,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         String phone = user.getPhone();
                         // 调用 Handler 来异步设置别名
                         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS,customerAlias));
-                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone1);
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, img, nickName, gender, unionid, isBindPhone, customerSign, phone1);
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(BindPhoneActivity.this,userBean);
                         EnumEventBus em = EnumEventBus.BIND;
@@ -344,10 +345,34 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         //通知webActivity修改登录状态
                         Intent intent1 = getIntent();
                         int webview = intent1.getIntExtra("webview", -1);
+                        //String webview = intent1.getStringExtra("webview");
                         if(webview==1){
-                            EnumEventBus em1 = EnumEventBus.WEBVIEW;
-                            EventBus.getDefault().post(new EventBusClass(em1));
+                            EnumEventBus web = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(web));
                         }
+                        if(webview==2){
+                            EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                            EventBus.getDefault().post(new EventBusClass(circlePraise));
+                        }
+                        //通知网页
+                        EnumEventBus web = EnumEventBus.WEBVIEW;
+                        EventBus.getDefault().post(new EventBusClass(web));
+                        //通知社交
+                        EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                        EventBus.getDefault().post(new EventBusClass(circlePraise));
+                      /*  //通知webActivity修改登录状态
+                        Intent intent1 = getIntent();
+                        String webview = intent1.getStringExtra("webview");
+                        switch (webview) {
+                            case "1":
+                                EnumEventBus web = EnumEventBus.WEBVIEW;
+                                EventBus.getDefault().post(new EventBusClass(web));
+                                break;
+                            case "2":
+                                EnumEventBus circle = EnumEventBus.CIRCLE;
+                                EventBus.getDefault().post(new EventBusClass(circle));
+                                break;
+                        }*/
                         finish();
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),bindPhoneSureBean.getMessage());

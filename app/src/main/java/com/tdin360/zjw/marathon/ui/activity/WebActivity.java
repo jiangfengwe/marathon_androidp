@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,15 +31,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
+import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.PayBean;
+import com.tdin360.zjw.marathon.model.PayInfoBean;
+import com.tdin360.zjw.marathon.model.WebViewPayBean;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
+import com.tdin360.zjw.marathon.wxapi.Constants;
+import com.tdin360.zjw.marathon.wxapi.WXPayEntryActivity;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -56,12 +69,15 @@ import com.umeng.socialize.utils.ShareBoardlistener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 /**
  *  赛事详情
  */
-public class WebActivity extends BaseActivity implements View.OnClickListener{
+public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPAYResultListener,View.OnClickListener{
     @ViewInject(R.id.mWebView)
     private WebView webView;
     @ViewInject(R.id.progressBar)
@@ -80,24 +96,27 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
     private ValueCallback<Uri[]> uploadMessageAboveL;
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
 
-
-
-
-
     private ShareAction action;
     private String webUrl;
     private String imageUrl;
+
+    private IWXAPI api;
     @Subscribe
     public void onEvent(EventBusClass event){
         if(event.getEnumEventBus()== EnumEventBus.WEBVIEW){
             initWeb();
-
+        }
+        if(event.getEnumEventBus()==EnumEventBus.EXIT){
+            initWeb();
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        WXPayEntryActivity.listener=this;
+        // 通过WXAPIFactory工厂，获取IWXAPI的实例
+        this.api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         initView();
        /* Intent intent = getIntent();
         if(intent!=null){
@@ -222,6 +241,33 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
             }
         });
     }
+    @JavascriptInterface
+    public void toPay(final String pay){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("webpay", "run: "+pay);
+                Gson gson=new Gson();
+                WebViewPayBean webViewPayBean = gson.fromJson(pay, WebViewPayBean.class);
+                String appId = webViewPayBean.getAppId();
+                String nonceStr = webViewPayBean.getNonceStr();
+                String packageValue = webViewPayBean.getPackageValue();
+                String partnerId = webViewPayBean.getPartnerId()+"";
+                String prepayId = webViewPayBean.getPrepayId();
+                String sign = webViewPayBean.getSign();
+                String timeStamp = webViewPayBean.getTimeStamp()+"";
+                PayReq req = new PayReq();
+                req.appId=appId;
+                req.nonceStr=nonceStr;
+                req.packageValue=packageValue;
+                req.partnerId=partnerId;
+                req.prepayId=prepayId;
+                req.sign=sign;
+                req.timeStamp=timeStamp;
+                api.sendReq(req);
+            }
+        });
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -303,7 +349,13 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
-   private class MyWebChromeClient extends WebChromeClient{
+
+    @Override
+    public void onWXPaySuccess() {
+
+    }
+
+    private class MyWebChromeClient extends WebChromeClient{
         @Override
         public void onProgressChanged(WebView webView, int i) {
             super.onProgressChanged(webView, i);
@@ -366,10 +418,14 @@ public class WebActivity extends BaseActivity implements View.OnClickListener{
         public boolean shouldOverrideUrlLoading(WebView webView, String s) {
             Log.d("------url--->", "shouldOverrideUrlLoading: "+s);
             //微信支付
-            if(s!=null&&s.startsWith("weixin://wap/pay?")){
+            if(s!=null&&s.startsWith("weixin://app/")){
                 Log.d("------支付--->", "shouldOverrideUrlLoading: "+s);
                 try{
-                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(s));
+                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("weixin://wap/pay?appid%3Dwx2421b1c4370ec43b%26noncestr%3Dee0456cf9096f19b0b1a5bf6405bfdf8%26\n" +
+                            "package%3DWAP%26\n" +
+                            "prepayid%3Dwx2016041510310675dd0b79e80509438698%26\n" +
+                            "timestamp%3D1460687466%26\n" +
+                            "sign%3DE9409AE1B77B897D422F661558C7F9C6"));
                     startActivity(intent);
                 }catch (ActivityNotFoundException e){
                     ToastUtils.show(WebActivity.this, "请安装微信最新版客户端");

@@ -138,6 +138,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
         //赛事状态tablayout
         viewPagerEvent.setAdapter(new EventTabLayoutAdapter(getChildFragmentManager()));
         tabLayout.setupWithViewPager(viewPagerEvent);
+        viewPagerEvent.setOffscreenPageLimit(2);
     }
 
     @Override

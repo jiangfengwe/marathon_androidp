@@ -11,8 +11,6 @@ import java.util.List;
  */
 
 public interface NoticeService {
-
-
     void addNotice(NoticeModel model);
     boolean deleteNotice(String eventId);
     boolean deleteAllNotice();

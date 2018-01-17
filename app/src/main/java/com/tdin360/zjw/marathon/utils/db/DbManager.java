@@ -8,7 +8,6 @@ import android.content.Context;
  */
 
 public class DbManager {
-
     public static void init(Context context){
         new SQLHelper(context);
     }

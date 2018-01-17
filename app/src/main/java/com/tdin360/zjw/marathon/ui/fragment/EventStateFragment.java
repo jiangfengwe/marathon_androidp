@@ -68,6 +68,9 @@ public class EventStateFragment extends BaseFragment {
 
     ImageOptions imageOptions;
 
+    private boolean isVisible;
+    private boolean isPrepared;
+
     private List<EventBean.ModelBean.BJEventSystemListModelBean> bjEventSystemListModel=new ArrayList<>();
 
 
@@ -82,7 +85,29 @@ public class EventStateFragment extends BaseFragment {
         return eventStateFragment;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(getUserVisibleHint()){
+            isVisible = true;
+            onVisible();
+        }else{
+            isVisible = false;
+            onInvisible();
+        }
+    }
+    private void onInvisible() {
+        bjEventSystemListModel.clear();
+    }
 
+    private void onVisible() {
+        if(!isPrepared || !isVisible) {
+            return;
+        }
+        initNet();
+        //initData();
+        initView();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -111,9 +136,9 @@ public class EventStateFragment extends BaseFragment {
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
-        initNet();
-        //initData();
-        initView();
+        isPrepared = true;
+        onVisible();
+
     }
     private void initNet() {
         /*mErrorView.setBackgroundResource(R.drawable.loading_error);

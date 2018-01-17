@@ -165,7 +165,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     logs = "Failed with errorCode = " + code;
                     //Log.e(TAG, logs);
             }
-            ExampleUtil.showToast(logs, getApplicationContext());
+            //ExampleUtil.showToast(logs, getApplicationContext());
         }
     };
     @Subscribe
@@ -508,15 +508,40 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         //通知webActivity修改登录状态
                         Intent intent1 = getIntent();
                         int webview = intent1.getIntExtra("webview", -1);
+                        //String webview = intent1.getStringExtra("webview");
                         if(webview==1){
-                            EnumEventBus em = EnumEventBus.WEBVIEW;
-                            EventBus.getDefault().post(new EventBusClass(em));
+                            EnumEventBus web = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(web));
                         }
+                        if(webview==2){
+                            EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                            EventBus.getDefault().post(new EventBusClass(circlePraise));
+                        }
+                        //通知网页
+                        EnumEventBus web = EnumEventBus.WEBVIEW;
+                        EventBus.getDefault().post(new EventBusClass(web));
+                        //通知社交
+                        EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                        EventBus.getDefault().post(new EventBusClass(circlePraise));
+                       /* //通知webActivity修改登录状态
+                        Intent intent1 = getIntent();
+                        String webview = intent1.getStringExtra("webview");
+                        switch (webview) {
+                            case "1":
+                                EnumEventBus web = EnumEventBus.WEBVIEW;
+                                EventBus.getDefault().post(new EventBusClass(web));
+                                break;
+                            case "2":
+                                EnumEventBus circle = EnumEventBus.CIRCLE;
+                                EventBus.getDefault().post(new EventBusClass(circle));
+                                break;
+                        }*/
                         finish();
                     }else{
                         SingleClass.getInstance().setUser(user);
                         Intent intent1=new Intent(LoginActivity.this,BindPhoneActivity.class);
                         intent1.putExtra("uId",unionid);
+                        intent1.putExtra("img",profile_image_url);
                         startActivity(intent1);
                     }
 
@@ -627,10 +652,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         //通知webActivity修改登录状态
                         Intent intent1 = getIntent();
                         int webview = intent1.getIntExtra("webview", -1);
+                        //String webview = intent1.getStringExtra("webview");
                         if(webview==1){
-                            EnumEventBus em = EnumEventBus.WEBVIEW;
-                            EventBus.getDefault().post(new EventBusClass(em));
+                            EnumEventBus web = EnumEventBus.WEBVIEW;
+                            EventBus.getDefault().post(new EventBusClass(web));
                         }
+                        if(webview==2){
+                            EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                            EventBus.getDefault().post(new EventBusClass(circlePraise));
+                        }
+                        //通知网页
+                        EnumEventBus web = EnumEventBus.WEBVIEW;
+                        EventBus.getDefault().post(new EventBusClass(web));
+                        //通知社交
+                        EnumEventBus circlePraise = EnumEventBus.CIRCLE;
+                        EventBus.getDefault().post(new EventBusClass(circlePraise));
+                      /*  switch (webview) {
+                            case "1":
+                                EnumEventBus web = EnumEventBus.WEBVIEW;
+                                EventBus.getDefault().post(new EventBusClass(web));
+                                break;
+                            case "2":
+                                EnumEventBus circle = EnumEventBus.CIRCLE;
+                                EventBus.getDefault().post(new EventBusClass(circle));
+                                break;
+                        }*/
                         finish();
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),loginBean.getMessage());

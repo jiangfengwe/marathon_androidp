@@ -10,7 +10,50 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/toolbar_layout"/>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentInsetStart="0dp"
+                android:background="@color/home_tab_title_color_check">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/iv_circle_notice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_notice"/>
+                    <ImageView
+                        android:id="@+id/iv_circle_notice_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/shap_oval_yellow"
+                        android:layout_marginLeft="20dp"
+                        android:visibility="gone"
+                        android:layout_marginTop="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="佰家圈"
+                        android:textColor="@color/white"
+                        android:layout_centerInParent="true"
+                        android:textSize="18sp"/>
+                    <ImageView
+                        android:id="@+id/iv_circle_publish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_publish"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
         <com.liaoinstan.springview.widget.SpringView
             android:id="@+id/springView"
             android:layout_width="match_parent"

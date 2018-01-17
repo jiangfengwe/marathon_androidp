@@ -24,7 +24,7 @@ import static android.R.attr.id;
  * Created by Administrator on 2016/8/23.
  */
 public class SharedPreferencesManager {
-   /*
+   /**
    清除用户报名数据
     */
     public static void clear(Context context){
@@ -49,6 +49,21 @@ public class SharedPreferencesManager {
         SharedPreferences mySharedPreferences= context.getSharedPreferences("my_setting",
                 Activity.MODE_PRIVATE);
         return mySharedPreferences.getBoolean("isOpen",true);
+    }
+    //保存设置是否有通知状态
+    public static void isNotice(Context context,boolean isOpen){
+        //实例化SharedPreferences对象（第一步）
+        SharedPreferences mySharedPreferences= context.getSharedPreferences("notice",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor edit = mySharedPreferences.edit();
+        edit.putBoolean("isNotice",isOpen);
+        edit.commit();
+    }
+    //获取是否有通知状态
+    public static boolean getNotice(Context context){
+        SharedPreferences mySharedPreferences= context.getSharedPreferences("notice",
+                Activity.MODE_PRIVATE);
+        return mySharedPreferences.getBoolean("isNotice",false);
     }
 
     //保存登录信息
