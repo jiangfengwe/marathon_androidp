@@ -13,8 +13,10 @@ public class SQLHelper extends SQLiteOpenHelper {
 
     //数据库名称
     public static final String DB_NAME="marathon.db";
-    // 社交点赞评论表
+    // 社交点赞评论通知表
     public static final String PRAISE_COMMENT_TABLE="Circle";
+    // 系统通知表
+    public static final String SYSTEM_NOTICE_TABLE="SystemNotice";
 
 //    赛事主页表
     public static final String EVENT_TABLE="Event";
@@ -48,14 +50,35 @@ public class SQLHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // 社交点赞评论表
-        String circleSql ="CREATE TABLE "+PRAISE_COMMENT_TABLE+" (\n" +
-                "    DynamicId            INTEGER \n" +
+        /*String circleSql ="CREATE TABLE "+PRAISE_COMMENT_TABLE+" (\n" +
+                "    DynamicId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "                          NOT NULL,\n" +
                 "    NickName      VARCHAR,\n" +
                 "    DynamicPictureUrl     VARCHAR,\n" +
                 "    messageType   VARCHAR,\n" +
                 "    HeadImg VARCHAR,\n" +
                 "    CommentContent VARCHAR,\n" +
-                "    DynamicContent   VARCHAR);" ;
+                "    DynamicContent   VARCHAR);" ;*/
+        String circleSql ="CREATE TABLE "+PRAISE_COMMENT_TABLE+" (\n" +
+                "    dynamicId            INTEGER \n" +
+                "                          NOT NULL,\n" +
+                "    nickName      VARCHAR,\n" +
+                "    dynamicPictureUrl     VARCHAR,\n" +
+                "    messageType   VARCHAR,\n" +
+                "    headImg VARCHAR,\n" +
+                "    commentContent VARCHAR,\n" +
+                "    time VARCHAR,\n" +
+                "    dynamicContent   VARCHAR);" ;
+        String systemSql ="CREATE TABLE "+SYSTEM_NOTICE_TABLE+" (\n" +
+                "    dynamicId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "                          NOT NULL,\n" +
+                "    nickName      VARCHAR,\n" +
+                "    dynamicPictureUrl     VARCHAR,\n" +
+                "    messageType   VARCHAR,\n" +
+                "    headImg VARCHAR,\n" +
+                "    commentContent VARCHAR,\n" +
+                "    time VARCHAR,\n" +
+                "    dynamicContent   VARCHAR);" ;
 
 //        赛事数据表
         String eventSql ="CREATE TABLE "+EVENT_TABLE+" (\n" +
@@ -113,6 +136,8 @@ public class SQLHelper extends SQLiteOpenHelper {
 
 
         db.execSQL(eventSql);
+        db.execSQL(systemSql);
+
         db.execSQL(eventDetailSql);
         db.execSQL(create_Notice_Sql);
         db.execSQL(myInfoSql);
@@ -126,6 +151,8 @@ public class SQLHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+PRAISE_COMMENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+SYSTEM_NOTICE_TABLE);
+
         db.execSQL("DROP TABLE IF EXISTS "+EVENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+EVENT_DETAIL_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+NOTICE_MESSAGE_TABLE);

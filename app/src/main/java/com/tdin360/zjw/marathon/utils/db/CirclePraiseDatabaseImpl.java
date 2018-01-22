@@ -82,8 +82,9 @@ public class CirclePraiseDatabaseImpl {
             String CommentContent =  cursor.getString(cursor.getColumnIndex("CommentContent")) ;
             String DynamicContent =  cursor.getString(cursor.getColumnIndex("DynamicContent")) ;
             String messageType = cursor.getString(cursor.getColumnIndex("messageType"));
+            String time = cursor.getString(cursor.getColumnIndex("time"));
 
-            list.add(new CirclePriseTableModel(NickName,DynamicPictureUrl,messageType,HeadImg,DynamicId,CommentContent,DynamicContent));
+            list.add(new CirclePriseTableModel(NickName,DynamicPictureUrl,messageType,HeadImg,DynamicId,CommentContent,DynamicContent,time));
         }
         Log.d("circlesize", "getAllCircleDetail: "+list.size());
         cursor.close();

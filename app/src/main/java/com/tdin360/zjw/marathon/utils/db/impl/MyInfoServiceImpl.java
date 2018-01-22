@@ -26,7 +26,6 @@ public class MyInfoServiceImpl implements MyInfoService {
 
     @Override
     public void addInfo(UserModel model) {
-
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("tel",model.getPhone());

@@ -181,6 +181,8 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     }
 
     private void initView() {
+        String name = getIntent().getStringExtra("name");
+        titleTv.setText(name );
         back.setOnClickListener(this);
         close.setOnClickListener(this);
         more.setOnClickListener(this);

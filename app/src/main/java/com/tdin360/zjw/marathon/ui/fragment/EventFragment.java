@@ -1,13 +1,20 @@
 package com.tdin360.zjw.marathon.ui.fragment;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +30,7 @@ import com.tdin360.zjw.marathon.adapter.CommonAdapter;
 import com.tdin360.zjw.marathon.adapter.EventTabLayoutAdapter;
 import com.tdin360.zjw.marathon.adapter.ViewHolder;
 import com.tdin360.zjw.marathon.model.EventModel;
+import com.tdin360.zjw.marathon.ui.activity.PublishActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.ui.activity.ZxingActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
@@ -41,6 +49,8 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.umeng.socialize.utils.ContextUtil.getPackageName;
 
 /**赛事列表
  * Created by Administrator on 2016/8/9.
@@ -90,7 +100,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-          EventBus.getDefault().register(this);
+         // EventBus.getDefault().register(this);
          this.impl  = new EventServiceImpl(getContext());
          /*this.marathonListViewAdapter = new EventAdapter(getActivity(),list,R.layout.marathon_list_item);
          this.listView.setAdapter(marathonListViewAdapter);
@@ -146,8 +156,18 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
         Intent intent;
         switch (v.getId()){
             case R.id.btn_Back:
-                intent=new Intent(getActivity(), ZxingActivity.class);
-                startActivity(intent);
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+                    intent=new Intent(getActivity(), ZxingActivity.class);
+                    startActivity(intent);
+                }else {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},9);
+                    }else {
+                        intent=new Intent(getActivity(), ZxingActivity.class);
+                        startActivity(intent);
+                    }
+                }
+
                 break;
             case R.id.navRightItemImage:
                 intent = new Intent(getActivity(), SearchActivity.class);
@@ -546,36 +566,55 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
     }
 */
 
-    /**
-     * 下载更新进度条处理
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateDownload(MessageEvent event){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode) {
+            // requestCode即所声明的权限获取码，在checkSelfPermission时传入
+            case 9:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                  Intent  intent=new Intent(getActivity(), ZxingActivity.class);
+                    startActivity(intent);
+                    //用户授权成功
+                }else {
+                    //用户没有授权
+                    android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                    alert.setTitle("提示");
+                    alert.setMessage("你需要设置权限才可以使用该功能");
+                    alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getAppDetailSettingIntent(getActivity());
+                        }
+                    });
+                    alert.show();
 
-        if(event.getType()== MessageEvent.MessageType.DOWNLOAD_UPDATE) {
-            progressBar.setMax((int) event.getTotalSize());
-            progressBar.setProgress((int) event.getCurrentSize());
-            totalTv.setText(CommonUtils.FormatFileSize(event.getTotalSize()));
-            currentTv.setText(CommonUtils.FormatFileSize(event.getCurrentSize()));
-            //下载完成
-            if(event.getCurrentSize()==event.getTotalSize()){
-
-                 if(dialog!=null){
-
-                   dialog.dismiss();
-                 }
-
-
-            }
-
+                }
+                break;
+            default:
+                break;
         }
     }
-
+    /**
+     * 设置权限界面
+     * @param context
+     */
+    public  void getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+        }
+        context.startActivity(localIntent);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
     }
 }

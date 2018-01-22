@@ -14,7 +14,11 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
+import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
+import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
+import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 
 import org.xutils.view.annotation.ViewInject;
 
@@ -74,10 +78,19 @@ public class MyNoticeMessageActivity extends BaseActivity {
         for (int i = 0; i <9 ; i++) {
             list.add(""+i);
         }
-        adapter=new RecyclerViewBaseAdapter<String>(getApplicationContext(),list,R.layout.my_notice_mesage_list_item) {
+        SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
+        List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+        if(allCircleNotice.size()<=0){
+            ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
+            return;
+        }
+        adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, String model) {
+            protected void onBindNormalViewHolder(NormalViewHolder holder, CirclePriseTableModel model) {
                 TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
+                holder.setText(R.id.tv_system_title,model.getNickName());
+                holder.setText(R.id.tv_system_content,model.getDynamicContent());
+                holder.setText(R.id.tv_system_time,model.getTime());
 
 
             }

@@ -585,12 +585,15 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         View inflate = View.inflate(MyInfoActivity.this, R.layout.item_mydialog_nickname, null);
         dialog.setContentView(inflate);
         final EditText etNickname = (EditText) inflate.findViewById(R.id.et_nickname);
+        String trim = tvNickName.getText().toString().trim();
+       // final String nickName = etNickname.getText().toString().trim();
+        etNickname.setText(trim);
         Button btnNickname = (Button) inflate.findViewById(R.id.btn_nickname);
         btnNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String nickName = etNickname.getText().toString().trim();
                 //ToastUtils.show(getApplicationContext(),etNickname.getText().toString());
+                final String nickName = etNickname.getText().toString().trim();
                 //修改昵称
                 if(TextUtils.isEmpty(nickName)){
                     ToastUtils.showCenter(getApplicationContext(),"修改昵称不能为空");

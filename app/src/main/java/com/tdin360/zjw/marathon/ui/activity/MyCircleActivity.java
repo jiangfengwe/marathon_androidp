@@ -39,6 +39,8 @@ import com.lzy.ninegrid.ImageInfo;
 import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.NineGridViewAdapter;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
@@ -54,6 +56,8 @@ import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
@@ -90,6 +94,9 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     @ViewInject(R.id.layout_my_circle)
     private RelativeLayout layout;
 
+    @ViewInject(R.id.tv_dynamic_null)
+    private TextView tvNull;
+
     @ViewInject(R.id.rv_my_circle)
     private RecyclerView rvCircle;
     private RecyclerViewBaseAdapter adapter;
@@ -110,10 +117,17 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     boolean isDragging;//判断scroll是否是用户主动拖拽
     boolean isScrolling;//判断scroll是否处于滑动中
 
+    @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()== EnumEventBus.PUBLISH){
+            initData(1);
+        }
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         imageOptions = new ImageOptions.Builder()
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
@@ -139,7 +153,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData();
+                        initData(0);
                         break;
 
                 }
@@ -148,7 +162,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(this)){
             //加载网络数据
-            initData();
+            initData(0);
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -175,7 +189,10 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
         }
     }
-    private void initData() {
+    private void initData(int i) {
+        if(i==1){
+            bjDynamicListModel.clear();
+        }
        // bjDynamicListModel.clear();
         final String customerId1 = getIntent().getStringExtra("customerId");
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
@@ -220,9 +237,11 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                         ToastUtils.showCenter(getApplicationContext(),"还没有发布动态哦！");
                     }*/
                     if(bjDynamicListModel.size()<=0){
-                        mErrorView.show(rvCircle,"还没有发布动态哦!",ErrorView.ViewShowMode.NOT_DATA);
+                        //mErrorView.show(rvCircle,"还没有发布动态哦!",ErrorView.ViewShowMode.NOT_DATA);
+                        tvNull.setVisibility(View.VISIBLE);
                     }else {
-                        mErrorView.hideErrorView(rvCircle);
+                        //mErrorView.hideErrorView(rvCircle);
+                        tvNull.setVisibility(View.GONE);
                     }
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),myCircleBean.getMessage());
@@ -254,9 +273,11 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         ivBack.setOnClickListener(this);
+        tvNull.setOnClickListener(this);
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerId = model.getId() + "";
         String customerId1 = getIntent().getStringExtra("customerId");
+
         if(customerId.equals(customerId1)){
             if(customerId.equals(customerId1)){
                 ivPic.setOnClickListener(this);
@@ -327,6 +348,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                                 boolean state = myCircleDeleteBean.isState();
                                 if(state){
                                     bjDynamicListModel.remove(getPosition(holder));
+                                    initData(1);
                                     adapter.notifyDataSetChanged();
 
                                 }else{
@@ -469,7 +491,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 springView.onFinishFreshAndLoad();
                 bjDynamicListModel.clear();
                 pageIndex=1;
-                initData();
+                initData(1);
             }
 
             @Override
@@ -480,7 +502,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData();
+                    initData(0);
                 }
 
             }
@@ -500,6 +522,12 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_my_circle_back:
                 //返回
                 finish();
+                break;
+            case R.id.tv_dynamic_null:
+                //跳转动态发布
+                Intent intent=new Intent(MyCircleActivity.this,PublishActivity.class);
+                intent.putExtra("myCircle","5");
+                startActivity(intent);
                 break;
             case R.id.iv_my_circle_pic:
                 //切换背景图
@@ -674,5 +702,11 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
         }
         context.startActivity(localIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

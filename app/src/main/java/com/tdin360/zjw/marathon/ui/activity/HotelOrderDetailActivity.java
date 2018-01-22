@@ -106,7 +106,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         initToolbar();
         initView();
-        initDetailData();
+       // initDetailData();
         initNet();
 
         /* tView.setText(Html.fromHtml(sText, null, new MxgsaTagHandler(this)));
@@ -121,7 +121,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData();
+                        initDetailData();
                         break;
 
                 }
@@ -171,7 +171,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d("orderdetaillis", "onSuccess: "+result);
+
                 Gson gson=new Gson();
                 OrderHOtelDetailBean orderHOtelDetailBean = gson.fromJson(result, OrderHOtelDetailBean.class);
                 boolean state = orderHOtelDetailBean.isState();
@@ -181,8 +181,9 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                     OrderHotelDetailDecryptBean orderHotelDetailDecryptBean = gson.fromJson(decrypt, OrderHotelDetailDecryptBean.class);
                     OrderHotelDetailDecryptBean.ModelBean model = orderHotelDetailDecryptBean.getModel();
                     bjHotelOrderModel= model.getBJHotelOrderModel();
-                    initData();
-                    Log.d("hotelorderS", "onSuccess: "+decrypt);
+                    String payMethod = bjHotelOrderModel.getPayMethod();
+                    initData(payMethod);
+                    Log.d("hotelorderS", "onSuccess: "+bjHotelOrderModel.getStatus());
 
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),orderHOtelDetailBean.getMessage());
@@ -208,8 +209,9 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         });
     }
 
-    private void initData() {
+    private void initData(final String payMethod) {
         final OrderHotelBean.ModelBean.BJHotelOrderListModelBean bjHotelOrderListModelBean = SingleClass.getInstance().getBjHotelOrderListModelBean();
+        Log.d("orderbacksss", "initRefund: "+bjHotelOrderListModelBean);
         final String orderNo = bjHotelOrderModel.getOrderNo();
         x.image().bind(ivPiv,bjHotelOrderModel.getHotelPictureUrl(),imageOptions);
         tvName.setText(bjHotelOrderModel.getHotelName());
@@ -223,9 +225,16 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         boolean isCancel = bjHotelOrderListModelBean.isIsCancel();
         boolean isUsing = bjHotelOrderListModelBean.isIsUsing();
         boolean isPay = bjHotelOrderListModelBean.isIsPay();
+        String status = bjHotelOrderListModelBean.getStatus();
+       /* if(status.equals("7")){
+            btn.setVisibility(View.VISIBLE);
+            btn.setText("退款成功");
+        }else {
+            btn.setVisibility(View.GONE);
+        }*/
         boolean isRefund = bjHotelOrderListModelBean.isIsRefund();
-        final String payMethod = bjHotelOrderListModelBean.getPayMethod();
-
+        //final String payMethod = bjHotelOrderListModelBean.getPayMethod();
+        Log.d("orderbacksss", "initRefund: "+payMethod);
         if(isCancel){
             layoutShow.setVisibility(View.GONE);
         }else{
@@ -235,6 +244,13 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                     btn.setVisibility(View.VISIBLE);
                     btn.setText("去评价");
                 }else{
+                    if(status.equals("6")){
+                        btn.setVisibility(View.VISIBLE);
+                        btn.setText("退款中");
+                    }else if(status.equals("7")){
+                        btn.setVisibility(View.VISIBLE);
+                        btn.setText("退款成功");
+                    } else{
                     btn.setVisibility(View.VISIBLE);
                     btn.setText("申请退款");
                     btn.setOnClickListener(new View.OnClickListener() {
@@ -245,11 +261,14 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                         private void initRefund() {
                             try{
                                 byte[] mBytes=null;
-                                layoutLoading.setVisibility(View.VISIBLE);
-                                ivLoading.setBackgroundResource(R.drawable.loading_before);
-                                AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                                background.start();
+                                final KProgressHUD hud = KProgressHUD.create(HotelOrderDetailActivity.this);
+                                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                                        .setCancellable(true)
+                                        .setAnimationSpeed(1)
+                                        .setDimAmount(0.5f)
+                                        .show();
                                 String string="{\"orderNumber\":"+"\""+orderNo+"\",\"refundDesc\":"+"\""+"不喜欢"+"\",\"payMethod\":"+"\""+payMethod+"\",\"type\":"+"\""+"hotel"+"\",\"appKey\":\"BJYDAppV-2\"}";
+                                Log.d("orderback", "initRefund: "+string);
                                 mBytes=string.getBytes("UTF8");
                                 String enString= AES.encrypt(mBytes);
                                 RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_BACK_MONEY);
@@ -263,6 +282,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                                         boolean state = refundHotelBean.isState();
                                         if(state){
                                             ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
+
                                             finish();
                                         }else{
                                             ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
@@ -282,9 +302,8 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
 
                                     @Override
                                     public void onFinished() {
-                                        layoutLoading.setVisibility(View.GONE);
-                                        //hud.dismiss();
-
+                                       // layoutLoading.setVisibility(View.GONE);
+                                        hud.dismiss();
                                     }
                                 });
 
@@ -294,6 +313,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                             }
                         }
                     });
+                    }
                 }
             }else{
                 layoutShow.setVisibility(View.VISIBLE);
@@ -336,7 +356,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                         .setAnimationSpeed(1)
                         .setDimAmount(0.5f)
                         .show();
-                String orderId = bjHotelOrderListModelBean.getId() + "";
+                String orderId =bjHotelOrderListModelBean.getId() + "";
                 RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_CANCEL);
                 params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                 params.addBodyParameter("orderId",orderId);

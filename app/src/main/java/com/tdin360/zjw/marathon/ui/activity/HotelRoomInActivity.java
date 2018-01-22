@@ -100,8 +100,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout layoutName;
     @ViewInject(R.id.layout_hotel_ic)
     private LinearLayout layoutIC;
+    private LinearLayout layoutInfo;
     private List<EditText> name=new ArrayList<>();
     private List<EditText> ic=new ArrayList<>();
+
     private String str;
     /*@ViewInject(R.id.list_Lin)
     private LinearLayout listLayout;*/
@@ -307,10 +309,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 }
                 count--;
                 countRoom--;
-                name.clear();
-                ic.clear();
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
+               /* layoutName.removeViewAt(countRoom-1);
+                layoutIC.removeViewAt(countRoom-1);*/
+               // LayoutInfo.removeViewAt(count-1);
              /*  if(count>=2){
                    layoutName.removeViewAt(count-2);
                    layoutIC.removeViewAt(count-2);
@@ -331,29 +334,16 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 //入住房间增加
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-               /* if(count>=2){
-                    layoutName.removeViewAt(count-2);
-                    layoutIC.removeViewAt(count-2);
-                }else{
-                    return;
-                }
-*/
+                //LayoutInfo.removeViewAt(count-1);
                 //layoutIC.removeViewAt(count-1);
                 if(countRoom>99){
                     return;
                 }
                 countRoom++;
                 count++;
-                name.clear();
-                ic.clear();
                 for (int i =0; i < count; i++) {
                     addLayout();
                 }
-                for (int i = 0; i < name.size(); i++) {
-                    String string = name.get(i).getText().toString();
-                    //ToastUtils.showCenter(getApplicationContext(),string);
-                }
-                //ToastUtils.showCenter(getApplicationContext(),name.size()+"");
                 setSum();
                 break;
             case R.id.layout_hotel_room_info:
@@ -424,16 +414,24 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 try {
 
                     tmpObj=new JSONObject();
-                    String nameJson = name.get(i).getText().toString();
-                    String icJson = ic.get(i).getText().toString();
-                    if(TextUtils.isEmpty(nameJson)&&TextUtils.isEmpty(icJson)){
+                    String nameJson1 = name.get(0).getText().toString();
+                    String icJson1 = ic.get(0).getText().toString();
+                    if(TextUtils.isEmpty(nameJson1)&&TextUtils.isEmpty(icJson1)){
                         ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
+                       /* String nameJson1 = name.get(i).getText().toString();
+                        String icJson1 = ic.get(i).getText().toString();
+                        if(TextUtils.isEmpty(nameJson1)||TextUtils.isEmpty(icJson1)){
+                            ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
+                            return;
+                        }*/
                         return;
                     }
-                    if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
+                   /* if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
                         ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
                         return;
-                    }
+                    }*/
+                    String nameJson = name.get(i).getText().toString();
+                    String icJson = ic.get(i).getText().toString();
                     tmpObj.put("userName",nameJson);
                     tmpObj.put("userDocument",icJson);
                     jsonArray.put(tmpObj);
@@ -567,6 +565,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
 
         layout.addView(layout1);
         layout.addView(layout2);
+        layoutInfo=new LinearLayout(this);
+        layoutInfo.setOrientation(LinearLayout.VERTICAL);
+        LayoutInfo.addView(layout);
         //layout.addView(layout1);
     }
     private void setSum() {

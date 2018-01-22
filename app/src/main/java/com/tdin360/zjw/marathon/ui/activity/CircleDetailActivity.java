@@ -149,14 +149,9 @@ public class CircleDetailActivity extends BaseActivity {
     }
     @Subscribe
     public void onEvent(EventBusClass event){
-     /*   if(event.getEnumEventBus()== EnumEventBus.PUBLISH){
-            initData();
-        }*/
+
         if(event.getEnumEventBus()==EnumEventBus.CIRCLEDETAILCOMMENT){
-            //int  index =Integer.parseInt(event.getMsg()) ;
-           // Log.d("circleCommentNumber", "onEvent: "+index);
             initData(1);
-            //adapter.notifyItemChanged(index);
 
         }
     }
@@ -350,7 +345,7 @@ public class CircleDetailActivity extends BaseActivity {
                 holder.setText(R.id.tv_circle_detail_comment_time,model.getCreateTimeStr());
                 //回复
                 tvCallback.setText(model.getCommentCount()+"回复");
-                tvCallback.setOnClickListener(new View.OnClickListener() {
+               /* tvCallback.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent=new Intent(CircleDetailActivity.this,CallBackActivity.class);
@@ -359,7 +354,7 @@ public class CircleDetailActivity extends BaseActivity {
                         startActivity(intent);
 
                     }
-                });
+                });*/
 
             }
 
@@ -381,6 +376,7 @@ public class CircleDetailActivity extends BaseActivity {
                 ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
                 x.image().bind(headPortrait,userModel.getHeadImg(),imageOptions);
                 holder.setText(R.id.tv_circle_detail_head_praise,model.getTagsNumber()+"人赞过");
+                //holder.setText(R.id.tv_circle_detail_head_time,userModel.get);
 
                 //holder.setText(R.id.tv_circle_detail_head_name,userModel.getHeadImg());
 
@@ -484,7 +480,6 @@ public class CircleDetailActivity extends BaseActivity {
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         adapter.addHeaderView(R.layout.item_circle_detail_head);
-
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

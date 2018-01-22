@@ -43,6 +43,8 @@ import org.xutils.x;
 
 import java.util.List;
 
+import static com.tdin360.zjw.marathon.R.id.status;
+
 /**
  * 我的订单中旅游订单详情
  */
@@ -220,6 +222,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         boolean isCancel = bjTravelOrderModel.isIsCancel();
         boolean isUsing = bjTravelOrderModel.isIsUsing();
         final String payMethod = bjTravelOrderModel.getPayMethod();
+        String status = bjTravelOrderModel.getStatus();
         if(isCancel){
             layoutShow.setVisibility(View.GONE);
         }else{
@@ -229,6 +232,13 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                     btn.setVisibility(View.VISIBLE);
                     btn.setText("去评价");
                 }else{
+                    if(status.equals("6")){
+                        btn.setVisibility(View.VISIBLE);
+                        btn.setText("退款中");
+                    }else if(status.equals("7")){
+                        btn.setVisibility(View.VISIBLE);
+                        btn.setText("退款成功");
+                    } else{
                     btn.setVisibility(View.VISIBLE);
                     btn.setText("申请退款");
                     btn.setOnClickListener(new View.OnClickListener() {
@@ -311,6 +321,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                             }
                         }
                     });
+                    }
                 }
             }else{
                 layoutShow.setVisibility(View.VISIBLE);

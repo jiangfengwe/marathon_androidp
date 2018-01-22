@@ -65,6 +65,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -117,8 +118,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private String uid="";
     private String gender ;
 
+     KProgressHUD hud;
 
-   /* @ViewInject(R.id.tel)
+
+    /* @ViewInject(R.id.tel)
     private EditText editTextName;
     @ViewInject(R.id.password)
     private EditText editTextPass;
@@ -347,8 +350,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
     private void setAut(SHARE_MEDIA share_media) {
         mShareAPI.getPlatformInfo(LoginActivity.this,share_media, umAuthListener);
+        hud= KProgressHUD.create(LoginActivity.this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
     }
     UMAuthListener umAuthListener=new UMAuthListener() {
+
         @Override
         public void onStart(SHARE_MEDIA share_media) {
 
@@ -422,7 +432,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 byte[] data=null;
                 try {
+                    //
                     URL url = new URL(path);
+                   // URL url = new URL("http://www.eaglesoft.org/public/UploadFiles/image/20141017/20141017152856_751.jpg");
+                    Log.d("headpath", "run: "+path);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setConnectTimeout(3000);
                     con.setRequestMethod("GET");
@@ -458,18 +471,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     }
     private void headImg(byte[] data) {
-        /*final KProgressHUD hud = KProgressHUD.create(LoginActivity.this);
+       /* final KProgressHUD hud = KProgressHUD.create(LoginActivity.this);
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setCancellable(true)
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();*/
+        Log.d("ttttttttt", "headImg: "+data.length);
         RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_OTHERLOGIN);
         params.addBodyParameter("uId",uid);
         params.addBodyParameter("nickName",screen_name);
         params.addBodyParameter("gender",gender.equals("男") ? "true":"false");
         if(data!=null){
-            params.addBodyParameter("uploadedFile",data,null);
+            params.addBodyParameter("up" +
+                    "" +
+                    "loadedFile",data.toString(),null);
+            Log.d("dataeeeeee", "headImg: "+data);
+            //params.addBodyParameter("uploadedFile",new File(profile_image_url));
         }
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -564,7 +582,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onFinished() {
                 //layoutLoading.setVisibility(View.GONE);
-                //hud.dismiss();
+                hud.dismiss();
 
             }
         });
@@ -590,7 +608,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             byte[] mBytes=null;
             final String phone = etPhone.getText().toString().trim();
             if(TextUtils.isEmpty(phone)){
-                ToastUtils.showCenter(getApplicationContext(),"电话号码能为空");
+                ToastUtils.showCenter(getApplicationContext(),"电话号码不能为空");
                 return;
             }
             if(!isMobileNO(phone)){

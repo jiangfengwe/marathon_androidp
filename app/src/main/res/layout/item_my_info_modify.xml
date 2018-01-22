@@ -102,8 +102,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
-                android:maxLines="2"
-                android:maxLength="1"
+                android:maxLines="1"
+                android:maxLength="30"
                 android:ellipsize="end"
                 android:text="修改签名修改签名修改签名"
                 android:textColor="@color/hotel_address" />

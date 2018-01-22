@@ -111,7 +111,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             Log.d("code", "gotResult: "+code);
             switch (code) {
                 case 0:
-                    ToastUtils.showCenter(getApplicationContext(),"codeeeee");
+                   // ToastUtils.showCenter(getApplicationContext(),"codeeeee");
                     logs = "Set tag and alias success";
                     // Log.i(TAG, logs);
                     // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。

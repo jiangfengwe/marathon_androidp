@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
@@ -22,6 +23,7 @@ import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.CirclePraiseDatabaseImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
 
@@ -51,7 +53,7 @@ public class CircleMessageActivity extends BaseActivity {
     private TextView titleTv;
 
     private CircleNoticeDetailsServiceImpl circlePraiseDatabase;
-    List<CirclePriseTableModel> allCircleDetail=new ArrayList<>();
+    //List<CirclePriseTableModel> allCircleDetail=new ArrayList<>();
 
     @ViewInject(R.id.rv_circle_message)
     private RecyclerView rvCircle;
@@ -93,8 +95,8 @@ public class CircleMessageActivity extends BaseActivity {
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                 .build();
-        circlePraiseDatabase=new CircleNoticeDetailsServiceImpl(getApplicationContext());
-        allCircleDetail= circlePraiseDatabase.getAllCircleNotice();
+     /*   circlePraiseDatabase=new CircleNoticeDetailsServiceImpl(getApplicationContext());
+        allCircleDetail=*/
         initToolbar();
         initView();
     }
@@ -103,11 +105,14 @@ public class CircleMessageActivity extends BaseActivity {
             list.add(""+i);
         }
         //allCircleDetail.clear();
-        if(allCircleDetail.size()<=0){
+        circlePraiseDatabase=new CircleNoticeDetailsServiceImpl(getApplicationContext());
+        List<CirclePriseTableModel> allCircleNotice = circlePraiseDatabase.getAllCircleNotice();
+        if(allCircleNotice.size()<=0){
+            ToastUtils.showCenter(getApplicationContext(),"暂时还没有星人来访问");
             return;
         }
-        Log.d("allcircle", "initView: "+allCircleDetail.size());
-        adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleDetail,R.layout.item_circle_message) {
+        Log.d("allcircle", "initView: "+allCircleNotice.size());
+        adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.item_circle_message) {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, CirclePriseTableModel model) {
                 String commentContent = model.getCommentContent();
@@ -120,6 +125,7 @@ public class CircleMessageActivity extends BaseActivity {
                    holder.setText(R.id.tv_circle_message_title, Html.fromHtml(str));
                    holder.setText(R.id.tv_circle_message_comment,model.getCommentContent());
                    holder.setText(R.id.tv_circle_message_content,model.getDynamicContent());
+                   holder.setText(R.id.tv_circle_message_time,model.getTime());
                   // Log.d("getDynamicContent", "onBindNormalViewHolder: "+model.getDynamicContent());
                    if(TextUtils.isEmpty(dynamicPictureUrl)){
                        imageViewCircle.setVisibility(View.GONE);
@@ -132,6 +138,7 @@ public class CircleMessageActivity extends BaseActivity {
                    holder.setText(R.id.tv_circle_message_title,Html.fromHtml(str));
                    holder.setText(R.id.tv_circle_message_comment,model.getCommentContent());
                    holder.setText(R.id.tv_circle_message_content,model.getDynamicContent());
+                   holder.setText(R.id.tv_circle_message_time,model.getTime());
                    if(TextUtils.isEmpty(dynamicPictureUrl)){
                        imageViewCircle.setVisibility(View.GONE);
                    }else{
@@ -142,7 +149,6 @@ public class CircleMessageActivity extends BaseActivity {
                }
             }
         };
-        //adapter.update(allCircleDetail);
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
 

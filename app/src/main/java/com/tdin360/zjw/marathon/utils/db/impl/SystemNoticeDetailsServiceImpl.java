@@ -6,11 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.tdin360.zjw.marathon.model.CarouselModel;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
 import com.tdin360.zjw.marathon.utils.db.service.CircleNoticeDetailService;
-import com.tdin360.zjw.marathon.utils.db.service.EventDetailService;
+import com.tdin360.zjw.marathon.utils.db.service.SystemNoticeDetailService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,84 +21,44 @@ import java.util.List;
  * Created by admin on 17/3/22.
  */
 
-public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService{
+public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService{
 
     private SQLHelper sqlHelper;
 
-    public CircleNoticeDetailsServiceImpl(Context context){
+    public SystemNoticeDetailsServiceImpl(Context context){
 
         this.sqlHelper = new SQLHelper(context);
 
     }
-
-
-   /* @Override
-    public void addEventDetail(CarouselModel model) {
+    @Override
+    public void addSystemNotice(CirclePriseTableModel model) {
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
-        //判断数据库中不存在才插入
-        Cursor cursor = conn.query(SQLHelper.EVENT_DETAIL_TABLE, null,"imageUrl=?",new String[]{model.getPicUrl()}, null, null, null);
-        if(!cursor.moveToFirst()){
-
-            ContentValues values = new ContentValues();
-            values.put("eventId",model.getEventId());
-            values.put("imageUrl",model.getPicUrl());
-            values.put("url",model.getLinkUrl());
-            values.put("title",model.getTitle());
-            values.put("type",model.isType());
-            conn.insert(SQLHelper.EVENT_DETAIL_TABLE, null, values);
-
-        }
-
-         conn.close();
-
-
-    }
-
-    @Override
-    public List<CarouselModel> getAllEventDetail(String eventId,String type) {
-        List<CarouselModel>list=new ArrayList<>();
-        SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
-        Cursor cursor = conn.query(SQLHelper.EVENT_DETAIL_TABLE, null, "eventId=? and type=?", new String[]{eventId, type}, null, null, null);
-
-        while (cursor.moveToNext()){
-
-            String eventId1 = cursor.getString(cursor.getColumnIndex("eventId"));
-            String imageUrl = cursor.getString(cursor.getColumnIndex("imageUrl"));
-            String url = cursor.getString(cursor.getColumnIndex("url"));
-            String title = cursor.getString(cursor.getColumnIndex("title"));
-            String type1 =  cursor.getString(cursor.getColumnIndex("type")) ;
-            list.add(new CarouselModel(eventId1,title,imageUrl,url,type1));
-
-        }
-
-        cursor.close();
-        conn.close();
-        return list;
-    }*/
-
-    @Override
-    public void addCircleNotice(CirclePriseTableModel model) {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
         Calendar c=Calendar.getInstance();
         //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
         String format = formatter.format(c.getTime());
         model.setTime(format);
-
-        SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
         //判断数据库中不存在才插入
        // Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,"NickName=?",new String[]{model.getNickName()}, null, null, null);
         //Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,null,null, null, null, null);
         //if(!cursor.moveToFirst()){
             ContentValues values = new ContentValues();
-            values.put("nickName",model.getNickName());
+          /*  values.put("nickName",model.getNickName());
             values.put("dynamicPictureUrl",model.getDynamicPictureUrl());
             values.put("headImg",model.getHeadImg());
             values.put("dynamicId",model.getDynamicId());
             values.put("commentContent",model.getCommentContent());
             values.put("dynamicContent",model.getDynamicContent());
-            values.put("messageType",model.getMessageType());
-            values.put("time",model.getTime());
-            conn.insert(SQLHelper.PRAISE_COMMENT_TABLE, null, values);
+            values.put("messageType",model.getMessageType());*/
+        values.put("nickName","aa");
+        values.put("dynamicPictureUrl",model.getDynamicPictureUrl());
+        values.put("headImg",model.getHeadImg());
+        values.put("dynamicId",model.getDynamicId());
+        values.put("commentContent",model.getCommentContent());
+        values.put("dynamicContent",model.getDynamicContent());
+        values.put("messageType",model.getMessageType());
+        values.put("time",model.getTime());
+            conn.insert(SQLHelper.SYSTEM_NOTICE_TABLE, null, values);
         Log.d("model.getNickName()", "addCircleNotice: "+model.getNickName());
        // }
         conn.close();
@@ -107,10 +66,10 @@ public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService
     }
 
     @Override
-    public List<CirclePriseTableModel> getAllCircleNotice() {
+    public List<CirclePriseTableModel> getAllSystemNotice() {
         List<CirclePriseTableModel> list=new ArrayList<>();
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
-        Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null, null, null, null, null, null);
+        Cursor cursor = conn.query(SQLHelper.SYSTEM_NOTICE_TABLE, null, null, null, null, null, null);
         while (cursor.moveToNext()){
             String NickName = cursor.getString(cursor.getColumnIndex("nickName"));
             Log.d("wwwwwwwwwww", "getAllCircleNotice: "+NickName);

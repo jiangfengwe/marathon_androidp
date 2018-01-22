@@ -121,9 +121,9 @@ public class EventStateFragment extends BaseFragment {
         imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
                 //ImageOptions.Builder()的一些其他属性：
                 //.setCircular(true) //设置图片显示为圆形
-                .setImageScaleType(ImageView.ScaleType.FIT_XY)
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 //.setSquare(true) //设置图片显示为正方形
-                .setCrop(true).setSize(130,130) //设置大小
+                //.setCrop(true).setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
                 .setFailureDrawableId(R.drawable.event_bg) //设置加载失败的动画
                 // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
@@ -306,9 +306,11 @@ public class EventStateFragment extends BaseFragment {
                 String url = bjEventSystemListModelBean.getUrl();
                 SingleClass.getInstance().setEventId(eventId);
                 String eventId1 = SingleClass.getInstance().getEventId();
+                String name = bjEventSystemListModelBean.getName();
                 Log.d("eventId1", "onItemClick: "+eventId1);
                 Intent intent=new Intent(getActivity(), WebActivity.class);
                 intent.putExtra("url",url);
+                intent.putExtra("name",name);
                 //Intent intent=new Intent(getActivity(), EventActivity.class);
                 startActivity(intent);
             }

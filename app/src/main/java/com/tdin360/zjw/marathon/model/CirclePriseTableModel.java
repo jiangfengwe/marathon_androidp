@@ -22,15 +22,25 @@ public class CirclePriseTableModel {
     private int DynamicId;
     private String CommentContent;
     private String DynamicContent;
+    private String time;
 
-    public CirclePriseTableModel(String nickName, String dynamicPictureUrl, String messageType, String headImg, int dynamicId, String commentContent, String dynamicContent){
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public CirclePriseTableModel(String nickName, String dynamicPictureUrl, String messageType, String headImg, int dynamicId, String commentContent, String dynamicContent,String time){
         NickName = nickName;
         DynamicPictureUrl = dynamicPictureUrl;
-        this.messageType = messageType;
+       this.messageType = messageType;
         HeadImg = headImg;
         DynamicId = dynamicId;
         CommentContent = commentContent;
         DynamicContent = dynamicContent;
+        this.time=time;
     }
     public String getNickName() {
         return NickName;

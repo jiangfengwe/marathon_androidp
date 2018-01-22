@@ -246,6 +246,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     startActivity(intent);
                 }else{
                     intent=new Intent(getActivity(), MyCircleActivity.class);
+                    intent.putExtra("customerId",customerId1);
                     startActivity(intent);
                 }
                 break;

@@ -74,6 +74,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private Button btnExit;
     @ViewInject(R.id.tv_vision)
     private TextView tvVision;
+    @ViewInject(R.id.tv_setting_update)
+    private TextView tvUpdate;
 
     private String url;
 
@@ -97,7 +99,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvAbout.setOnClickListener(this);
         tvFeedback.setOnClickListener(this);
         tvClear.setOnClickListener(this);
-        layoutVision.setOnClickListener(this);
+        //layoutVision.setOnClickListener(this);
+        tvUpdate.setOnClickListener(this);
         layoutPhone.setOnClickListener(this);
         btnExit.setOnClickListener(this);
         //是否接收推送通知
@@ -167,7 +170,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 });
                 builder.show();
                 break;
-            case R.id.layout_vision:
+            case R.id.tv_setting_update:
                 //版本更新
                 checkUpdate();
                 break;
@@ -264,6 +267,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void checkFinished(boolean isUpdate, String content, String url) {
         this.url = url;
         if(isUpdate){//发现新版本
+            tvUpdate.setVisibility(View.VISIBLE);
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("版本更新");
             alert.setMessage(Html.fromHtml(content));
@@ -293,7 +297,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             alert.show();
 
         }else {  //已是最新版本
-            AlertDialog.Builder alert = new AlertDialog.Builder(SettingActivity.this);
+            tvUpdate.setVisibility(View.GONE);
+           /* AlertDialog.Builder alert = new AlertDialog.Builder(SettingActivity.this);
             alert.setTitle("版本检查");
             alert.setMessage("当前已是最新版本!");
             alert.setCancelable(false);
@@ -306,7 +311,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 }
             });
 
-            alert.show();
+            alert.show();*/
         }
     }
     //下载安装包

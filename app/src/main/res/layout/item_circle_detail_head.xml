@@ -37,7 +37,6 @@
             android:id="@+id/tv_circle_detail_head_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12-12"
             android:textSize="12sp"
             android:layout_gravity="center"
             android:textColor="@color/circle_head_time"/>

@@ -41,6 +41,8 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import com.maning.mndialoglibrary.MProgressBarDialog;
 import com.maning.mndialoglibrary.MProgressDialog;
 import com.maning.mndialoglibrary.MToast;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.GridImageAdapter;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -52,6 +54,7 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
@@ -283,10 +286,20 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 boolean state = publishBean.isState();
                 if(state){
                     // ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
-                    CircleFragment.instance.initData(1);
+                    CircleFragment.instance.initData(1,1);
                     clearPic();
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
+                   // finish();
+                    Intent intent=getIntent();
+                    //intent.putExtra("myCircle","circle");
+
+                    int myCircle = intent.getIntExtra("myCircle",-1);
+                    if(myCircle==5){
+                        EnumEventBus publish = EnumEventBus.PUBLISH;
+                        EventBus.getDefault().post(new EventBusClass(publish));
+                    }
+
                     finish();
                     //layoutRefresh.setVisibility(View.GONE);
                   /* new Thread(new Runnable() {
@@ -335,8 +348,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
-                ToastUtils.showCenter(getContext(),current+"");
-                Log.d("long", "onLoading: "+current+"pppppppppppp"+total);
+                //ToastUtils.showCenter(getContext(),current+"");
+               // Log.d("long", "onLoading: "+current+"pppppppppppp"+total);
 
             }
         });

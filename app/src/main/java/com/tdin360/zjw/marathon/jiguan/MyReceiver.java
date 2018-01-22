@@ -12,6 +12,7 @@ import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
+import com.tdin360.zjw.marathon.ui.activity.CircleMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -19,6 +20,7 @@ import com.tdin360.zjw.marathon.utils.SystemUtils;
 import com.tdin360.zjw.marathon.utils.db.CirclePraiseDatabaseImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
+import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,11 +49,12 @@ public class MyReceiver extends BroadcastReceiver {
 	private NoticeMessageServiceImpl service;
 	private static CirclePraiseDatabaseImpl circlePraiseDatabase;
 	private CircleNoticeDetailsServiceImpl circleNoticeDetailsService;
+	private SystemNoticeDetailsServiceImpl systemNoticeDetailsService;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		circleNoticeDetailsService=new CircleNoticeDetailsServiceImpl(context);
-
+		systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(context);
         Bundle bundle = intent.getExtras();
 		Log.d("mynotice", "onReceive: "+bundle);
 		StringBuilder sb = new StringBuilder();
@@ -74,11 +77,20 @@ public class MyReceiver extends BroadcastReceiver {
 					Gson gson=new Gson();
 					CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
 					String nickName = circlePriseTableModel.getNickName();
-					Log.d("circlenickName", "onReceive: "+nickName);
-					SharedPreferencesManager.isNotice(context,true);
-                    EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
-                    EventBus.getDefault().post(new EventBusClass(circle));
-					circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
+                    String messageType = circlePriseTableModel.getMessageType();
+                    Log.d("circlenickName", "onReceive: "+nickName);
+                    if(messageType.equals("messagenotification")){
+						SharedPreferencesManager.isNotice(context,true);
+						EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
+						EventBus.getDefault().post(new EventBusClass(circle));
+						circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
+                    }else{
+						systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
+					}
+
+
+
+
 					//Log.d("circlestring", "printBundle: "+circleNoticeDetailsService);
 					//circleNoticeDetailsService.add(circlePriseTableModel);
 					/*Iterator<String> it =  json.keys();
@@ -124,12 +136,11 @@ public class MyReceiver extends BroadcastReceiver {
 
 			//打开自定义的Activity
 			if(SystemUtils.isAppAlive(context,context.getPackageName())){
-				Intent notice = new Intent(context,MyNoticeMessageActivity.class);
+				Intent notice = new Intent(context,CircleMessageActivity.class);
 				Intent main = new Intent(context,MainActivity.class);
 				main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivities(new Intent[]{main,notice});
 			}else {
-
 				Intent mLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
 				mLaunchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
 				context.startActivity(mLaunchIntent);
