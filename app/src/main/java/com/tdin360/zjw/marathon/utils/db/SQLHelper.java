@@ -67,7 +67,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    messageType   VARCHAR,\n" +
                 "    headImg VARCHAR,\n" +
                 "    commentContent VARCHAR,\n" +
-                "    time VARCHAR,\n" +
+                "    time VARCHAR DESC,\n" +
                 "    dynamicContent   VARCHAR);" ;
         String systemSql ="CREATE TABLE "+SYSTEM_NOTICE_TABLE+" (\n" +
                 "    dynamicId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +

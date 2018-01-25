@@ -32,6 +32,15 @@
                     android:src="@drawable/my_notice"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"/>
+                <ImageView
+                    android:id="@+id/iv_system_notice_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shap_oval_yellow"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginTop="5dp"/>
             </RelativeLayout>
 
 

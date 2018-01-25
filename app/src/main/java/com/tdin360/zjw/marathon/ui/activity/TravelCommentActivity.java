@@ -257,6 +257,7 @@ public class TravelCommentActivity extends BaseActivity {
         for(int i=0;i<localMedias.size();i++ ){
             params.addBodyParameter("file"+i,new File(localMedias.get(i).getCompressPath()),"image/jpeg",i+".jpg");
         }
+        params.setConnectTimeout(5000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

@@ -25,7 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
@@ -38,6 +41,7 @@ import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -46,6 +50,8 @@ import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.ShareBoardlistener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
@@ -77,6 +83,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     private LinearLayout layoutSetting;
     @ViewInject(R.id.my_phone)
     private LinearLayout layoutPhone;
+    @ViewInject(R.id.iv_system_notice_show)
+    private ImageView ivShow;
+    private boolean flag;
+
+
+
+
 
 
     private ShareAction action;
@@ -85,16 +98,60 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
 
         return   new MyFragment();
     }
+    @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()==EnumEventBus.SYSTEM){
+            boolean open = SharedPreferencesManager.getNotice(getContext());
+            if(open){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
+        if(event.getEnumEventBus()==EnumEventBus.SYSTEMNOTICE){
+            boolean open = SharedPreferencesManager.getNotice(getContext());
+            if(open){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d("onAttach", "onAttach: "+"onAttach");
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(!flag){
+            EventBus.getDefault().register(this);
+            flag=!flag;
+        }
         return  inflater.inflate(R.layout.fargment_my,container,false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+      /*  NickName = nickName;
+        DynamicPictureUrl = dynamicPictureUrl;
+        this.messageType = messageType;
+        HeadImg = headImg;
+        DynamicId = dynamicId;
+        CommentContent = commentContent;
+        DynamicContent = dynamicContent;
+        this.time=time;*/
+        CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2");
+        SharedPreferencesManager.isNotice(getContext(),true);
+        EnumEventBus circle = EnumEventBus.SYSTEM;
+        EventBus.getDefault().post(new EventBusClass(circle));
+        SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
+        systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
         //显示信息
        showInfo();
         //注册广播
@@ -503,6 +560,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         unRegister();
     }
 }

@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/setting_clear"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:textColor="@color/theme_text" />
             <RelativeLayout
                 android:background="@drawable/personal_center_item_selector"

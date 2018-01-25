@@ -161,7 +161,7 @@ public class FeedbackListActivity extends BaseActivity  implements View.OnClickL
                 .glideOverride(130,130)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
-                .isGif(true)// 是否显示gif图片 true or false
+                .isGif(false)// 是否显示gif图片 true or false
                 .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
                 .circleDimmedLayer(false)// 是否圆形裁剪 true or false
                 .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
@@ -296,6 +296,7 @@ public class FeedbackListActivity extends BaseActivity  implements View.OnClickL
         for(int i=0;i<localMedias.size();i++ ){
             params.addBodyParameter("file"+i,new File(localMedias.get(i).getCompressPath()),"image/jpeg",i+".jpg");
         }
+        params.setConnectTimeout(5000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

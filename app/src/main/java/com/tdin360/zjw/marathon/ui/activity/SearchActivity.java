@@ -182,6 +182,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         params.addBodyParameter("pageIndex",""+pageIndex);
         params.addBodyParameter("IsStart","");
         params.addBodyParameter("name",key);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -264,9 +265,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String eventId = bjEventSystemListModel.get(position).getId()+"";
+                SearchBean.ModelBean.BJEventSystemListModelBean bjEventSystemListModelBean = bjEventSystemListModel.get(position);
+                String eventId = bjEventSystemListModelBean.getId()+"";
                 SingleClass.getInstance().setEventId(eventId);
                 Intent intent=new Intent(SearchActivity.this,WebActivity.class);
+                String name = bjEventSystemListModelBean.getName();
+                String url = bjEventSystemListModelBean.getUrl();
+                intent.putExtra("url",url);
+                intent.putExtra("name",name);
                 startActivity(intent);
             }
         });

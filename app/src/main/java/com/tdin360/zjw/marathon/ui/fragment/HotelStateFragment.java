@@ -156,6 +156,7 @@ public class HotelStateFragment extends BaseFragment {
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
         params.addBodyParameter("Status",Status);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

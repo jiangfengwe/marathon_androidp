@@ -271,6 +271,7 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.FIND_PASSWORD);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -356,6 +357,7 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.FIND_PASSWORD_CODE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

@@ -49,6 +49,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.Bean;
+import com.tdin360.zjw.marathon.model.CircleShareBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.model.PraiseBean;
 import com.tdin360.zjw.marathon.ui.activity.CircleDetailActivity;
@@ -130,6 +131,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     private boolean flag=false;
     private int index;
+    private boolean isShare;
 
     private boolean mIsRefreshing;
 
@@ -145,10 +147,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Subscribe
     public void onEvent(EventBusClass event){
         if(event.getEnumEventBus()==EnumEventBus.CIRCLECOMMENT){
-            initData(1,0);
+            initData(1);
         }
         if(event.getEnumEventBus()==EnumEventBus.CIRCLE){
-            initData(1,0);
+            initData(1);
         }
         if(event.getEnumEventBus()==EnumEventBus.NOTICE){
             boolean open = SharedPreferencesManager.getNotice(getContext());
@@ -167,7 +169,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             }
         }
         if(event.getEnumEventBus()==EnumEventBus.EXIT){
-            initData(1,0);
+            initData(1);
         }
     }
 
@@ -193,12 +195,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 //.setSquare(true) //设置图片显示为正方形
                // .setCrop(true)
-                .setSize(130,130) //设置大小
+                //.setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
-                .setFailureDrawableId(R.drawable.event_bg) //设置加载失败的动画
+                .setFailureDrawableId(R.drawable.add_lose_square) //设置加载失败的动画
                 // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
                 //.setLoadingDrawable(Drawable loadingDrawable) //设置加载中的动画
-                .setLoadingDrawableId(R.drawable.event_bg) //以资源id设置加载中的动画
+                .setLoadingDrawableId(R.drawable.add_lose_square) //以资源id设置加载中的动画
                 .setIgnoreGif(false) //忽略Gif图片
                 //.setRadius(10)
                 .setUseMemCache(true).build();
@@ -234,7 +236,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData(0,0);
+                        initData(0);
                         break;
 
                 }
@@ -243,7 +245,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(getContext())){
             //加载网络数据
-            initData(0,0);
+            initData(0);
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -270,7 +272,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         }
     }
-    public void initData(int i,int page) {
+    public void initData(int i) {
         if(i==1){
             bjDynamicListModel.clear();
         }
@@ -282,15 +284,16 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("pageSize",""+pageSize);
-        if(page==1){
+        /*if(page==1){
             pageIndex=page;
             params.addBodyParameter("pageIndex",""+page);
-            rvCircle.smoothScrollToPosition(0);
+            initTop();
         }else{
             params.addBodyParameter("pageIndex",""+pageIndex);
-        }
-
+        }*/
+        params.addBodyParameter("pageIndex",""+pageIndex);
         params.addBodyParameter("customerId",customerId);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -358,6 +361,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 final LinearLayout layoutShare = (LinearLayout) holder.getViewById(R.id.layout_circle_share);
                 final LinearLayout LayoutPraise = (LinearLayout) holder.getViewById(R.id.layout_circle_praise);
                 final TextView tvPraise = (TextView) holder.getViewById(R.id.tv_circle_praise);
+                final TextView tvShare = (TextView) holder.getViewById(R.id.tv_circle_share);
                 ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_circle_portrait);
                 final CheckBox checkBox = (CheckBox) holder.getViewById(R.id.cb_circle);
                 LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
@@ -367,7 +371,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 }else{
                     checkBox.setChecked(false);
                 }
-
                 boolean isRecommend = model.isIsRecommend();
                 if(isRecommend){
                     layoutRecommend.setVisibility(View.VISIBLE);
@@ -379,7 +382,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     x.image().bind(imageView,model.getDynamicsThumsPictureUrl(),imageOptions);
                     holder.setText(R.id.tv_circle_praise,model.getTagsNumber()+"");
                     holder.setText(R.id.tv_circle_comment,model.getCommentNumber()+"");
-                    holder.setText(R.id.tv_circle_share,model.getShare()+"");
+                    String share = model.getShare() + "";
+                    holder.setText(R.id.tv_circle_share,share);
                     holder.setText(R.id.tv_circle_look,model.getView()+"");
                    // LinearLayout layoutHead = (LinearLayout) holder.getViewById(R.id.layout_circle);
                    /* layoutHead.setOnClickListener(new View.OnClickListener() {
@@ -407,7 +411,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     holder.setText(R.id.tv_circle_content,model.getDynamicsContent());
                     holder.setText(R.id.tv_circle_praise,model.getTagsNumber()+"");
                     holder.setText(R.id.tv_circle_comment,model.getCommentNumber()+"");
-                    holder.setText(R.id.tv_circle_share,model.getShare()+"");
+                    String share = model.getShare() + "";
+                    holder.setText(R.id.tv_circle_share,share);
                     holder.setText(R.id.tv_circle_look,model.getView()+"");
                     ArrayList<ImageInfo> imageInfo = new ArrayList<>();
                     List<Bean.ModelBean.BJDynamicListModelBean.BJDynamicsPictureListModel> bjDynamicsPictureListModel
@@ -453,18 +458,23 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         }
                     });
                 }
+                //评论跳转到详情
+                LinearLayout layoutComment = (LinearLayout) holder.getViewById(R.id.layout_circle_comment);
+                layoutComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(getActivity(), CircleDetailActivity.class);
+                        intent.putExtra("isRecommend",model.isIsRecommend());
+                        intent.putExtra("dynamicId",model.getId()+"");
+                        intent.putExtra("comment",10);
+                        startActivity(intent);
+                    }
+                });
 
                 //点赞
                 LayoutPraise.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       /* Animation animation= AnimationUtils.loadAnimation(getContext(),R.anim.anim_in_praise);
-                        LayoutPraise.clearAnimation();
-                        LayoutPraise.startAnimation(animation);
-                        layoutLoading.setVisibility(View.VISIBLE);*/
-                      /*  ivLoading.setBackgroundResource(R.drawable.loading_before);
-                        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                        background.start();*/
                         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
                        String customerId= loginInfo.getId()+"";
                       if(TextUtils.isEmpty(customerId)){
@@ -487,7 +497,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                     //ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
-                                    initData(0,0);
+                                    initData(0);
                                     model.setTagsNumber(tagsNumber);
                                     tvPraise.setText(tagsNumber+"");
                                     checkBox.setChecked(true);
@@ -525,15 +535,19 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         String dynamicId = model.getId() + "";
-                        index=model.getId();
-                        String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
+                        //index=model.getId();
+                       // String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
+                        final String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
                         if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
-                            shareApp(url);
+                           // shareApp(url);
+                            initShare(url, model, tvShare,dynamicId);
                         }else {
                             if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
                                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10001);
                             }else {
-                                shareApp(url);
+                                //shareApp(url);
+                                /*使用友盟自带分享模版*/
+                                initShare(url, model, tvShare,dynamicId);
                             }
                         }
                     }
@@ -601,7 +615,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         mImageViewRebackTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rvCircle.smoothScrollToPosition(0);
+                initTop();
             }
         });
 
@@ -616,7 +630,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 }
                // bjDynamicListModel.clear();
                 pageIndex=1;
-                initData(1,0);
+                initData(1);
             }
 
             @Override
@@ -627,7 +641,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData(0,0);
+                    initData(0);
                 }
 
             }
@@ -638,6 +652,139 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
 
     }
+
+    private void initShare(final String url, final Bean.ModelBean.BJDynamicListModelBean model, final TextView tvShare, final String dynamicId) {
+    /*使用友盟自带分享模版*/
+        action = new ShareAction(getActivity()).setDisplayList(
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE,
+                SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
+        ).setShareboardclickCallback(new ShareBoardlistener() {
+            @Override
+            public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+                UMWeb umWeb = new UMWeb(url);
+                umWeb.setTitle("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。");
+                umWeb.setDescription("佰家运动");
+                UMImage image = new UMImage(getActivity(), R.mipmap.logo);
+
+                image.compressStyle = UMImage.CompressStyle.SCALE;//质量压缩，适合长图的分享
+                image.compressFormat = Bitmap.CompressFormat.JPEG;//用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
+                umWeb.setThumb(image);
+
+                new ShareAction(getActivity()).withText("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。")
+                        .setPlatform(share_media)
+                        .setCallback(new UMShareListener() {
+                            @Override
+                            public void onStart(SHARE_MEDIA share_media) {
+                                Toast.makeText(getActivity(),"正在打开分享...",Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onResult(SHARE_MEDIA platform) {
+                                if (platform.name().equals("WEIXIN_FAVORITE")) {
+                                    Toast.makeText(getActivity(), platform + " 收藏成功啦", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                                            && platform != SHARE_MEDIA.EMAIL
+                                            && platform != SHARE_MEDIA.FLICKR
+                                            && platform != SHARE_MEDIA.FOURSQUARE
+                                            && platform != SHARE_MEDIA.TUMBLR
+                                            && platform != SHARE_MEDIA.POCKET
+                                            && platform != SHARE_MEDIA.PINTEREST
+                                            && platform != SHARE_MEDIA.INSTAGRAM
+                                            && platform != SHARE_MEDIA.GOOGLEPLUS
+                                            && platform != SHARE_MEDIA.YNOTE
+                                            && platform != SHARE_MEDIA.EVERNOTE) {
+                                        Toast.makeText(getActivity(), platform + " 分享成功啦!", Toast.LENGTH_SHORT).show();
+                                        RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE_SHARE);
+                                        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+                                        params.addBodyParameter("dynamicId",dynamicId);
+                                        x.http().post(params, new Callback.CommonCallback<String>() {
+                                            @Override
+                                            public void onSuccess(String result) {
+                                                Log.d("share", "onSuccess: "+result);
+                                                Gson gson=new Gson();
+                                                CircleShareBean circleShareBean = gson.fromJson(result, CircleShareBean.class);
+                                                boolean state = circleShareBean.isState();
+                                                if(state){
+                                                    int share = model.getShare();
+                                                    share++;
+                                                    initData(0);
+                                                    tvShare.setText(share+"");
+                                                    //tvPraise.setText(share+"");
+                                                    model.setShare(share);
+                                                    adapter.notifyDataSetChanged();
+                                                }else{
+                                                    ToastUtils.showCenter(getContext(),circleShareBean.getMessage());
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable ex, boolean isOnCallback) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(CancelledException cex) {
+
+                                            }
+
+                                            @Override
+                                            public void onFinished() {
+
+                                            }
+                                        });
+
+                                      /*  int share = model.getShare();
+                                        share++;
+                                        initData(0);
+                                        tvShare.setText(share+"");
+                                        //tvPraise.setText(share+"");
+                                        model.setShare(share);
+                                        adapter.notifyDataSetChanged();*/
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onError(SHARE_MEDIA platform, Throwable throwable) {
+                                if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                                        && platform != SHARE_MEDIA.EMAIL
+                                        && platform != SHARE_MEDIA.FLICKR
+                                        && platform != SHARE_MEDIA.FOURSQUARE
+                                        && platform != SHARE_MEDIA.TUMBLR
+                                        && platform != SHARE_MEDIA.POCKET
+                                        && platform != SHARE_MEDIA.PINTEREST
+
+                                        && platform != SHARE_MEDIA.INSTAGRAM
+                                        && platform != SHARE_MEDIA.GOOGLEPLUS
+                                        && platform != SHARE_MEDIA.YNOTE
+                                        && platform != SHARE_MEDIA.EVERNOTE) {
+                                    Toast.makeText(getActivity(), platform + " 分享失败啦!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancel(SHARE_MEDIA share_media) {
+                                Toast.makeText(getActivity(),"分享已取消!",Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .withMedia(umWeb)
+                        .share();
+            }
+
+
+        });
+
+
+        action.open();
+    }
+
+    public void initTop() {
+        rvCircle.smoothScrollToPosition(0);
+    }
+
     /**
      *  分享给好友
      */
@@ -703,7 +850,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     Bean.ModelBean.BJDynamicListModelBean bjDynamicListModelBean = bjDynamicListModel.get(index);
                     int share = bjDynamicListModelBean.getShare();
                     share++;
-                    initData(0,0);
+                    initData(0);
                     //tvPraise.setText(share+"");
                     bjDynamicListModelBean.setTagsNumber(share);
                     adapter.notifyDataSetChanged();

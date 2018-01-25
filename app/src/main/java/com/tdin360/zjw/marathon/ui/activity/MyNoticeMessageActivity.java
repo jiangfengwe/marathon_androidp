@@ -1,5 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,16 +12,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 
+import org.greenrobot.eventbus.EventBus;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +56,24 @@ public class MyNoticeMessageActivity extends BaseActivity {
     private List<String> list=new ArrayList<>();
     private RecyclerViewBaseAdapter adapter;
 
+    private ImageOptions imageOptionsCircle;
+
     //private   NoticeMessageListAdapter adapter;
     private NoticeMessageServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.service = new NoticeMessageServiceImpl(this);
+        //systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
+        imageOptionsCircle = new ImageOptions.Builder()
+//                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+                .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setRadius(DensityUtil.dip2px(80))
+                .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
+                .setUseMemCache(true)//设置使用缓存
+                .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
+                .build();
         initToolbar();
         initView();
         loadData();
@@ -66,6 +86,10 @@ public class MyNoticeMessageActivity extends BaseActivity {
         titleTv.setText(R.string.notice_title);
         titleTv.setTextColor(Color.WHITE);
         showBack(toolbar,imageView);
+        /*SharedPreferencesManager.isNotice(getApplicationContext(),false);
+        EnumEventBus notice = EnumEventBus.SYSTEMNOTICE;
+        EventBus.getDefault().post(new EventBusClass(notice));
+        finish();*/
     }
 
 
@@ -79,7 +103,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
             list.add(""+i);
         }
         SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
-        List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+        final List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
         if(allCircleNotice.size()<=0){
             ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
             return;
@@ -87,7 +111,9 @@ public class MyNoticeMessageActivity extends BaseActivity {
         adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, CirclePriseTableModel model) {
-                TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
+                //TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
+                ImageView imageView = (ImageView) holder.getViewById(R.id.iv_system_pic);
+                x.image().bind(imageView,model.getHeadImg(),imageOptionsCircle);
                 holder.setText(R.id.tv_system_title,model.getNickName());
                 holder.setText(R.id.tv_system_content,model.getDynamicContent());
                 holder.setText(R.id.tv_system_time,model.getTime());
@@ -97,6 +123,16 @@ public class MyNoticeMessageActivity extends BaseActivity {
         };
         rvNotice.setAdapter(adapter);
         rvNotice.setLayoutManager(new WrapContentLinearLayoutManager(this));
+        adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+               // ToastUtils.showCenter(getApplicationContext(),"system Notice");
+                Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
+                int dynamicId = allCircleNotice.get(position).getDynamicId();
+                intent.putExtra("dynamicId",dynamicId);
+                startActivity(intent);
+            }
+        });
        // this.adapter = new NoticeMessageListAdapter();
        // mRecyclerView.setAdapter(adapter);
 

@@ -226,6 +226,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_PSW);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

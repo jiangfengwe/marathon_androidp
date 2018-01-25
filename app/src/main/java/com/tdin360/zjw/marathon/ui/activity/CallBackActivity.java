@@ -89,6 +89,8 @@ public class CallBackActivity extends BaseActivity {
     private TextView tvTime;
     @ViewInject(R.id.tv_all_comment_content)
     private TextView tvContent;
+    @ViewInject(R.id.tv_comment_back_null)
+    private TextView tvNull;
 
     @ViewInject(R.id.btn_all_comment)
     private Button btnSure;
@@ -207,6 +209,7 @@ public class CallBackActivity extends BaseActivity {
                     params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                     params.addBodyParameter("customerId",customerId);
                     params.addBodyParameter("dynamicId",dynamicId);
+
                     //params.addBodyParameter("commentId",commentId+"");
                     if(index==0){
                         params.addBodyParameter("commentId",commentId+"");
@@ -215,6 +218,7 @@ public class CallBackActivity extends BaseActivity {
                     }
                     params.addBodyParameter("commentContent",commentContent);
                     params.addBodyParameter("platform","android");
+                    params.setConnectTimeout(5000);
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -334,6 +338,7 @@ public class CallBackActivity extends BaseActivity {
         }*/
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -350,6 +355,11 @@ public class CallBackActivity extends BaseActivity {
                     x.image().bind(ivPortrait,commentModel.getHeadImg(),imageOptions);
                     replayCommentList.addAll(commentModel.getReplayCommentList());
                     etComment.setText("");
+                    if(replayCommentList.size()<=0){
+                        tvNull.setVisibility(View.VISIBLE);
+                    }else{
+                        tvNull.setVisibility(View.GONE);
+                    }
                 }else {
                     ToastUtils.showCenter(getApplicationContext(),circleDetailAllCommentBean.getMessage());
                 }
@@ -359,6 +369,7 @@ public class CallBackActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 mErrorView.show(rvComment,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                tvNull.setVisibility(View.GONE);
                 ToastUtils.showCenter(getBaseContext(),"网络不给力,连接服务器异常!");
             }
 

@@ -168,6 +168,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_DETAIL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("orderId",orderId);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

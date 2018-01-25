@@ -182,6 +182,7 @@ public class HotelActivity extends BaseActivity {
         params.addBodyParameter("styleId","");
         params.addBodyParameter("lowPrice",lowPrice+"");
         params.addBodyParameter("highPrice",highPrice+"");
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

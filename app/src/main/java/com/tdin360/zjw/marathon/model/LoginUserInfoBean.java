@@ -13,6 +13,7 @@ public class LoginUserInfoBean {
     public static final String Unionid="unionid";
     public static final String IsBindPhone="isbindphone";
     public static final String CustomerSign="customersign";
+    public static final String Login="login";
 
     /**
      * user : {"Id":507,"HeadImg":"","Phone":null,"NickName":"用户507","Gender":false,"Unionid":null,"IsBindPhone":false,"CustomerSign":null}
@@ -51,6 +52,15 @@ public class LoginUserInfoBean {
         private boolean IsBindPhone;
         private String CustomerSign;
         private String CustomerAlias;
+        private String login;
+
+        public String getLogin() {
+            return login;
+        }
+
+        public void setLogin(String login) {
+            this.login = login;
+        }
 
         public String getCustomerAlias() {
             return CustomerAlias;
@@ -60,7 +70,7 @@ public class LoginUserInfoBean {
             CustomerAlias = customerAlias;
         }
 
-        public UserBean(String Id, String HeadImg, String NickName, boolean Gender, String Unionid, boolean IsBindPhone, String CustomerSign, String Phone) {
+        public UserBean(String Id, String HeadImg, String NickName, boolean Gender, String Unionid, boolean IsBindPhone, String CustomerSign, String Phone,String login) {
             this.Id=Id;
             this.HeadImg = HeadImg;
             this.NickName = NickName;
@@ -69,6 +79,7 @@ public class LoginUserInfoBean {
             this.IsBindPhone = IsBindPhone;
             this.CustomerSign = CustomerSign;
             this.Phone = Phone;
+            this.login=login;
 
         }
 

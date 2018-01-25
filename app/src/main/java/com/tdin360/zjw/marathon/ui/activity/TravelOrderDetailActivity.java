@@ -126,6 +126,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_ORDER_DETAIL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("orderId",orderId);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

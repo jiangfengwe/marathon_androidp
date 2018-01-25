@@ -32,14 +32,14 @@
                 android:text="荐客家"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="@color/home_tab_title_color_check"/>
             <TextView
                 android:id="@+id/tv_circle_detail_callback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="回复"
-                android:textSize="12sp"
+                android:text=" 回复"
+                android:textSize="14sp"
                 android:layout_gravity="center"
                 android:textColor="@color/circle_head_time"/>
         </LinearLayout>
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病荐客家神经病"
-            android:textSize="13.3sp"
+            android:textSize="14sp"
             android:layout_marginBottom="10dp"
             android:textColor="@color/theme_text"/>
         <TextView

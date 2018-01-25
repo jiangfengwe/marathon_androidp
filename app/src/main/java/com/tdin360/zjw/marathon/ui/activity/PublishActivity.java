@@ -153,7 +153,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 .glideOverride(130,130)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
-                .isGif(true)// 是否显示gif图片 true or false
+                .isGif(false)// 是否显示gif图片 true or false
                 .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
                 .circleDimmedLayer(false)// 是否圆形裁剪 true or false
                 .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
@@ -277,6 +277,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
             Log.d("compressPath", "initSure: "+compressPath);
             params.addBodyParameter("file"+i,new File(compressPath),"image/jpeg",i+".jpg");
         }
+        params.setConnectTimeout(5000);
         x.http().post(params, new Callback.ProgressCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -286,7 +287,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 boolean state = publishBean.isState();
                 if(state){
                     // ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
-                    CircleFragment.instance.initData(1,1);
+                    CircleFragment.instance.initData(1);
+                    CircleFragment.instance.initTop();
                     clearPic();
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
@@ -299,7 +301,6 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                         EnumEventBus publish = EnumEventBus.PUBLISH;
                         EventBus.getDefault().post(new EventBusClass(publish));
                     }
-
                     finish();
                     //layoutRefresh.setVisibility(View.GONE);
                   /* new Thread(new Runnable() {

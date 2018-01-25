@@ -283,7 +283,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             String uId = intent.getStringExtra("uId");
             final String img = intent.getStringExtra("img");
             byte[] mBytes=null;
-            final String phone1 = etPhone.getText().toString().trim();
+            final String phone1=etPhone.getText().toString().trim();
             if(TextUtils.isEmpty(phone1)){
                 ToastUtils.showCenter(getApplicationContext(),"手机号不能为空");
                 return;
@@ -313,6 +313,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.OTHER_PHONE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -332,9 +333,10 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         String customerSign = user.getCustomerSign();
                         String customerAlias = user.getCustomerAlias();
                         String phone = user.getPhone();
+                        String phone2=etPhone.getText().toString().trim();
                         // 调用 Handler 来异步设置别名
                         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS,customerAlias));
-                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, img, nickName, gender, unionid, isBindPhone, customerSign, phone1);
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone2,"weixin");
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(BindPhoneActivity.this,userBean);
                         EnumEventBus em = EnumEventBus.BIND;
@@ -444,6 +446,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.OTHER_PHONE_CODE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

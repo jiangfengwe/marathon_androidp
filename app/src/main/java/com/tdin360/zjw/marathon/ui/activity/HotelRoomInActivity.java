@@ -471,6 +471,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_DETAIL_ORDER);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

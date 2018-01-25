@@ -79,7 +79,7 @@ public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService
 
     @Override
     public void addCircleNotice(CirclePriseTableModel model) {
-        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         Calendar c=Calendar.getInstance();
         //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
         String format = formatter.format(c.getTime());
@@ -110,7 +110,7 @@ public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService
     public List<CirclePriseTableModel> getAllCircleNotice() {
         List<CirclePriseTableModel> list=new ArrayList<>();
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
-        Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null, null, null, null, null, null);
+        Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null, null, null, null, null, "time desc");
         while (cursor.moveToNext()){
             String NickName = cursor.getString(cursor.getColumnIndex("nickName"));
             Log.d("wwwwwwwwwww", "getAllCircleNotice: "+NickName);

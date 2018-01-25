@@ -89,6 +89,7 @@ public class SharedPreferencesManager {
         edit.putBoolean(LoginUserInfoBean.IsBindPhone,model.isIsBindPhone());
         edit.putString(LoginUserInfoBean.CustomerSign,model.getCustomerSign());
         edit.putString(LoginUserInfoBean.Phone,model.getPhone());
+        edit.putString(LoginUserInfoBean.Login,model.getLogin());
         edit.commit();
 
     }
@@ -167,8 +168,9 @@ public class SharedPreferencesManager {
         boolean isbind = sharedPreferences.getBoolean(LoginUserInfoBean.IsBindPhone, false);
         String sign = sharedPreferences.getString(LoginUserInfoBean.CustomerSign, "");
         String phone = sharedPreferences.getString(LoginUserInfoBean.Phone, "");
+        String login = sharedPreferences.getString(LoginUserInfoBean.Login, "");
 
-        return new LoginUserInfoBean.UserBean(id,headimg,name,gender,unionid,isbind,sign,phone);
+        return new LoginUserInfoBean.UserBean(id,headimg,name,gender,unionid,isbind,sign,phone,login);
     }
 
 

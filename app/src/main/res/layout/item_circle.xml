@@ -141,6 +141,7 @@
                     android:textColor="@color/circle_head_time"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/layout_circle_comment"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"

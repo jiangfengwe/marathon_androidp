@@ -30,7 +30,6 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -381,69 +380,99 @@
         <activity
             android:name=".ui.activity.HotelOrderDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.WebActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.EventActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ApplyActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CreateTeamActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ZxingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.MyOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelOrderDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelOrderDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ChangeSignActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ChangePhoneActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ForgetPswActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelRoomActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelRoomInActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelRoomSubmitActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelOrderSubmitActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CircleDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.PublishActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CircleMessageActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.MyCircleActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CircleDetailPraiseActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelMoreCommentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CallBackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.PictureActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.HotelCommentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ChangePhoneNewActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.BindPhoneActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelCommentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TravelMoreCommentActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ui.activity.WebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.EventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ApplyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CreateTeamActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ZxingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MyOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ChangeSignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ChangePhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ForgetPswActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelRoomActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelRoomInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelRoomSubmitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelOrderSubmitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CircleDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CircleMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MyCircleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CircleDetailPraiseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelMoreCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CallBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.HotelCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ChangePhoneNewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TravelMoreCommentActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -455,6 +484,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".ui.activity.MyNoticeDetailActivity"></activity>
     </application>
 
 </manifest>

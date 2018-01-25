@@ -8,7 +8,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +64,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initToolbar();
         initView();
 
@@ -75,6 +78,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
             ToastUtils.showCenter(getApplicationContext(),"签名内容不能为空");
             return;
         }
+
         final KProgressHUD hud = KProgressHUD.create(this);
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setCancellable(true)
@@ -89,6 +93,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("customerId",customerId);
         params.addBodyParameter("customerSign",customerSign);
+        params.setConnectTimeout(5000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -101,7 +106,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
                     LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                     LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(loginInfo.getId(), loginInfo.getHeadImg(),
                             loginInfo.getNickName(), loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                            customerSign, loginInfo.getPhone());
+                            customerSign, loginInfo.getPhone(),loginInfo.getLogin());
                     //保存用户登录数据
                     SharedPreferencesManager.saveLoginInfo(ChangeSignActivity.this,userBean);
                     //通知个人中心更新签名
@@ -141,6 +146,30 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerSign = loginInfo.getCustomerSign();
         etSign.setText(customerSign);
+        //String customerSign1 = etSign.getText().toString().trim();
+       // etSign.setInputConnectionWrapper
+        etSign.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>30){
+                    ToastUtils.showCenter(getApplicationContext(),"最多只能输入30个字哦");
+                    etSign.setFocusable(false);
+                    etSign.setKeyListener(null);
+                    etSign.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         btnSure.setOnClickListener(this);
     }
 

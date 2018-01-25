@@ -249,6 +249,10 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void run() {
                 Log.d("webpay", "run: "+pay);
+                if(TextUtils.isEmpty(pay)){
+                    Log.d("webpay----------", "run: "+"null");
+                   return;
+                }
                 Gson gson=new Gson();
                 WebViewPayBean webViewPayBean = gson.fromJson(pay, WebViewPayBean.class);
                 String appId = webViewPayBean.getAppId();

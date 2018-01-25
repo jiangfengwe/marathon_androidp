@@ -193,7 +193,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                             LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                             LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(loginInfo.getId(), loginInfo.getHeadImg(),
                                     loginInfo.getNickName(),isgender, loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                                    loginInfo.getCustomerSign(), loginInfo.getPhone());
+                                    loginInfo.getCustomerSign(), loginInfo.getPhone(),loginInfo.getLogin());
                             //保存用户登录数据
                             SharedPreferencesManager.saveLoginInfo(MyInfoActivity.this,userBean);
                         }else{
@@ -247,6 +247,12 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private void initView() {
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         x.image().bind(ivHeadImg,loginInfo.getHeadImg(),imageOptions);
+        String login = loginInfo.getLogin();
+        if(login.equals("phone")){
+            tvPsw.setVisibility(View.VISIBLE);
+        }else{
+            tvPsw.setVisibility(View.GONE);
+        }
         tvNickName.setText(loginInfo.getNickName());
         tvSign.setText(loginInfo.getCustomerSign());
         String phone = loginInfo.getPhone();
@@ -414,7 +420,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 .glideOverride(200,200)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
-                .isGif(true)// 是否显示gif图片 true or false
+                .isGif(false)// 是否显示gif图片 true or false
                 .freeStyleCropEnabled(true)// 裁剪框是否可拖拽 true or false
                 .circleDimmedLayer(true)// 是否圆形裁剪 true or false
                 .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
@@ -467,6 +473,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                     params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                     params.addBodyParameter("customerId",customerId);
                     params.addBodyParameter("uploadedFile",file);
+                    params.setConnectTimeout(5000);
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -479,7 +486,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                                 LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                                 LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(loginInfo.getId(), headImg,
                                         loginInfo.getNickName(), loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                                        loginInfo.getCustomerSign(), loginInfo.getPhone());
+                                        loginInfo.getCustomerSign(), loginInfo.getPhone(),loginInfo.getLogin());
                                 //保存用户登录数据
                                 SharedPreferencesManager.saveLoginInfo(MyInfoActivity.this,userBean);
                                 initView();
@@ -619,6 +626,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                 params.addBodyParameter("customerId",customerId);
                 params.addBodyParameter("nickName",nickName);
+                params.setConnectTimeout(5000);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -631,7 +639,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                             LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                             LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(loginInfo.getId(), loginInfo.getHeadImg(),
                                     nickName, loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                                    loginInfo.getCustomerSign(), loginInfo.getPhone());
+                                    loginInfo.getCustomerSign(), loginInfo.getPhone(),loginInfo.getLogin());
                             //保存用户登录数据
                             SharedPreferencesManager.saveLoginInfo(MyInfoActivity.this,userBean);
                             initView();

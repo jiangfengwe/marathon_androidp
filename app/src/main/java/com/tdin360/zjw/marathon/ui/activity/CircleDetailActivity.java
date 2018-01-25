@@ -107,6 +107,9 @@ public class CircleDetailActivity extends BaseActivity {
     @ViewInject(R.id.springView)
     private SpringView springView;
 
+    @ViewInject(R.id.tv_comment_null)
+    private TextView tvNull;
+
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
 
@@ -187,6 +190,7 @@ public class CircleDetailActivity extends BaseActivity {
                 params.addBodyParameter("dynamicId",dynamicId);
                 params.addBodyParameter("commentId","0");
                 params.addBodyParameter("commentContent",commentContent);
+                params.setConnectTimeout(5000);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -282,6 +286,7 @@ public class CircleDetailActivity extends BaseActivity {
         params.addBodyParameter("dynamicId",dynamicId);
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -306,6 +311,7 @@ public class CircleDetailActivity extends BaseActivity {
             public void onError(Throwable ex, boolean isOnCallback) {
                 mErrorView.show(rvCircle,"加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
                 ToastUtils.showCenter(getBaseContext(),"网络不给力,连接服务器异常!");
+                tvNull.setVisibility(View.GONE);
             }
 
             @Override
@@ -344,7 +350,7 @@ public class CircleDetailActivity extends BaseActivity {
                 holder.setText(R.id.tv_circle_detail_comment_name,model.getNickName());
                 holder.setText(R.id.tv_circle_detail_comment_time,model.getCreateTimeStr());
                 //回复
-                tvCallback.setText(model.getCommentCount()+"回复");
+                tvCallback.setText(model.getCommentCount()+" 回复");
                /* tvCallback.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -361,16 +367,30 @@ public class CircleDetailActivity extends BaseActivity {
             @Override
             public void onBindHeaderViewHolder(HeaderViewHolder holder) {
                 super.onBindHeaderViewHolder(holder);
+
                 boolean isRecommend = getIntent().getBooleanExtra("isRecommend",false);
                 LinearLayout linearLayout = (LinearLayout) holder.getViewById(R.id.layout_circle_detail);
                 WebView webView = (WebView) holder.getViewById(R.id.wb_circle_detail);
-                if (isRecommend){
-                    webView.setVisibility(View.VISIBLE);
+                Intent intent=getIntent();
+                int comment = intent.getIntExtra("comment", -1);
+                if(comment==10){
                     linearLayout.setVisibility(View.GONE);
-                }else{
                     webView.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.VISIBLE);
+                    if(bjDynamicsCommentListModel.size()<=0){
+                        tvNull.setVisibility(View.VISIBLE);
+                    }else{
+                        tvNull.setVisibility(View.GONE);
+                    }
+                }else{
+                    if (isRecommend){
+                        webView.setVisibility(View.VISIBLE);
+                        linearLayout.setVisibility(View.GONE);
+                    }else{
+                        webView.setVisibility(View.GONE);
+                        linearLayout.setVisibility(View.VISIBLE);
+                    }
                 }
+
                 holder.setText(R.id.tv_circle_detail_head_content,model.getDynamicsContent());
                 holder.setText(R.id.tv_circle_detail_head_name,userModel.getNickName());
                 ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
@@ -477,9 +497,13 @@ public class CircleDetailActivity extends BaseActivity {
 
             }
         };
+
+        adapter.addHeaderView(R.layout.item_circle_detail_head);
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-        adapter.addHeaderView(R.layout.item_circle_detail_head);
+       // intent.putExtra("comment","10");
+
+
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

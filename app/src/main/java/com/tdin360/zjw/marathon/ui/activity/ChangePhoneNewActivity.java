@@ -258,6 +258,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_NEW_PHONE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -270,7 +271,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
                         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                         LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(loginInfo.getId(), loginInfo.getHeadImg(),
                                 loginInfo.getNickName(), loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                                loginInfo.getCustomerSign(),phone );
+                                loginInfo.getCustomerSign(),phone,loginInfo.getLogin() );
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(ChangePhoneNewActivity.this,userBean);
                         //通知号码更新
@@ -345,6 +346,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_NEW_PHONE_CODE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

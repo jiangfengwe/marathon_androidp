@@ -94,8 +94,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     @ViewInject(R.id.layout_my_circle)
     private RelativeLayout layout;
 
-    @ViewInject(R.id.tv_dynamic_null)
-    private TextView tvNull;
 
     @ViewInject(R.id.rv_my_circle)
     private RecyclerView rvCircle;
@@ -120,6 +118,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     @Subscribe
     public void onEvent(EventBusClass event){
         if(event.getEnumEventBus()== EnumEventBus.PUBLISH){
+            //pageIndex=1;
             initData(1);
         }
 
@@ -155,7 +154,12 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                     case NOT_NETWORK:
                         initData(0);
                         break;
-
+                    case NOT_DATA:
+                        //跳转动态发布
+                        Intent intent=new Intent(MyCircleActivity.this,PublishActivity.class);
+                        intent.putExtra("myCircle",5);
+                        startActivity(intent);
+                        break;
                 }
             }
         });
@@ -206,6 +210,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
         }else{
             params.addBodyParameter("customerId",customerId1);
         }
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -237,11 +242,12 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                         ToastUtils.showCenter(getApplicationContext(),"还没有发布动态哦！");
                     }*/
                     if(bjDynamicListModel.size()<=0){
-                        //mErrorView.show(rvCircle,"还没有发布动态哦!",ErrorView.ViewShowMode.NOT_DATA);
-                        tvNull.setVisibility(View.VISIBLE);
+                        mErrorView.show(rvCircle,"还没有发布动态哦,点击去发布!",ErrorView.ViewShowMode.NOT_DATA);
+                        layout.setBackgroundColor(Color.parseColor("#ff621a"));
+                        //tvNull.setVisibility(View.VISIBLE);
                     }else {
                         //mErrorView.hideErrorView(rvCircle);
-                        tvNull.setVisibility(View.GONE);
+                        //tvNull.setVisibility(View.GONE);
                     }
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),myCircleBean.getMessage());
@@ -252,6 +258,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 mErrorView.show(rvCircle,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                layout.setBackgroundColor(Color.parseColor("#ff621a"));
                 ToastUtils.showCenter(MyCircleActivity.this,"网络不给力,连接服务器异常!");
             }
 
@@ -273,11 +280,9 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         ivBack.setOnClickListener(this);
-        tvNull.setOnClickListener(this);
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerId = model.getId() + "";
         String customerId1 = getIntent().getStringExtra("customerId");
-
         if(customerId.equals(customerId1)){
             if(customerId.equals(customerId1)){
                 ivPic.setOnClickListener(this);
@@ -523,12 +528,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 //返回
                 finish();
                 break;
-            case R.id.tv_dynamic_null:
-                //跳转动态发布
-                Intent intent=new Intent(MyCircleActivity.this,PublishActivity.class);
-                intent.putExtra("myCircle","5");
-                startActivity(intent);
-                break;
             case R.id.iv_my_circle_pic:
                 //切换背景图
                 if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
@@ -559,15 +558,15 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 .compressGrade(Luban.CUSTOM_GEAR)// luban压缩档次，默认3档 Luban.THIRD_GEAR、Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
                 .isCamera(true)// 是否显示拍照按钮 true or false
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                 .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
                 .enableCrop(true)// 是否裁剪 true or false
                 .compress(true)// 是否压缩 true or false
-                .compressMode(PictureConfig.SYSTEM_COMPRESS_MODE)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
-                .glideOverride(200,200)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                .compressMode(PictureConfig.LUBAN_COMPRESS_MODE)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
+                .glideOverride(130,130)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                 //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
-                .isGif(true)// 是否显示gif图片 true or false
+                .isGif(false)// 是否显示gif图片 true or false
                 .freeStyleCropEnabled(true)// 裁剪框是否可拖拽 true or false
                 //.circleDimmedLayer(true)// 是否圆形裁剪 true or false
                 .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
@@ -575,7 +574,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 .openClickSound(true)// 是否开启点击声音 true or false
                 //.selectionMedia()// 是否传入已选图片 List<LocalMedia> list
                 .previewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
-                .cropCompressQuality(90)// 裁剪压缩质量 默认90 int
+                .cropCompressQuality(50)// 裁剪压缩质量 默认90 int
                 .compressMaxKB(Luban.CUSTOM_GEAR)//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效 int
                 // .compressWH() // 压缩宽高比 compressGrade()为Luban.CUSTOM_GEAR有效  int
                 // .cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
@@ -620,6 +619,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                     params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                     params.addBodyParameter("customerId",customerId);
                     params.addBodyParameter("uploadedFile",file);
+                    params.setConnectTimeout(5000);
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {

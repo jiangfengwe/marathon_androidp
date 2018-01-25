@@ -124,6 +124,10 @@ dependencies {
     //二维码
     //条件选择
     //图片选择
+    //compile 'com.amap.api:3dmap:latest.integration'
+//    compile 'cn.finalteam.rxgalleryfinal:library:1.1.0'
+    //compile 'com.github.maning0303:MNImageBrowser:V1.0.3'
+    compile project(path: ':imagebrowserlibrary')
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
@@ -135,8 +139,6 @@ dependencies {
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'com.kaopiz:kprogresshud:1.1.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    //compile 'com.amap.api:3dmap:latest.integration'
-//    compile 'cn.finalteam.rxgalleryfinal:library:1.1.0'
     compile 'com.tb.emoji:yykEmoji:1.1.0'
     compile 'com.youth.banner:banner:1.4.9'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -152,11 +154,10 @@ dependencies {
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
     compile 'com.github.codbking:PickTime:v1.0.1'
     compile 'com.liaoinstan.springview:library:1.3.0'
-    testCompile 'junit:junit:4.12'
-    //compile 'com.github.maning0303:MNImageBrowser:V1.0.3'
     compile 'com.github.maning0303:MNProgressHUD:V1.0.5'
-    compile project(path: ':imagebrowserlibrary')
+    testCompile 'junit:junit:4.12'
 }
+
 
 
 

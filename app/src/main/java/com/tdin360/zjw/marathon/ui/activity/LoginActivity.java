@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Selection;
@@ -120,6 +123,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
      KProgressHUD hud;
 
+    private static final int MSG_SUCCESS = 0;// 获取图片成功的标识
+    private static final int MSG_FAILURE = 1;// 获取图片失败的标识
+
+
 
     /* @ViewInject(R.id.tel)
     private EditText editTextName;
@@ -127,7 +134,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private EditText editTextPass;
     @ViewInject(R.id.clear)
     private ImageView clearBtn;*/
-   private static final int MSG_SET_ALIAS = 1002;
+   /* private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_SUCCESS:
+                    Bitmap bit = (Bitmap) msg.obj;
+                    ivBack.setImageBitmap(bit);
+                    break;
+                default:
+                    break;
+            }
+        };
+
+    };*/
+
+
+
+    private static final int MSG_SET_ALIAS = 1002;
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {
@@ -444,6 +467,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     data= new byte[1024];
                     if (responseCode == 200) {
                         in = con.getInputStream();
+                      /*  Bitmap bitmap= BitmapFactory.decodeStream(in);
+                        //ivBack.setImageBitmap(bitmap);
+                        Message m = new Message();
+                        m.what = MSG_SUCCESS;
+                        m.obj = bitmap;
+                        handler.sendMessage(m);*/
                         while ((len = in.read(data)) != -1) {
                             out.write(data, 0, len);
                         }
@@ -482,14 +511,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         params.addBodyParameter("uId",uid);
         params.addBodyParameter("nickName",screen_name);
         params.addBodyParameter("gender",gender.equals("男") ? "true":"false");
+        params.addBodyParameter("platform","android");
         if(data!=null){
-            params.addBodyParameter("up" +
-                    "" +
-                    "loadedFile",data.toString(),null);
+            params.addBodyParameter("uploadedFile",data,"image/jpeg","1.jpg");
             Log.d("dataeeeeee", "headImg: "+data);
             //params.addBodyParameter("uploadedFile",new File(profile_image_url));
         }
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.setConnectTimeout(5000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -516,10 +545,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         String phone = user.getPhone();
                         // 调用 Handler 来异步设置别名
                         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
-                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id,profile_image_url, nickName, gender, unionid, isBindPhone, customerSign, phone);
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id,headImg, nickName, gender, unionid, isBindPhone, customerSign, phone,"weixin");
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
-
                         //通知个人中心修改登录状态
                         Intent intent  =new Intent(MyFragment.ACTION);
                         sendBroadcast(intent);
@@ -636,6 +664,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -661,7 +690,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
                         SharedPreferencesManager.writeAlias(getApplicationContext(),customerAlias);
                         Log.d("customerAlias", "onSuccess: "+customerAlias);
-                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone);
+                        LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone,"phone");
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
                         //通知个人中心修改登录状态

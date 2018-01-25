@@ -156,12 +156,14 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
         Intent intent;
         switch (v.getId()){
             case R.id.btn_Back:
+                //ToastUtils.showCenter(getActivity(),"zxing");
+
                 if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
                     intent=new Intent(getActivity(), ZxingActivity.class);
                     startActivity(intent);
                 }else {
-                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},9);
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},90);
                     }else {
                         intent=new Intent(getActivity(), ZxingActivity.class);
                         startActivity(intent);
@@ -570,7 +572,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch(requestCode) {
             // requestCode即所声明的权限获取码，在checkSelfPermission时传入
-            case 9:
+            case 90:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
                   Intent  intent=new Intent(getActivity(), ZxingActivity.class);
                     startActivity(intent);

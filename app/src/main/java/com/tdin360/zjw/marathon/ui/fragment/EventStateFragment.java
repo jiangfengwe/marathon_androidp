@@ -204,6 +204,7 @@ public class EventStateFragment extends BaseFragment {
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
         params.addBodyParameter("IsStart",Status);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -310,6 +311,7 @@ public class EventStateFragment extends BaseFragment {
                 Log.d("eventId1", "onItemClick: "+eventId1);
                 Intent intent=new Intent(getActivity(), WebActivity.class);
                 intent.putExtra("url",url);
+                Log.d("eventId1url", "onItemClick: "+url);
                 intent.putExtra("name",name);
                 //Intent intent=new Intent(getActivity(), EventActivity.class);
                 startActivity(intent);

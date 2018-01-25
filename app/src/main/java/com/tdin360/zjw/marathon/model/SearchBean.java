@@ -178,7 +178,16 @@ public class SearchBean {
             private Object Statue;
             private boolean IsObsolete;
             private int Id;
+            private String Url;
             private CustomPropertiesBeanX CustomProperties;
+
+            public String getUrl() {
+                return Url;
+            }
+
+            public void setUrl(String url) {
+                Url = url;
+            }
 
             public String getName() {
                 return Name;

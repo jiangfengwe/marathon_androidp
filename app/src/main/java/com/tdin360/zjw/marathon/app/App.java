@@ -1,4 +1,5 @@
 package com.tdin360.zjw.marathon.app;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.multidex.MultiDexApplication;
@@ -70,10 +71,14 @@ public class App extends MultiDexApplication {
         x.Ext.init(this);
         // 设置是否输出debug
         x.Ext.setDebug(false);
+/*
+        String currentProcessName = getCurrentProcessName();
+        if (getPackageName().equals(currentProcessName)) {
+
+        }*/
         //极光推送
         JPushInterface.setDebugMode(false);
         JPushInterface.init(this);
-
         //友盟分享
         UMShareAPI.get(this);
         Log.LOG=false;
@@ -90,5 +95,21 @@ public class App extends MultiDexApplication {
             QbSdk.initX5Environment(this, null);
         }
     }
+    //获取进程名字
+    private String getCurrentProcessName() {
+        String currentProcName = "";
+        int pid = android.os.Process.myPid();
+        ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) {
+                currentProcName = processInfo.processName;
+                break;
+            }
+        }
+        return currentProcName;
+    }
+
+
+
 
 }

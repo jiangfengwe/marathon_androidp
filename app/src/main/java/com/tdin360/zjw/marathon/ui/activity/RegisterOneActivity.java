@@ -153,6 +153,7 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_REGISTER);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -368,6 +369,7 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
             String enString=AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.VALIDATE_CODE);
             params.addBodyParameter("secretMessage",enString);
+            params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

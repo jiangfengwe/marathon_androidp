@@ -164,6 +164,7 @@
             android:text="修改密码"
             android:background="@color/white"
             android:padding="15dp"
+            android:visibility="gone"
             android:layout_marginTop="6dp"
             android:drawableRight="@drawable/my_entry"
             android:textColor="@color/theme_text"

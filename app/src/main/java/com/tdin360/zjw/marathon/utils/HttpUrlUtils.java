@@ -68,7 +68,7 @@ public class HttpUrlUtils {
     //动态点赞列表
     public static final String CIRCLE_PRAISE_LIST=BASE+"EventAppApi/BJDynamicTags";
     //动态分享页面
-    public static final String CIRCLE_SHARE_LIST=BASE+"EventAppApi/DynamicSharePage";
+    public static final String CIRCLE_SHARE=BASE+"EventAppApi/ShareDynamic";
     //佰家圈发布动态
     public static final String PUBLISH_CIRCLE=BASE+"EventAppApi/CreateDynamic";
 
@@ -124,6 +124,8 @@ public class HttpUrlUtils {
     public static final String UPDATE_URL=BASE+"EventAppApi/AppUpdate";
     //App下载页面
     public static final String DOWNLOAD_URL=BASE+"EventAppApi/AppDownload";
+    //系统通知消息详细页面
+    public static final String NOTICE_DETAIL_URL=BASE+"EventAppApi/SystemNotifation";
 
 
 

@@ -51,84 +51,33 @@ public class MyReceiver extends BroadcastReceiver {
 	private CircleNoticeDetailsServiceImpl circleNoticeDetailsService;
 	private SystemNoticeDetailsServiceImpl systemNoticeDetailsService;
 
+    private boolean flag;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		circleNoticeDetailsService=new CircleNoticeDetailsServiceImpl(context);
-		systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(context);
-        Bundle bundle = intent.getExtras();
-		Log.d("mynotice", "onReceive: "+bundle);
-		StringBuilder sb = new StringBuilder();
-		for (String key : bundle.keySet()) {
-			if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
-				sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
-			}else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
-				sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
-			} else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
-				if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
-					Log.i(TAG, "This message has no Extra data");
-					continue;
-				}
-
-				try {
-					JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
-					//Log.d("circlejson", "printBundle: "+json);
-					String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
-					Log.d("circlestring", "printBundle: "+string);
-					Gson gson=new Gson();
-					CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
-					String nickName = circlePriseTableModel.getNickName();
-                    String messageType = circlePriseTableModel.getMessageType();
-                    Log.d("circlenickName", "onReceive: "+nickName);
-                    if(messageType.equals("messagenotification")){
-						SharedPreferencesManager.isNotice(context,true);
-						EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
-						EventBus.getDefault().post(new EventBusClass(circle));
-						circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
-                    }else{
-						systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
-					}
-
-
-
-
-					//Log.d("circlestring", "printBundle: "+circleNoticeDetailsService);
-					//circleNoticeDetailsService.add(circlePriseTableModel);
-					/*Iterator<String> it =  json.keys();
-
-					while (it.hasNext()) {
-						String myKey = it.next().toString();
-						sb.append("\nkey:" + key + ", value: [" +
-								myKey + " - " +json.optString(myKey) + "]");
-					}*/
-				} catch (JSONException e) {
-					Log.e(TAG, "Get message extra JSON error!");
-				}
-
-			} else {
-				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
-			}
-		}
 		//Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
-		
+		Bundle bundle = intent.getExtras();
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
           //  Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-        	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+        	//Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	//processCustomMessage(context, bundle);
 			String content =  bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			Log.d("notice", "onReceive: "+content);
 			saveMessage(context,content);
 
+
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-           Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
+          // Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
            // Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 			String content = bundle.getString("cn.jpush.android.ALERT");
         	 saveMessage(context,content);
+			 initData(context, bundle);
 			//获取数据并保存到sharepreference
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
@@ -136,10 +85,32 @@ public class MyReceiver extends BroadcastReceiver {
 
 			//打开自定义的Activity
 			if(SystemUtils.isAppAlive(context,context.getPackageName())){
-				Intent notice = new Intent(context,CircleMessageActivity.class);
-				Intent main = new Intent(context,MainActivity.class);
-				main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivities(new Intent[]{main,notice});
+				circleNoticeDetailsService=new CircleNoticeDetailsServiceImpl(context);
+				systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(context);
+				String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
+				Log.d("circlestring", "printBundle: "+string);
+				Gson gson=new Gson();
+				CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
+				String nickName = circlePriseTableModel.getNickName();
+				String messageType = circlePriseTableModel.getMessageType();
+				Log.d("circlenickName", "onReceive: "+nickName);
+				if(messageType.equals("messagenotification")){
+					Intent notice = new Intent(context,CircleMessageActivity.class);
+					Intent main = new Intent(context,MainActivity.class);
+					main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					// notice.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivities(new Intent[]{main,notice});
+					//context.startActivity(notice);
+				}else{
+					Intent notice = new Intent(context,MyNoticeMessageActivity.class);
+					Intent main = new Intent(context,MainActivity.class);
+					main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					// notice.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivities(new Intent[]{main,notice});
+					//context.startActivity(notice);
+				}
+
+
 			}else {
 				Intent mLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
 				mLaunchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
@@ -158,6 +129,68 @@ public class MyReceiver extends BroadcastReceiver {
         } else {
         //	Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
         }
+        //initData(context,bundle);
+
+	}
+
+	private void initData(Context context, Bundle bundle) {
+		circleNoticeDetailsService=new CircleNoticeDetailsServiceImpl(context);
+		systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(context);
+		Log.d("mynotice", "onReceive: "+bundle);
+		StringBuilder sb = new StringBuilder();
+		/*for (String key : bundle.keySet()) {
+			if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
+				sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
+			}else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
+				sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
+			} else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
+				if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
+					Log.i(TAG, "This message has no Extra data");
+					continue;
+				}
+
+				try {
+					JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));*/
+					//Log.d("circlejson", "printBundle: "+json);
+					String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
+					Log.d("circlestring", "printBundle: "+string);
+					Gson gson=new Gson();
+					CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
+					String nickName = circlePriseTableModel.getNickName();
+					String messageType = circlePriseTableModel.getMessageType();
+					Log.d("circlenickName", "onReceive: "+nickName);
+					if(messageType.equals("messagenotification")){
+						SharedPreferencesManager.isNotice(context,true);
+						EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
+						EventBus.getDefault().post(new EventBusClass(circle));
+						circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
+					}else{
+						SharedPreferencesManager.isNotice(context,true);
+						EnumEventBus circle = EnumEventBus.SYSTEM;
+						EventBus.getDefault().post(new EventBusClass(circle));
+						systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
+					}
+
+
+
+
+					//Log.d("circlestring", "printBundle: "+circleNoticeDetailsService);
+					//circleNoticeDetailsService.add(circlePriseTableModel);
+					/*Iterator<String> it =  json.keys();
+
+					while (it.hasNext()) {
+						String myKey = it.next().toString();
+						sb.append("\nkey:" + key + ", value: [" +
+								myKey + " - " +json.optString(myKey) + "]");
+					}*/
+		/*		} catch (JSONException e) {
+					Log.e(TAG, "Get message extra JSON error!");
+				}
+
+			} else {
+				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
+			}
+		}*/
 	}
 
 	// 打印所有的 intent extra 数据
@@ -178,7 +211,7 @@ public class MyReceiver extends BroadcastReceiver {
 					JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
 					//Log.d("circlejson", "printBundle: "+json);
 					String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
-					Log.d("circlestring", "printBundle: "+string);
+					//Log.d("circlestring", "printBundle: "+string);
 					Gson gson=new Gson();
 					CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
 					//circlePraiseDat
@@ -199,7 +232,7 @@ public class MyReceiver extends BroadcastReceiver {
 				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
 			}
 		}
-		Log.d("mynoticesb", "printBundle: "+sb.toString());
+		//Log.d("mynoticesb", "printBundle: "+sb.toString());
 
 		return sb.toString();
 	}
@@ -239,7 +272,6 @@ public class MyReceiver extends BroadcastReceiver {
 
 	//获取指定格式的当前系统时间
 	private  String getTime(){
-
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(new Date(System.currentTimeMillis()));
 	}

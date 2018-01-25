@@ -106,7 +106,7 @@ public class CircleMessageActivity extends BaseActivity {
         }
         //allCircleDetail.clear();
         circlePraiseDatabase=new CircleNoticeDetailsServiceImpl(getApplicationContext());
-        List<CirclePriseTableModel> allCircleNotice = circlePraiseDatabase.getAllCircleNotice();
+        final List<CirclePriseTableModel> allCircleNotice = circlePraiseDatabase.getAllCircleNotice();
         if(allCircleNotice.size()<=0){
             ToastUtils.showCenter(getApplicationContext(),"暂时还没有星人来访问");
             return;
@@ -145,13 +145,21 @@ public class CircleMessageActivity extends BaseActivity {
                        imageViewCircle.setVisibility(View.VISIBLE);
                        x.image().bind(imageViewCircle,model.getDynamicPictureUrl(),imageOptions);
                    }
-
                }
             }
         };
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-
+        adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(CircleMessageActivity.this,CircleDetailActivity.class);
+                CirclePriseTableModel circlePriseTableModel = allCircleNotice.get(position);
+                int dynamicId = circlePriseTableModel.getDynamicId();
+                intent.putExtra("dynamicId",dynamicId+"");
+                startActivity(intent);
+            }
+        });
     }
 
     private void initToolbar() {

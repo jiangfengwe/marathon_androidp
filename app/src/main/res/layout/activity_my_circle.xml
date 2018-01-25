@@ -53,7 +53,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp">
+        android:layout_marginTop="50dp">
         <include layout="@layout/load_fail_layout"/>
     </LinearLayout>
    <!-- <LinearLayout
@@ -63,17 +63,6 @@
 
     </LinearLayout>-->
     <include layout="@layout/item_loading"/>
-    <TextView
-        android:id="@+id/tv_dynamic_null"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="你还没有发布动态哦，可以点击去发布动态"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:textColor="@color/home_tab_title_color_check"/>
 
 
 </RelativeLayout>

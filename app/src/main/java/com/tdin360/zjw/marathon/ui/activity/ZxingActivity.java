@@ -1,5 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.hardware.Camera;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,12 +43,8 @@ public class ZxingActivity extends BaseActivity implements QRCodeView.Delegate {
     public void onScanQRCodeSuccess(String result) {
         zXingView.startSpot();
         ToastUtils.show(getApplicationContext(),result);
-
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(200);
-
-
-
     }
 
     @Override
@@ -58,8 +55,7 @@ public class ZxingActivity extends BaseActivity implements QRCodeView.Delegate {
     protected void onStart() {
         super.onStart();
         zXingView.startCamera();
-//        mQRCodeView.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
-
+        //mQRCodeView.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
         zXingView.showScanRect();
     }
 

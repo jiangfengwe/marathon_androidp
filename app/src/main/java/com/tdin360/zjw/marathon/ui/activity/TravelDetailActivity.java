@@ -328,6 +328,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("eventId",eventId);
         params.addBodyParameter("travelId",travelId);
+        params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
