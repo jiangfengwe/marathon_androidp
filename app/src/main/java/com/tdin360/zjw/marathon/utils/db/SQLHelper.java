@@ -78,6 +78,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    headImg VARCHAR,\n" +
                 "    commentContent VARCHAR,\n" +
                 "    time VARCHAR,\n" +
+                "    timeNotice VARCHAR,\n" +
                 "    dynamicContent   VARCHAR);" ;
 
 //        赛事数据表

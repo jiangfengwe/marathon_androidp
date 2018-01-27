@@ -497,7 +497,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                     //ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
-                                    initData(0);
+                                    initData(1);
                                     model.setTagsNumber(tagsNumber);
                                     tvPraise.setText(tagsNumber+"");
                                     checkBox.setChecked(true);
@@ -628,7 +628,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 if(bjDynamicListModel.size()<=0){
                     return;
                 }
-               // bjDynamicListModel.clear();
                 pageIndex=1;
                 initData(1);
             }

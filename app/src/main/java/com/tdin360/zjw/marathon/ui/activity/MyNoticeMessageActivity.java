@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -76,7 +77,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
                 .build();
         initToolbar();
         initView();
-        loadData();
+        //loadData();
     }
 
     private void initToolbar() {
@@ -110,20 +111,46 @@ public class MyNoticeMessageActivity extends BaseActivity {
         }
         adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, CirclePriseTableModel model) {
+            protected void onBindNormalViewHolder(NormalViewHolder holder, final CirclePriseTableModel model) {
                 //TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
                 ImageView imageView = (ImageView) holder.getViewById(R.id.iv_system_pic);
                 x.image().bind(imageView,model.getHeadImg(),imageOptionsCircle);
                 holder.setText(R.id.tv_system_title,model.getNickName());
                 holder.setText(R.id.tv_system_content,model.getDynamicContent());
                 holder.setText(R.id.tv_system_time,model.getTime());
+                final ImageView imageViewShow = (ImageView) holder.getViewById(R.id.iv_system_notice_detail_show);
+                String notice = model.getNotice();
+                if(notice.equals("0")){
+                    imageViewShow.setVisibility(View.VISIBLE);
+                }else{
+                    imageViewShow.setVisibility(View.GONE);
+                }
 
+                adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        imageViewShow.setVisibility(View.GONE);
+                        model.setNotice("1");
+                        SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
+                        systemNoticeDetailsService.update("1");
+                        List<CirclePriseTableModel> allSystemNotice = systemNoticeDetailsService.getAllSystemNotice();
+                        String notice1 = allSystemNotice.get(0).getNotice();
+                        Log.d("notice1", "onItemClick: "+notice1);
+                        EnumEventBus system = EnumEventBus.NOTICECLICK;
+                        EventBus.getDefault().post(new EventBusClass(system));
 
+                        // ToastUtils.showCenter(getApplicationContext(),"system Notice");
+                        Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
+                        int dynamicId = allCircleNotice.get(position).getDynamicId();
+                        intent.putExtra("dynamicId",dynamicId);
+                        startActivity(intent);
+                    }
+                });
             }
         };
         rvNotice.setAdapter(adapter);
         rvNotice.setLayoutManager(new WrapContentLinearLayoutManager(this));
-        adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+       /* adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                // ToastUtils.showCenter(getApplicationContext(),"system Notice");
@@ -132,7 +159,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
                 intent.putExtra("dynamicId",dynamicId);
                 startActivity(intent);
             }
-        });
+        });*/
        // this.adapter = new NoticeMessageListAdapter();
        // mRecyclerView.setAdapter(adapter);
 

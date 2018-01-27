@@ -41,6 +41,7 @@ import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -56,6 +57,8 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.List;
 
 /**个人中心
  * Created by Administrator on 2016/8/9.
@@ -93,6 +96,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
 
 
     private ShareAction action;
+    private String noticeView;
 
     public static MyFragment newInstance(){
 
@@ -116,6 +120,19 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 ivShow.setVisibility(View.GONE);
             }
         }
+        if(event.getEnumEventBus()==EnumEventBus.NOTICECLICK){
+            SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getActivity());
+            final List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+            for (int i = 0; i <allCircleNotice.size() ; i++) {
+                String notice = allCircleNotice.get(i).getNotice();
+                noticeView=notice;
+            }
+            if(noticeView.equals("0")){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
 
     }
 
@@ -123,6 +140,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d("onAttach", "onAttach: "+"onAttach");
+
     }
 
     @Nullable
@@ -138,20 +156,22 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-      /*  NickName = nickName;
-        DynamicPictureUrl = dynamicPictureUrl;
-        this.messageType = messageType;
-        HeadImg = headImg;
-        DynamicId = dynamicId;
-        CommentContent = commentContent;
-        DynamicContent = dynamicContent;
-        this.time=time;*/
-        CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2");
+        CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2",null);
         SharedPreferencesManager.isNotice(getContext(),true);
         EnumEventBus circle = EnumEventBus.SYSTEM;
         EventBus.getDefault().post(new EventBusClass(circle));
         SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
         systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
+        List<CirclePriseTableModel> allSystemNotice = systemNoticeDetailsService.getAllSystemNotice();
+        for (int i = 0; i <allSystemNotice.size() ; i++) {
+            String notice = allSystemNotice.get(i).getNotice();
+            noticeView=notice;
+        }
+        if(noticeView.equals("0")){
+            ivShow.setVisibility(View.VISIBLE);
+        }else{
+            ivShow.setVisibility(View.GONE);
+        }
         //显示信息
        showInfo();
         //注册广播

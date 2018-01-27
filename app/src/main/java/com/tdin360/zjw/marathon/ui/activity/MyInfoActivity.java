@@ -113,7 +113,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     @ViewInject(R.id.layout_modify_portrait)
     private LinearLayout layoutPortrait;
     @ViewInject(R.id.layout_modify_sign)
-    private LinearLayout layoutSign;
+    private RelativeLayout layoutSign;
     @ViewInject(R.id.rg_modify_sex)
     private RadioGroup rgSex;
     @ViewInject(R.id.rb_boy)
@@ -247,12 +247,12 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private void initView() {
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         x.image().bind(ivHeadImg,loginInfo.getHeadImg(),imageOptions);
-        String login = loginInfo.getLogin();
+       /* String login = loginInfo.getLogin();
         if(login.equals("phone")){
             tvPsw.setVisibility(View.VISIBLE);
         }else{
             tvPsw.setVisibility(View.GONE);
-        }
+        }*/
         tvNickName.setText(loginInfo.getNickName());
         tvSign.setText(loginInfo.getCustomerSign());
         String phone = loginInfo.getPhone();
@@ -385,9 +385,19 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.tv_modify_psw:
-                //修改密码
-                intent=new Intent(MyInfoActivity.this,ChangePasswordActivity.class);
-                startActivity(intent);
+                LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+                x.image().bind(ivHeadImg,loginInfo.getHeadImg(),imageOptions);
+                String login = loginInfo.getLogin();
+                if(login.equals("phone")){
+                    tvPsw.setVisibility(View.VISIBLE);
+                    //修改密码
+                    intent=new Intent(MyInfoActivity.this,ChangePasswordActivity.class);
+                    startActivity(intent);
+                }else{
+                    tvPsw.setVisibility(View.VISIBLE);
+                    ToastUtils.showCenter(getApplicationContext(),"微信登录不可以修改密码哦");
+                }
+
                 break;
             case R.id.layout_modify_phone:
                 //修改手机号

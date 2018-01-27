@@ -38,9 +38,10 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
         String format = formatter.format(c.getTime());
         model.setTime(format);
-       /* model.setNickName("aa");
+        model.setNickName("aa");
         model.setDynamicId(2);
-        model.setDynamicContent("jjjjjjjjjjjjjjj");*/
+        model.setDynamicContent("jjjjjjjjjjjjjjj");
+        //model.setNotice("0");
        // model.setNotice(1);
         //判断数据库中不存在才插入
        // Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,"NickName=?",new String[]{model.getNickName()}, null, null, null);
@@ -62,7 +63,7 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         values.put("dynamicContent",model.getDynamicContent());
         values.put("messageType",model.getMessageType());
         values.put("time",model.getTime());
-       // values.put("notice",model.getNotice());
+        values.put("timeNotice",model.getNotice());
             conn.insert(SQLHelper.SYSTEM_NOTICE_TABLE, null, values);
         Log.d("model.getNickName()", "addCircleNotice: "+model.getNickName());
        // }
@@ -85,8 +86,8 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
             String DynamicContent =  cursor.getString(cursor.getColumnIndex("dynamicContent")) ;
             String messageType = cursor.getString(cursor.getColumnIndex("messageType"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
-            //int notice = cursor.getInt(cursor.getColumnIndex("notice"));
-            list.add(new CirclePriseTableModel(NickName,DynamicPictureUrl,messageType,HeadImg,DynamicId,CommentContent,DynamicContent,time));
+            String notice = cursor.getString(cursor.getColumnIndex("timeNotice"));
+            list.add(new CirclePriseTableModel(NickName,DynamicPictureUrl,messageType,HeadImg,DynamicId,CommentContent,DynamicContent,time,notice));
         }
         cursor.close();
         conn.close();
@@ -107,5 +108,17 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         }finally {
             conn.close();
         }
+    }
+    /**
+     * 更新记录
+     * @param timeNotice
+     */
+    public void update(String timeNotice){
+        SQLiteDatabase sqldb = sqlHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("timeNotice",timeNotice);
+        sqldb.update(SQLHelper.SYSTEM_NOTICE_TABLE, values, "dynamicId= ?",new String[] { timeNotice });
+        sqldb.close();
+
     }
 }

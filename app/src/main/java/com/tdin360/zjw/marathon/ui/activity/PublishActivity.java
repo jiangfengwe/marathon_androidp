@@ -286,6 +286,13 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 PublishBean publishBean = gson.fromJson(result, PublishBean.class);
                 boolean state = publishBean.isState();
                 if(state){
+                    Intent intent=getIntent();
+                    int myCircle = intent.getIntExtra("myCircle",-1);
+                    if(myCircle==6){
+                        EnumEventBus publish = EnumEventBus.CIRCLEPUBLISH;
+                        EventBus.getDefault().post(new EventBusClass(publish));
+                        finish();
+                    }
                     // ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
                     CircleFragment.instance.initData(1);
                     CircleFragment.instance.initTop();
@@ -293,14 +300,6 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
                    // finish();
-                    Intent intent=getIntent();
-                    //intent.putExtra("myCircle","circle");
-
-                    int myCircle = intent.getIntExtra("myCircle",-1);
-                    if(myCircle==5){
-                        EnumEventBus publish = EnumEventBus.PUBLISH;
-                        EventBus.getDefault().post(new EventBusClass(publish));
-                    }
                     finish();
                     //layoutRefresh.setVisibility(View.GONE);
                   /* new Thread(new Runnable() {

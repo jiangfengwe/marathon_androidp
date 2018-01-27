@@ -126,6 +126,18 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         initWeb();
     }
   private void initWeb() {
+      //刷新旋转动画
+      Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
+      if (animation != null) {
+          more.startAnimation(animation);
+      }  else {
+          more.setAnimation(animation);
+          more.startAnimation(animation);
+      }
+      LinearInterpolator lin = new LinearInterpolator();
+      animation.setInterpolator(lin);
+
+
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
@@ -179,7 +191,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         uploadMessageAboveL.onReceiveValue(results);
         uploadMessageAboveL = null;
     }
-
     private void initView() {
         String name = getIntent().getStringExtra("name");
         titleTv.setText(name );

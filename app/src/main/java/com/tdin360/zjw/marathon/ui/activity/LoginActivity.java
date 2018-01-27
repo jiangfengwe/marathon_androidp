@@ -543,8 +543,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         String customerSign = user.getCustomerSign();
                         String customerAlias = user.getCustomerAlias();
                         String phone = user.getPhone();
-                        // 调用 Handler 来异步设置别名
-                        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
+                        //判断是否打开接受通知
+                        boolean open = SharedPreferencesManager.getOpen(getApplicationContext());
+                        if(open){
+                            // 调用 Handler 来异步设置别名
+                            mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
+                        }
+
                         LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id,headImg, nickName, gender, unionid, isBindPhone, customerSign, phone,"weixin");
                         //保存用户登录数据
                         SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);
@@ -686,8 +691,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         boolean isBindPhone = user.isIsBindPhone();
                         String customerSign = user.getCustomerSign();
                         String customerAlias = user.getCustomerAlias();
-                        // 调用 Handler 来异步设置别名
-                        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
+                        //判断是否打开接受通知
+                        boolean open = SharedPreferencesManager.getOpen(getApplicationContext());
+                        if(open){
+                            // 调用 Handler 来异步设置别名
+                            mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, customerAlias));
+                        }
                         SharedPreferencesManager.writeAlias(getApplicationContext(),customerAlias);
                         Log.d("customerAlias", "onSuccess: "+customerAlias);
                         LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(id, headImg, nickName, gender, unionid, isBindPhone, customerSign, phone,"phone");

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -16,9 +17,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +39,10 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
+import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -85,6 +90,10 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tvConsult;
     @ViewInject(R.id.tv_travel_detail_order)
     private TextView tvOrder;
+    @ViewInject(R.id.layout_travel_detail)
+    private LinearLayout layoutNull;
+    @ViewInject(R.id.sl_travel)
+    private ScrollView scrollView;
 
 
     private ShareAction action;
@@ -272,11 +281,6 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     bjTravelPictureListModel= model.getBJTravelPictureListModel();
                     SingleClass.getInstance().setBjTravelPictureListModel(bjTravelPictureListModel);
                     tvCount.setText(bjTravelPictureListModel.size()+"");
-                  /*  if(bjTravelPictureListModel.size()<=0){
-                        mErrorView.show(tvCount,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
-                    }else {
-                        mErrorView.hideErrorView(tvCount);
-                    }*/
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),travelPictureBean.getMessage());
                 }
@@ -303,18 +307,22 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initInfo() {
+        webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.getSettings().setDomStorageEnabled(true);
         String travelId = getIntent().getStringExtra("travelId");
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
         this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        this.webView.getSettings().setBuiltInZoomControls(false);
-        this.webView.setWebChromeClient(null);
-        this.webView.setWebViewClient(null);
+        this.webView.setWebChromeClient(new WebChromeClient());
+        this.webView.setWebViewClient(new WebViewClient());
        // String url = HttpUrlUtils.TRAVEL_DETAIL_INFO + "?" + "appKey" + "=" + "BJYDAppV-2" + "&" + "travelId" + travelId;
         String url="http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
         webView.loadUrl(url);
+        webView.addJavascriptInterface(TravelDetailActivity.this,"android");
     }
 
     private void initData() {
@@ -340,14 +348,13 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     TravelDetailBean.ModelBean model = travelDetailBean.getModel();
                    bjTravelModel= model.getBJTravelModel();
                     List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList = model.getApiTravelMonthDateList();
-                    tvCommentCount.setText("一共"+model.getEvaluationCount()+"条评论");
+                    //tvCommentCount.setText("一共"+model.getEvaluationCount()+"条评论");
                     SingleClass.getInstance().setApiTravelMonthDateList(apiTravelMonthDateList);
                     x.image().bind(ivPic,bjTravelModel.getPictureUrl(),imageOptions);
                     tvPrice.setText(bjTravelModel.getPrice()+"");
                     tvName.setText(bjTravelModel.getStartPlace()+"——"+bjTravelModel.getEndPlace());
-                    tvLevel.setText(bjTravelModel.getScoring()+"");
+                   // tvLevel.setText(bjTravelModel.getScoring()+"");
                     List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean> bjTravelEvaluateListModel = model.getBJTravelEvaluateListModel();
-
                     if(bjTravelEvaluateListModel.size()<=0){
                         layout.setVisibility(View.GONE);
                        return;
@@ -361,10 +368,10 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     String evaluateContent = bjTravelEvaluateListModelBean.getEvaluateContent();
                     String evaluateTimeStr = bjTravelEvaluateListModelBean.getEvaluateTimeStr();
                     bjTravelEvaluatePictureListModel= bjTravelEvaluateListModelBean.getBJTravelEvaluatePictureListModel();
-                    x.image().bind(ivHeadPic,headImg,imageOptionsCircle);
-                    tvCommentName.setText(nickName);
-                    tvCommentTime.setText(evaluateTimeStr);
-                    tvComment.setText(evaluateContent);
+                    //x.image().bind(ivHeadPic,headImg,imageOptionsCircle);
+                    //tvCommentName.setText(nickName);
+                    //tvCommentTime.setText(evaluateTimeStr);
+                   // tvComment.setText(evaluateContent);
                     Log.d("apiTravelMonthDateList", "onSuccess: "+apiTravelMonthDateList.size());
                     }
                 }else{
@@ -376,6 +383,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 mErrorView.show(webView,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                layoutNull.setBackgroundColor(Color.parseColor("#ff621a"));
                 ToastUtils.show(TravelDetailActivity.this,"网络不给力,连接服务器异常!");
             }
 
@@ -400,11 +408,50 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         layoutPic.setOnClickListener(this);
         tvConsult.setOnClickListener(this);
         tvOrder.setOnClickListener(this);
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+               /* LinearLayoutManager manager = (LinearLayoutManager) v.getLayoutManager();
+                int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
+                // 当不滚动时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // 判断是否滚动超过一屏
+                    if (firstVisibleItemPosition == 0) {
+                        layout.setBackgroundColor(Color.parseColor("#00000000"));
+                    } else if(firstVisibleItemPosition == 1){
+                        layout.setBackgroundColor(Color.parseColor("#50ff621a"));
+                    } else {
+                        layout.setBackgroundColor(Color.parseColor("#ff621a"));
+                    }
 
-
+                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {//拖动中
+                    layout.setBackgroundColor(Color.parseColor("#ff621a"));
+                }*/
+                Log.d("onScrollChange", "onScrollChange: "+(scrollY-oldScrollY));
+                if((scrollY-oldScrollY)>1){
+                    layoutNull.setBackgroundColor(Color.parseColor("#ff621a"));
+                }else{
+                    layoutNull.setBackgroundColor(Color.parseColor("#00000000"));
+                }
+            }
+        });
     }
 
-
+    @JavascriptInterface
+    public void toTravelMoreComment(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String eventId = SingleClass.getInstance().getEventId();
+                String travelId = getIntent().getStringExtra("travelId");
+                Intent intent=new Intent(TravelDetailActivity.this,TravelMoreCommentActivity.class);
+                intent.putExtra("eventId",eventId);
+                intent.putExtra("travelId",travelId);
+                //intent.putExtra("webview","1");
+                startActivity(intent);
+            }
+        });
+    }
     @Override
     public int getLayout() {
         return R.layout.activity_travel_detail;

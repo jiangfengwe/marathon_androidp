@@ -58,7 +58,7 @@ android {
 
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            minifyEnabled false;//是否启用混淆
+            minifyEnabled true;//是否启用混淆
             //Zipalign优化
             zipAlignEnabled true
 

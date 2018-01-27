@@ -213,9 +213,11 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 count--;
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-                name.clear();
-                ic.clear();
-                for (int i = 0; i < count; i++) {
+                /*layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);*/
+              /*  name.clear();
+                ic.clear();*/
+                for (int i = 0; i <count; i++) {
                     addView();
                 }
                 setSum();
@@ -224,14 +226,17 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.tv_travel_order_add:
                 //数量增加
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
-                name.clear();
-                ic.clear();
+
+               /* name.clear();
+                ic.clear();*/
                 if(count>99){
                     return;
                 }
                 count++;
+                layoutName.removeAllViews();
+                layoutIC.removeAllViews();
+               /* layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);*/
                 for (int i =0; i < count; i++) {
                     addView();
                 }
@@ -358,7 +363,7 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                     TravelOrderBean travelOrderBean = gson.fromJson(result, TravelOrderBean.class);
                     boolean state = travelOrderBean.isState();
                     if(state){
-                        String orderSecretMessage = travelOrderBean.getOrderSecretMessage();
+                       String orderSecretMessage = travelOrderBean.getOrderSecretMessage();
                         String decrypt = AES.decrypt(orderSecretMessage);
                         Log.d("travelorderdecrypt", "onSuccess: "+decrypt);
                         TravelOrderInfoBean travelOrderInfoBean = gson.fromJson(decrypt, TravelOrderInfoBean.class);

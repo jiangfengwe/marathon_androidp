@@ -118,7 +118,7 @@ public class TravelMoreCommentActivity extends BaseActivity {
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData();
+                        initData(0);
                         break;
 
                 }
@@ -127,7 +127,7 @@ public class TravelMoreCommentActivity extends BaseActivity {
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(this)){
             //加载网络数据
-            initData();
+            initData(0);
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -154,8 +154,11 @@ public class TravelMoreCommentActivity extends BaseActivity {
 
         }
     }
-    private void initData() {
-        //bjTravelEvaluateListModel.clear();
+    private void initData(int i) {
+        if(i==1){
+            bjTravelEvaluateListModel.clear();
+        }
+
         String eventId = SingleClass.getInstance().getEventId();
         String travelId = getIntent().getStringExtra("travelId");
         RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_MORE_COMMENT);
@@ -258,7 +261,7 @@ public class TravelMoreCommentActivity extends BaseActivity {
                 springView.onFinishFreshAndLoad();
                 //bjDynamicListModel.clear();
                 pageIndex=1;
-                initData();
+                initData(1);
             }
 
             @Override
@@ -269,7 +272,7 @@ public class TravelMoreCommentActivity extends BaseActivity {
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData();
+                    initData(0);
                 }
 
             }

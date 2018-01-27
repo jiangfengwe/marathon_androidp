@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -148,7 +149,8 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
         etSign.setText(customerSign);
         //String customerSign1 = etSign.getText().toString().trim();
        // etSign.setInputConnectionWrapper
-        etSign.addTextChangedListener(new TextWatcher() {
+        etSign.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+       /* etSign.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -169,7 +171,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
 
             }
         });
-
+*/
         btnSure.setOnClickListener(this);
     }
 

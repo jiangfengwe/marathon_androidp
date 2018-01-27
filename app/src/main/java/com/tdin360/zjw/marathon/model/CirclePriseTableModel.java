@@ -13,6 +13,8 @@ public class CirclePriseTableModel {
      * DynamicId : 180
      * CommentContent : 模仿秀
      * DynamicContent :
+     * time;
+     * notice;
      */
 
     private String NickName;
@@ -23,13 +25,13 @@ public class CirclePriseTableModel {
     private String CommentContent;
     private String DynamicContent;
     private String time;
-    private int notice;
+    private String notice;
 
-    public int getNotice() {
+    public String getNotice() {
         return notice;
     }
 
-    public void setNotice(int notice) {
+    public void setNotice(String notice) {
         this.notice = notice;
     }
 
@@ -41,7 +43,7 @@ public class CirclePriseTableModel {
         this.time = time;
     }
 
-    public CirclePriseTableModel(String nickName, String dynamicPictureUrl, String messageType, String headImg, int dynamicId, String commentContent, String dynamicContent, String time, int notice) {
+    public CirclePriseTableModel(String nickName, String dynamicPictureUrl, String messageType, String headImg, int dynamicId, String commentContent, String dynamicContent, String time, String notice) {
         NickName = nickName;
         DynamicPictureUrl = dynamicPictureUrl;
         this.messageType = messageType;

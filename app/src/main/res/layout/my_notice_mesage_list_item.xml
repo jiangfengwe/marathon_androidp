@@ -10,14 +10,29 @@
         android:layout_height="102dp"
         android:padding="10dp"
         android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/iv_system_pic"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/notice_portrait"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/iv_system_pic"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/notice_portrait"/>
+            <ImageView
+                android:id="@+id/iv_system_notice_detail_show"
+                android:layout_width="10.5dp"
+                android:layout_height="10.5dp"
+                android:src="@drawable/shap_oval_red"
+                android:layout_alignParentLeft="true"
+                android:visibility="gone"
+                android:layout_marginLeft="53dp"
+                android:layout_marginTop="5dp"/>
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

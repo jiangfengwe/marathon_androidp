@@ -74,47 +74,42 @@
                 android:layout_gravity="center"/>
 
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_modify_sign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:background="@color/white"
-            android:orientation="horizontal"
             android:padding="15dp">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_centerVertical="true"
                 android:text="修改签名"
                 android:textColor="@color/theme_text" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/tv_modify_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
                 android:maxLines="1"
-                android:maxLength="30"
                 android:ellipsize="end"
+                android:layout_alignParentRight="true"
                 android:text="修改签名修改签名修改签名"
                 android:textColor="@color/hotel_address" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="15dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:src="@drawable/my_entry" />
 
-        </LinearLayout>
+        </RelativeLayout>
         <RadioGroup
             android:id="@+id/rg_modify_sex"
             android:layout_width="match_parent"
@@ -164,7 +159,6 @@
             android:text="修改密码"
             android:background="@color/white"
             android:padding="15dp"
-            android:visibility="gone"
             android:layout_marginTop="6dp"
             android:drawableRight="@drawable/my_entry"
             android:textColor="@color/theme_text"

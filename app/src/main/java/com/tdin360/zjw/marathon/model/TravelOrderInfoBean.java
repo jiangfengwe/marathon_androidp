@@ -9,7 +9,7 @@ import java.util.List;
 public class TravelOrderInfoBean {
 
     /**
-     * model : {"BJTravelOrderModel":{"PayMethod":null,"Type":null,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0000038_320.png","StartPlace":"贵阳","EndPlace":"安顺","Phone":"17621145702","StartDate":"0001-01-01T00:00:00","StartDatestr":"2017-12-12 00:00","EndDate":"0001-01-01T00:00:00","EndDatestr":"2017-12-14 00:00","TotalMoney":120,"TravelNumber":1,"OrderTime":"0001-01-01T00:00:00","OrderTimeStr":"2017-12-14","OrderNo":"201712141619297357068","IsCancel":false,"CancelTime":null,"IsPay":false,"PayTime":null,"IsUsing":false,"UsingTime":null,"IsEvaluate":false,"EvaluateTime":null,"IsRefund":false,"Status":null,"CustomerId":0,"TravelId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}},"BJTravelStayInCustomerListModel":[{"Name":"user1","IDNumber":"123456","OrderId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}}],"Id":0,"CustomProperties":{}}
+     * model : {"BJTravelOrderModel":{"PayMethod":null,"Type":null,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0004683_320.jpeg","StartPlace":"贵阳","EndPlace":"遵义","Phone":"17621145702","StartDate":"0001-01-01T00:00:00","StartDatestr":"2018-02-22 00:00","EndDate":"0001-01-01T00:00:00","EndDatestr":"2018-02-22 00:00","TotalMoney":0.01,"TravelNumber":1,"OrderTime":"0001-01-01T00:00:00","OrderTimeStr":"2018-01-26","OrderNo":"201801261656511462689","IsCancel":false,"CancelTime":null,"IsPay":false,"PayTime":null,"IsUsing":false,"UsingTime":null,"IsEvaluate":false,"EvaluateTime":null,"IsApplyRefund":false,"ApplyRefundTime":null,"ApplyRefundTimeStr":null,"IsRefund":false,"Status":"1","CustomerId":0,"TravelId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":1079,"CustomProperties":{}},"BJTravelStayInCustomerListModel":[{"Name":"","IDNumber":"","OrderId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}}],"Id":0,"CustomProperties":{}}
      */
 
     private ModelBean model;
@@ -24,10 +24,9 @@ public class TravelOrderInfoBean {
 
     public static class ModelBean{
 
-
         /**
-         * BJTravelOrderModel : {"PayMethod":null,"Type":null,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0000038_320.png","StartPlace":"贵阳","EndPlace":"安顺","Phone":"17621145702","StartDate":"0001-01-01T00:00:00","StartDatestr":"2017-12-12 00:00","EndDate":"0001-01-01T00:00:00","EndDatestr":"2017-12-14 00:00","TotalMoney":120,"TravelNumber":1,"OrderTime":"0001-01-01T00:00:00","OrderTimeStr":"2017-12-14","OrderNo":"201712141619297357068","IsCancel":false,"CancelTime":null,"IsPay":false,"PayTime":null,"IsUsing":false,"UsingTime":null,"IsEvaluate":false,"EvaluateTime":null,"IsRefund":false,"Status":null,"CustomerId":0,"TravelId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}}
-         * BJTravelStayInCustomerListModel : [{"Name":"user1","IDNumber":"123456","OrderId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}}]
+         * BJTravelOrderModel : {"PayMethod":null,"Type":null,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0004683_320.jpeg","StartPlace":"贵阳","EndPlace":"遵义","Phone":"17621145702","StartDate":"0001-01-01T00:00:00","StartDatestr":"2018-02-22 00:00","EndDate":"0001-01-01T00:00:00","EndDatestr":"2018-02-22 00:00","TotalMoney":0.01,"TravelNumber":1,"OrderTime":"0001-01-01T00:00:00","OrderTimeStr":"2018-01-26","OrderNo":"201801261656511462689","IsCancel":false,"CancelTime":null,"IsPay":false,"PayTime":null,"IsUsing":false,"UsingTime":null,"IsEvaluate":false,"EvaluateTime":null,"IsApplyRefund":false,"ApplyRefundTime":null,"ApplyRefundTimeStr":null,"IsRefund":false,"Status":"1","CustomerId":0,"TravelId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":1079,"CustomProperties":{}}
+         * BJTravelStayInCustomerListModel : [{"Name":"","IDNumber":"","OrderId":0,"CreateTime":"0001-01-01T00:00:00","Note":null,"Id":0,"CustomProperties":{}}]
          * Id : 0
          * CustomProperties : {}
          */
@@ -68,24 +67,25 @@ public class TravelOrderInfoBean {
         public void setBJTravelStayInCustomerListModel(List<BJTravelStayInCustomerListModelBean> BJTravelStayInCustomerListModel) {
             this.BJTravelStayInCustomerListModel = BJTravelStayInCustomerListModel;
         }
+
         public static class BJTravelOrderModelBean{
 
             /**
              * PayMethod : null
              * Type : null
-             * PictureUrl : http://www.baijar.com/content/images/thumbs/0000038_320.png
+             * PictureUrl : http://www.baijar.com/content/images/thumbs/0004683_320.jpeg
              * StartPlace : 贵阳
-             * EndPlace : 安顺
+             * EndPlace : 遵义
              * Phone : 17621145702
              * StartDate : 0001-01-01T00:00:00
-             * StartDatestr : 2017-12-12 00:00
+             * StartDatestr : 2018-02-22 00:00
              * EndDate : 0001-01-01T00:00:00
-             * EndDatestr : 2017-12-14 00:00
-             * TotalMoney : 120
+             * EndDatestr : 2018-02-22 00:00
+             * TotalMoney : 0.01
              * TravelNumber : 1
              * OrderTime : 0001-01-01T00:00:00
-             * OrderTimeStr : 2017-12-14
-             * OrderNo : 201712141619297357068
+             * OrderTimeStr : 2018-01-26
+             * OrderNo : 201801261656511462689
              * IsCancel : false
              * CancelTime : null
              * IsPay : false
@@ -94,13 +94,16 @@ public class TravelOrderInfoBean {
              * UsingTime : null
              * IsEvaluate : false
              * EvaluateTime : null
+             * IsApplyRefund : false
+             * ApplyRefundTime : null
+             * ApplyRefundTimeStr : null
              * IsRefund : false
-             * Status : null
+             * Status : 1
              * CustomerId : 0
              * TravelId : 0
              * CreateTime : 0001-01-01T00:00:00
              * Note : null
-             * Id : 0
+             * Id : 1079
              * CustomProperties : {}
              */
 
@@ -114,7 +117,7 @@ public class TravelOrderInfoBean {
             private String StartDatestr;
             private String EndDate;
             private String EndDatestr;
-            private int TotalMoney;
+            private double TotalMoney;
             private int TravelNumber;
             private String OrderTime;
             private String OrderTimeStr;
@@ -127,8 +130,11 @@ public class TravelOrderInfoBean {
             private Object UsingTime;
             private boolean IsEvaluate;
             private Object EvaluateTime;
+            private boolean IsApplyRefund;
+            private Object ApplyRefundTime;
+            private Object ApplyRefundTimeStr;
             private boolean IsRefund;
-            private Object Status;
+            private String Status;
             private int CustomerId;
             private int TravelId;
             private String CreateTime;
@@ -216,11 +222,11 @@ public class TravelOrderInfoBean {
                 this.EndDatestr = EndDatestr;
             }
 
-            public int getTotalMoney() {
+            public double getTotalMoney() {
                 return TotalMoney;
             }
 
-            public void setTotalMoney(int TotalMoney) {
+            public void setTotalMoney(double TotalMoney) {
                 this.TotalMoney = TotalMoney;
             }
 
@@ -320,6 +326,30 @@ public class TravelOrderInfoBean {
                 this.EvaluateTime = EvaluateTime;
             }
 
+            public boolean isIsApplyRefund() {
+                return IsApplyRefund;
+            }
+
+            public void setIsApplyRefund(boolean IsApplyRefund) {
+                this.IsApplyRefund = IsApplyRefund;
+            }
+
+            public Object getApplyRefundTime() {
+                return ApplyRefundTime;
+            }
+
+            public void setApplyRefundTime(Object ApplyRefundTime) {
+                this.ApplyRefundTime = ApplyRefundTime;
+            }
+
+            public Object getApplyRefundTimeStr() {
+                return ApplyRefundTimeStr;
+            }
+
+            public void setApplyRefundTimeStr(Object ApplyRefundTimeStr) {
+                this.ApplyRefundTimeStr = ApplyRefundTimeStr;
+            }
+
             public boolean isIsRefund() {
                 return IsRefund;
             }
@@ -328,11 +358,11 @@ public class TravelOrderInfoBean {
                 this.IsRefund = IsRefund;
             }
 
-            public Object getStatus() {
+            public String getStatus() {
                 return Status;
             }
 
-            public void setStatus(Object Status) {
+            public void setStatus(String Status) {
                 this.Status = Status;
             }
 
@@ -391,8 +421,8 @@ public class TravelOrderInfoBean {
         public static class BJTravelStayInCustomerListModelBean{
 
             /**
-             * Name : user1
-             * IDNumber : 123456
+             * Name :
+             * IDNumber :
              * OrderId : 0
              * CreateTime : 0001-01-01T00:00:00
              * Note : null
