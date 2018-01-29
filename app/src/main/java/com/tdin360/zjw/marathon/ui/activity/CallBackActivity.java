@@ -1,6 +1,7 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -290,6 +292,9 @@ public class CallBackActivity extends BaseActivity {
                 Log.d("position", "onItemClick: "+index);
                 nickName= replayCommentListBean.getNickName();
                 etComment.setHint("回复@"+nickName);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
             }
         });
         springView.setType(SpringView.Type.FOLLOW);

@@ -155,13 +155,11 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
 
             @Override
             public void onFinished() {
                 layoutLoading.setVisibility(View.GONE);
-
             }
         });
 
@@ -224,6 +222,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         boolean isUsing = bjTravelOrderModel.isIsUsing();
         final String payMethod = bjTravelOrderModel.getPayMethod();
         String status = bjTravelOrderModel.getStatus();
+
         if(isCancel){
             layoutShow.setVisibility(View.GONE);
         }else{

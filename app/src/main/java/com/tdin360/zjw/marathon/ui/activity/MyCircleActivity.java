@@ -278,17 +278,14 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
         ivBack.setOnClickListener(this);
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-        String customerId = model.getId() + "";
-        String customerId1 = getIntent().getStringExtra("customerId");
-        if(customerId.equals(customerId1)){
+        final String customerId = model.getId() + "";
+        final String customerId1 = getIntent().getStringExtra("customerId");
             if(customerId.equals(customerId1)){
                 ivPic.setOnClickListener(this);
             }else{
               ivPic.setClickable(false);
+                //ToastUtils.showCenter(getApplicationContext(),"不可以修改别人的背景图哦");
             }
-        }else{
-
-        }
 
         adapter=new RecyclerViewBaseAdapter<MyCircleBean.ModelBean.BJDynamicListModelBean>(getApplicationContext(),
                 bjDynamicListModel,R.layout.item_my_circle) {
@@ -299,6 +296,12 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 TextView tvContent = (TextView) holder.getViewById(R.id.tv_mycircle_content);
                 //删除动态
                 TextView tvDelete = (TextView) holder.getViewById(R.id.tv_my_circle_delete);
+                    if(customerId.equals(customerId1)){
+                        tvDelete.setVisibility(View.VISIBLE);
+                    }else{
+                        tvDelete.setVisibility(View.GONE);
+                    }
+
                 //删除动态
                 tvDelete.setOnClickListener(new View.OnClickListener() {
                     @Override

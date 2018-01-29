@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
+    android:background="@drawable/recycler_item_selector"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/iv_circle_detail_comment_portrait"

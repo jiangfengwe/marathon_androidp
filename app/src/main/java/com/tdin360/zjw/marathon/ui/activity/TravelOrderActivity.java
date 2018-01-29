@@ -103,6 +103,8 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     private String year;
     private String time;
 
+    private  LinearLayout layout;
+
 
 
     @Override
@@ -213,7 +215,8 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 count--;
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-                /*layoutName.removeViewAt(count-1);
+               /* layout.removeViewAt(count-1);
+                layoutName.removeViewAt(count-1);
                 layoutIC.removeViewAt(count-1);*/
               /*  name.clear();
                 ic.clear();*/
@@ -235,8 +238,9 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 count++;
                 layoutName.removeAllViews();
                 layoutIC.removeAllViews();
-               /* layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);*/
+                /*layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);
+                layout.removeViewAt(count-1);*/
                 for (int i =0; i < count; i++) {
                     addView();
                 }
@@ -401,7 +405,25 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void addView() {
-        EditText etName = new EditText(this);
+        layout= new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final LinearLayout layout1 = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        final EditText etName = new EditText(this);
+        etName.setHint("姓名");
+        etName.setTextSize(16);
+        name.add(etName);
+        layoutName.addView(etName);
+        final EditText etIC = new EditText(this);
+        ic.add(etIC);
+        etIC.setHint("身份证");
+        etIC.setTextSize(16);
+        layoutIC.addView(etIC);
+        layout.addView(layout1);
+
+
+       /* EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
         name.add(etName);
@@ -410,7 +432,7 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
         etIC.setHint("身份证");
         ic.add(etIC);
         etIC.setTextSize(16);
-        layoutIC.addView(etIC);
+        layoutIC.addView(etIC);*/
     }
 
     private void setSum() {

@@ -5,6 +5,8 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tdin360.zjw.marathon.R;
@@ -21,11 +23,19 @@ import cn.bingoogolapple.qrcode.zxing.ZXingView;
 public class ZxingActivity extends BaseActivity implements QRCodeView.Delegate {
     @ViewInject(R.id.zxingview)
     private ZXingView zXingView;
+    @ViewInject(R.id.zxing_back)
+    private ImageView imageViewBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initZxing();
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

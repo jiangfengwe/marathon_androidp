@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.tdin360.zjw.marathon.ui.activity.ZxingActivity">
+
     <cn.bingoogolapple.qrcode.zxing.ZXingView
         android:layout_centerInParent="true"
         android:id="@+id/zxingview"
@@ -37,5 +38,10 @@
         app:qrcv_tipTextColor="@android:color/white"
         app:qrcv_tipTextSize="12sp"
         app:qrcv_toolbarHeight="56dp"/>
-
+    <ImageView
+        android:id="@+id/zxing_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/back"/>
 </RelativeLayout>

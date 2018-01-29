@@ -569,7 +569,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     /**
      * 支付成功后直接弹出支持成功界面
      */
-    private void showPaySuccessDialog(final String title, final String link){
+    private void showPaySuccessDialog(final String orderId, final String link){
             //从支付详情进入支付成功则去改变支付状态
            if(isFormDetail&&!isHotel) {
                Intent intent = new Intent(PAY_ACTION);
@@ -588,7 +588,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
        // TextView freeView = (TextView) view.findViewById(R.id.free);
         //freeView.setText("¥ "+money);
         //活动链接跳转
-        if(link!=null&&!link.equals("null")&&!link.equals("")){
+      /*  if(link!=null&&!link.equals("null")&&!link.equals("")){
            Button btn = (Button) view.findViewById(R.id.home);
             btn.setText(title);
             btn.setOnClickListener(new View.OnClickListener() {
@@ -612,12 +612,15 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     alert.dismiss();
                 }
             });
-        }
+        }*/
         //查看详情
-        view.findViewById(R.id.details).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_check_order).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isHotel&&!isFormDetail){//来源于报名界面的支付
+                Intent intent=new Intent(PayActivity.this,TravelOrderDetailActivity.class);
+                intent.putExtra("orderId",orderId);
+                startActivity(intent);
+              /*  if(!isHotel&&!isFormDetail){//来源于报名界面的支付
                     Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
                     //intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
@@ -633,7 +636,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     finish();
                 }
 
-                alert.dismiss();
+                alert.dismiss();*/
             }
 
         });
@@ -656,7 +659,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 .show();
         try{
             String type = getIntent().getStringExtra("type");
-            String orderNumber = getIntent().getStringExtra("orderNumber");
+            final String orderNumber = getIntent().getStringExtra("orderNumber");
             byte[] mBytes=null;
             String string="{\"orderNumber\":"+"\""+orderNumber+"\",\"type\":"+"\""+type+"\",\"appKey\":\"BJYDAppV-2\"}";
             Log.d("----------", "initData: "+string);
@@ -673,7 +676,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     PaySureBean paySureBean = gson.fromJson(result, PaySureBean.class);
                     boolean state = paySureBean.isState();
                     if(state){
-                        showPaySuccessDialog("aa",getString(R.string.shareDownLoadUrl));
+                        showPaySuccessDialog(orderNumber,getString(R.string.shareDownLoadUrl));
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),paySureBean.getMessage());
                     }

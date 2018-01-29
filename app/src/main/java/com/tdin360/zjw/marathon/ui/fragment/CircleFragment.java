@@ -218,11 +218,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         boolean open = SharedPreferencesManager.getNotice(getContext());
-        if(open){
+        /*if(open){
             ivShow.setVisibility(View.VISIBLE);
         }else{
             ivShow.setVisibility(View.GONE);
-        }
+        }*/
         initNet();
         initToolbar();
         initView();
@@ -497,7 +497,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                     //ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
-                                    initData(1);
+                                    initData(0);
                                     model.setTagsNumber(tagsNumber);
                                     tvPraise.setText(tagsNumber+"");
                                     checkBox.setChecked(true);

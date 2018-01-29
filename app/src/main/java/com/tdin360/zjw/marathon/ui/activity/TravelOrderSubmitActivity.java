@@ -3,6 +3,10 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +51,9 @@ public class TravelOrderSubmitActivity extends BaseActivity {
     private TextView tvNumber;
 
     ImageOptions imageOptions;
+
+    @ViewInject(R.id.tv_web)
+    private TextView tvWeb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +74,27 @@ public class TravelOrderSubmitActivity extends BaseActivity {
         initToolbar();
         initData();
 
+
+
     }
 
     private void initData() {
         TravelOrderInfoBean.ModelBean.BJTravelOrderModelBean bjTravelOrderModel = SingleClass.getInstance().getBjTravelOrderModel();
         List<TravelOrderInfoBean.ModelBean.BJTravelStayInCustomerListModelBean> bjTravelStayInCustomerListModel =
                 SingleClass.getInstance().getBjTravelStayInCustomerListModel();
+        for (int i = 0; i <bjTravelStayInCustomerListModel.size() ; i++) {
+            String name = bjTravelStayInCustomerListModel.get(i).getName();
+            String idNumber = bjTravelStayInCustomerListModel.get(i).getIDNumber();
+            Log.d("6666666666name", "initData: "+name);
+           // String content=tvWeb.getText().toString();
+           /* SpannableString spanString= new SpannableString(name);
+            String html= Html.toHtml(spanString);
+            Spanned spanned = Html.fromHtml(name);*/
+            //String html_string=parseUnicodeToStr(html);
+            Spanned text = Html.fromHtml(name);
+            TextView textView=new TextView(getApplicationContext());
+            textView.setText(Html.fromHtml("<p>"+text+"</p>"+"<p>"+text+"</p>"));
+        }
         x.image().bind(ivPic,bjTravelOrderModel.getPictureUrl(),imageOptions);
         tvName.setText(bjTravelOrderModel.getStartPlace()+"——"+bjTravelOrderModel.getEndPlace());
         tvCount.setText(bjTravelOrderModel.getTravelNumber()+"天");

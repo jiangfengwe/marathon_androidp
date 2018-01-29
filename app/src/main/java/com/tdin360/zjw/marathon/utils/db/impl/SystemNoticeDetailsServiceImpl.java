@@ -41,7 +41,7 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         model.setNickName("aa");
         model.setDynamicId(2);
         model.setDynamicContent("jjjjjjjjjjjjjjj");
-        //model.setNotice("0");
+        model.setNotice("0");
        // model.setNotice(1);
         //判断数据库中不存在才插入
        // Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,"NickName=?",new String[]{model.getNickName()}, null, null, null);
