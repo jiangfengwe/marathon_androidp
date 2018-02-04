@@ -143,6 +143,7 @@ public class EventBean {
              * Url : http://event1.baijar.com/TdinAppHomePage/Index
              * Id : 34
              * CustomProperties : {}
+             * ShareUrl
              */
 
             private String Name;
@@ -183,7 +184,16 @@ public class EventBean {
             private boolean IsObsolete;
             private String Url;
             private int Id;
+            private String ShareUrl;
             private CustomPropertiesBeanX CustomProperties;
+
+            public String getShareUrl() {
+                return ShareUrl;
+            }
+
+            public void setShareUrl(String shareUrl) {
+                ShareUrl = shareUrl;
+            }
 
             public String getName() {
                 return Name;

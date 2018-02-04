@@ -31,6 +31,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.model.LoginModel;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyInfoActivity;
@@ -122,27 +123,35 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
         }
         if(event.getEnumEventBus()==EnumEventBus.NOTICECLICK){
             SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getActivity());
-            final List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+            final List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
             for (int i = 0; i <allCircleNotice.size() ; i++) {
                 String notice = allCircleNotice.get(i).getNotice();
-                noticeView=notice;
+                Log.d("55555notice", "onEvent: "+notice);
+                if(notice.equals("0")){
+                    ivShow.setVisibility(View.VISIBLE);
+                    break;
+                }else{
+                    ivShow.setVisibility(View.GONE);
+                }
             }
-            if(noticeView.equals("0")){
-                ivShow.setVisibility(View.VISIBLE);
-            }else{
-                ivShow.setVisibility(View.GONE);
+        }
+        if(event.getEnumEventBus()==EnumEventBus.NOTICEDELETE){
+            SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getActivity());
+            final List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+            for (int i = 0; i <allCircleNotice.size() ; i++) {
+                String notice = allCircleNotice.get(i).getNotice();
+                Log.d("55555notice", "onEvent: "+notice);
+                if(notice.equals("0")){
+                    ivShow.setVisibility(View.VISIBLE);
+                    break;
+                }else{
+                    ivShow.setVisibility(View.GONE);
+                }
             }
         }
 
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d("onAttach", "onAttach: "+"onAttach");
 
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -156,114 +165,28 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2",null);
-        SharedPreferencesManager.isNotice(getContext(),true);
-        EnumEventBus circle = EnumEventBus.SYSTEM;
-        EventBus.getDefault().post(new EventBusClass(circle));
-        SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
-        systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
-        List<CirclePriseTableModel> allSystemNotice = systemNoticeDetailsService.getAllSystemNotice();
-        for (int i = 0; i <allSystemNotice.size() ; i++) {
-            String notice = allSystemNotice.get(i).getNotice();
-            noticeView=notice;
-        }
-        if(noticeView.equals("0")){
-            ivShow.setVisibility(View.VISIBLE);
-        }else{
-            ivShow.setVisibility(View.GONE);
-        }
+        //CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2",null);
+
         //显示信息
        showInfo();
         //注册广播
         register();
         initView();
-
-      //我的报名
-      /* view.findViewById(R.id.signUpSearch).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               if(SharedPreferencesManager.isLogin(getContext())){
-
-                   Intent intent = new Intent(getContext(), MySignUpListActivity.class);
-                   startActivity(intent);
-               }else {
-                   Intent intent = new Intent(getContext(), LoginActivity.class);
-                   startActivity(intent);
-                   //设置登录成功后跳转到我的报名界面
-                   LoginNavigationConfig.instance().setNavType(NavType.MySignUp);
-               }
-
-
-           }
-       });*/
-        //我的成绩
-       /* view.findViewById(R.id.search_bar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(SharedPreferencesManager.isLogin(getContext())){
-
-                    Intent intent = new Intent(getContext(), MyAchievementListActivity.class);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(intent);
-                    //设置登录成功后跳转到物资界面
-                    LoginNavigationConfig.instance().setNavType(NavType.MyMark);
-                }
-
-
+        SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
+        List<SystemNoticeBean> allSystemNotice = systemNoticeDetailsService.getAllSystemNotice();
+        if(allSystemNotice.size()<=0){
+            return;
+        }else {
+            for (int i = 0; i <allSystemNotice.size() ; i++) {
+                String notice = allSystemNotice.get(i).getNotice();
+                noticeView=notice;
             }
-        });*/
-        /**
-         * 我的物资
-         */
-        /*view.findViewById(R.id.myGoods).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(SharedPreferencesManager.isLogin(getContext())){
-
-                    Intent intent = new Intent(getContext(), MyGoodsListActivity.class);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(intent);
-                    //设置登录成功后跳转到报名界面
-                    LoginNavigationConfig.instance().setNavType(NavType.MyGoods);
-                }
-
-
-
+            if(noticeView.equals("0")){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
             }
-        });*/
-
-        /**
-         * 我的团队
-         */
-       /* view.findViewById(R.id.myTeam).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-               Toast.makeText(getActivity(),"开发中敬请期待",Toast.LENGTH_SHORT).show();
-//
-//               Intent intent = new Intent(getContext(), MyTeamListActivity.class);
-//                  startActivity(intent);
-//               if(SharedPreferencesManager.isLogin(getContext())){
-//
-//                   Intent intent = new Intent(getContext(), MyGoodsListActivity.class);
-//                   startActivity(intent);
-//               }else {
-//                   Intent intent = new Intent(getContext(), LoginActivity.class);
-//                   startActivity(intent);
-//                   //设置登录成功后跳转到报名界面
-//                   LoginNavigationConfig.instance().setNavType(NavType.MyGoods);
-//               }
-
-           }
-       });
-*/
-
+        }
     }
 
     private void initView() {
@@ -345,6 +268,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.my_phone:
+                SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
+                SharedPreferencesManager.isNotice(getContext(),true);
+                EnumEventBus circle = EnumEventBus.SYSTEM;
+                EventBus.getDefault().post(new EventBusClass(circle));
+                SystemNoticeBean systemNoticeBean=new SystemNoticeBean(null,null,0,null,null);
+                systemNoticeDetailsService.addSystemNotice(systemNoticeBean);
                 //联系客服
                 if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},2);
@@ -359,14 +288,14 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     }
     private void showTelDialog() {
         android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(getActivity());
-        normalDialog.setMessage("是否拨打18941125702");
+        normalDialog.setMessage("是否拨打0851138157660");
         normalDialog.setPositiveButton("是",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //String phone = textViewhot.getText().toString();
                         Intent intent = new Intent(Intent.ACTION_DIAL);
-                        Uri data = Uri.parse("tel:" + "18941125702");
+                        Uri data = Uri.parse("tel:" + "0851138157660");
                         intent.setData(data);
                         startActivity(intent);
                     }
@@ -395,7 +324,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                       //用户没有授权
                       AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                       alert.setTitle("提示");
-                      alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                      alert.setMessage("您需要设置允许才能使用该功能");
                       alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                           @Override
                           public void onClick(DialogInterface dialog, int which) {
@@ -416,11 +345,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                       //用户没有授权
                       AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                       alert.setTitle("提示");
-                      alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                      alert.setMessage("您需要设置允许才能使用该功能");
                       alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                           @Override
                           public void onClick(DialogInterface dialog, int which) {
-
                               CommonUtils.getAppDetailSettingIntent(getContext());
                           }
                       });

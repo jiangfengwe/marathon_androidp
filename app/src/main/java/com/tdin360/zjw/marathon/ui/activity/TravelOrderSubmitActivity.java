@@ -14,6 +14,11 @@ import android.widget.TextView;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.TravelOrderInfoBean;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
@@ -50,10 +55,11 @@ public class TravelOrderSubmitActivity extends BaseActivity {
     @ViewInject(R.id.travel_order_number)
     private TextView tvNumber;
 
+    @ViewInject(R.id.travel_order_webview)
+    private WebView webView;
+
     ImageOptions imageOptions;
 
-    @ViewInject(R.id.tv_web)
-    private TextView tvWeb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,23 @@ public class TravelOrderSubmitActivity extends BaseActivity {
                 .setUseMemCache(true).build();
         initToolbar();
         initData();
+        Intent intent=getIntent();
+        String orderId = intent.getStringExtra("orderId");
+        String  url = HttpUrlUtils.TRAVEL_DETAIL_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
+        Log.d("orderIdurl", "onCreate: "+url);
+        webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.getSettings().setDomStorageEnabled(true);
+        this.webView.setWebChromeClient(new WebChromeClient());
+        this.webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(url);
 
 
 
@@ -102,6 +125,7 @@ public class TravelOrderSubmitActivity extends BaseActivity {
         tvPhone.setText(bjTravelOrderModel.getPhone()+"");
         tvTime.setText(bjTravelOrderModel.getStartDatestr()+"~~"+bjTravelOrderModel.getEndDatestr());
         final String orderNo = bjTravelOrderModel.getOrderNo();
+        final String orderId = bjTravelOrderModel.getId() + "";
         tvNumber.setText(orderNo);
         tvPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +133,7 @@ public class TravelOrderSubmitActivity extends BaseActivity {
                 Intent intent=new Intent(TravelOrderSubmitActivity.this,PayActivity.class);
                 intent.putExtra("type","travel");
                 intent.putExtra("orderNumber",orderNo);
+                intent.putExtra("orderId",orderId);
                 startActivity(intent);
             }
         });

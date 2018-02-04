@@ -127,29 +127,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private static final int MSG_FAILURE = 1;// 获取图片失败的标识
 
 
-
-    /* @ViewInject(R.id.tel)
-    private EditText editTextName;
-    @ViewInject(R.id.password)
-    private EditText editTextPass;
-    @ViewInject(R.id.clear)
-    private ImageView clearBtn;*/
-   /* private Handler handler = new Handler(){
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_SUCCESS:
-                    Bitmap bit = (Bitmap) msg.obj;
-                    ivBack.setImageBitmap(bit);
-                    break;
-                default:
-                    break;
-            }
-        };
-
-    };*/
-
-
-
     private static final int MSG_SET_ALIAS = 1002;
     private final Handler mHandler = new Handler() {
         @Override
@@ -402,27 +379,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 String unionid = map.get("unionid");
                 map.get("gender");
 
-               /* LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-                LoginUserInfoBean.UserBean userBean = new LoginUserInfoBean.UserBean(uid,profile_image_url,
-                        screen_name,loginInfo.isGender(), loginInfo.getUnionid(), loginInfo.isIsBindPhone(),
-                        loginInfo.getCustomerSign(), loginInfo.getPhone());
-                //保存用户登录数据
-                SharedPreferencesManager.saveLoginInfo(LoginActivity.this,userBean);*/
-                //layoutRefresh.setVisibility(View.GONE);
-               /* ToastUtils.showCenter(getApplicationContext(),"登录成功");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1000);
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
-                            //imm.hideSoftInputFromWindow(buttonLogin.getWindowToken(), 0);
-                            finish();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();*/
 
             }
             if(profile_image_url!=null&&!profile_image_url.equals("")){
@@ -723,16 +679,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         //通知社交
                         EnumEventBus circlePraise = EnumEventBus.CIRCLE;
                         EventBus.getDefault().post(new EventBusClass(circlePraise));
-                      /*  switch (webview) {
-                            case "1":
-                                EnumEventBus web = EnumEventBus.WEBVIEW;
-                                EventBus.getDefault().post(new EventBusClass(web));
-                                break;
-                            case "2":
-                                EnumEventBus circle = EnumEventBus.CIRCLE;
-                                EventBus.getDefault().post(new EventBusClass(circle));
-                                break;
-                        }*/
                         finish();
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),loginBean.getMessage());

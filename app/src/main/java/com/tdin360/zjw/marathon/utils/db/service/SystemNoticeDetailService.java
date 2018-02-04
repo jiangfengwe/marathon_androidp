@@ -1,6 +1,7 @@
 package com.tdin360.zjw.marathon.utils.db.service;
 
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
+import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface SystemNoticeDetailService {
 
-    void addSystemNotice(CirclePriseTableModel model);
-    List<CirclePriseTableModel> getAllSystemNotice();
+    void addSystemNotice(SystemNoticeBean model);
+    List<SystemNoticeBean> getAllSystemNotice();
     void deleteAll(String eventId);
 }

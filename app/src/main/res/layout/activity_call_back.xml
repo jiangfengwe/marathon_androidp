@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
+            android:background="@color/circle_detail"
             android:paddingTop="10dp"
             android:paddingLeft="10dp">
             <EditText

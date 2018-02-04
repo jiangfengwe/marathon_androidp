@@ -229,6 +229,7 @@ public class CallBackActivity extends BaseActivity {
                             CircleDetailAllCommentBean circleDetailAllCommentBean = gson.fromJson(result, CircleDetailAllCommentBean.class);
                             boolean state = circleDetailAllCommentBean.isState();
                             if(state){
+                                ToastUtils.showCenter(getApplicationContext(),circleDetailAllCommentBean.getMessage());
                                 initData(1);
                                 etComment.setText("");
                                 EnumEventBus em = EnumEventBus.CIRCLEDETAILCOMMENT;

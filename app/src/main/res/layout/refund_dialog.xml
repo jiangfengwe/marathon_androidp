@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_pay_result"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hotel_detail_intro"
+    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_centerInParent="true">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="退款原因"
+                   android:textColor="@color/theme_division"
+                   android:textSize="16sp"
+                   android:layout_gravity="center"
+                   android:layout_marginTop="20dp"
+                   android:layout_marginBottom="15dp"/>
+            <!-- android:button="@null"
+                            android:drawableLeft="@drawable/refund_selector"-->
+                <RadioGroup
+                    android:id="@+id/rg_refund"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:orientation="vertical">
+                        <RadioButton
+                            android:id="@+id/rb_refund_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="没时间"/>
+                        <RadioButton
+                            android:id="@+id/rb_refund_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="不想去了"/>
+                        <RadioButton
+                            android:id="@+id/rb_refund_three"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="对服务不满意"/>
+                        <RadioButton
+                            android:id="@+id/rb_refund_four"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="担心安全问题"/>
+                        <RadioButton
+                            android:id="@+id/rb_refund_five"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="其他"/>
+
+                </RadioGroup>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="取消订单将扣取1%手续费"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/my_circle_head_sign"
+                    android:layout_marginBottom="20dp"/>
+                <TextView
+                    android:id="@+id/refund_sure"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/home_tab_title_color_check"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:text="确定"/>
+        </LinearLayout>
+
+
+</RelativeLayout>

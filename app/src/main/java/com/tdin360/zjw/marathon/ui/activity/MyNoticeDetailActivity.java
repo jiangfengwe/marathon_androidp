@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,8 +44,9 @@ public class MyNoticeDetailActivity extends BaseActivity {
     }
 
     private void initWebView() {
-        int dynamicId = getIntent().getIntExtra("dynamicId", -1);
-        String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?" + "Id=" + dynamicId;
+        int Id = getIntent().getIntExtra("Id", -1);
+        String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?Id=" + Id;
+        Log.d("noticeurl", "initWebView: "+url);
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);

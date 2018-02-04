@@ -138,6 +138,18 @@ public class HotelStateFragment extends BaseFragment {
             bjHotelOrderListModel.clear();
             initData();
         }
+        if(event.getEnumEventBus()== EnumEventBus.HOTELREFUND){
+            //申请退款成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+            bjHotelOrderListModel.clear();
+            initData();
+        }
+        if(event.getEnumEventBus()== EnumEventBus.PAYHOTEL){
+            //支付成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+            bjHotelOrderListModel.clear();
+            initData();
+        }
     }
     @Override
     public void onDestroy() {
@@ -322,6 +334,7 @@ public class HotelStateFragment extends BaseFragment {
                 Intent intent=new Intent(getActivity(), HotelOrderDetailActivity.class);
                 String orderId= bjHotelOrderListModelBean.getId() + "";
                 intent.putExtra("orderId",orderId);
+                Log.d("state", "onItemClick: "+orderId);
                 startActivity(intent);
             }
         });

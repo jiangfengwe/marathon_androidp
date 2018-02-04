@@ -80,7 +80,7 @@ public class HotelRoomActivity extends BaseActivity {
 
     private void initView() {
         String name = getIntent().getStringExtra("name");
-        HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        final HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
         x.image().bind(ivPic,bjHotelRoomListModelBean.getPictureUrl(),imageOptions);
         tvName.setText(name);
         tvPrice.setText(bjHotelRoomListModelBean.getPrice()+"");
@@ -89,28 +89,18 @@ public class HotelRoomActivity extends BaseActivity {
         tvBed.setText(bjHotelRoomListModelBean.getBedType());
         tvBreakfrast.setText(bjHotelRoomListModelBean.getBreakfast());
         boolean isBooking = bjHotelRoomListModelBean.isIsBooking();
-        if(isBooking){
-            tvOrder.setText("立即支付");
-            tvOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(HotelRoomActivity.this,PayActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }else{
-            tvOrder.setText("立即预定");
-            tvOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(HotelRoomActivity.this,HotelRoomInActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-
-        String str="<font color='#ff621a'>使用说明：</font>觉得广播课题句话暖宫尽快帮您UR局UI人进步并不能杰克马门口v模具费没看见";
+        tvOrder.setText("立即预定");
+        tvOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(HotelRoomActivity.this,HotelRoomInActivity.class);
+                String hotelRoomId = bjHotelRoomListModelBean.getId() + "";
+                intent.putExtra("hotelRoomId",hotelRoomId);
+                intent.putExtra("hotelprice",bjHotelRoomListModelBean.getPrice());
+                startActivity(intent);
+            }
+        });
+        String str="<font color='#ff621a'>使用说明：</font>"+bjHotelRoomListModelBean.getInstructions();
         tvIntro.setText(Html.fromHtml(str));
 
     }

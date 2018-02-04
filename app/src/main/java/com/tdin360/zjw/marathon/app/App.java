@@ -77,7 +77,7 @@ public class App extends MultiDexApplication {
 
         }*/
         //极光推送
-        JPushInterface.setDebugMode(false);
+        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         //友盟分享
         UMShareAPI.get(this);

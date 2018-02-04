@@ -439,6 +439,7 @@ public class HotelDetailBean {
              * Note : null
              * Id : 2
              * CustomProperties : {}
+             * Instructions
              */
 
             private int HotelRoomPictureCount;
@@ -456,10 +457,19 @@ public class HotelDetailBean {
             private String Breakfast;
             private int HotelId;
             private String CreateTime;
+            private String Instructions;
             private Object Note;
             private int Id;
             private CustomPropertiesBean CustomProperties;
             private List<?> BJHotelRoomPictureListModel;
+
+            public String getInstructions() {
+                return Instructions;
+            }
+
+            public void setInstructions(String instructions) {
+                Instructions = instructions;
+            }
 
             public int getHotelRoomPictureCount() {
                 return HotelRoomPictureCount;

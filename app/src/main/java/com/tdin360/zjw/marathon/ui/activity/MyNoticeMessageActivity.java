@@ -1,5 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
+import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
@@ -104,67 +106,91 @@ public class MyNoticeMessageActivity extends BaseActivity {
             list.add(""+i);
         }
         SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
-        final List<CirclePriseTableModel> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+        final List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
         if(allCircleNotice.size()<=0){
             ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
             return;
         }
-        adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
+        adapter=new RecyclerViewBaseAdapter<SystemNoticeBean>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, final CirclePriseTableModel model) {
+            protected void onBindNormalViewHolder(final NormalViewHolder holder, final SystemNoticeBean model) {
                 //TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
                 ImageView imageView = (ImageView) holder.getViewById(R.id.iv_system_pic);
-                x.image().bind(imageView,model.getHeadImg(),imageOptionsCircle);
-                holder.setText(R.id.tv_system_title,model.getNickName());
-                holder.setText(R.id.tv_system_content,model.getDynamicContent());
+               // x.image().bind(imageView,model.getHeadImg(),imageOptionsCircle);
+                holder.setText(R.id.tv_system_title,model.getMessageIntroduce());
+                holder.setText(R.id.tv_system_content,model.getMessageIntroduce());
                 holder.setText(R.id.tv_system_time,model.getTime());
                 final ImageView imageViewShow = (ImageView) holder.getViewById(R.id.iv_system_notice_detail_show);
+                LinearLayout layout = (LinearLayout) holder.getViewById(R.id.layout_notice);
                 String notice = model.getNotice();
                 if(notice.equals("0")){
                     imageViewShow.setVisibility(View.VISIBLE);
                 }else{
                     imageViewShow.setVisibility(View.GONE);
                 }
-
-                adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+                layout.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View v) {
                         imageViewShow.setVisibility(View.GONE);
                         model.setNotice("1");
                         SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
-                        systemNoticeDetailsService.update("1");
-                        List<CirclePriseTableModel> allSystemNotice = systemNoticeDetailsService.getAllSystemNotice();
-                        String notice1 = allSystemNotice.get(0).getNotice();
-                        Log.d("notice1", "onItemClick: "+notice1);
+                        String position = getPosition(holder)+"";
+                        systemNoticeDetailsService.update(model.getNotice(),model.getMessageId()+"");
+                        // Log.d("notice1", "onItemClick: "+notice1);
                         EnumEventBus system = EnumEventBus.NOTICECLICK;
                         EventBus.getDefault().post(new EventBusClass(system));
-
-                        // ToastUtils.showCenter(getApplicationContext(),"system Notice");
                         Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
-                        int dynamicId = allCircleNotice.get(position).getDynamicId();
-                        intent.putExtra("dynamicId",dynamicId);
+                        int dynamicId = model.getMessageId();
+                        intent.putExtra("Id",dynamicId);
                         startActivity(intent);
                     }
                 });
+              /*  layout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        return false;
+                    }
+                });*/
             }
         };
         rvNotice.setAdapter(adapter);
         rvNotice.setLayoutManager(new WrapContentLinearLayoutManager(this));
-       /* adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+        adapter.setLongClickListener(new RecyclerViewBaseAdapter.OnLongClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-               // ToastUtils.showCenter(getApplicationContext(),"system Notice");
-                Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
-                int dynamicId = allCircleNotice.get(position).getDynamicId();
-                intent.putExtra("dynamicId",dynamicId);
-                startActivity(intent);
+            public void onLongClick(View view, final int position) {
+                android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(MyNoticeMessageActivity.this);
+                normalDialog.setMessage("是否删除该消息");
+                normalDialog.setPositiveButton("是",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //ToastUtils.showCenter(getApplicationContext(),"删除消息");
+                                SystemNoticeBean systemNoticeBean = allCircleNotice.get(position);
+                                allCircleNotice.remove(position);
+                                SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
+                                String messageId = systemNoticeBean.getMessageId()+"";
+                                systemNoticeDetailsService.deleteAll(messageId);
+                                adapter.notifyDataSetChanged();
+                                systemNoticeBean.setNotice("1");
+                                systemNoticeDetailsService.update(systemNoticeBean.getNotice(),systemNoticeBean.getMessageId()+"");
+                                // Log.d("notice1", "onItemClick: "+notice1);
+                                EnumEventBus system = EnumEventBus.NOTICEDELETE;
+                                EventBus.getDefault().post(new EventBusClass(system));
+                            }
+                        });
+                normalDialog.setNegativeButton("取消",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //...To-do
+                                dialog.dismiss();
+                            }
+                        });
+                // 显示
+                normalDialog.show();
             }
-        });*/
-       // this.adapter = new NoticeMessageListAdapter();
-       // mRecyclerView.setAdapter(adapter);
-
-
-
+        });
     }
     //从数据中获取所以通知消息
     private void loadData() {

@@ -484,7 +484,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.activity.MyNoticeDetailActivity"></activity>
+        <activity android:name=".ui.activity.MyNoticeDetailActivity" />
+        <activity android:name=".ui.activity.ZxingWebActivity"></activity>
     </application>
 
 </manifest>

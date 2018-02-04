@@ -183,7 +183,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
             public void onSuccess(String result) {
                 Log.d("hoteldetail", "onSuccess: "+result);
                Gson gson=new Gson();
-                 HotelDetailBean hotelDetailBean = gson.fromJson(result, HotelDetailBean.class);
+                HotelDetailBean hotelDetailBean = gson.fromJson(result, HotelDetailBean.class);
                 boolean state = hotelDetailBean.isState();
                 if(state){
                    // ToastUtils.showCenter(getApplicationContext(),hotelDetailBean.getMessage());
@@ -194,9 +194,9 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     bjHotelPictureListModel = model.getBJHotelPictureListModel();
                     SingleClass.getInstance().setBjHotelPictureListModel(bjHotelPictureListModel);
                     bjHotelRoomListModel= model.getBJHotelRoomListModel();
-                    bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
+                   /* bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
                    evaluationUserModel= bjHotelEvaluateListModelBean.getEvaluationUserModel();
-                    /* if(bjHotelRoomListModel.size()<=0){
+                     if(bjHotelRoomListModel.size()<=0){
                         mErrorView.show(recyclerView,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
                     }else {
                         mErrorView.hideErrorView(recyclerView);
@@ -275,7 +275,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                 holder.setText(R.id.tv_hotel_head_address,bjHotelModel.getAddress());
                 holder.setText(R.id.tv_hotel_head_info,bjHotelModel.getDescription());
 
-                LinearLayout layout = (LinearLayout) holder.getViewById(R.id.layout_hotel_detail_pic);
+                RelativeLayout layout = (RelativeLayout) holder.getViewById(R.id.layout_hotel_detail_head);
                 //拨打电话
                 headPhone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -437,12 +437,11 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     //用户没有授权
                     android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(getApplicationContext());
                     alert.setTitle("提示");
-                    alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                    alert.setMessage("您需要设置允许才能使用该功能");
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            CommonUtils.getAppDetailSettingIntent(getApplicationContext());
+                            CommonUtils.getAppDetailSettingIntent(HotelDetailsActivity.this);
                         }
                     });
                     alert.show();
@@ -453,122 +452,5 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
 
     }
 
- /*   class MyAdapter extends RecyclerViewBaseAdapter<HotelItem>{
 
-
-        public MyAdapter(Context context, List<HotelItem> list, int layoutId) {
-            super(context, list, layoutId);
-        }
-
-
-        @Override
-        public void onBindHeaderViewHolder(final HeaderViewHolder holder) {
-
-
-              ViewPager viewPager = (ViewPager) holder.getViewById(R.id.galleryView);
-               galleryAdapter = new GalleryAdapter(pics);
-               viewPager.setAdapter(galleryAdapter);
-               holder.setText(R.id.textCountTip,"1/"+pics.size());
-               viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                 @Override
-                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                 }
-
-                 @Override
-                 public void onPageSelected(int position) {
-
-                     holder.setText(R.id.title,picTitles.get(position));
-                     holder.setText(R.id.textCountTip,(position+1)+"/"+pics.size());
-
-                 }
-
-                 @Override
-                 public void onPageScrollStateChanged(int state) {
-
-                 }
-             });
-
-            if(model==null)return;
-             holder.setText(R.id.hotel_name,model.getName());
-             holder.setText(R.id.hotel_price,"¥"+model.getLowestPrice()+"起");
-             holder.setText(R.id.hotel_Description,model.getDescription());
-             String p2 = model.getPhone2()==null||model.getPhone2().equals("null")?"":","+model.getPhone2();
-             holder.setText(R.id.hotel_tel,model.getPhone1()+p2);
-             holder.setText(R.id.hotel_address,model.getAddress());
-
-            }
-        @Override
-        protected void onBindNormalViewHolder(NormalViewHolder holder, final HotelItem model) {
-
-
-            ImageView view = (ImageView) holder.getViewById(R.id.room_imageView);
-            x.image().bind(view,model.getPictureUrl());
-            holder.setText(R.id.room_name,model.getTitle());
-              holder.setText(R.id.room_bad_size,model.getType());
-              holder.setText(R.id.room_area,model.getArea()+"平米");
-              holder.setText(R.id.room_price,model.getPrice()+"元");
-             holder.getViewById(R.id.buy).setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-
-                    Intent intent = new Intent(HotelDetailsActivity.this,HotelOrderSubmitActivity.class);
-
-
-                     intent.putExtra("id",model.getHotelId());
-                     intent.putExtra("title",title+"-"+model.getTitle());
-                     intent.putExtra("price",model.getPrice());
-                     startActivity(intent);
-                 }
-             });
-            holder.setText(R.id.room_intro,"");
-
-        }
-    }
-
-
-    *//**
-     * 详情页顶部图片适配器
-     *//*
-    class GalleryAdapter extends PagerAdapter{
-
-
-        private List<View>list;
-
-        public GalleryAdapter(List<View>list){
-
-
-            this.list=list;
-
-        }
-        public void update(List<View> list){
-
-            this.list=list;
-            notifyDataSetChanged();
-        }
-        @Override
-        public int getCount() {
-            return list==null? 0:list.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view==object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-
-            View view = list.get(position);
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-
-            container.removeView(list.get(position));
-
-        }
-    }*/
 }

@@ -199,7 +199,7 @@ public class CircleDetailActivity extends BaseActivity {
                         CircleDetailCommentBean circleDetailCommentBean = gson.fromJson(result, CircleDetailCommentBean.class);
                         boolean state = circleDetailCommentBean.isState();
                         if(state){
-                            //ToastUtils.showCenter(getApplicationContext(),circleDetailCommentBean.getMessage());
+                            ToastUtils.showCenter(getApplicationContext(),circleDetailCommentBean.getMessage());
                             commentCount = bjDynamicsCommentListModel.size();
                             commentCount++;
                             initData(1);
@@ -502,8 +502,6 @@ public class CircleDetailActivity extends BaseActivity {
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
        // intent.putExtra("comment","10");
-
-
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

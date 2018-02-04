@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <!--导航栏部分-->
+    <!--导航栏部分app:tabMode="scrollable"-->
     <include layout="@layout/toolbar_layout"></include>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs_event"
@@ -14,7 +14,6 @@
         android:background="@color/home_tab_title_color_check"
         app:tabSelectedTextColor="@color/white"
         app:tabIndicatorColor="@color/white"
-        app:tabMode="scrollable"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         app:tabTextColor="@color/white_event"

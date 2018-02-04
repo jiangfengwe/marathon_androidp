@@ -95,6 +95,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
 
     private String picPath;
 
+    private boolean flag=false;
+
     //private KProgressHUD hud;
 
     @Override
@@ -144,14 +146,14 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 .compressGrade(Luban.CUSTOM_GEAR)// luban压缩档次，默认3档 Luban.THIRD_GEAR、Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
                 .isCamera(true)// 是否显示拍照按钮 true or false
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+               // .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                 .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
                 .enableCrop(false)// 是否裁剪 true or false
                 .compress(true)// 是否压缩 true or false
                 .compressMode(PictureConfig.LUBAN_COMPRESS_MODE)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
                 .compressGrade(Luban.THIRD_GEAR)
                 .glideOverride(130,130)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-                //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                .withAspectRatio(1,1)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
                 .isGif(false)// 是否显示gif图片 true or false
                 .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
@@ -203,34 +205,39 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tv_publish:
                 //发布
-                //判断网络是否处于可用状态
-                if(NetWorkUtils.isNetworkAvailable(this)){
-                    //加载网络数据
-                    initData();
-                }else {
-                    layoutLoading.setVisibility(View.GONE);
-                    //如果缓存数据不存在则需要用户打开网络设置
-                    AlertDialog.Builder alert = new AlertDialog.Builder(PublishActivity.this);
-                    alert.setMessage("网络不可用，是否打开网络设置");
-                    alert.setCancelable(false);
-                    alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //打开网络设置
+                if(!flag){
+                    //判断网络是否处于可用状态
+                    if(NetWorkUtils.isNetworkAvailable(this)){
+                        //加载网络数据
+                        initData();
+                    }else {
+                        layoutLoading.setVisibility(View.GONE);
+                        //如果缓存数据不存在则需要用户打开网络设置
+                        AlertDialog.Builder alert = new AlertDialog.Builder(PublishActivity.this);
+                        alert.setMessage("网络不可用，是否打开网络设置");
+                        alert.setCancelable(false);
+                        alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //打开网络设置
 
-                            startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+                                startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
 
-                        }
-                    });
-                    alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.show();
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.show();
+                    }
+                }else{
+                    tvPublish.setClickable(false);
                 }
+
 
 
                 break;
@@ -297,6 +304,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     CircleFragment.instance.initData(1);
                     CircleFragment.instance.initTop();
                     clearPic();
+                    flag=false;
+                    tvPublish.setClickable(true);
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
                    // finish();
@@ -315,6 +324,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 }).start();*/
             }else{
                 ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
+                    flag=true;
             }
 
             }

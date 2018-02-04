@@ -76,8 +76,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
     private ImageView ivBack;
     @ViewInject(R.id.iv_travel_detail_share)
     private ImageView ivShare;
-    @ViewInject(R.id.layout_travel_detail_pic)
-    private LinearLayout layoutPic;
+    @ViewInject(R.id.layout_travel_detail_head)
+    private RelativeLayout layoutPic;
     @ViewInject(R.id.iv_travel_detail_pic)
     private ImageView ivPic;
     @ViewInject(R.id.tv_travel_detail_count)
@@ -477,7 +477,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     }
                 }
                 break;
-            case R.id.layout_travel_detail_pic:
+            case R.id.layout_travel_detail_head:
                 //图片浏览
                 intent=new Intent(TravelDetailActivity.this,PictureActivity.class);
                 intent.putExtra("picture","travelPic");

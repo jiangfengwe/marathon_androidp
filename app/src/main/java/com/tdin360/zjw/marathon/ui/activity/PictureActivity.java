@@ -20,6 +20,7 @@ import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelPictureBean;
+import com.tdin360.zjw.marathon.utils.ToastUtils;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
@@ -83,11 +84,16 @@ public class PictureActivity extends BaseActivity {
     }
 
     private void initView() {
-        List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
+
         //List<TravelDetailBean.ModelBean.BJTravelPictureListModelBean> bjTravelPictureListModel = SingleClass.getInstance().getBjTravelPictureListModel();
         String picture = getIntent().getStringExtra("picture");
         final ArrayList<String> image= new ArrayList<>();
         if(picture.equals("hotelPic")){
+            List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
+            if(bjHotelPictureListModel.size()<=0){
+                ToastUtils.showCenter(getApplication(),"没有图片哦");
+                return;
+            }
             adapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelPictureListModelBean>(getApplicationContext(),
                     bjHotelPictureListModel,R.layout.item_picture) {
                 @Override
@@ -102,6 +108,10 @@ public class PictureActivity extends BaseActivity {
         }
         if(picture.equals("travelPic")){
             List<TravelPictureBean.ModelBean.BJTravelPictureListModelBean> bjTravelPictureListModel = SingleClass.getInstance().getBjTravelPictureListModel();
+            if(bjTravelPictureListModel.size()<=0){
+                ToastUtils.showCenter(getApplication(),"没有图片哦");
+                return;
+            }
             adapter=new RecyclerViewBaseAdapter<TravelPictureBean.ModelBean.BJTravelPictureListModelBean>(getApplicationContext(),
                     bjTravelPictureListModel,R.layout.item_picture) {
                 @Override

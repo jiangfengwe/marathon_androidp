@@ -32,6 +32,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.service.DownloadAPKService;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
+import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.Constants;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -337,7 +338,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            getAppDetailSettingIntent(getApplicationContext());
+                            getAppDetailSettingIntent(SettingActivity.this);
+                           // CommonUtils.getAppDetailSettingIntent(SettingActivity.this);
+
                         }
                     });
                     alert.show();

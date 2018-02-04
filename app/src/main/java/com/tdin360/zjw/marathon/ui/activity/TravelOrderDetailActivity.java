@@ -3,14 +3,18 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +26,7 @@ import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.OrderHotelBean;
 import com.tdin360.zjw.marathon.model.OrderTravelBean;
 import com.tdin360.zjw.marathon.model.OrderTravelCancelBean;
 import com.tdin360.zjw.marathon.model.OrderTravelDetailBean;
@@ -33,8 +38,13 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
@@ -43,6 +53,7 @@ import org.xutils.x;
 
 import java.util.List;
 
+import static com.tdin360.zjw.marathon.R.id.orderNumber;
 import static com.tdin360.zjw.marathon.R.id.status;
 
 /**
@@ -50,7 +61,6 @@ import static com.tdin360.zjw.marathon.R.id.status;
  */
 
 public class TravelOrderDetailActivity extends BaseActivity implements View.OnClickListener {
-
     @ViewInject(R.id.layout_lading)
     private RelativeLayout layoutLoading;
     @ViewInject(R.id.iv_loading)
@@ -95,6 +105,13 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
     ImageOptions imageOptions;
 
+    @ViewInject(R.id.order_travel_detail_webview)
+    private WebView webView;
+
+    private String stringLike;
+    private int highPrice;
+    private int index;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +136,38 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         background.start();
         initToolbar();
        initNet();
+
+        Intent intent=getIntent();
+        String orderId = intent.getStringExtra("orderId");
+        String  url = HttpUrlUtils.TRAVEL_DETAIL_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
+        Log.d("orderIdurl", "onCreate: "+url);
+        webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.getSettings().setDomStorageEnabled(true);
+        this.webView.setWebChromeClient(new WebChromeClient());
+        this.webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(url);
     }
+  /*  @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()== EnumEventBus.PAYTRAVEL){
+            //支付成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+
+            iniData();
+        }
+    }*/
 
     private void iniData() {
         String orderId = getIntent().getStringExtra("orderId");
+        Log.d("payordereeId", "onClick: "+orderId);
         RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_ORDER_DETAIL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("orderId",orderId);
@@ -150,7 +195,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                ToastUtils.show(TravelOrderDetailActivity.this,"网络不给力,连接服务器异常!");
+                //ToastUtils.show(TravelOrderDetailActivity.this,"网络不给力,连接服务器异常!");
             }
 
             @Override
@@ -210,6 +255,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         }
     }
     private void initView() {
+        final OrderTravelBean.ModelBean.BJTravelOrderListModelBean bjTravelOrderListModelBean = SingleClass.getInstance().getBjTravelOrderListModelBean();
         x.image().bind(ivPic,bjTravelOrderModel.getPictureUrl(),imageOptions);
         tvName.setText(bjTravelOrderModel.getStartPlace()+"——"+bjTravelOrderModel.getEndPlace());
         tvCount.setText(bjTravelOrderModel.getTravelNumber()+"天");
@@ -217,12 +263,13 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         tvPhone.setText(bjTravelOrderModel.getPhone()+"");
         tvTime.setText(bjTravelOrderModel.getStartDatestr()+"~~"+bjTravelOrderModel.getEndDatestr());
         final String orderNo = bjTravelOrderModel.getOrderNo();
-        boolean isPay = bjTravelOrderModel.isIsPay();
-        boolean isCancel = bjTravelOrderModel.isIsCancel();
-        boolean isUsing = bjTravelOrderModel.isIsUsing();
+        final String orderId = bjTravelOrderModel.getId() + "";
+        //boolean isPay = bjTravelOrderModel.isIsPay();
+        boolean isPay = bjTravelOrderListModelBean.isIsPay();
+        boolean isCancel = bjTravelOrderListModelBean.isIsCancel();
+        boolean isUsing = bjTravelOrderListModelBean.isIsUsing();
         final String payMethod = bjTravelOrderModel.getPayMethod();
-        String status = bjTravelOrderModel.getStatus();
-
+        String status = bjTravelOrderListModelBean.getStatus();
         if(isCancel){
             layoutShow.setVisibility(View.GONE);
         }else{
@@ -247,78 +294,132 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                             initRefund();
                         }
                         private void initRefund() {
-                            if(NetWorkUtils.isNetworkAvailable(TravelOrderDetailActivity.this)){
-                                //加载网络数据
-                            try{
-                                byte[] mBytes=null;
-                                layoutLoading.setVisibility(View.VISIBLE);
-                                ivLoading.setBackgroundResource(R.drawable.loading_before);
-                                AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                                background.start();
-                                String string="{\"orderNumber\":"+"\""+orderNo+"\",\"refundDesc\":"+"\""+"不喜欢"+"\",\"payMethod\":"+"\""+payMethod+"\",\"type\":"+"\""+"hotel"+"\",\"appKey\":\"BJYDAppV-2\"}";
-                                mBytes=string.getBytes("UTF8");
-                                String enString= AES.encrypt(mBytes);
-                                RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_BACK_MONEY);
-                                params.addBodyParameter("secretMessage",enString);
-                                x.http().post(params, new Callback.CommonCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        Log.d("loginfund", "onSuccess: "+result);
-                                        Gson gson=new Gson();
-                                        RefundHotelBean refundHotelBean = gson.fromJson(result, RefundHotelBean.class);
-                                        boolean state = refundHotelBean.isState();
-                                        if(state){
-                                            ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
-                                            finish();
-                                        }else{
-                                            ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
+                            final AlertDialog alert = new AlertDialog.Builder(TravelOrderDetailActivity.this).create();
+                            View view = View.inflate(TravelOrderDetailActivity.this, R.layout.refund_dialog, null);
+                            alert.setView(view);
+                            alert.setCancelable(true);
+                            RadioGroup rgRefund = (RadioGroup) view.findViewById(R.id.rg_refund);
+                            final RadioButton rbOne = (RadioButton) view.findViewById(R.id.rb_refund_one);
+                            final RadioButton rbTwo = (RadioButton) view.findViewById(R.id.rb_refund_two);
+                            final RadioButton rbThree = (RadioButton) view.findViewById(R.id.rb_refund_three);
+                            final RadioButton rbFour = (RadioButton) view.findViewById(R.id.rb_refund_four);
+                            final RadioButton rbFive = (RadioButton) view.findViewById(R.id.rb_refund_five);
+                            TextView tvSure = (TextView) view.findViewById(R.id.refund_sure);
+                            rgRefund.check(index);
+                            rgRefund.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                                    switch (checkedId){
+                                        case R.id.rb_refund_one:
+                                            index=checkedId;
+                                            stringLike = rbOne.getText().toString().trim();
+                                            //Log.d("hotelprice", "initData: "+lowPrice+"price"+ highPrice);
+                                            break;
+                                        case R.id.rb_refund_two:
+                                            index=checkedId;
+                                            stringLike = rbTwo.getText().toString().trim();
+                                            break;
+                                        case R.id.rb_refund_three:
+                                            index=checkedId;
+                                            stringLike = rbThree.getText().toString().trim();
+                                            break;
+                                        case R.id.rb_refund_four:
+                                            index=checkedId;
+                                            stringLike = rbFour.getText().toString().trim();
+                                            break;
+                                        case R.id.rb_refund_five:
+                                            index=checkedId;
+                                            stringLike = rbFive.getText().toString().trim();
+                                            break;
+                                    }
+                                   // Log.d("hotelprice", "initData: "+lowPrice+"price"+ highPrice);
+                                }
+
+                            });
+                            tvSure.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alert.dismiss();
+                                    if(NetWorkUtils.isNetworkAvailable(TravelOrderDetailActivity.this)){
+                                        //加载网络数据
+                                        try{
+                                            byte[] mBytes=null;
+                                            layoutLoading.setVisibility(View.VISIBLE);
+                                            ivLoading.setBackgroundResource(R.drawable.loading_before);
+                                            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+                                            background.start();
+                                            if(TextUtils.isEmpty(stringLike)){
+                                                ToastUtils.showCenter(getApplicationContext(),"退款原因不能为空");
+                                                return;
+                                            }
+                                            String string="{\"orderNumber\":"+"\""+orderNo+"\",\"refundDesc\":"+"\""+stringLike+"\",\"payMethod\":"+"\""+payMethod+"\",\"type\":"+"\""+"travel"+"\",\"appKey\":\"BJYDAppV-2\"}";
+                                            mBytes=string.getBytes("UTF8");
+                                            String enString= AES.encrypt(mBytes);
+                                            RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_BACK_MONEY);
+                                            params.addBodyParameter("secretMessage",enString);
+                                            x.http().post(params, new Callback.CommonCallback<String>() {
+                                                @Override
+                                                public void onSuccess(String result) {
+                                                    Log.d("loginfund", "onSuccess: "+result);
+                                                    Gson gson=new Gson();
+                                                    RefundHotelBean refundHotelBean = gson.fromJson(result, RefundHotelBean.class);
+                                                    boolean state = refundHotelBean.isState();
+                                                    if(state){
+                                                        //ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
+                                                        bjTravelOrderListModelBean.setIsPay(true);
+                                                        EnumEventBus travelrefund = EnumEventBus.TRAVELREFUND;
+                                                        EventBus.getDefault().post(new EventBusClass(travelrefund));
+                                                        finish();
+                                                    }else{
+                                                        ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable ex, boolean isOnCallback) {
+                                                    // mErrorView.show(tvPay,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                                                    ToastUtils.show(TravelOrderDetailActivity.this,"网络不给力,连接服务器异常!");
+                                                }
+
+                                                @Override
+                                                public void onCancelled(CancelledException cex) {
+                                                }
+
+                                                @Override
+                                                public void onFinished() {
+                                                    layoutLoading.setVisibility(View.GONE);
+                                                    //hud.dismiss();
+                                                }
+                                            });
+
+                                        }catch(Exception e){
+                                            mErrorView.show(tvCount,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
                                         }
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable ex, boolean isOnCallback) {
-                                       // mErrorView.show(tvPay,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                                        ToastUtils.show(TravelOrderDetailActivity.this,"网络不给力,连接服务器异常!");
-                                    }
-
-                                    @Override
-                                    public void onCancelled(CancelledException cex) {
-
-                                    }
-
-                                    @Override
-                                    public void onFinished() {
+                                    }else{
                                         layoutLoading.setVisibility(View.GONE);
-                                        //hud.dismiss();
+                                        //如果缓存数据不存在则需要用户打开网络设置
+                                        AlertDialog.Builder alert1 = new AlertDialog.Builder(TravelOrderDetailActivity.this);
+                                        alert1.setMessage("网络不可用，是否打开网络设置");
+                                        alert1.setCancelable(false);
+                                        alert1.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //打开网络设置
+                                                startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
+                                            }
+                                        });
+                                        alert1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        alert.show();
                                     }
-                                });
-
-                            }catch(Exception e){
-                                mErrorView.show(tvCount,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
-                            }
-                            }else{
-                                layoutLoading.setVisibility(View.GONE);
-                                //如果缓存数据不存在则需要用户打开网络设置
-                                AlertDialog.Builder alert = new AlertDialog.Builder(TravelOrderDetailActivity.this);
-                                alert.setMessage("网络不可用，是否打开网络设置");
-                                alert.setCancelable(false);
-                                alert.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //打开网络设置
-                                        startActivity(new Intent( android.provider.Settings.ACTION_SETTINGS));
-                                    }
-                                });
-                                alert.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        dialog.dismiss();
-                                    }
-                                });
-                                alert.show();
-                            }
+                                }
+                            });
+                            alert.show();
                         }
                     });
                     }
@@ -333,20 +434,14 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(TravelOrderDetailActivity.this,PayActivity.class);
+                Intent intent1=getIntent();
+               // String orderNumber = intent1.getStringExtra("orderNumber");
+                String orderNo = bjTravelOrderListModelBean.getOrderNo();
                 intent.putExtra("type","travel");
                 intent.putExtra("orderNumber",orderNo);
+                intent.putExtra("orderId",orderId);
                 startActivity(intent);
-               /* LoginUserInfoBean.UserBean loginInfo =
-                        SharedPreferencesManager.getLoginInfo(getApplicationContext());
-                String customerId = loginInfo.getId();
-                if(TextUtils.isEmpty(customerId)){
-                    Intent intent=new Intent(TravelOrderDetailActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                }else{
-                    Intent intent=new Intent(TravelOrderDetailActivity.this,TravelCommentActivity.class);
-                    intent.putExtra("orderId",bjTravelOrderListModelBean.getId()+"");
-                    startActivity(intent);
-                }*/
+
             }
         });
         tvCancel.setOnClickListener(new View.OnClickListener() {
@@ -461,6 +556,12 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                 startActivity(intent);*/
                 break;
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
     }
 }

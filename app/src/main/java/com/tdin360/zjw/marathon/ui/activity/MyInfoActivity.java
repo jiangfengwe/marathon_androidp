@@ -616,7 +616,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                     ToastUtils.showCenter(getApplicationContext(),"修改昵称不能为空");
                     return;
                 }
-                if(nickName.length()>5){
+                if(nickName.length()>10){
                     ToastUtils.showCenter(getApplicationContext(),"昵称长度不能超过5哦空");
                     return;
                 }

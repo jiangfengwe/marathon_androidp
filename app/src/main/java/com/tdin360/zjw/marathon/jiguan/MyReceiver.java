@@ -12,6 +12,7 @@ import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
 import com.tdin360.zjw.marathon.model.NoticeMessageModel;
+import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.ui.activity.CircleMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
@@ -155,42 +156,30 @@ public class MyReceiver extends BroadcastReceiver {
 					String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					Log.d("circlestring", "printBundle: "+string);
 					Gson gson=new Gson();
-					CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
-					String nickName = circlePriseTableModel.getNickName();
-					String messageType = circlePriseTableModel.getMessageType();
-					Log.d("circlenickName", "onReceive: "+nickName);
-					if(messageType.equals("messagenotification")){
-						SharedPreferencesManager.isNotice(context,true);
-						EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
-						EventBus.getDefault().post(new EventBusClass(circle));
-						circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
-					}else{
-						SharedPreferencesManager.isNotice(context,true);
-						EnumEventBus circle = EnumEventBus.SYSTEM;
-						EventBus.getDefault().post(new EventBusClass(circle));
-						systemNoticeDetailsService.addSystemNotice(circlePriseTableModel);
-					}
-
-
-
-
-					//Log.d("circlestring", "printBundle: "+circleNoticeDetailsService);
-					//circleNoticeDetailsService.add(circlePriseTableModel);
-					/*Iterator<String> it =  json.keys();
-
-					while (it.hasNext()) {
-						String myKey = it.next().toString();
-						sb.append("\nkey:" + key + ", value: [" +
-								myKey + " - " +json.optString(myKey) + "]");
-					}*/
-		/*		} catch (JSONException e) {
-					Log.e(TAG, "Get message extra JSON error!");
-				}
-
-			} else {
-				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
-			}
-		}*/
+                    //点赞评论通知
+        CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
+        //系统通知
+        SystemNoticeBean systemNoticeBean = gson.fromJson(string, SystemNoticeBean.class);
+        String nickName = circlePriseTableModel.getNickName();
+        String messageType = circlePriseTableModel.getMessageType();
+        Log.d("circlenickName", "onReceive: "+nickName);
+        if(messageType.equals("messagenotification")){
+            SharedPreferencesManager.isNotice(context,true);
+            EnumEventBus circle = EnumEventBus.CIRCLENOTICE;
+            EventBus.getDefault().post(new EventBusClass(circle));
+            circleNoticeDetailsService.addCircleNotice(circlePriseTableModel);
+        }else{
+            SharedPreferencesManager.isNotice(context,true);
+            EnumEventBus circle = EnumEventBus.SYSTEM;
+            EventBus.getDefault().post(new EventBusClass(circle));
+            circlePriseTableModel.setNotice("0");
+            systemNoticeDetailsService.addSystemNotice(systemNoticeBean);
+        }
+        //系统通知
+        //SystemNoticeBean systemNoticeBean = gson.fromJson(string, SystemNoticeBean.class);
+        String introduce = systemNoticeBean.getMessageIntroduce();
+        String messageTypeSystem = systemNoticeBean.getMessageType();
+        Log.d("circlenickName", "onReceive: "+nickName);
 	}
 
 	// 打印所有的 intent extra 数据

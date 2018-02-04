@@ -25,6 +25,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.HotelOrderBean;
 import com.tdin360.zjw.marathon.model.HotelOrderInfoBean;
 import com.tdin360.zjw.marathon.model.LoginBean;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 酒店预定，入住信息填写
@@ -91,7 +93,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private EditText etPhone;
     private int count=1;
     private int countRoom=1;
-
     @ViewInject(R.id.tv_hotel_room_money)
     private TextView tvMoney;
 
@@ -100,6 +101,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout layoutName;
     @ViewInject(R.id.layout_hotel_ic)
     private LinearLayout layoutIC;
+    @ViewInject(R.id.layout_hotel_room_info)
+    private LinearLayout layoutList;
     private LinearLayout layoutInfo;
     private List<EditText> name=new ArrayList<>();
     private List<EditText> ic=new ArrayList<>();
@@ -108,6 +111,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     /*@ViewInject(R.id.list_Lin)
     private LinearLayout listLayout;*/
     private static int id = 100;
+
+    private LinearLayout layout;
 
 
 
@@ -154,8 +159,17 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        String str="<font color='#ff621a'>入住说明：</font>觉得广播课题句话暖宫尽快帮您UR局UI人进步并不能杰克马门口v模具费没看见";
-        tvIntro.setText(Html.fromHtml(str));
+         /*HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        String instructions = bjHotelRoomListModelBean.getInstructions();
+        if(TextUtils.isEmpty(instructions)){
+            String str="<font color='#ff621a'>入住说明：</font>";
+            tvIntro.setText(Html.fromHtml(str));
+        }else{
+            String str="<font color='#ff621a'>入住说明：</font>"+bjHotelRoomListModelBean.getInstructions();
+            tvIntro.setText(Html.fromHtml(str));
+        }
+*/
+
         tvIn.setOnClickListener(this);
         tvOut.setOnClickListener(this);
         tvDec.setOnClickListener(this);
@@ -240,7 +254,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                             Date todayDate=formatter.parse(today);
                             Date timeDate=formatter.parse(time);
                             int i = (int) (timeDate.getTime()-todayDate.getTime()) / (1000 * 3600 * 24);
-                            if(i>0){
+                            if(i>=0){
                                 today =time ;
                                 tvEnter.setText(i+"晚");
                                 tvIn.setText(getTime(date));
@@ -282,7 +296,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                             Date todayDate=formatter.parse(tomorrow);
                             Date timeDate=formatter.parse(time);
                             int i = (int) (timeDate.getTime()-todayDate.getTime()) / (1000 * 3600 * 24);
-                            if(i>0){
+                            if(i>=0){
                                 tomorrow =time ;
                                 tvEnter.setText(i+"晚");
                                 tvOut.setText(getTime(date));
@@ -295,9 +309,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        tomorrow = getTime(date);
-                        tvOut.setText(tomorrow);
-                        initDateLive();
+                        /*tomorrow = getTime(date);
+                        tvOut.setText(tomorrow);*/
+                        //initDateLive();
                     }
                 });
                 dialog.show();
@@ -309,41 +323,21 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 }
                 count--;
                 countRoom--;
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
-               /* layoutName.removeViewAt(countRoom-1);
-                layoutIC.removeViewAt(countRoom-1);*/
-               // LayoutInfo.removeViewAt(count-1);
-             /*  if(count>=2){
-                   layoutName.removeViewAt(count-2);
-                   layoutIC.removeViewAt(count-2);
-            }else{
-                   return;
-               }*/
-               /* layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);*/
-               /* for (int i = count; i < count; i--) {
-                    addLayout();
-                }*/
-                for (int i =0; i < count; i++) {
-                    addLayout();
-                }
+                layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);
+                layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);
+                //layout.removeViewAt(count-1);
                 setSum();
                 break;
             case R.id.tv_hotel_room_add:
                 //入住房间增加
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
-                //LayoutInfo.removeViewAt(count-1);
-                //layoutIC.removeViewAt(count-1);
                 if(countRoom>99){
                     return;
                 }
                 countRoom++;
                 count++;
-                for (int i =0; i < count; i++) {
-                    addLayout();
-                }
+                addLayout();
                 setSum();
                 break;
             case R.id.layout_hotel_room_info:
@@ -412,30 +406,26 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             JSONObject tmpObj =null;
             for (int i = 0; i < name.size(); i++) {
                 try {
-
                     tmpObj=new JSONObject();
-                    String nameJson1 = name.get(0).getText().toString();
-                    String icJson1 = ic.get(0).getText().toString();
-                    if(TextUtils.isEmpty(nameJson1)&&TextUtils.isEmpty(icJson1)){
-                        ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能为空");
-                       /* String nameJson1 = name.get(i).getText().toString();
-                        String icJson1 = ic.get(i).getText().toString();
-                        if(TextUtils.isEmpty(nameJson1)||TextUtils.isEmpty(icJson1)){
-                            ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
-                            return;
-                        }*/
-                        return;
-                    }
-                   /* if(TextUtils.isEmpty(nameJson)||TextUtils.isEmpty(icJson)){
-                        ToastUtils.showCenter(getApplicationContext(),"姓名或身份证号不能为空");
-                        return;
-                    }*/
                     String nameJson = name.get(i).getText().toString();
                     String icJson = ic.get(i).getText().toString();
-                    tmpObj.put("userName",nameJson);
-                    tmpObj.put("userDocument",icJson);
-                    jsonArray.put(tmpObj);
-                    tmpObj=null;
+                    for (int j = 0; j < name.size(); j++) {
+                        Log.d("rrrrrrrrr", "initData: "+name.size());
+                        if((j)%2==0){
+                            String stringName = name.get(j).getText().toString();
+                            String stringIc = ic.get(j).getText().toString();
+                            if(TextUtils.isEmpty(stringName)&&TextUtils.isEmpty(stringIc)){
+                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能同时为空！");
+                                return;
+                            }
+                        }
+                    }
+                    if(!TextUtils.isEmpty(nameJson)&&!TextUtils.isEmpty(icJson)){
+                        tmpObj.put("userName",nameJson);
+                        tmpObj.put("userDocument",icJson);
+                        jsonArray.put(tmpObj);
+                        tmpObj=null;
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -490,6 +480,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         List<HotelOrderInfoBean.ModelBean.BJHotelStayInCustomerListModelBean> bjHotelStayInCustomerListModel = model.getBJHotelStayInCustomerListModel();
                         SingleClass.getInstance().setBjHotelStayInCustomerListModel(bjHotelStayInCustomerListModel);
                         Intent intent=new Intent(HotelRoomInActivity.this,HotelRoomSubmitActivity.class);
+                        intent.putExtra("orderId",bjHotelOrderModel.getId()+"");
                         startActivity(intent);
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),hotelOrderBean.getMessage());
@@ -535,11 +526,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutIC.addView(etIC);
     }
     private void addLayout(){
-        final LinearLayout layout = new LinearLayout(this);
+        layout= new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final LinearLayout layout1 = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
+
+
         final EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
@@ -552,7 +545,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutIC.addView(etIC);
 
         final LinearLayout layout2 = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout2.setOrientation(LinearLayout.HORIZONTAL);
         final EditText etName2 = new EditText(this);
         etName2.setHint("姓名");
         etName2.setTextSize(16);
@@ -564,11 +557,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         etIC2.setTextSize(16);
         layoutIC.addView(etIC2);
 
+
         layout.addView(layout1);
         layout.addView(layout2);
-        layoutInfo=new LinearLayout(this);
+       /* layoutInfo=new LinearLayout(this);
         layoutInfo.setOrientation(LinearLayout.VERTICAL);
-        LayoutInfo.addView(layout);
+        LayoutInfo.addView(layout);*/
         //layout.addView(layout1);
     }
     private void setSum() {

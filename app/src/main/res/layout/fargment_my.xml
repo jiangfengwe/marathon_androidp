@@ -84,6 +84,8 @@
                     android:text="中华小烟嗓"
                     android:layout_marginTop="25dp"
                     android:gravity="center"
+                    android:maxLength="10"
+                    android:ellipsize="end"
                     android:textSize="16sp"
                     android:textColor="@color/hotel_size"/>
                 <TextView

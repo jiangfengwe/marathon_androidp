@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="修改昵称修改昵称修改昵称"
                 android:layout_marginRight="5dp"
-                android:maxLength="5"
+                android:maxLength="10"
                 android:ellipsize="end"
                 android:textColor="@color/hotel_size"
                 android:layout_gravity="center"/>

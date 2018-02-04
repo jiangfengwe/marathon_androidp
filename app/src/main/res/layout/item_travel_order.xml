@@ -202,12 +202,6 @@
                     android:text="sdsdsdsffdgfgsss"/>
             </LinearLayout>
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_web"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="eeeeeeeeeeeeeeeeeeeeeeeeeeee"/>
     </LinearLayout>
 
     <include layout="@layout/item_loading"/>

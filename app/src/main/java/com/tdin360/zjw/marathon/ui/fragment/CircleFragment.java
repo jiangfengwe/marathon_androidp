@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -58,6 +59,7 @@ import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
 import com.tdin360.zjw.marathon.ui.activity.PhotoBrowseActivity;
 import com.tdin360.zjw.marathon.ui.activity.PublishActivity;
+import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -106,6 +108,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     private ImageView mImageViewRebackTop;
     @ViewInject(R.id.iv_circle_notice)
     private ImageView imageView;
+    @ViewInject(R.id.mToolBar)
+    private Toolbar toolbar;
 
     @ViewInject(R.id.rv_circle)
     private RecyclerView rvCircle;
@@ -497,7 +501,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                     //ToastUtils.showCenter(getContext(),praiseBean.getMessage());
                                     int tagsNumber = model.getTagsNumber();
                                     tagsNumber++;
-                                    initData(0);
+                                    //bjDynamicListModel.clear();
+                                    //initData(0);
                                     model.setTagsNumber(tagsNumber);
                                     tvPraise.setText(tagsNumber+"");
                                     checkBox.setChecked(true);
@@ -583,13 +588,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 判断是否滚动超过一屏
                     if (firstVisibleItemPosition == 0) {
-                        mImageViewRebackTop.setVisibility(View.INVISIBLE);
+                       // mImageViewRebackTop.setVisibility(View.INVISIBLE);
                     } else {
-                        mImageViewRebackTop.setVisibility(View.VISIBLE);
+                       // mImageViewRebackTop.setVisibility(View.VISIBLE);
                     }
 
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {//拖动中
-                    mImageViewRebackTop.setVisibility(View.INVISIBLE);
+                    //mImageViewRebackTop.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -661,8 +666,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
                 UMWeb umWeb = new UMWeb(url);
-                umWeb.setTitle("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。");
-                umWeb.setDescription("佰家运动");
+                String dynamicsContent = model.getDynamicsContent();
+                umWeb.setTitle("佰家运动");
+                if(!TextUtils.isEmpty(dynamicsContent)){
+                    umWeb.setDescription(dynamicsContent);
+                }else{
+                    umWeb.setDescription("赛事尽在佰家运动App");
+                }
                 UMImage image = new UMImage(getActivity(), R.mipmap.logo);
 
                 image.compressStyle = UMImage.CompressStyle.SCALE;//质量压缩，适合长图的分享
@@ -707,7 +717,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                                 if(state){
                                                     int share = model.getShare();
                                                     share++;
-                                                    initData(0);
+                                                    //initData(0);
                                                     tvShare.setText(share+"");
                                                     //tvPraise.setText(share+"");
                                                     model.setShare(share);
@@ -781,7 +791,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void initTop() {
-        rvCircle.smoothScrollToPosition(0);
+        //rvCircle.smoothScrollToPosition(0);
+        rvCircle.scrollToPosition(0);
+
     }
 
     /**
@@ -885,6 +897,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     private void initToolbar() {
         //消息通知
         imageView.setOnClickListener(this);
+        //点击顶部
+        toolbar.setOnClickListener(this);
 
         //发布动态
         this.rightImage.setOnClickListener(this);
@@ -902,6 +916,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     intent=new Intent(getActivity(),LoginActivity.class);
                     startActivity(intent);
                 }else{
+                    SharedPreferencesManager.isNotice(getActivity(),false);
+                    boolean open = SharedPreferencesManager.getNotice(getContext());
+                    if(open){
+                        ivShow.setVisibility(View.VISIBLE);
+                    }else{
+                        ivShow.setVisibility(View.GONE);
+                    }
+
                     intent=new Intent(getActivity(), CircleMessageActivity.class);
                     startActivity(intent);
                 }
@@ -919,9 +941,15 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 startActivity(intent);
                 }
                 break;
+            case R.id.mToolBar:
+                //回到顶部
+                initTop();
+                break;
         }
 
     }
+
+
 
     @Override
     public void onDestroy() {

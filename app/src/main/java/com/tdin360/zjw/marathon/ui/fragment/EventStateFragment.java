@@ -308,11 +308,12 @@ public class EventStateFragment extends BaseFragment {
                 SingleClass.getInstance().setEventId(eventId);
                 String eventId1 = SingleClass.getInstance().getEventId();
                 String name = bjEventSystemListModelBean.getName();
+                String shareUrl = bjEventSystemListModelBean.getShareUrl();
                 Log.d("eventId1", "onItemClick: "+eventId1);
                 Intent intent=new Intent(getActivity(), WebActivity.class);
                 intent.putExtra("url",url);
-                Log.d("eventId1url", "onItemClick: "+url);
                 intent.putExtra("name",name);
+                intent.putExtra("shareUrl",shareUrl);
                 //Intent intent=new Intent(getActivity(), EventActivity.class);
                 startActivity(intent);
             }

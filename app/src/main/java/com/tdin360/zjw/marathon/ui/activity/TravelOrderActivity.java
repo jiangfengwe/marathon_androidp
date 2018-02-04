@@ -23,6 +23,7 @@ import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.HotelOrderBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.OrderTravelBean;
 import com.tdin360.zjw.marathon.model.TravelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelOrderBean;
 import com.tdin360.zjw.marathon.model.TravelOrderInfoBean;
@@ -44,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 旅游立即预定
@@ -213,16 +215,20 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 count--;
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
-               /* layout.removeViewAt(count-1);
-                layoutName.removeViewAt(count-1);
+               /* layoutName.removeAllViews();
+                layoutIC.removeAllViews();*/
+               /* layoutName.removeViewAt(count-1);
                 layoutIC.removeViewAt(count-1);*/
+                //layout.removeViewAt(count-1);
+              /*  name.remove(count-1);
+                ic.remove(count-1);*/
               /*  name.clear();
                 ic.clear();*/
-                for (int i = 0; i <count; i++) {
+                layoutName.removeViewAt(count-1);
+                layoutIC.removeViewAt(count-1);
+               /* for (int i = count; i < count; i--) {
                     addView();
-                }
+                }*/
                 setSum();
 
                 //setContentView(layoutName);
@@ -236,14 +242,17 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 count++;
-                layoutName.removeAllViews();
-                layoutIC.removeAllViews();
-                /*layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);
-                layout.removeViewAt(count-1);*/
-                for (int i =0; i < count; i++) {
+                addView();
+                /*layoutName.removeViewAt(count+1);
+                layoutIC.removeViewAt(count+1);*/
+               /* layoutName.removeAllViews();
+                layoutIC.removeAllViews();*/
+               /* name.remove(count-1);
+                ic.remove(count-1);*/
+                //layout.removeViewAt(count-1);
+              /*  for (int i =0; i < count; i++) {
                     addView();
-                }
+                }*/
                 setSum();
                 break;
             case R.id.layout_choose_time:
@@ -305,16 +314,6 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
             String customerId = loginInfo.getId();
             String travelId = getIntent().getStringExtra("travelId");
             byte[] mBytes=null;
-            final String phone = etPhone.getText().toString().trim();
-            if(TextUtils.isEmpty(phone)){
-                ToastUtils.showCenter(getApplicationContext(),"电话号码不能为空");
-                return;
-            }
-            String travelNumber = tvSum.getText().toString().trim();
-            if(!isMobileNO(phone)){
-                ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
-                return;
-            }
             Log.d("222222222222", "initData: "+customerId);
             JSONArray jsonArray=new JSONArray();
             JSONObject jsonObject=new JSONObject();
@@ -322,12 +321,15 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
             for (int i = 0; i < name.size(); i++) {
                 try {
                     tmpObj=new JSONObject();
-                String string = name.get(i).getText().toString();
-                String string1 = ic.get(i).getText().toString();
-                String s1 = new Gson().toJson(string);
-                Log.d("wwwwname1", "initToolbar: "+s1);
-                    tmpObj.put("userName",string);
-                    tmpObj.put("userDocument",string1);
+                    String nameEt = name.get(i).getText().toString().trim();
+                    String icEt = ic.get(i).getText().toString().trim();
+                    if(TextUtils.isEmpty(nameEt)&&TextUtils.isEmpty(icEt)){
+                        ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能同时为空！");
+                        return;
+                    }
+                    tmpObj.put("userName",nameEt);
+                    tmpObj.put("userDocument",icEt);
+
                     jsonArray.put(tmpObj);
                     tmpObj=null;
                 } catch (JSONException e) {
@@ -338,6 +340,17 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
             Log.d("wwwwname2", "initToolbar: "+userList);
             JSONObject personInfos = jsonObject.put("userList", userList);
             Log.d("wwwwname4", "initToolbar: "+personInfos.toString());
+
+            final String phone = etPhone.getText().toString().trim();
+            if(TextUtils.isEmpty(phone)){
+                ToastUtils.showCenter(getApplicationContext(),"电话号码不能为空");
+                return;
+            }
+            String travelNumber = tvSum.getText().toString().trim();
+            if(!isMobileNO(phone)){
+                ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
+                return;
+            }
            /* layoutLoading.setVisibility(View.VISIBLE);
             ivLoading.setBackgroundResource(R.drawable.loading_before);
             AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
@@ -377,6 +390,7 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                         List<TravelOrderInfoBean.ModelBean.BJTravelStayInCustomerListModelBean> bjTravelStayInCustomerListModel = model.getBJTravelStayInCustomerListModel();
                         SingleClass.getInstance().setBjTravelStayInCustomerListModel(bjTravelStayInCustomerListModel);
                         Intent intent=new Intent(TravelOrderActivity.this,TravelOrderSubmitActivity.class);
+                        intent.putExtra("orderId",bjTravelOrderModel.getId()+"");
                         startActivity(intent);
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),travelOrderBean.getMessage());
@@ -422,17 +436,6 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
         layoutIC.addView(etIC);
         layout.addView(layout1);
 
-
-       /* EditText etName = new EditText(this);
-        etName.setHint("姓名");
-        etName.setTextSize(16);
-        name.add(etName);
-        layoutName.addView(etName);
-        EditText etIC = new EditText(this);
-        etIC.setHint("身份证");
-        ic.add(etIC);
-        etIC.setTextSize(16);
-        layoutIC.addView(etIC);*/
     }
 
     private void setSum() {

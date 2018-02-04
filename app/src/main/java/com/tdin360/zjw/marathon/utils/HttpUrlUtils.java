@@ -80,6 +80,8 @@ public class HttpUrlUtils {
     public static final String HOTEL_DETAIL=BASE+"EventAppApi/HotelDetail";
     //生成入住信息、生成入住订单
     public static final String HOTEL_DETAIL_ORDER=BASE+"EventAppApi/HotelStayMessage";
+    //酒店订单详情页面
+    public static final String HOTEL_ORDER_WEBVIEW=BASE+"EventAppApi/AppHotelDetail";
     //生成旅游订单
     public static final String TRAVEL_DETAIL_ORDER=BASE+"EventAppApi/TravelStayMessage";
     //酒店更多评论
@@ -92,6 +94,8 @@ public class HttpUrlUtils {
     public static final String TRAVEL_DETAIL_PICTURE =BASE+"EventAppApi/TravelPictureList";
     //旅游路线详情中嵌套的信息页面
     public static final String TRAVEL_DETAIL_INFO=BASE+"EventAppApi/TravelDetailMessageView";
+    //旅游订单详情页面
+    public static final String TRAVEL_DETAIL_WEBVIEW=BASE+"EventAppApi/AppTravelDetail";
     //酒店更多评论
     public static final String TRAVEL_MORE_COMMENT=BASE+"EventAppApi/TravelEvaluationList";
     //支付方法
@@ -126,6 +130,8 @@ public class HttpUrlUtils {
     public static final String DOWNLOAD_URL=BASE+"EventAppApi/AppDownload";
     //系统通知消息详细页面
     public static final String NOTICE_DETAIL_URL=BASE+"EventAppApi/SystemNotifation";
+    //系统通知消息详细页面
+    public static final String ZXING_URL=BASE+"EventAppApi/TransitReturn";
 
 
 

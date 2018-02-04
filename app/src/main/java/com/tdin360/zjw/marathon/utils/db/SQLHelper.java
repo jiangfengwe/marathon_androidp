@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLHelper extends SQLiteOpenHelper {
 
     //数据库名称
-    public static final String DB_NAME="marathon.db";
+    public static final String DB_NAME="marathon2.db";
     // 社交点赞评论通知表
     public static final String PRAISE_COMMENT_TABLE="Circle";
     // 系统通知表
@@ -69,10 +69,17 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    commentContent VARCHAR,\n" +
                 "    time VARCHAR DESC,\n" +
                 "    dynamicContent   VARCHAR);" ;
+        /**
+         * messageIntroduce : 测试消息
+         * messageType : systemnotification
+         * messageId : 19
+         *  private String time;
+         private String notice;
+         */
         String systemSql ="CREATE TABLE "+SYSTEM_NOTICE_TABLE+" (\n" +
-                "    dynamicId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "    messageId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
                 "                          NOT NULL,\n" +
-                "    nickName      VARCHAR,\n" +
+                "    messageIntroduce      VARCHAR,\n" +
                 "    dynamicPictureUrl     VARCHAR,\n" +
                 "    messageType   VARCHAR,\n" +
                 "    headImg VARCHAR,\n" +

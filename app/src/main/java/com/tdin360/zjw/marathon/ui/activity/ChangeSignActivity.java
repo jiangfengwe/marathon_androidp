@@ -147,31 +147,7 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerSign = loginInfo.getCustomerSign();
         etSign.setText(customerSign);
-        //String customerSign1 = etSign.getText().toString().trim();
-       // etSign.setInputConnectionWrapper
-        etSign.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
-       /* etSign.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>30){
-                    ToastUtils.showCenter(getApplicationContext(),"最多只能输入30个字哦");
-                    etSign.setFocusable(false);
-                    etSign.setKeyListener(null);
-                    etSign.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-*/
+        etSign.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         btnSure.setOnClickListener(this);
     }
 

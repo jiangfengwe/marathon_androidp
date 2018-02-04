@@ -32,7 +32,9 @@ import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.OrderHotelBean;
 import com.tdin360.zjw.marathon.model.OrderTravelBean;
+import com.tdin360.zjw.marathon.ui.activity.HotelOrderDetailActivity;
 import com.tdin360.zjw.marathon.ui.activity.TravelOrderDetailActivity;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MarathonDataUtils;
@@ -222,6 +224,18 @@ public class TravelStateFragment extends BaseFragment {
             bjTravelOrderListModel.clear();
             initData();
         }
+        if(event.getEnumEventBus()== EnumEventBus.TRAVELREFUND){
+            //申请退款成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+            bjTravelOrderListModel.clear();
+            initData();
+        }
+        if(event.getEnumEventBus()== EnumEventBus.PAYTRAVEL){
+            //支付成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+            bjTravelOrderListModel.clear();
+            initData();
+        }
     }
     @Override
     public void onDestroy() {
@@ -354,9 +368,10 @@ public class TravelStateFragment extends BaseFragment {
                 SingleClass.getInstance().setBjTravelOrderListModelBean(bjTravelOrderListModelBean);
                 Intent intent=new Intent(getActivity(), TravelOrderDetailActivity.class);
                 String orderId = bjTravelOrderListModelBean.getId()+"";
+                String orderNo = bjTravelOrderListModelBean.getOrderNo();
                 intent.putExtra("orderId",orderId);
+                //intent.putExtra("orderNumber",orderNo);
                 startActivity(intent);
-
             }
         });
         springView.setType(SpringView.Type.FOLLOW);

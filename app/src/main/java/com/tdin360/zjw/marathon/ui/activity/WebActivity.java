@@ -10,9 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Message;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,13 +24,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +99,8 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private ImageView close;
     @ViewInject(R.id.more)
     private ImageView more;
+    @ViewInject(R.id.more_add)
+    private ImageView ivMore;
 
 
     private ValueCallback<Uri> uploadMessage;
@@ -99,6 +110,8 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private ShareAction action;
     private String webUrl;
     private String imageUrl;
+
+    private boolean flag=false;
 
     private IWXAPI api;
     @Subscribe
@@ -152,6 +165,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         LoginUserInfoBean.UserBean modelInfo= SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String id = modelInfo.getId();
         String url = getIntent().getStringExtra("url");
+      Log.d("fffffff", "initWeb: "+url);
         if(TextUtils.isEmpty(id)){
             webUrl= url + "?customerId=" +0;
         }else{
@@ -192,14 +206,92 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         uploadMessageAboveL = null;
     }
     private void initView() {
+        if(flag){
+            ivMore.setClickable(false);
+        }else{
+            ivMore.setClickable(true);
+        }
         String name = getIntent().getStringExtra("name");
         titleTv.setText(name );
         back.setOnClickListener(this);
         close.setOnClickListener(this);
         more.setOnClickListener(this);
-        more.setOnLongClickListener(new View.OnLongClickListener() {
+        ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag=true;
+                ivMore.setClickable(false);
+                //ToastUtils.showCenter(getApplicationContext(),"PopupWindow");
+                final View popupView = WebActivity.this.getLayoutInflater().inflate(R.layout.item_webview_pup, null);
+                final PopupWindow window = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout layoutRefresh = (LinearLayout) popupView.findViewById(R.id.layout_web_referesh);
+                LinearLayout layoutShare = (LinearLayout) popupView.findViewById(R.id.layout_web_share);
+                final ImageView ivRefresh = (ImageView) popupView.findViewById(R.id.iv_more);
+                layoutRefresh.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
+                        if (animation != null) {
+                            ivRefresh.startAnimation(animation);
+                        }  else {
+                            ivRefresh.setAnimation(animation);
+                            ivRefresh.startAnimation(animation);
+                        }
+                        LinearInterpolator lin = new LinearInterpolator();
+                        animation.setInterpolator(lin);
+                        webView.reload();
+                        window.dismiss();
+                        ivMore.setClickable(true);
+                    }
+                });
+                layoutShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        window.dismiss();
+                        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
+                            share();
+                        }else {
+                            if (ContextCompat.checkSelfPermission(WebActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(WebActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+                            } else {
+                                share();
+                            }
+                        }
+
+                        ivMore.setClickable(true);
+                    }
+                });
+                // TODO: 2016/5/17 设置动画
+                // window.setAnimationStyle(R.style.popup_window_anim);
+                // TODO: 2016/5/17 设置背景颜色
+                window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+                // TODO: 2016/5/17 设置可以获取焦点
+                 //window.setFocusable(true);
+                // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+                window.setOutsideTouchable(true);
+                //popupWindow消失是下拉图片变化
+                window.setTouchInterceptor(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        //点击PopupWindow以外区域时PopupWindow消失
+                        if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                            window.dismiss();
+                            ivMore.setClickable(true);
+                            // checkBoxHot.setChecked(false);
+                        }
+                        return false;
+                    }
+                });
+                // TODO：更新popupwindow的状态
+                window.update();
+                // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+                window.showAsDropDown(ivMore, -230, 50);
+            }
+        });
+        ivMore.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                ivMore.setClickable(false);
                 //刷新旋转动画
                 Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
                 if (animation != null) {
@@ -213,7 +305,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 webView.clearHistory();
                 webView.clearFormData();
                 webView.reload();
-                return false;
+                return true;
             }
         });
     }
@@ -288,8 +380,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-
         switch (requestCode){
 
 
@@ -305,7 +395,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     //授权失败
                     AlertDialog.Builder alert = new AlertDialog.Builder(WebActivity.this);
                     alert.setTitle("提示");
-                    alert.setMessage("您需要设置允许存储权限才能使用该功能");
+                    alert.setMessage("您需要设置才能使用该功能");
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -343,16 +433,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 //分享
                 //webView.reload();
                 //刷新旋转动画
-                Animation animation= AnimationUtils.loadAnimation(WebActivity.this,R.anim.anim_in_web);
-                if (animation != null) {
-                    more.startAnimation(animation);
-                }  else {
-                    more.setAnimation(animation);
-                    more.startAnimation(animation);
-                }
-                LinearInterpolator lin = new LinearInterpolator();
-                animation.setInterpolator(lin);
-                webView.reload();
+
 
              /*   if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
                     share();
@@ -476,6 +557,9 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
      * 分享
      */
     private void share(){
+        Intent intent=getIntent();
+        final String shareUrl = intent.getStringExtra("shareUrl");
+        final String name = intent.getStringExtra("name");
 
                   /*使用友盟自带分享模版*/
         action = new ShareAction(this).setDisplayList(
@@ -485,13 +569,12 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             @Override
             public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
 
-
-                    UMWeb umWeb = new UMWeb(webView.getUrl());
-                UMImage image = new UMImage(WebActivity.this,imageUrl);
+                    UMWeb umWeb = new UMWeb(shareUrl);
+                UMImage image = new UMImage(WebActivity.this,R.mipmap.logo);
                 image.compressStyle= UMImage.CompressStyle.SCALE;
                    umWeb.setThumb(image);
-                    umWeb.setTitle(webView.getTitle());
-                    new ShareAction(WebActivity.this).withText(webView.getTitle())
+                    umWeb.setTitle(name);
+                    new ShareAction(WebActivity.this).withText(name)
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())
                             .withMedia(umWeb)

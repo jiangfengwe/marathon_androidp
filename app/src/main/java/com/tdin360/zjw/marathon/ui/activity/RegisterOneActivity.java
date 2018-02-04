@@ -30,10 +30,12 @@ import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
 import com.tdin360.zjw.marathon.model.RegisterCodeBean;
 import com.tdin360.zjw.marathon.model.RegisterSureBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.ValidateUtils;
 
@@ -43,6 +45,11 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import static com.tdin360.zjw.marathon.R.id.phone;
 
@@ -81,12 +88,55 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
      public static Activity instance;
 
 
-
-
     private String type;
 
     private static final int CODE=0x0101;
     private int time;
+
+    private static final int MSG_SET_ALIAS = 1002;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    // Log.d(TAG, "Set alias in handler.");
+                    // 调用 JPush 接口来设置别名。
+                    JPushInterface.setAliasAndTags(getApplicationContext(),
+                            (String) msg.obj,
+                            null,
+                            mAliasCallback);
+                    break;
+                default:
+                    //Log.i(TAG, "Unhandled msg - " + msg.what);
+            }
+        }
+    };
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            Log.d("code", "gotResult: "+code);
+            switch (code) {
+                case 0:
+                    //ToastUtils.showCenter(getApplicationContext(),"codeeeee");
+                    logs = "Set tag and alias success";
+                    // Log.i(TAG, logs);
+                    // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    // Log.i(TAG, logs);
+                    // 延迟 60 秒来调用 Handler 设置别名
+                    mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    break;
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    //Log.e(TAG, logs);
+            }
+            ExampleUtil.showToast(logs, getApplicationContext());
+        }
+    };
 
     private Handler handler = new Handler(){
 
@@ -360,10 +410,6 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
                     .setAnimationSpeed(1)
                     .setDimAmount(0.5f)
                     .show();
-            /*layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             String string="{'userPhone':'"+phone+"','password':'"+psw+"','appKey': 'BJYDAppV-2','validCode':'"+code+"'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
@@ -423,110 +469,5 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
      else return mobiles.matches(telRegex);
      }
 
-
-    /**
-     * 下一步
-     * @param view
-     */
-   /* public void nextClick(View view) {
-
-        final String phone = etPhone.getText().toString().trim();
-
-        if(phone.length()==0){
-
-            ToastUtils.showCenter(getBaseContext(),"手机号码不能为空!");
-
-            return;
-        }
-
-        if(!ValidateUtils.isMobileNO(phone)){
-
-           ToastUtils.showCenter(getBaseContext(),"手机号码格式错误!");
-
-            return;
-        }
-
-        nextBtn.setEnabled(false);
-
-        //显示提示框
-        final KProgressHUD hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setDetailsLabel("请稍后")
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();
-
-
-
-        *//**
-         * 验证手机号并发送验证码
-         *//*
-        RequestParams params = new RequestParams(HttpUrlUtils.REGISTER_ONE);
-        params.addBodyParameter("phone",phone);
-        params.addBodyParameter("type",type);
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-
-        x.http().post(params, new Callback.CommonCallback<String>() {
-
-            @Override
-            public void onSuccess(String result) {
-
-//                Log.d("------------>", "onSuccess: "+result);
-                try {
-                    JSONObject obj = new JSONObject(result);
-                    boolean success = obj.getBoolean("Success");
-                    String reason = obj.getString("Reason");
-                    if(success){
-
-
-                        *//**
-                         *  验证成功进行注册第二步
-                         *//*
-
-                        String type = getIntent().getStringExtra("type");
-                        Intent intent = new Intent(RegisterOneActivity.this,GetCodeActivity.class);
-                        intent.putExtra("phone",phone);
-                        intent.putExtra("type",type);
-                        startActivity(intent);
-
-                    }else {
-
-
-
-                        ToastUtils.showCenter(getBaseContext(),reason);
-
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-                nextBtn.setEnabled(true);
-                ToastUtils.showCenter(getBaseContext(),"网络连接错误或服务器错误!");
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                hud.dismiss();
-                nextBtn.setEnabled(true);
-            }
-        });
-
-
-
-    }*/
 
 }

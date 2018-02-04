@@ -47,10 +47,19 @@
         android:text="2017贵阳马拉松"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/more_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:src="@drawable/share" />
     <ImageView
         android:id="@+id/more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
         android:src="@drawable/refrash" />
 
 </LinearLayout>
@@ -63,7 +72,7 @@
         android:id="@+id/progressBar"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="2dp" />
+        android:layout_height="3dp" />
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/mWebView"
         android:layout_width="match_parent"

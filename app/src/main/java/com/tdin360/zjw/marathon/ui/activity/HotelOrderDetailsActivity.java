@@ -122,55 +122,6 @@ public class HotelOrderDetailsActivity extends BaseActivity {
                 .setDimAmount(0.5f)
                 .show();
 
-       /* RequestParams params = new RequestParams(HttpUrlUtils.HOTEL_ORDER_DETAILS);
-        params.addBodyParameter("reservationId",id);
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-
-            @Override
-            public void onSuccess(String result) {
-
-//                Log.d("-------详情---->", "onSuccess: "+result);
-
-                try {
-                    JSONObject object = new JSONObject(result);
-                    HotelOrderDetailsModel model = new Gson().fromJson(object.toString(), HotelOrderDetailsModel.class);
-                    JSONObject typeModel = object.getJSONObject("EventHotelTypeModel");
-                    HotelItem hotelItem = new Gson().fromJson(typeModel.toString(), HotelItem.class);
-                    model.setArea(hotelItem.getArea());
-                    model.setPictureUrl(hotelItem.getPictureUrl());
-                    model.setTitle(hotelItem.getTitle());
-                    model.setType(hotelItem.getType());
-                    showInfo(model);
-                 mErrorView.hideErrorView(main);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                    mErrorView.show(main,"服务器数据异常",ErrorView.ViewShowMode.ERROR);
-
-                }
-
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-                mErrorView.show(main,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.show(getBaseContext(),"网络不给力,连接服务器异常!");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-                hud.dismiss();
-            }
-        });*/
 
     }
 

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.tdin360.zjw.marathon.model.CirclePriseTableModel;
+import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.utils.db.SQLHelper;
 import com.tdin360.zjw.marathon.utils.db.service.CircleNoticeDetailService;
 import com.tdin360.zjw.marathon.utils.db.service.SystemNoticeDetailService;
@@ -31,16 +32,21 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
 
     }
     @Override
-    public void addSystemNotice(CirclePriseTableModel model) {
+    public void addSystemNotice(SystemNoticeBean model) {
+        /**
+         * messageIntroduce : 测试消息
+         * messageType : systemnotification
+         * messageId : 19
+         *  private String time;
+         private String notice;
+         */
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         Calendar c=Calendar.getInstance();
         //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
         String format = formatter.format(c.getTime());
         model.setTime(format);
-        model.setNickName("aa");
-        model.setDynamicId(2);
-        model.setDynamicContent("jjjjjjjjjjjjjjj");
+       /* model.setMessageIntroduce("aa");*/
         model.setNotice("0");
        // model.setNotice(1);
         //判断数据库中不存在才插入
@@ -55,39 +61,33 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
             values.put("commentContent",model.getCommentContent());
             values.put("dynamicContent",model.getDynamicContent());
             values.put("messageType",model.getMessageType());*/
-        values.put("nickName",model.getNickName());
-        values.put("dynamicPictureUrl",model.getDynamicPictureUrl());
-        values.put("headImg",model.getHeadImg());
-        values.put("dynamicId",model.getDynamicId());
-        values.put("commentContent",model.getCommentContent());
-        values.put("dynamicContent",model.getDynamicContent());
+        //values.put("messageId",model.getMessageId());
+        values.put("messageIntroduce",model.getMessageIntroduce());
         values.put("messageType",model.getMessageType());
         values.put("time",model.getTime());
         values.put("timeNotice",model.getNotice());
             conn.insert(SQLHelper.SYSTEM_NOTICE_TABLE, null, values);
-        Log.d("model.getNickName()", "addCircleNotice: "+model.getNickName());
+        Log.d("model.getNickName()", "addCircleNotice: "+model.getMessageIntroduce());
        // }
         conn.close();
 
     }
 
     @Override
-    public List<CirclePriseTableModel> getAllSystemNotice() {
-        List<CirclePriseTableModel> list=new ArrayList<>();
+    public List<SystemNoticeBean> getAllSystemNotice() {
+        List<SystemNoticeBean> list=new ArrayList<>();
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
         Cursor cursor = conn.query(SQLHelper.SYSTEM_NOTICE_TABLE, null, null, null, null, null, "time desc");
         while (cursor.moveToNext()){
-            String NickName = cursor.getString(cursor.getColumnIndex("nickName"));
-            Log.d("wwwwwwwwwww", "getAllCircleNotice: "+NickName);
-            String DynamicPictureUrl = cursor.getString(cursor.getColumnIndex("dynamicPictureUrl"));
-            String HeadImg = cursor.getString(cursor.getColumnIndex("headImg"));
-            int DynamicId = cursor.getInt(cursor.getColumnIndex("dynamicId"));
-            String CommentContent =  cursor.getString(cursor.getColumnIndex("commentContent")) ;
-            String DynamicContent =  cursor.getString(cursor.getColumnIndex("dynamicContent")) ;
+           // String NickName = cursor.getString(cursor.getColumnIndex("nickName"));
+
+            int DynamicId = cursor.getInt(cursor.getColumnIndex("messageId"));
+            String DynamicContent =  cursor.getString(cursor.getColumnIndex("messageIntroduce")) ;
+
             String messageType = cursor.getString(cursor.getColumnIndex("messageType"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             String notice = cursor.getString(cursor.getColumnIndex("timeNotice"));
-            list.add(new CirclePriseTableModel(NickName,DynamicPictureUrl,messageType,HeadImg,DynamicId,CommentContent,DynamicContent,time,notice));
+            list.add(new SystemNoticeBean(DynamicContent,messageType,DynamicId,time,notice));
         }
         cursor.close();
         conn.close();
@@ -100,7 +100,7 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         SQLiteDatabase conn = this.sqlHelper.getReadableDatabase();
         try {
 
-            conn.delete(SQLHelper.PRAISE_COMMENT_TABLE,"eventId=?",new String[]{eventId});
+            conn.delete(SQLHelper.SYSTEM_NOTICE_TABLE,"messageId=?",new String[]{eventId});
 
         }catch (Exception e){
 
@@ -113,11 +113,11 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
      * 更新记录
      * @param timeNotice
      */
-    public void update(String timeNotice){
+    public void update(String timeNotice,String index){
         SQLiteDatabase sqldb = sqlHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("timeNotice",timeNotice);
-        sqldb.update(SQLHelper.SYSTEM_NOTICE_TABLE, values, "dynamicId= ?",new String[] { timeNotice });
+        sqldb.update(SQLHelper.SYSTEM_NOTICE_TABLE, values, "messageId = ?",new String[] { index });
         sqldb.close();
 
     }

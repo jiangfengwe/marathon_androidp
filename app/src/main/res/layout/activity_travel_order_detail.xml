@@ -13,9 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include layout="@layout/toolbar_layout"/>
+        <com.tencent.smtt.sdk.WebView
+            android:id="@+id/order_travel_detail_webview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:layout_weight="1">
             <include layout="@layout/item_travel_order"/>
         </ScrollView>
@@ -55,6 +61,12 @@
             android:visibility="gone"
             android:background="@color/home_tab_title_color_check"/>
     </LinearLayout>
-    <include layout="@layout/load_fail_layout"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+        <include layout="@layout/load_fail_layout"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

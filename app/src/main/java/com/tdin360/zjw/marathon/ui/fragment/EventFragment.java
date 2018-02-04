@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,15 @@ import com.tdin360.zjw.marathon.adapter.CommonAdapter;
 import com.tdin360.zjw.marathon.adapter.EventTabLayoutAdapter;
 import com.tdin360.zjw.marathon.adapter.ViewHolder;
 import com.tdin360.zjw.marathon.model.EventModel;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.PublishActivity;
 import com.tdin360.zjw.marathon.ui.activity.SearchActivity;
 import com.tdin360.zjw.marathon.ui.activity.ZxingActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.MessageEvent;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
 import com.tdin360.zjw.marathon.utils.db.impl.EventServiceImpl;
@@ -156,19 +160,26 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
         Intent intent;
         switch (v.getId()){
             case R.id.btn_Back:
-                //ToastUtils.showCenter(getActivity(),"zxing");
-
-                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
-                    intent=new Intent(getActivity(), ZxingActivity.class);
+                //二维码扫描
+                LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getActivity());
+                String customerId = loginInfo.getId();
+                if(TextUtils.isEmpty(customerId)){
+                    intent=new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
                 }else {
-                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},90);
-                    }else {
+                    if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
                         intent=new Intent(getActivity(), ZxingActivity.class);
                         startActivity(intent);
+                    }else {
+                        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},90);
+                        }else {
+                            intent=new Intent(getActivity(), ZxingActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 }
+
 
                 break;
             case R.id.navRightItemImage:
@@ -585,6 +596,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //CommonUtils.getAppDetailSettingIntent(getContext());
                             getAppDetailSettingIntent(getActivity());
                         }
                     });

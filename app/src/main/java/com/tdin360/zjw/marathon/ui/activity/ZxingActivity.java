@@ -1,15 +1,22 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.ZxingBean;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 
 import org.xutils.view.annotation.ViewInject;
@@ -52,8 +59,19 @@ public class ZxingActivity extends BaseActivity implements QRCodeView.Delegate {
     @Override
     public void onScanQRCodeSuccess(String result) {
         zXingView.startSpot();
-        ToastUtils.show(getApplicationContext(),result);
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        Log.d("zxing", "onScanQRCodeSuccess: "+result);
+        Gson gson=new Gson();
+        ZxingBean zxingBean = gson.fromJson(result, ZxingBean.class);
+        String type = zxingBean.getType();
+        if(!TextUtils.isEmpty(type)){
+            Intent intent=new Intent(ZxingActivity.this,ZxingWebActivity.class);
+            intent.putExtra("type",type);
+            startActivity(intent);
+        }else{
+            ToastUtils.showCenter(getApplicationContext(),result);
+        }
+
         vibrator.vibrate(200);
     }
 

@@ -8,9 +8,15 @@
     android:layout_height="match_parent"
     tools:context="com.tdin360.zjw.marathon.ui.activity.HotelRoomSubmitActivity">
     <include layout="@layout/toolbar_layout"/>
+    <com.tencent.smtt.sdk.WebView
+        android:id="@+id/hotel_order_webview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:layout_weight="1">
         <include layout="@layout/item_hotel_order_detail"/>
     </ScrollView>

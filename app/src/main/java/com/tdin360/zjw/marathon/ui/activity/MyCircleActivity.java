@@ -425,6 +425,16 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
         adapter.addHeaderView(R.layout.item_my_circle_head);
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+        adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                MyCircleBean.ModelBean.BJDynamicListModelBean bjDynamicListModelBean = bjDynamicListModel.get(position);
+                String dynamicId = bjDynamicListModelBean.getId() + "";
+                Intent intent=new Intent(MyCircleActivity.this,CircleDetailActivity.class);
+                intent.putExtra("dynamicId",dynamicId);
+                startActivity(intent);
+            }
+        });
         rvCircle.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
