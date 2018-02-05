@@ -285,7 +285,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 // TODO：更新popupwindow的状态
                 window.update();
                 // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
-                window.showAsDropDown(ivMore, -230, 50);
+                window.showAsDropDown(ivMore, -220, 50);
             }
         });
         ivMore.setOnLongClickListener(new View.OnLongClickListener() {
@@ -574,6 +574,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 image.compressStyle= UMImage.CompressStyle.SCALE;
                    umWeb.setThumb(image);
                     umWeb.setTitle(name);
+                    umWeb.setDescription("佰家运动");
                     new ShareAction(WebActivity.this).withText(name)
                             .setPlatform(share_media)
                             .setCallback(new CustomUMShareListener())

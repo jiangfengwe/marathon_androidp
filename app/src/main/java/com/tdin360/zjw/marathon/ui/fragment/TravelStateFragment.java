@@ -285,8 +285,8 @@ public class TravelStateFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                mErrorView.show(rvState,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.showCenter(getContext(),"网络不给力,连接服务器异常!");
+                //mErrorView.show(rvState,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                //ToastUtils.showCenter(getContext(),"网络不给力,连接服务器异常!");
             }
 
             @Override
@@ -368,9 +368,7 @@ public class TravelStateFragment extends BaseFragment {
                 SingleClass.getInstance().setBjTravelOrderListModelBean(bjTravelOrderListModelBean);
                 Intent intent=new Intent(getActivity(), TravelOrderDetailActivity.class);
                 String orderId = bjTravelOrderListModelBean.getId()+"";
-                String orderNo = bjTravelOrderListModelBean.getOrderNo();
                 intent.putExtra("orderId",orderId);
-                //intent.putExtra("orderNumber",orderNo);
                 startActivity(intent);
             }
         });

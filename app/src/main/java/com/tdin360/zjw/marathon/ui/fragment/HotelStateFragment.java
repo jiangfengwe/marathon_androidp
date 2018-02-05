@@ -193,8 +193,8 @@ public class HotelStateFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                mErrorView.show(rvHotel,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.showCenter(getContext(),"网络不给力,连接服务器异常!");
+                //mErrorView.show(rvHotel,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                //ToastUtils.showCenter(getContext(),"网络不给力,连接服务器异常!");
             }
 
             @Override

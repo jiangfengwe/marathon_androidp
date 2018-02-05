@@ -442,17 +442,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
      * 支付成功后直接弹出支持成功界面
      */
     private void showPaySuccessDialog(final String orderId, final String type){
-            //从支付详情进入支付成功则去改变支付状态
-           if(isFormDetail&&!isHotel) {
-               Intent intent = new Intent(PAY_ACTION);
-               //intent.putExtra("orderNo", orderNo);
-               sendBroadcast(intent);
-           }
-           //酒店订单从详情进行支付
-           if(isFormDetail&&isHotel){
-//             改变支付状态
-              EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageType.HOTEL_STATS_UPDATE));
-           }
         final AlertDialog alert = new AlertDialog.Builder(this).create();
         View view = View.inflate(PayActivity.this, R.layout.pay_result_dialog, null);
         alert.setView(view);
@@ -469,36 +458,14 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             public void onClick(View v) {
                 Intent intent;
                 if(type.equals("travel")){
-                   /* EnumEventBus cancelHotel = EnumEventBus.PAYTRAVEL;
-                    EventBus.getDefault().post(new EventBusClass(cancelHotel));*/
                     intent =new Intent(PayActivity.this,TravelOrderDetailActivity.class);
                     intent.putExtra("orderId",orderId);
                     startActivity(intent);
                 }else{
-                   /* EnumEventBus cancelHotel = EnumEventBus.PAYHOTEL;
-                    EventBus.getDefault().post(new EventBusClass(cancelHotel));*/
                     intent=new Intent(PayActivity.this,HotelOrderDetailActivity.class);
                     intent.putExtra("orderId",orderId);
                     startActivity(intent);
                 }
-
-              /*  if(!isHotel&&!isFormDetail){//来源于报名界面的支付
-                    Intent intent = new Intent(PayActivity.this,MySigUpDetailActivity.class);
-                    //intent.putExtra("orderNo",orderNo);
-                    startActivity(intent);
-                    finish();
-                  //跳转到报名详细
-                }else {
-                    //返回更新
-                    finish();
-                }
-                if(isHotel&&!isFormDetail){
-                    //查看酒店预订详情
-                }else {
-                    finish();
-                }
-
-                alert.dismiss();*/
             }
 
         });

@@ -101,6 +101,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout layoutName;
     @ViewInject(R.id.layout_hotel_ic)
     private LinearLayout layoutIC;
+
+
     @ViewInject(R.id.layout_hotel_room_info)
     private LinearLayout layoutList;
     private LinearLayout layoutInfo;
@@ -529,8 +531,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layout= new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+
+
+
         final LinearLayout layout1 = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout1.setOrientation(LinearLayout.HORIZONTAL);
 
 
         final EditText etName = new EditText(this);
@@ -540,7 +545,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutName.addView(etName);
         final EditText etIC = new EditText(this);
         ic.add(etIC);
-        etIC.setHint("身份证");
+        etIC.setHint("身份证 房间"+countRoom);
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
 
@@ -553,7 +558,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutName.addView(etName2);
         final EditText etIC2 = new EditText(this);
         ic.add(etIC2);
-        etIC2.setHint("身份证");
+        etIC2.setHint("身份证 房间"+countRoom);
         etIC2.setTextSize(16);
         layoutIC.addView(etIC2);
 

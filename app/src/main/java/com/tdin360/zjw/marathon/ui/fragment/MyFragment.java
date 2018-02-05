@@ -268,12 +268,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.my_phone:
-                SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
+               /* SystemNoticeDetailsServiceImpl systemNoticeDetailsService=new SystemNoticeDetailsServiceImpl(getContext());
                 SharedPreferencesManager.isNotice(getContext(),true);
                 EnumEventBus circle = EnumEventBus.SYSTEM;
                 EventBus.getDefault().post(new EventBusClass(circle));
                 SystemNoticeBean systemNoticeBean=new SystemNoticeBean(null,null,0,null,null);
-                systemNoticeDetailsService.addSystemNotice(systemNoticeBean);
+                systemNoticeDetailsService.addSystemNotice(systemNoticeBean);*/
                 //联系客服
                 if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},2);
