@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -100,8 +101,15 @@ public class HotelRoomActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        String str="<font color='#ff621a'>使用说明：</font>"+bjHotelRoomListModelBean.getInstructions();
-        tvIntro.setText(Html.fromHtml(str));
+        String instructions = bjHotelRoomListModelBean.getInstructions();
+        if(TextUtils.isEmpty(instructions)){
+            String str="<font color='#ff621a'>使用说明：</font>暂无说明";
+            tvIntro.setText(Html.fromHtml(str));
+        }else{
+            String str="<font color='#ff621a'>使用说明：</font>"+instructions;
+            tvIntro.setText(Html.fromHtml(str));
+        }
+
 
     }
 

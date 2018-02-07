@@ -18,6 +18,25 @@ import java.util.List;
 
 public class SingleClass {
     private String eventId;
+    private String hotelId;
+    private String travelId;
+
+    public String getTravelId() {
+        return travelId;
+    }
+
+    public void setTravelId(String travelId) {
+        this.travelId = travelId;
+    }
+
+    public String getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(String hotelId) {
+        this.hotelId = hotelId;
+    }
+
     private static SingleClass singleClass=new SingleClass();
     public static SingleClass getInstance(){
         return singleClass;

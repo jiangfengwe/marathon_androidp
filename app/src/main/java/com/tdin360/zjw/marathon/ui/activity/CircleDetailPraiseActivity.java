@@ -222,7 +222,10 @@ public class CircleDetailPraiseActivity extends BaseActivity {
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                CircleDetailPraiseListBean.ModelBean.TagUserListModelBean tagUserListModelBean = tagUserListModel.get(position);
+                String customerId = tagUserListModelBean.getId() + "";
                 Intent intent=new Intent(CircleDetailPraiseActivity.this,MyCircleActivity.class);
+                intent.putExtra("customerId",customerId);
                 startActivity(intent);
             }
         });

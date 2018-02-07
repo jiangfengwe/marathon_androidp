@@ -9,6 +9,7 @@
         android:id="@+id/iv_praise_list_portrait"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/circle_portrait"
         android:layout_marginRight="10dp"/>
     <LinearLayout

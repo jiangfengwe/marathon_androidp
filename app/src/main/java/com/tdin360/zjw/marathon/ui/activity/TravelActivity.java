@@ -221,7 +221,7 @@ public class TravelActivity extends BaseActivity {
                 String travelId = bjTravelListModelBean.getId()+"";
                 Log.d("eeeeeeeeeee", "onItemClick: "+travelId);
                 Intent intent=new Intent(TravelActivity.this,TravelDetailActivity.class);
-                intent.putExtra("travelId",travelId);
+                SingleClass.getInstance().setTravelId(travelId);
                 startActivity(intent);
             }
         });

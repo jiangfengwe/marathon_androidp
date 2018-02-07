@@ -1,12 +1,18 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -107,7 +113,16 @@ public class HotelCommentActivity extends BaseActivity {
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener=new GridImageAdapter.onAddPicClickListener() {
         @Override
         public void onAddPicClick() {
-            initPic();
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+                initPic();
+            }else {
+                if(ActivityCompat.checkSelfPermission(HotelCommentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(HotelCommentActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},81);
+                }else {
+                    initPic();
+                }
+            }
+
         }
     };
     private void initPic() {
@@ -165,6 +180,50 @@ public class HotelCommentActivity extends BaseActivity {
                     break;
             }
         }
+    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode) {
+            // requestCode即所声明的权限获取码，在checkSelfPermission时传入
+            case 81:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    initPic();
+                    //用户授权成功
+                }else {
+                    //用户没有授权
+                    android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(HotelCommentActivity.this);
+                    alert.setTitle("提示");
+                    alert.setMessage("你需要设置权限才可以使用该功能");
+                    alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getAppDetailSettingIntent(HotelCommentActivity.this);
+                        }
+                    });
+                    alert.show();
+
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    /**
+     * 设置权限界面
+     * @param context
+     */
+    public  void getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+        }
+        context.startActivity(localIntent);
     }
 
     private void initView() {

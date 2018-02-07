@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLHelper extends SQLiteOpenHelper {
 
     //数据库名称
-    public static final String DB_NAME="marathon2.db";
+    public static final String DB_NAME="marathonTwo.db";
     // 社交点赞评论通知表
     public static final String PRAISE_COMMENT_TABLE="Circle";
     // 系统通知表
@@ -50,15 +50,6 @@ public class SQLHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // 社交点赞评论表
-        /*String circleSql ="CREATE TABLE "+PRAISE_COMMENT_TABLE+" (\n" +
-                "    DynamicId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
-                "                          NOT NULL,\n" +
-                "    NickName      VARCHAR,\n" +
-                "    DynamicPictureUrl     VARCHAR,\n" +
-                "    messageType   VARCHAR,\n" +
-                "    HeadImg VARCHAR,\n" +
-                "    CommentContent VARCHAR,\n" +
-                "    DynamicContent   VARCHAR);" ;*/
         String circleSql ="CREATE TABLE "+PRAISE_COMMENT_TABLE+" (\n" +
                 "    dynamicId            INTEGER \n" +
                 "                          NOT NULL,\n" +
@@ -77,7 +68,7 @@ public class SQLHelper extends SQLiteOpenHelper {
          private String notice;
          */
         String systemSql ="CREATE TABLE "+SYSTEM_NOTICE_TABLE+" (\n" +
-                "    messageId            INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "    messageId            INTEGER PRIMARY KEY \n" +
                 "                          NOT NULL,\n" +
                 "    messageIntroduce      VARCHAR,\n" +
                 "    dynamicPictureUrl     VARCHAR,\n" +

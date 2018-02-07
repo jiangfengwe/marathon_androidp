@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
@@ -50,7 +51,8 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false">
 
         <!-- 高德地图配置 -->
         <meta-data
@@ -484,8 +486,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.activity.MyNoticeDetailActivity" />
-        <activity android:name=".ui.activity.ZxingWebActivity"></activity>
+        <activity android:name=".ui.activity.MyNoticeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.ZxingWebActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.RegisterServiceActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

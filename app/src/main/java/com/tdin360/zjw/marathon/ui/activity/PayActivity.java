@@ -162,44 +162,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                         ToastUtils.showCenter(getApplicationContext(),apay.getMessage());
                     }
 
-                  /*  Gson gson=new Gson();
-                    PayBean payBean = gson.fromJson(result, PayBean.class);
-                    boolean state = payBean.isState();
-                    if(state){
-                        ToastUtils.showCenter(getApplicationContext(),payBean.getMessage());
-                        String orderSecretMessage = payBean.getOrderSecretMessage();
-                        String decrypt = AES.decrypt(orderSecretMessage);
-                        Log.d("order", "onSuccess: "+decrypt);
-                        PayInfoBean payInfoBean = gson.fromJson(decrypt, PayInfoBean.class);
-                        PayInfoBean.ModelBean model = payInfoBean.getModel();
-                        PayInfoBean.ModelBean.AppWeiXinPayModelBean appWeiXinPayModel = model.getAppWeiXinPayModel();
-                        PayInfoBean.ModelBean.AppAliPayDataBean appAliPayData = model.getAppAliPayData();
-
-                        PayInfoBean.ModelBean.AppAliPayDataBean appAliPayData1 = model.getAppAliPayData();
-                        String body = appAliPayData.getBody();
-
-                        //支付宝支付
-                        String decrypt1 = AES.decrypt(body);
-                        Log.d("alipay", "onSuccess: "+decrypt1);
-                       *//* String appId = appWeiXinPayModel.getAppId();
-                        String nonceStr = appWeiXinPayModel.getNonceStr();
-                        String packageValue = appWeiXinPayModel.getPackageValue();
-                        String partnerId = appWeiXinPayModel.getPartnerId();
-                        String prepayId = appWeiXinPayModel.getPrepayId();
-                        String sign = appWeiXinPayModel.getSign();
-                        String timeStamp = appWeiXinPayModel.getTimeStamp();
-                        PayReq req = new PayReq();
-                        req.appId=appId;
-                        req.nonceStr=nonceStr;
-                        req.packageValue=packageValue;
-                        req.partnerId=partnerId;
-                        req.prepayId=prepayId;
-                        req.sign=sign;
-                        req.timeStamp=timeStamp;
-                        api.sendReq(req);*//*
-                    }else{
-                        ToastUtils.showCenter(getApplicationContext(),payBean.getMessage());
-                    }*/
 
                 }
 
@@ -456,15 +418,30 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         view.findViewById(R.id.btn_check_order).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
+                Intent intent,intent1;
                 if(type.equals("travel")){
+                    //intent.putExtra("payOrder","travelorder");
                     intent =new Intent(PayActivity.this,TravelOrderDetailActivity.class);
+                    intent1=getIntent();
+                    String payOrder = intent1.getStringExtra("payOrder");
                     intent.putExtra("orderId",orderId);
+                    intent.putExtra("payOrder",payOrder);
+                    if(payOrder.equals("travelorder")){
+                        finish();
+                    }
                     startActivity(intent);
                 }else{
+                    intent1=getIntent();
+                    String payOrder = intent1.getStringExtra("payOrder");
                     intent=new Intent(PayActivity.this,HotelOrderDetailActivity.class);
                     intent.putExtra("orderId",orderId);
+                    intent.putExtra("payOrder",payOrder);
+                    if(payOrder.equals("hotelorder")){
+                        finish();
+                    }
+                    //intent.putExtra("payOrder","hotelorder");
                     startActivity(intent);
+
                 }
             }
 

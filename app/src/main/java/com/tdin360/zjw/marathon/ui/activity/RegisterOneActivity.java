@@ -84,6 +84,8 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
     private EditText etPsw;
     @ViewInject(R.id.btn_register_sure)
     private Button btnSure;
+    @ViewInject(R.id.tv_register_service)
+    private TextView tvService;
 
      public static Activity instance;
 
@@ -241,6 +243,7 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
         ivCancel.setOnClickListener(this);
         tvCode.setOnClickListener(this);
         btnSure.setOnClickListener(this);
+        tvService.setOnClickListener(this);
         //取消按钮的隐藏
         etPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -312,6 +315,12 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
             case R.id.iv_register_cancel:
                 //意见清空
                 etPhone.setText("");
+                break;
+            case R.id.tv_register_service:
+                //注册协议
+                Intent intent=new Intent(RegisterOneActivity.this,RegisterServiceActivity.class);
+                startActivity(intent);
+
                 break;
             case R.id.tv_get_code:
                 //获取验证码

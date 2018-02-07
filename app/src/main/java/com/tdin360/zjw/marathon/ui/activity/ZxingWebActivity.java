@@ -97,7 +97,7 @@ public class ZxingWebActivity extends BaseActivity {
         @Override
         public void onReceivedTitle(WebView webView, String s) {
             super.onReceivedTitle(webView, s);
-             titleTv.setText(s);
+             titleTv.setText("佰家赛事");
         }
     }
     private class MyWebViewClient extends WebViewClient {
@@ -110,7 +110,7 @@ public class ZxingWebActivity extends BaseActivity {
         public void onPageFinished(WebView webView, String s) {
             super.onPageFinished(webView, s);
             progressBar.setVisibility(View.GONE);
-            titleTv.setText(webView.getTitle());
+            titleTv.setText("佰家赛事");
         }
         @Override
         public void onReceivedError(WebView webView, int i, String s, String s1) {

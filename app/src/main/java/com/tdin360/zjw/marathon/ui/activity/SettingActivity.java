@@ -200,13 +200,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void initPhone() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
         builder.setTitle("温馨提示");
-        builder.setMessage("确定拨打18941125702吗?");
+        builder.setMessage("确定拨打085138157660吗?");
         builder.setCancelable(false);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                Uri data = Uri.parse("tel:" + "18941125702");
+                Uri data = Uri.parse("tel:" + "085138157660");
                 intent.setData(data);
                 startActivity(intent);
                 finish();

@@ -133,7 +133,7 @@ public class HotelRoomSubmitActivity extends BaseActivity {
                 intent.putExtra("type","hotel");
                 intent.putExtra("orderNumber",orderNo);
                 intent.putExtra("orderId",orderId);
-
+                intent.putExtra("payOrder","hotelpay");
                 startActivity(intent);
             }
         });

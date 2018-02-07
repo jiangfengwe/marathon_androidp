@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,10 @@ import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.UpdateManager;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import org.xutils.view.annotation.ViewInject;
 
@@ -44,6 +49,8 @@ public class AboutUsActivity extends BaseActivity  {
     private View viewline;
     @ViewInject(R.id.toolbar_title)
     private TextView titleTv;
+    @ViewInject(R.id.webView)
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +79,23 @@ public class AboutUsActivity extends BaseActivity  {
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
         titleTv.setText(R.string.setting_about_us);
-
-
         showBack(toolbar,imageView);
+
+        String  url ="file:///android_asset/about.html";
+        Log.d("orderIdurl", "onCreate: "+url);
+        webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        this.webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.webView.getSettings().setBuiltInZoomControls(false);
+        this.webView.getSettings().setDomStorageEnabled(true);
+        this.webView.setWebChromeClient(new WebChromeClient());
+        this.webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(url);
 
     }
 

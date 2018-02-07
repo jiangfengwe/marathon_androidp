@@ -70,6 +70,10 @@ public class EventStateFragment extends BaseFragment {
 
     private boolean isVisible;
     private boolean isPrepared;
+    private boolean isLazyLoad=true;//默认状态需要懒加载
+    public static final String INTENT_BOOLEAN_LAZYLOAD="intent_boolean_lazyLoad";
+
+
 
     private List<EventBean.ModelBean.BJEventSystemListModelBean> bjEventSystemListModel=new ArrayList<>();
 
@@ -105,14 +109,20 @@ public class EventStateFragment extends BaseFragment {
             return;
         }
         initNet();
-        //initData();
         initView();
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_state, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_event_state, container, false);
+
+        Bundle bundle=getArguments();
+        if(bundle!=null)
+        {
+            isLazyLoad=bundle.getBoolean(INTENT_BOOLEAN_LAZYLOAD,isLazyLoad);
+        }
+        return inflate;
+
     }
 
     @Override
@@ -187,13 +197,6 @@ public class EventStateFragment extends BaseFragment {
         }
     }
     private void initData(int i) {
-        //bjEventSystemListModel.clear();
-       /* final KProgressHUD hud = KProgressHUD.create(getContext());
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();*/
        if(i==1){
            bjEventSystemListModel.clear();
        }

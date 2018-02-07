@@ -167,10 +167,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String str="<font color='#ff621a'>入住说明：</font>";
             tvIntro.setText(Html.fromHtml(str));
         }else{
-            String str="<font color='#ff621a'>入住说明：</font>"+bjHotelRoomListModelBean.getInstructions();
+            String str="<font color='#ff621a'>入住说明：</font>暂无说明"+bjHotelRoomListModelBean.getInstructions();
             tvIntro.setText(Html.fromHtml(str));
-        }
-*/
+        }*/
+        String str="<font color='#ff621a'>入住说明：</font>暂无说明";
+        tvIntro.setText(Html.fromHtml(str));
 
         tvIn.setOnClickListener(this);
         tvOut.setOnClickListener(this);
@@ -325,11 +326,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 }
                 count--;
                 countRoom--;
-                layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);
-                layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);
-                //layout.removeViewAt(count-1);
+                layoutName.removeViewAt(count);
+                layoutIC.removeViewAt(count);
+                layoutName.removeViewAt(count);
+                layoutIC.removeViewAt(count);
+                layout.removeViewAt(count);
                 setSum();
                 break;
             case R.id.tv_hotel_room_add:
@@ -530,10 +531,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private void addLayout(){
         layout= new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-
-
-
-
         final LinearLayout layout1 = new LinearLayout(this);
         layout1.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -545,7 +542,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutName.addView(etName);
         final EditText etIC = new EditText(this);
         ic.add(etIC);
-        etIC.setHint("身份证 房间"+countRoom);
+        etIC.setHint("身份证");
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
 
@@ -558,7 +555,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutName.addView(etName2);
         final EditText etIC2 = new EditText(this);
         ic.add(etIC2);
-        etIC2.setHint("身份证 房间"+countRoom);
+        etIC2.setHint("身份证");
         etIC2.setTextSize(16);
         layoutIC.addView(etIC2);
 

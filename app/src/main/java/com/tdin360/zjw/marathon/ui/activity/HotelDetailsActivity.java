@@ -1,12 +1,14 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -172,7 +174,8 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         String eventId= SingleClass.getInstance().getEventId();
-        String hotelId = getIntent().getStringExtra("hotelId");
+       // String hotelId = getIntent().getStringExtra("hotelId");
+        String hotelId = SingleClass.getInstance().getHotelId();
         RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_DETAIL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("eventId",eventId);
@@ -281,11 +284,17 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         if(ContextCompat.checkSelfPermission(HotelDetailsActivity.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-                            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},3);
+                            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},20);
                             //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},1);
                         }else{
                             showTelDialog();
                         }
+                       /* if(ContextCompat.checkSelfPermission(HotelDetailsActivity.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},3);
+                            //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},1);
+                        }else{
+                            showTelDialog();
+                        }*/
                     }
                 });
                 //查看图片
@@ -429,7 +438,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
-            case 3:
+            case 20:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
                     showTelDialog();
                     //用户授权成功
@@ -441,7 +450,8 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            CommonUtils.getAppDetailSettingIntent(HotelDetailsActivity.this);
+                            //CommonUtils.getAppDetailSettingIntent(HotelDetailsActivity.this);
+                            getAppDetailSettingIntent(getApplicationContext());
                         }
                     });
                     alert.show();
@@ -451,6 +461,24 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         }
 
     }
+    /**
+     * 设置权限界面
+     * @param context
+     */
+    public  void getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+        }
+        context.startActivity(localIntent);
+    }
+
 
 
 }

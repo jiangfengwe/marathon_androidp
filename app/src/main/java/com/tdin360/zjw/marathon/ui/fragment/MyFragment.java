@@ -39,6 +39,7 @@ import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyOrderActivity;
 import com.tdin360.zjw.marathon.ui.activity.SettingActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
+import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.LoginNavigationConfig;
 import com.tdin360.zjw.marathon.utils.NavType;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -288,14 +289,14 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     }
     private void showTelDialog() {
         android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(getActivity());
-        normalDialog.setMessage("是否拨打0851138157660");
+        normalDialog.setMessage("是否拨打085138157660");
         normalDialog.setPositiveButton("是",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //String phone = textViewhot.getText().toString();
                         Intent intent = new Intent(Intent.ACTION_DIAL);
-                        Uri data = Uri.parse("tel:" + "0851138157660");
+                        Uri data = Uri.parse("tel:" + "085138157660");
                         intent.setData(data);
                         startActivity(intent);
                     }
@@ -401,16 +402,17 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
             @Override
             public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
 
-                UMWeb umWeb = new UMWeb(getString(R.string.shareDownLoadUrl));
-                umWeb.setTitle("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。");
-                umWeb.setDescription("佰家运动");
+                //UMWeb umWeb = new UMWeb(getString(R.string.shareDownLoadUrl));
+                UMWeb umWeb = new UMWeb(HttpUrlUtils.DOWNLOAD_URL);
+                umWeb.setTitle("赛事尽在佰家赛事App，下载佰家赛事，随时随地了解赛事信息，查询、报名全程无忧。");
+                umWeb.setDescription("佰家赛事");
                 UMImage image = new UMImage(getActivity(),R.mipmap.logo);
 
                 image.compressStyle = UMImage.CompressStyle.SCALE;//质量压缩，适合长图的分享
                 image.compressFormat = Bitmap.CompressFormat.JPEG;//用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
                 umWeb.setThumb(image);
 
-                new ShareAction(getActivity()).withText("赛事尽在佰家运动App，下载佰家运动，随时随地了解赛事信息，查询、报名全程无忧。")
+                new ShareAction(getActivity()).withText("赛事尽在佰家赛事App，下载佰家赛事，随时随地了解赛事信息，查询、报名全程无忧。")
                             .setPlatform(share_media)
                             .setCallback(new MyUMShareListener())
                             .withMedia(umWeb)

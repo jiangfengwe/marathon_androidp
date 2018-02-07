@@ -434,9 +434,16 @@ public class CircleDetailActivity extends BaseActivity {
                 rvHead.setAdapter(new RecyclerViewBaseAdapter<CircleDetailBean.ModelBean.TagUserListModelBean>(getApplicationContext(),
                         tagUserListModel,R.layout.item_circle_detail_head_praise) {
                     @Override
-                    protected void onBindNormalViewHolder(NormalViewHolder holder, CircleDetailBean.ModelBean.TagUserListModelBean model) {
+                    protected void onBindNormalViewHolder(NormalViewHolder holder, final CircleDetailBean.ModelBean.TagUserListModelBean model) {
                         ImageView iv = (ImageView) holder.getViewById(R.id.iv_circle_detail_praise_portrait);
-                        x.image().bind(iv,model.getHeadImg(),imageOptions);
+                        String headImg = model.getHeadImg();
+                        if(TextUtils.isEmpty(headImg)){
+                            iv.setImageResource(R.drawable.my_portrait);
+                        }else{
+                            x.image().bind(iv,headImg,imageOptions);
+                        }
+
+
                         if(getPosition(holder)==10){
                             holder.setImageResource(R.id.iv_circle_detail_praise_portrait,R.drawable.circle_detail_enter);
                             iv.setOnClickListener(new View.OnClickListener() {
@@ -446,24 +453,27 @@ public class CircleDetailActivity extends BaseActivity {
                                     startActivity(intent);
                                 }
                             });
-                            return;
+
+                        }else{
+                            iv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent=new Intent(CircleDetailActivity.this,MyCircleActivity.class);
+                                    String customerId = model.getId() + "";
+                                    intent.putExtra("customerId",customerId);
+                                    startActivity(intent);
+                                }
+                            });
                         }
-                        iv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent=new Intent(CircleDetailActivity.this,MyCircleActivity.class);
-                                intent.putExtra("dynamicId",dynamicId);
-                                startActivity(intent);
-                            }
-                        });
-                        iv.setOnClickListener(new View.OnClickListener() {
+
+                       /* iv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent=new Intent(CircleDetailActivity.this,CircleDetailPraiseActivity.class);
                                 intent.putExtra("dynamicId",dynamicId);
                                 startActivity(intent);
                             }
-                        });
+                        });*/
 
                     }
                 });

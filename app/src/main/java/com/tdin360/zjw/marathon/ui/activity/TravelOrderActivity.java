@@ -224,8 +224,8 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 ic.remove(count-1);*/
               /*  name.clear();
                 ic.clear();*/
-                layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);
+                layoutName.removeViewAt(count);
+                layoutIC.removeViewAt(count);
                /* for (int i = count; i < count; i--) {
                     addView();
                 }*/

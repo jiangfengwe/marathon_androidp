@@ -134,6 +134,7 @@ public class TravelOrderSubmitActivity extends BaseActivity {
                 intent.putExtra("type","travel");
                 intent.putExtra("orderNumber",orderNo);
                 intent.putExtra("orderId",orderId);
+                intent.putExtra("payOrder","travelpay");
                 startActivity(intent);
             }
         });

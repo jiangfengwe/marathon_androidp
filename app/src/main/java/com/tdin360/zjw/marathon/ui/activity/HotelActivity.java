@@ -252,6 +252,7 @@ public class HotelActivity extends BaseActivity {
                 String hotelId = bjHotelListModelBean.getId() + "";
                 Intent intent=new Intent(HotelActivity.this,HotelDetailsActivity.class);
                 intent.putExtra("hotelId",hotelId);
+                SingleClass.getInstance().setHotelId(hotelId);
                 startActivity(intent);
             }
         });

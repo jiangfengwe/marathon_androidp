@@ -85,20 +85,6 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     @ViewInject(R.id.iv_loading)
     private ImageView ivLoading;
 
-//implements MyDatePickerDialog.OnMyDatePickerChangeListener
-   /* private ImageView imageView;
-    private EditText editName;
-    private EditText editEmail;
-    private RadioButton gender1,gender2;
-    private boolean isCanEdit;
-    private LinearLayout main;
-    private TextView loadFail;
-    //出生日期选择相关
-    private TextView editBirth;
-    //用于存储用户选择裁剪后的头像
-    //private KProgressHUD hud;
-
-    private MyInfoServiceImpl service;*/
 
     @ViewInject(R.id.mToolBar)
     private Toolbar toolbar;

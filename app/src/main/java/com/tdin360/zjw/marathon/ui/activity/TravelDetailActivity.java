@@ -204,7 +204,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 String eventId = SingleClass.getInstance().getEventId();
-                String travelId = getIntent().getStringExtra("travelId");
+                String travelId = SingleClass.getInstance().getTravelId();
+               // String travelId = getIntent().getStringExtra("travelId");
                 Intent intent=new Intent(TravelDetailActivity.this,TravelMoreCommentActivity.class);
                 intent.putExtra("eventId",eventId);
                 intent.putExtra("travelId",travelId);
@@ -223,7 +224,6 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                     case NOT_NETWORK:
                         initData();
                         break;
-
                 }
             }
         });
@@ -331,7 +331,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         String eventId = SingleClass.getInstance().getEventId();
-        String travelId = getIntent().getStringExtra("travelId");
+       // String travelId = getIntent().getStringExtra("travelId");
+        String travelId = SingleClass.getInstance().getTravelId();
         RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_DETAIL);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("eventId",eventId);
@@ -411,22 +412,6 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-               /* LinearLayoutManager manager = (LinearLayoutManager) v.getLayoutManager();
-                int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-                // 当不滚动时
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // 判断是否滚动超过一屏
-                    if (firstVisibleItemPosition == 0) {
-                        layout.setBackgroundColor(Color.parseColor("#00000000"));
-                    } else if(firstVisibleItemPosition == 1){
-                        layout.setBackgroundColor(Color.parseColor("#50ff621a"));
-                    } else {
-                        layout.setBackgroundColor(Color.parseColor("#ff621a"));
-                    }
-
-                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {//拖动中
-                    layout.setBackgroundColor(Color.parseColor("#ff621a"));
-                }*/
                 Log.d("onScrollChange", "onScrollChange: "+(scrollY-oldScrollY));
                 if((scrollY-oldScrollY)>1){
                     layoutNull.setBackgroundColor(Color.parseColor("#ff621a"));
@@ -509,7 +494,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
 
     private void tellDialog() {
         android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(TravelDetailActivity.this);
-        normalDialog.setMessage("是否拨打");
+        normalDialog.setMessage("是否拨打"+bjTravelModel.getPhone1());
         normalDialog.setPositiveButton("是",
                 new DialogInterface.OnClickListener() {
                     @Override

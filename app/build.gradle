@@ -8,8 +8,8 @@ android {
         applicationId "com.tdin360.zjw.marathon"//极光推送配置
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 10
-        versionName "1.1.1"
+        versionCode 20
+        versionName "2.0.0"
         multiDexEnabled true //突破应用方法数的65535的限制
         //不指定渠道时默认添加友盟渠道
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Umeng"]
@@ -128,13 +128,15 @@ dependencies {
 //    compile 'cn.finalteam.rxgalleryfinal:library:1.1.0'
     //compile 'com.github.maning0303:MNImageBrowser:V1.0.3'
     compile project(path: ':imagebrowserlibrary')
+    // 此处以JPush 3.1.1 版本为例。
+    // 此处以JCore 1.1.9 版本为例。
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'org.xutils:xutils:3.4.0'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
-    compile 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
+    compile 'cn.jiguang.sdk:jpush:3.1.1'
+    compile 'cn.jiguang.sdk:jcore:1.1.9'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'com.kaopiz:kprogresshud:1.1.0'
@@ -157,6 +159,7 @@ dependencies {
     compile 'com.github.maning0303:MNProgressHUD:V1.0.5'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

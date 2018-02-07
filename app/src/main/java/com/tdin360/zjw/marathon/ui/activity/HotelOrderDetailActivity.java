@@ -121,7 +121,6 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         initToolbar();
         initView();
-
         initNet();
         Intent intent=getIntent();
         String orderId = intent.getStringExtra("orderId");
@@ -141,8 +140,6 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         this.webView.setWebChromeClient(new WebChromeClient());
         this.webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
-
-
     }
     private void initNet() {
         //加载失败点击重试
@@ -345,6 +342,20 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                                                 bjHotelOrderModel.setIsPay(true);
                                                 EnumEventBus travelrefund = EnumEventBus.HOTELREFUND;
                                                 EventBus.getDefault().post(new EventBusClass(travelrefund));
+                                                Intent intent1=getIntent();
+                                                String payOrder = intent1.getStringExtra("payOrder");
+                                                if(payOrder.equals("hotelorder")){
+                                                    finish();
+                                                }
+                                                //intent.putExtra("payOrder","hotelpay");
+                                                if(payOrder.equals("hotelpay")){
+                                                    Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
+                                                    Intent intent2=getIntent();
+                                                    String hotelId = getIntent().getStringExtra("hotelId");
+                                                    //intent.putExtra("orderId",hotelId);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
                                                 finish();
                                             }else{
                                                 ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
@@ -419,6 +430,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                 intent.putExtra("type","hotel");
                 intent.putExtra("orderNumber",orderNo);
                 intent.putExtra("orderId",orderId);
+                intent.putExtra("payOrder","hotelorder");
                 startActivity(intent);
             }
         });
@@ -488,7 +500,21 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent1=getIntent();
+                String payOrder = intent1.getStringExtra("payOrder");
+                if(payOrder.equals("hotelorder")){
+                    finish();
+                }
+                //intent.putExtra("payOrder","hotelpay");
+                if(payOrder.equals("hotelpay")){
+                    Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
+                    Intent intent2=getIntent();
+                    String orderId = intent2.getStringExtra("orderId");
+                    //intent.putExtra("orderId",orderId);
+                    startActivity(intent);
+                    finish();
+                }
+                //finish();
             }
         });
         viewline.setVisibility(View.GONE);
