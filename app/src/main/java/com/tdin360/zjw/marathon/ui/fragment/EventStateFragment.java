@@ -116,11 +116,6 @@ public class EventStateFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_event_state, container, false);
 
-        Bundle bundle=getArguments();
-        if(bundle!=null)
-        {
-            isLazyLoad=bundle.getBoolean(INTENT_BOOLEAN_LAZYLOAD,isLazyLoad);
-        }
         return inflate;
 
     }
@@ -274,14 +269,6 @@ public class EventStateFragment extends BaseFragment {
                 if(isRegister){
                     apply.setText("正在报名>>");
                     apply.setTextColor(Color.parseColor("#ff621a"));
-                    /*apply.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent=new Intent(getActivity(),ApplyActivity.class);
-                            startActivity(intent);
-
-                        }
-                    });*/
                 }else {
                     apply.setText("报名截止>>");
                     apply.setTextColor(Color.parseColor("#9b9b9b"));
@@ -328,7 +315,7 @@ public class EventStateFragment extends BaseFragment {
                 springView.onFinishFreshAndLoad();
                 bjEventSystemListModel.clear();
                 pageIndex=1;
-                initData(0);
+                initData(1);
             }
 
             @Override

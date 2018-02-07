@@ -264,7 +264,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         String eventId = SingleClass.getInstance().getEventId();
-        String travelId = getIntent().getStringExtra("travelId");
+        //String travelId = getIntent().getStringExtra("travelId");
+        String travelId = SingleClass.getInstance().getTravelId();
         RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_DETAIL_PICTURE);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("eventId",eventId);
@@ -311,7 +312,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         webView.getSettings().setLoadWithOverviewMode(true);
         this.webView.getSettings().setBuiltInZoomControls(false);
         this.webView.getSettings().setDomStorageEnabled(true);
-        String travelId = getIntent().getStringExtra("travelId");
+       // String travelId = getIntent().getStringExtra("travelId");
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
@@ -319,6 +320,7 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.setWebChromeClient(new WebChromeClient());
         this.webView.setWebViewClient(new WebViewClient());
+        String travelId = SingleClass.getInstance().getTravelId();
        // String url = HttpUrlUtils.TRAVEL_DETAIL_INFO + "?" + "appKey" + "=" + "BJYDAppV-2" + "&" + "travelId" + travelId;
         String url="http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
         webView.loadUrl(url);

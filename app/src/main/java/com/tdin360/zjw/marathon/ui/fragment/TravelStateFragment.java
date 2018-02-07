@@ -369,6 +369,7 @@ public class TravelStateFragment extends BaseFragment {
                 Intent intent=new Intent(getActivity(), TravelOrderDetailActivity.class);
                 String orderId = bjTravelOrderListModelBean.getId()+"";
                 intent.putExtra("orderId",orderId);
+                //intent.putExtra("orderId","payOrder");
                 startActivity(intent);
             }
         });

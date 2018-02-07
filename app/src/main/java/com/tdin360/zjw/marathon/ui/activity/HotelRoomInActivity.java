@@ -23,6 +23,7 @@ import com.codbking.widget.bean.DateType;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
+import com.tdin360.zjw.marathon.PeopleClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
@@ -106,8 +107,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     @ViewInject(R.id.layout_hotel_room_info)
     private LinearLayout layoutList;
     private LinearLayout layoutInfo;
-    private List<EditText> name=new ArrayList<>();
-    private List<EditText> ic=new ArrayList<>();
+    private List<PeopleClass> name=new ArrayList<>();
+    //private List<EditText> ic=new ArrayList<>();
 
     private String str;
     /*@ViewInject(R.id.list_Lin)
@@ -330,7 +331,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 layoutIC.removeViewAt(count);
                 layoutName.removeViewAt(count);
                 layoutIC.removeViewAt(count);
-                layout.removeViewAt(count);
+                //layout.removeViewAt(count);
+                name.remove(count);
+                name.remove(count);
                 setSum();
                 break;
             case R.id.tv_hotel_room_add:
@@ -410,13 +413,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             for (int i = 0; i < name.size(); i++) {
                 try {
                     tmpObj=new JSONObject();
-                    String nameJson = name.get(i).getText().toString();
-                    String icJson = ic.get(i).getText().toString();
+                    String nameJson = name.get(i).getNameEt().getText().toString();
+                    String icJson = name.get(i).getNameIc().getText().toString();
                     for (int j = 0; j < name.size(); j++) {
                         Log.d("rrrrrrrrr", "initData: "+name.size());
                         if((j)%2==0){
-                            String stringName = name.get(j).getText().toString();
-                            String stringIc = ic.get(j).getText().toString();
+                            String stringName = name.get(j).getNameEt().toString();
+                            String stringIc = name.get(j).getNameIc().toString();
                             if(TextUtils.isEmpty(stringName)&&TextUtils.isEmpty(stringIc)){
                                 ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能同时为空！");
                                 return;
@@ -520,10 +523,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         final EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
-        name.add(etName);
+        //name.add(etName);
         layoutName.addView(etName);
         final EditText etIC = new EditText(this);
-        ic.add(etIC);
+        //ic.add(etIC);
         etIC.setHint("身份证");
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
@@ -538,26 +541,29 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         final EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
-        name.add(etName);
+       // name.add(etName);
         layoutName.addView(etName);
         final EditText etIC = new EditText(this);
-        ic.add(etIC);
-        etIC.setHint("身份证");
+       // ic.add(etIC);
+        etIC.setHint("身份证"+count);
         etIC.setTextSize(16);
         layoutIC.addView(etIC);
+        name.add(new PeopleClass(etName,etIC));
 
         final LinearLayout layout2 = new LinearLayout(this);
         layout2.setOrientation(LinearLayout.HORIZONTAL);
         final EditText etName2 = new EditText(this);
         etName2.setHint("姓名");
         etName2.setTextSize(16);
-        name.add(etName2);
+        //name.add(etName2);
         layoutName.addView(etName2);
         final EditText etIC2 = new EditText(this);
-        ic.add(etIC2);
-        etIC2.setHint("身份证");
+       // ic.add(etIC2);
+        etIC2.setHint("身份证"+count);
         etIC2.setTextSize(16);
         layoutIC.addView(etIC2);
+
+        name.add(new PeopleClass(etName2,etIC2));
 
 
         layout.addView(layout1);

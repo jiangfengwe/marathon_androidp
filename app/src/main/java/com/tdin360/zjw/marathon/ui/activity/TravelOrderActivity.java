@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
+import com.tdin360.zjw.marathon.PeopleClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.HotelOrderBean;
@@ -90,8 +91,8 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout layoutName;
     @ViewInject(R.id.layout_ic)
     private LinearLayout layoutIC;
-    private List<EditText> name=new ArrayList<>();
-    private List<EditText> ic=new ArrayList<>();
+    private List<PeopleClass> name=new ArrayList<>();
+    //private List<EditText> ic=new ArrayList<>();
 
 
     @ViewInject(R.id.layout_choose_time)
@@ -215,17 +216,11 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 count--;
-               /* layoutName.removeAllViews();
-                layoutIC.removeAllViews();*/
-               /* layoutName.removeViewAt(count-1);
-                layoutIC.removeViewAt(count-1);*/
-                //layout.removeViewAt(count-1);
-              /*  name.remove(count-1);
-                ic.remove(count-1);*/
-              /*  name.clear();
-                ic.clear();*/
+
                 layoutName.removeViewAt(count);
                 layoutIC.removeViewAt(count);
+                name.remove(count);
+                //ic.remove(count);
                /* for (int i = count; i < count; i--) {
                     addView();
                 }*/
@@ -321,8 +316,9 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
             for (int i = 0; i < name.size(); i++) {
                 try {
                     tmpObj=new JSONObject();
-                    String nameEt = name.get(i).getText().toString().trim();
-                    String icEt = ic.get(i).getText().toString().trim();
+
+                    String nameEt = name.get(i).getNameEt().getText().toString().trim();
+                    String icEt = name.get(i).getNameIc().getText().toString().trim();
                     if(TextUtils.isEmpty(nameEt)&&TextUtils.isEmpty(icEt)){
                         ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能同时为空！");
                         return;
@@ -422,17 +418,20 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
         layout= new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+
         final LinearLayout layout1 = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         final EditText etName = new EditText(this);
         etName.setHint("姓名");
         etName.setTextSize(16);
-        name.add(etName);
+        //name.add(etName);
         layoutName.addView(etName);
         final EditText etIC = new EditText(this);
-        ic.add(etIC);
+        //ic.add(etIC);
         etIC.setHint("身份证");
         etIC.setTextSize(16);
+        name.add(new PeopleClass(etName,etIC));
+
         layoutIC.addView(etIC);
         layout.addView(layout1);
 

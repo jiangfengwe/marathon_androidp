@@ -497,26 +497,27 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
 
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1=getIntent();
-                String payOrder = intent1.getStringExtra("payOrder");
-                if(payOrder.equals("hotelorder")){
-                    finish();
-                }
-                //intent.putExtra("payOrder","hotelpay");
-                if(payOrder.equals("hotelpay")){
+        Intent intent1=getIntent();
+        String payOrder = intent1.getStringExtra("payOrder");
+        if(!TextUtils.isEmpty(payOrder)&&payOrder.equals("hotelpay")){
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
-                    Intent intent2=getIntent();
-                    String orderId = intent2.getStringExtra("orderId");
-                    //intent.putExtra("orderId",orderId);
                     startActivity(intent);
                     finish();
                 }
-                //finish();
-            }
-        });
+            });
+
+        }else{
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
         viewline.setVisibility(View.GONE);
         titleTv.setText("预定详情");
     }

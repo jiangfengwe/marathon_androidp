@@ -525,26 +525,29 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
     }
 
     private void initToolbar() {
+        viewline.setVisibility(View.VISIBLE);
         imageView.setImageResource(R.drawable.back_black);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1=getIntent();
-                String payOrder = intent1.getStringExtra("payOrder");
-                if(payOrder.equals("travelorder")){
-                    finish();
-                }
-                if(payOrder.equals("travelpay")){
-                    Intent intent2=getIntent();
+        Intent intent1=getIntent();
+        String payOrder = intent1.getStringExtra("payOrder");
+        if(!TextUtils.isEmpty(payOrder)&&payOrder.equals("travelpay")){
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Intent intent=new Intent(TravelOrderDetailActivity.this,TravelDetailActivity.class);
-                    String orderId = intent2.getStringExtra("orderId");
-                    intent.putExtra("orderId",orderId);
                     startActivity(intent);
                     finish();
                 }
+            });
 
-            }
-        });
+        }else{
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
         viewline.setVisibility(View.GONE);
         titleTv.setText("预定详情");
     }
