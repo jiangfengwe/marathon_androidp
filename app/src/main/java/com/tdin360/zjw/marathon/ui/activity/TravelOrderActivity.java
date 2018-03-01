@@ -83,6 +83,7 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
     @ViewInject(R.id.et_travel_order_phone)
     private TextView etPhone;
     private int count=1;
+    private int countDte=0;
 
     @ViewInject(R.id.tv_travel_order_money)
     private TextView tvMoney;
@@ -108,6 +109,8 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
 
     private  LinearLayout layout;
 
+    //List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList =new ArrayList<>();
+
 
 
     @Override
@@ -119,16 +122,19 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
         year =formatter.format(c.getTime());
         //c.add(Calendar.DAY_OF_MONTH,1);
         tvYear.setText(year);
+
         initToolbar();
         initView();
         initDate();
+
     }
     private void initDate() {
-        List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList =
-                SingleClass.getInstance().getApiTravelMonthDateList();
+        List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiTravelMonthDateList();
         if(apiTravelMonthDateList.size()<=0){
             return;
         }
+        options1Items.clear();
+        options2Itemss.clear();
         for (int i = 0; i <apiTravelMonthDateList.size() ; i++) {
             TravelDetailBean.ModelBean.ApiTravelMonthDateListBean apiTravelMonthDateListBean = apiTravelMonthDateList.get(i);
             String month = apiTravelMonthDateListBean.getMonth();
@@ -251,8 +257,12 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 setSum();
                 break;
             case R.id.layout_choose_time:
+               /* List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList =
+                        SingleClass.getInstance().getApiTravelMonthDateList();
+                apiTravelMonthDateList.clear();*/
                 //日期选择
                 initDate();
+                //countDte++;
                 break;
             case R.id.tv_travel_choose_submit:
                 //提交订单
