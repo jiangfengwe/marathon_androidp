@@ -141,6 +141,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
                         EventBus.getDefault().post(new EventBusClass(system));
                         Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
                         int dynamicId = model.getMessageId();
+                        Log.d("notice1dynamicId", "onItemClick: "+dynamicId);
                         intent.putExtra("Id",dynamicId);
                         startActivity(intent);
                     }

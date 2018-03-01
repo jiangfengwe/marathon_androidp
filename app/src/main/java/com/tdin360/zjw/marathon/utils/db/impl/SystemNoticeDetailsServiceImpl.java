@@ -61,7 +61,7 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
             values.put("commentContent",model.getCommentContent());
             values.put("dynamicContent",model.getDynamicContent());
             values.put("messageType",model.getMessageType());*/
-        //values.put("messageId",model.getMessageId());
+        values.put("messageId",model.getMessageId());
         values.put("messageIntroduce",model.getMessageIntroduce());
         values.put("messageType",model.getMessageType());
         values.put("time",model.getTime());

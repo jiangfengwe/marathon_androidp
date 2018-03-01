@@ -68,16 +68,12 @@ public class SQLHelper extends SQLiteOpenHelper {
          private String notice;
          */
         String systemSql ="CREATE TABLE "+SYSTEM_NOTICE_TABLE+" (\n" +
-                "    messageId            INTEGER PRIMARY KEY \n" +
+                "    messageId            INTEGER PRIMARY KEY\n" +
                 "                          NOT NULL,\n" +
                 "    messageIntroduce      VARCHAR,\n" +
-                "    dynamicPictureUrl     VARCHAR,\n" +
                 "    messageType   VARCHAR,\n" +
-                "    headImg VARCHAR,\n" +
-                "    commentContent VARCHAR,\n" +
                 "    time VARCHAR,\n" +
-                "    timeNotice VARCHAR,\n" +
-                "    dynamicContent   VARCHAR);" ;
+                "    timeNotice   VARCHAR);" ;
 
 //        赛事数据表
         String eventSql ="CREATE TABLE "+EVENT_TABLE+" (\n" +

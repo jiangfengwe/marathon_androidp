@@ -446,7 +446,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     //用户没有授权
                     android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(getApplicationContext());
                     alert.setTitle("提示");
-                    alert.setMessage("您需要设置允许才能使用该功能");
+                    alert.setMessage("您需要设置打电话权限才能使用该功能");
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

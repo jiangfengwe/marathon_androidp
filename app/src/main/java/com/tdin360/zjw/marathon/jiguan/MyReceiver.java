@@ -172,7 +172,7 @@ public class MyReceiver extends BroadcastReceiver {
             SharedPreferencesManager.isNotice(context,true);
             EnumEventBus circle = EnumEventBus.SYSTEM;
             EventBus.getDefault().post(new EventBusClass(circle));
-            circlePriseTableModel.setNotice("0");
+			systemNoticeBean.setNotice("0");
             systemNoticeDetailsService.addSystemNotice(systemNoticeBean);
         }
         //系统通知

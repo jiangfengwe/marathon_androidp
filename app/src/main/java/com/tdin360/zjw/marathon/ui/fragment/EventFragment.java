@@ -592,7 +592,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener 
                     //用户没有授权
                     android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(getActivity());
                     alert.setTitle("提示");
-                    alert.setMessage("你需要设置权限才可以使用该功能");
+                    alert.setMessage("你需要设置摄像头权限才可以使用该功能");
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

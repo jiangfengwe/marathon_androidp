@@ -381,31 +381,23 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
-
-
-            case 1000:
-
+            case 100:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-
                     //授权成功
                     share();
-
-                }else {
-
+                }else{
                     //授权失败
                     AlertDialog.Builder alert = new AlertDialog.Builder(WebActivity.this);
                     alert.setTitle("提示");
-                    alert.setMessage("您需要设置才能使用该功能");
+                    alert.setMessage("您需要设置存储权限才能使用该功能");
                     alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             CommonUtils.getAppDetailSettingIntent(getBaseContext());
                         }
                     });
                     alert.show();
                 }
-
                 break;
         }
 
@@ -433,7 +425,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 //分享
                 //webView.reload();
                 //刷新旋转动画
-
 
              /*   if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
                     share();

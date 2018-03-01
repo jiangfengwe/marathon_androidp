@@ -100,6 +100,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     private ShareAction action;
     private String noticeView;
 
+    ImageOptions imageOptions;
+
     public static MyFragment newInstance(){
 
         return   new MyFragment();
@@ -160,6 +162,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
             EventBus.getDefault().register(this);
             flag=!flag;
         }
+        imageOptions= new ImageOptions.Builder()
+//                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
+                .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setRadius(DensityUtil.dip2px(80))
+                .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
+                .setUseMemCache(true)//设置使用缓存
+                .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
+                .build();
         return  inflater.inflate(R.layout.fargment_my,container,false);
     }
 
@@ -321,11 +332,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                       shareApp();
                     //用户授权成功
                   }else {
-
                       //用户没有授权
                       AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                       alert.setTitle("提示");
-                      alert.setMessage("您需要设置允许才能使用该功能");
+                      alert.setMessage("您需要设置存储权限才能使用该功能");
                       alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                           @Override
                           public void onClick(DialogInterface dialog, int which) {
@@ -346,7 +356,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                       //用户没有授权
                       AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                       alert.setTitle("提示");
-                      alert.setMessage("您需要设置允许才能使用该功能");
+                      alert.setMessage("您需要设置打电话权限才能使用该功能");
                       alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                           @Override
                           public void onClick(DialogInterface dialog, int which) {
@@ -372,7 +382,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getContext())){
             //    获取用户头像
-            ImageOptions imageOptions = new ImageOptions.Builder()
+           /* ImageOptions imageOptions = new ImageOptions.Builder()
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                      .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                     .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
@@ -380,7 +390,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                      .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
-                    .build();
+                    .build();*/
             x.image().bind(myImageView,model.getHeadImg(),imageOptions);
             tvSign.setText(model.getCustomerSign());
         }else {

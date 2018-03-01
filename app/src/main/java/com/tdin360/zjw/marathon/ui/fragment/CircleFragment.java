@@ -59,6 +59,7 @@ import com.tdin360.zjw.marathon.ui.activity.LoginActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyCircleActivity;
 import com.tdin360.zjw.marathon.ui.activity.PhotoBrowseActivity;
 import com.tdin360.zjw.marathon.ui.activity.PublishActivity;
+import com.tdin360.zjw.marathon.ui.activity.WebActivity;
 import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -138,6 +139,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     private boolean isShare;
 
     private boolean mIsRefreshing;
+
+    private String urlWeb;
+    private Bean.ModelBean.BJDynamicListModelBean modelWeb=new Bean.ModelBean.BJDynamicListModelBean();
+    private TextView textViewWeb;
+    private String dynamicIdWeb;
+
+    //final String url, final Bean.ModelBean.BJDynamicListModelBean model, final TextView tvShare, final String dynamicId
+
 
     public static CircleFragment instance;
     public CircleFragment() {
@@ -540,9 +549,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         String dynamicId = model.getId() + "";
+
                         //index=model.getId();
                        // String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
                         final String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
+                        urlWeb=url;
+                        modelWeb=model;
+                        textViewWeb=tvShare;
+                        dynamicIdWeb=dynamicId;
                         if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
                            // shareApp(url);
                             initShare(url, model, tvShare,dynamicId);
@@ -948,7 +962,33 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         }
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 10001:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //授权成功
+                    initShare(urlWeb,modelWeb,textViewWeb,dynamicIdWeb);
+                }else{
+                    //授权失败
+                    android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                    alert.setTitle("提示");
+                    alert.setMessage("您需要设置存储权限才能使用该功能");
+                    alert.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            CommonUtils.getAppDetailSettingIntent(getActivity());
+                        }
+                    });
+                    alert.show();
+                }
 
+                break;
+        }
+
+
+    }
 
 
     @Override

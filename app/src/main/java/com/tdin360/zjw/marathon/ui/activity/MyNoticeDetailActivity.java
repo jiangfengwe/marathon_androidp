@@ -44,6 +44,7 @@ public class MyNoticeDetailActivity extends BaseActivity {
     }
 
     private void initWebView() {
+
         int Id = getIntent().getIntExtra("Id", -1);
         String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?Id=" + Id;
         Log.d("noticeurl", "initWebView: "+url);
