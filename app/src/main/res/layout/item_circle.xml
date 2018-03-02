@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@drawable/recycler_item_selector"
@@ -27,14 +27,23 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
+               <!-- <ImageView
                     android:id="@+id/iv_circle_portrait"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="6dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/circle_portrait" />
+                    android:src="@drawable/circle_portrait" />-->
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/iv_circle_portrait"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="6dp"
+                    android:scaleType="centerCrop"
+                    fresco:roundAsCircle="true"
+                    fresco:placeholderImage="@drawable/circle_portrait"/>
 
                 <TextView
                     android:id="@+id/tv_circle_name"

@@ -88,12 +88,19 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private TextView tvAdd;
     @ViewInject(R.id.tv_hotel_room_sum)
     private TextView tvSum;
+    @ViewInject(R.id.tv_hotel_people_add)
+    private TextView tvAddPeople;
+    @ViewInject(R.id.tv_hotel_people_dec)
+    private TextView tvDecPeople;
+    @ViewInject(R.id.tv_hotel_people_sum)
+    private TextView tvSumPeople;
     @ViewInject(R.id.layout_hotel_room_info)
     private LinearLayout LayoutInfo;
     @ViewInject(R.id.et_hotel_order_phone)
     private EditText etPhone;
     private int count=1;
     private int countRoom=1;
+    private int countPeople=1;
     @ViewInject(R.id.tv_hotel_room_money)
     private TextView tvMoney;
 
@@ -179,6 +186,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         tvDec.setOnClickListener(this);
         tvAdd.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
+        tvAddPeople.setOnClickListener(this);
+        tvDecPeople.setOnClickListener(this);
 
         double price = getIntent().getDoubleExtra("hotelprice", 0.0);
         double money = count * price;
@@ -344,6 +353,22 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 countRoom++;
                 count++;
                 addLayout();
+                setSum();
+                break;
+            case R.id.tv_hotel_people_dec:
+                //入住人数减少
+                if(countPeople<=1){
+                    return;
+                }
+                countPeople--;
+                setSum();
+                break;
+            case R.id.tv_hotel_people_add:
+                //入住人数增加
+                if(countPeople>99){
+                    return;
+                }
+                countPeople++;
                 setSum();
                 break;
             case R.id.layout_hotel_room_info:
@@ -576,6 +601,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private void setSum() {
         //订单金额
         tvSum.setText(""+countRoom);
+        tvSumPeople.setText(""+countPeople);
         double price = getIntent().getDoubleExtra("hotelprice", 0.0);
         double money = count * price;
         Log.d("44", "initView: "+money);

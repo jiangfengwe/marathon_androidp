@@ -7,8 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +38,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -44,8 +54,12 @@ import com.lzy.ninegrid.NineGridViewAdapter;
 import com.lzy.ninegrid.NineGridViewWrapper;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
+import com.tdin360.zjw.marathon.GlideRoundTransform;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
@@ -85,6 +99,9 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.umeng.socialize.utils.ContextUtil.getContext;
 
@@ -192,22 +209,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             EventBus.getDefault().register(this);
             flag=!flag;
         }
-        View inflate = inflater.inflate(R.layout.fragment_circle, container, false);
-        return  inflate;
-
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
-        customerId= loginInfo.getId()+"";
         imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
                 //ImageOptions.Builder()的一些其他属性：
                 //.setCircular(true) //设置图片显示为圆形
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 //.setSquare(true) //设置图片显示为正方形
-               // .setCrop(true)
+                // .setCrop(true)
                 //.setSize(130,130) //设置大小
                 //.setAnimation(animation) //设置动画
                 .setFailureDrawableId(R.drawable.add_lose_square) //设置加载失败的动画
@@ -221,11 +228,22 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setRadius(DensityUtil.dip2px(80))
+                .setRadius(DensityUtil.dip2px(20))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                 .build();
+        View inflate = inflater.inflate(R.layout.fragment_circle, container, false);
+        return  inflate;
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
+        customerId= loginInfo.getId()+"";
+
         layoutLoading.setVisibility(View.VISIBLE);
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
@@ -375,7 +393,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 final LinearLayout LayoutPraise = (LinearLayout) holder.getViewById(R.id.layout_circle_praise);
                 final TextView tvPraise = (TextView) holder.getViewById(R.id.tv_circle_praise);
                 final TextView tvShare = (TextView) holder.getViewById(R.id.tv_circle_share);
-                ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_circle_portrait);
+                //ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_circle_portrait);
                 final CheckBox checkBox = (CheckBox) holder.getViewById(R.id.cb_circle);
                 LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
                 String customerId = loginInfo.getId() + "";
@@ -393,6 +411,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     holder.setText(R.id.tv_circle_title_content,model.getDynamicsIntroduce());
                     ImageView imageView = (ImageView) holder.getViewById(R.id.iv_circle_title_pic);
                     x.image().bind(imageView,model.getDynamicsThumsPictureUrl(),imageOptions);
+
+
                     holder.setText(R.id.tv_circle_praise,model.getTagsNumber()+"");
                     holder.setText(R.id.tv_circle_comment,model.getCommentNumber()+"");
                     String share = model.getShare() + "";
@@ -417,7 +437,33 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     NineGridView nineGridView = (NineGridView) holder.getViewById(R.id.circle_nineGrid);
                     //用户设置
                     final Bean.ModelBean.BJDynamicListModelBean.UserModelBean userModel = model.getUserModel();
-                    x.image().bind(ivPortrait,userModel.getHeadImg(),imageOptionsCircle);
+                  /*  Glide.with(getContext()).load(userModel.getHeadImg())
+                            .trandform
+*/
+                  /*  Glide.with(getActivity()).load(userModel.getHeadImg())
+                           //.placeholder(R.drawable.loading) //占位符 也就是加载中的图片，可放个gif
+                            //.error(R.drawable.failed) //失败图片
+
+                            .transform(new GlideRoundTransform(getContext(),10))
+                            .into(ivPortrait);*/
+
+                    Uri uri =  Uri.parse(userModel.getHeadImg());
+//        sdv.setImageURI(uri);
+                    SimpleDraweeView ivPortrait = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_portrait);
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setUri(uri)
+                            .setAutoPlayAnimations(true)
+                            .build();
+                    ivPortrait.setController(controller);
+
+                   /* Picasso.with(getContext()).load(userModel.getHeadImg())//
+                            //.memoryPolicy(MemoryPolicy.NO_CACHE)
+                           // .transform((Transformation) new CropCircleTransformation(getContext()))
+                            .placeholder(R.drawable.my_portrait)//
+                            .error(R.drawable.my_portrait)//
+                            //.centerCrop()
+                            .into(ivPortrait);*/
+                    //x.image().bind(ivPortrait,userModel.getHeadImg(),imageOptionsCircle);
                     holder.setText(R.id.tv_circle_name,userModel.getNickName());
                     String releaseTimeStr = model.getReleaseTimeStr();
                     holder.setText(R.id.tv_circle_time,releaseTimeStr);
@@ -540,8 +586,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             }
                         });
                       }
-
-
                     }
                 });
 

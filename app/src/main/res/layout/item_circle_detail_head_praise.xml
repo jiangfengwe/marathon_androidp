@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <ImageView
+  <!--  <ImageView
         android:id="@+id/iv_circle_detail_praise_portrait"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:src="@drawable/circle_portrait"
         android:scaleType="centerCrop"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"/>-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_circle_detail_praise_portrait"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="6dp"
+        android:scaleType="centerCrop"
+        fresco:roundAsCircle="true"
+        fresco:placeholderImage="@drawable/my_portrait"/>
 
 </LinearLayout>

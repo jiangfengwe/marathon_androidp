@@ -88,7 +88,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,6 +141,82 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/background"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="入住人数"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:background="@drawable/hotel_enter_bg"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:text="会根据所填写入住人
+数安排赛事大巴座位"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:background="@drawable/shape_travel"
+            android:layout_alignParentRight="true">
+            <TextView
+                android:id="@+id/tv_hotel_people_dec"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:text="-"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/hotel_phone_division"/>
+            <TextView
+                android:id="@+id/tv_hotel_people_sum"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/home_tab_title_color_check"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="1"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/hotel_phone_division"/>
+            <TextView
+                android:id="@+id/tv_hotel_people_add"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:text="+"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginBottom="16dp"
         android:background="@color/background"/>
     <TextView
@@ -153,6 +229,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15.3dp"
+        android:visibility="gone"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -184,14 +261,40 @@
 
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/hotel_division"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_hotel_room"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/theme_division"
+            android:layout_marginRight="20dp"
+            android:text="姓名"/>
+        <EditText
+            android:id="@+id/et_hotel_order_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:inputType="phone"
+            android:textSize="14.7sp"
+            android:maxLength="11"
+            android:hint="请输入真实姓名"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/shape_hotel_room"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -212,10 +315,6 @@
             android:layout_gravity="center"/>
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/hotel_division"/>
+
 
 </LinearLayout>

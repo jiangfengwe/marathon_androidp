@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.multidex.MultiDexApplication;
 import android.widget.ImageView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lzy.ninegrid.NineGridView;
 import com.tdin360.zjw.marathon.CrashHander;
 import com.tdin360.zjw.marathon.R;
@@ -62,6 +63,7 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fresco.initialize(this);
         //全局异常捕捉
         //CrashHander crashHandler= CrashHander.getInstance();
        // crashHandler.init(getApplicationContext());

@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +35,10 @@ import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.HotelListBean;
+import com.tdin360.zjw.marathon.ui.fragment.HotelFragment;
+import com.tdin360.zjw.marathon.ui.fragment.HotelOrderFragment;
+import com.tdin360.zjw.marathon.ui.fragment.TravelFragment;
+import com.tdin360.zjw.marathon.ui.fragment.TravelOrderFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
@@ -75,6 +81,22 @@ public class HotelActivity extends BaseActivity {
     private View viewBg;
 
 
+    @ViewInject(R.id.iv_hotel_tab_back)
+    private ImageView ivTabBack;
+    @ViewInject(R.id.rg_hotel)
+    private RadioGroup rgHotel;
+    @ViewInject(R.id.rb_hotel)
+    private RadioButton rbHotelOrder;
+    @ViewInject(R.id.rb_travel)
+    private RadioButton rbTravelOrder;
+
+
+    private HotelFragment hotelFragment;//酒店fragment
+    private TravelFragment travelFragment;//旅游fragment
+    private String hotelFragmentTag="hotelFragment";
+    private String travelFragmentTag="travelFragment";
+
+
    @ViewInject(R.id.rv_hotel)
    private RecyclerView rvHotel;
    private List<String> list=new ArrayList<>();
@@ -114,16 +136,113 @@ public class HotelActivity extends BaseActivity {
                 .setIgnoreGif(false) //忽略Gif图片
                 //.setRadius(10)
                 .setUseMemCache(true).build();
-        layoutLoading.setVisibility(View.VISIBLE);
+        /*layoutLoading.setVisibility(View.VISIBLE);
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();
+        background.start();*/
         //initData();
-        initNet();
-        initToolbar();
-        initView();
+        //initNet();
+        //initToolbar();
+        //initView();
+        clickCheck();
+        initTab();
+        if(savedInstanceState!=null){
+            hotelFragment = (HotelFragment) getSupportFragmentManager().findFragmentByTag(hotelFragmentTag);
+            travelFragment = (TravelFragment) getSupportFragmentManager().findFragmentByTag(travelFragmentTag);
+           // travelAccompanyingFragment = (TravelAccompanyingFragment) getSupportFragmentManager().findFragmentByTag(travelAccompanyingTag);
+        }
+        this.rgHotel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                //通过事物来切换fragment
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                hideFragment(fragmentTransaction);
+                switch (group.getCheckedRadioButtonId()){
+                    case  R.id.rb_hotel:
+                        rbHotelOrder.setBackgroundResource(R.color.white);
+                        rbHotelOrder.setTextColor(getResources().getColor(R.color.home_tab_title_color_check));
+                        rbTravelOrder.setBackgroundResource(R.color.home_tab_title_color_check);
+                        rbTravelOrder.setTextColor(getResources().getColor(R.color.white));
+                        if(hotelFragment==null){
+                            hotelFragment=new HotelFragment();
+                            fragmentTransaction.add(R.id.layout_hotel,hotelFragment,hotelFragmentTag);
+                        }else{
+                            fragmentTransaction.show(hotelFragment);
+                        }
+                        break;
+                    case  R.id.rb_travel:
+                        rbTravelOrder.setBackgroundResource(R.color.white);
+                        rbTravelOrder.setTextColor(getResources().getColor(R.color.home_tab_title_color_check));
+                        rbHotelOrder.setBackgroundResource(R.color.home_tab_title_color_check);
+                        rbHotelOrder.setTextColor(getResources().getColor(R.color.white));
+                        if(travelFragment==null){
+                            travelFragment=new TravelFragment();
+                            fragmentTransaction.add(R.id.layout_hotel,travelFragment,travelFragmentTag);
+                        }else{
+                            fragmentTransaction.show(travelFragment);
+                        }
+                        break;
+                }
+                fragmentTransaction.commit();
+            }
+        });
 
     }
+    private void clickCheck() {
+        //根据发现fragment点击的不同而选中不同的fragment
+        Intent intent=getIntent();
+        //通过事物来切换fragment
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        hideFragment(fragmentTransaction);
+        if(intent.getStringExtra("webclick").equals("1")){
+            rgHotel.check(R.id.rb_hotel);
+            rbHotelOrder.setBackgroundResource(R.color.white);
+            rbHotelOrder.setTextColor(getResources().getColor(R.color.home_tab_title_color_check));
+            rbTravelOrder.setBackgroundResource(R.color.home_tab_title_color_check);
+            rbTravelOrder.setTextColor(getResources().getColor(R.color.white));
+            if(hotelFragment==null){
+                hotelFragment=new HotelFragment();
+                fragmentTransaction.add(R.id.layout_hotel,hotelFragment,hotelFragmentTag);
+            }else{
+                fragmentTransaction.show(hotelFragment);
+            }
+            fragmentTransaction.commit();
+        }
+        if(intent.getStringExtra("webclick").equals("2")){
+            rgHotel.check(R.id.rb_travel);
+            rbTravelOrder.setBackgroundResource(R.color.white);
+            rbTravelOrder.setTextColor(getResources().getColor(R.color.home_tab_title_color_check));
+            rbHotelOrder.setBackgroundResource(R.color.home_tab_title_color_check);
+            rbHotelOrder.setTextColor(getResources().getColor(R.color.white));
+            if(travelFragment==null){
+                travelFragment=new TravelFragment();
+                fragmentTransaction.add(R.id.layout_hotel,travelFragment,travelFragmentTag);
+            }else{
+                fragmentTransaction.show(travelFragment);
+            }
+            fragmentTransaction.commit();
+        }
+
+    }
+    private  void hideFragment(FragmentTransaction fragmentTransaction){
+        if(hotelFragment!=null&&hotelFragment.isAdded()){
+            fragmentTransaction.hide(hotelFragment);
+        }
+        if(travelFragment!=null&&travelFragment.isAdded()){
+            fragmentTransaction.hide(travelFragment);
+        }
+
+    }
+
+    private void initTab() {
+        ivTabBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
     private void initNet() {
         //加载失败点击重试
         mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
@@ -166,67 +285,6 @@ public class HotelActivity extends BaseActivity {
             alert.show();
 
         }
-    }
-
-    private void initData(int i) {
-       // Log.d("hotelprice", "initData: "+lowPrice+"price"+ highPrice);
-        String eventId = SingleClass.getInstance().getEventId();
-        if(i==1){
-            bjHotelListModel.clear();
-        }
-        RequestParams params=new RequestParams(HttpUrlUtils.HOTEL);
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        params.addBodyParameter("pageSize",""+pageSize);
-        params.addBodyParameter("pageIndex",""+pageIndex);
-        params.addBodyParameter("eventId",eventId);
-        params.addBodyParameter("styleId","");
-        params.addBodyParameter("lowPrice",lowPrice+"");
-        params.addBodyParameter("highPrice",highPrice+"");
-        params.setConnectTimeout(5000);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d("hotel", "onSuccess: " + result);
-                Gson gson = new Gson();
-                HotelListBean hotelListBean = gson.fromJson(result, HotelListBean.class);
-                boolean state = hotelListBean.isState();
-                if(state){
-                    HotelListBean.ModelBean model = hotelListBean.getModel();
-                    totalPage=model.getTotalPages();
-                    bjHotelListModel.addAll(model.getBJHotelListModel());
-                    bjHotelStyleListModel= model.getBJHotelStyleListModel();
-                    if(bjHotelListModel.size()<=0){
-                        mErrorView.show(rvHotel,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
-                    }else {
-                        mErrorView.hideErrorView(rvHotel);
-                    }
-                }else{
-                    ToastUtils.showCenter(getApplicationContext(),hotelListBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                mErrorView.show(rvHotel, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.showCenter(HotelActivity.this, "网络不给力,连接服务器异常!");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-                adapter.update(bjHotelListModel);
-                layoutLoading.setVisibility(View.GONE);
-                // hud.dismiss();
-
-            }
-        });
-    }
-    @Override
-    public int getLayout() {
-        return R.layout.activity_hotel;
     }
     private void initView() {
         for (int i = 0; i <9 ; i++) {
@@ -287,7 +345,7 @@ public class HotelActivity extends BaseActivity {
         checkBoxHot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               // checkBoxHot.setClickable(false);
+                // checkBoxHot.setClickable(false);
                 if(isChecked){
                     viewBg.setVisibility(View.VISIBLE);
                     //rvHotel.setClickable(false);
@@ -355,7 +413,7 @@ public class HotelActivity extends BaseActivity {
                         tvClass.setGravity(Gravity.CENTER);
                         tvClass.setTextSize(14);
                         layout.addView(tvClass);
-                       // addView(layout, tvClass, i);
+                        // addView(layout, tvClass, i);
                     }
 
                     // TODO: 2016/5/17 设置动画
@@ -380,7 +438,7 @@ public class HotelActivity extends BaseActivity {
                         public boolean onTouch(View v, MotionEvent event) {
                             //点击PopupWindow以外区域时PopupWindow消失
                             if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                               // checkBoxHot.setChecked(false);
+                                // checkBoxHot.setChecked(false);
                             }
                             return false;
                         }
@@ -390,7 +448,7 @@ public class HotelActivity extends BaseActivity {
                     // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
                     window.showAsDropDown(checkBoxHot, 0, 20);
                 }else{
-                   // checkBoxHot.setClickable(true);
+                    // checkBoxHot.setClickable(true);
                     viewBg.setVisibility(View.GONE);
                     imageViewBack.setImageResource(R.drawable.back);
                     toolbarBack.setBackgroundColor(Color.parseColor("#ff621a"));
@@ -399,6 +457,68 @@ public class HotelActivity extends BaseActivity {
             }
         });
     }
+
+    private void initData(int i) {
+       // Log.d("hotelprice", "initData: "+lowPrice+"price"+ highPrice);
+        String eventId = SingleClass.getInstance().getEventId();
+        if(i==1){
+            bjHotelListModel.clear();
+        }
+        RequestParams params=new RequestParams(HttpUrlUtils.HOTEL);
+        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
+        params.addBodyParameter("pageSize",""+pageSize);
+        params.addBodyParameter("pageIndex",""+pageIndex);
+        params.addBodyParameter("eventId",eventId);
+        params.addBodyParameter("styleId","");
+        params.addBodyParameter("lowPrice",lowPrice+"");
+        params.addBodyParameter("highPrice",highPrice+"");
+        params.setConnectTimeout(5000);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("hotel", "onSuccess: " + result);
+                Gson gson = new Gson();
+                HotelListBean hotelListBean = gson.fromJson(result, HotelListBean.class);
+                boolean state = hotelListBean.isState();
+                if(state){
+                    HotelListBean.ModelBean model = hotelListBean.getModel();
+                    totalPage=model.getTotalPages();
+                    bjHotelListModel.addAll(model.getBJHotelListModel());
+                    bjHotelStyleListModel= model.getBJHotelStyleListModel();
+                    if(bjHotelListModel.size()<=0){
+                        mErrorView.show(rvHotel,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
+                    }else {
+                        mErrorView.hideErrorView(rvHotel);
+                    }
+                }else{
+                    ToastUtils.showCenter(getApplicationContext(),hotelListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                mErrorView.show(rvHotel, "加载失败,点击重试", ErrorView.ViewShowMode.NOT_NETWORK);
+                ToastUtils.showCenter(HotelActivity.this, "网络不给力,连接服务器异常!");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+
+            @Override
+            public void onFinished() {
+                adapter.update(bjHotelListModel);
+                layoutLoading.setVisibility(View.GONE);
+                // hud.dismiss();
+
+            }
+        });
+    }
+    @Override
+    public int getLayout() {
+        return R.layout.activity_hotel;
+    }
+
     private void addView(LinearLayout layout, TextView tvClass, int i) {
         String name = bjHotelStyleListModel.get(i).getName();
         tvClass.setBackgroundResource(R.drawable.hotel_text_bg_selector);

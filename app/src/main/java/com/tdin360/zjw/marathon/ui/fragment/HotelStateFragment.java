@@ -116,9 +116,7 @@ public class HotelStateFragment extends BaseFragment {
 
     private void onInvisible() {
         bjHotelOrderListModel.clear();
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

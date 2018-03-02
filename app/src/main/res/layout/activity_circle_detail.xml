@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -45,13 +46,22 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"/>
-                    <ImageView
+                   <!-- <ImageView
                         android:id="@+id/iv_circle_detail_portrait"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/circle_detail_portrait"/>
+                        android:src="@drawable/circle_detail_portrait"/>-->
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/iv_circle_detail_portrait"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="6dp"
+                        android:scaleType="centerCrop"
+                        fresco:roundAsCircle="true"
+                        fresco:placeholderImage="@drawable/my_portrait"/>
                     <TextView
                         android:id="@+id/iv_circle_detail_name"
                         android:layout_width="wrap_content"
@@ -102,7 +112,7 @@
                 android:layout_gravity="center"
                 android:textSize="14.7sp"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:maxHeight="80dp"
                 android:textColor="@color/circle_detail_comment"
                 android:hint="@string/comment_hint"/>
             <Button

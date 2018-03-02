@@ -1,28 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <android.support.design.widget.TabLayout
-
-        android:id="@+id/tabs"
-        app:tabMode="fixed"
-        app:tabTextAppearance="@style/HotelTabLayoutTextAppearance"
-        app:tabSelectedTextColor="@color/green"
-        app:tabIndicatorColor="@color/green"
-        android:layout_width="match_parent"
-        android:layout_height="30dp">
-    </android.support.design.widget.TabLayout>
-    </LinearLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/mViewPager"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    </android.support.v4.view.ViewPager>
-</LinearLayout>
+        <android.support.design.widget.AppBarLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/hotel_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/home_tab_title_color_check"
+                app:contentInsetStart="0dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/iv_hotel_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/back"/>
+                    <TextView
+                        android:id="@+id/tv_hotel_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hotel_event"
+                        android:textSize="18sp"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white"/>
+                    <CheckBox
+                        android:id="@+id/cb_hotel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/hotel_select"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:button="@null"
+                        android:textColor="@color/white"
+                        android:textSize="7sp"
+                        android:layout_marginRight="15dp"/>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+        <CheckBox
+            android:id="@+id/cb_hotel_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/hotel_select"
+            android:layout_gravity="right"
+            android:button="@null"
+            android:textColor="@color/white"
+            android:textSize="7sp"
+            android:layout_marginRight="15dp"/>
+        <com.liaoinstan.springview.widget.SpringView
+            android:id="@+id/springView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_hotel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.liaoinstan.springview.widget.SpringView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:orientation="vertical">
+        <include layout="@layout/load_fail_layout" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:orientation="vertical">
+        <include layout="@layout/item_loading"/>
+    </LinearLayout>
+</RelativeLayout>

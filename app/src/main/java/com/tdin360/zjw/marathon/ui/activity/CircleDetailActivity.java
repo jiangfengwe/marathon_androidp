@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -89,7 +93,9 @@ public class CircleDetailActivity extends BaseActivity {
     @ViewInject(R.id.iv_circle_detail_name)
     private TextView tvName;
     @ViewInject(R.id.iv_circle_detail_portrait)
-    private ImageView ivPortrait;
+   // private ImageView ivPortrait;
+    private SimpleDraweeView ivPortrait;
+
     //评论
     @ViewInject(R.id.et_circle_detail_comment)
     private EditText etComment;
@@ -133,7 +139,7 @@ public class CircleDetailActivity extends BaseActivity {
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setRadius(DensityUtil.dip2px(80))
+                .setRadius(DensityUtil.dip2px(20))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
@@ -343,9 +349,15 @@ public class CircleDetailActivity extends BaseActivity {
                 String str="回复<font color='#ff621a'>楼主：</font>的统一问题极寒风暴㚥看能否佰家节能环保福尔";
                 tvResponse.setText(Html.fromHtml(str));
                 TextView tvCallback = (TextView) holder.getViewById(R.id.tv_circle_detail_callback);
-                ImageView portrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_comment_portrait);
+                SimpleDraweeView portrait = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_comment_portrait);
                 String headImg = model.getHeadImg();
-                x.image().bind(portrait,headImg,imageOptions);
+               // x.image().bind(portrait,headImg,imageOptions);
+                Uri uri =  Uri.parse(headImg);
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true)
+                        .build();
+                portrait.setController(controller);
                 holder.setText(R.id.tv_circle_detail_comment_content,model.getCommentContent());
                 holder.setText(R.id.tv_circle_detail_comment_name,model.getNickName());
                 holder.setText(R.id.tv_circle_detail_comment_time,model.getCreateTimeStr());
@@ -435,12 +447,18 @@ public class CircleDetailActivity extends BaseActivity {
                         tagUserListModel,R.layout.item_circle_detail_head_praise) {
                     @Override
                     protected void onBindNormalViewHolder(NormalViewHolder holder, final CircleDetailBean.ModelBean.TagUserListModelBean model) {
-                        ImageView iv = (ImageView) holder.getViewById(R.id.iv_circle_detail_praise_portrait);
+                        SimpleDraweeView iv = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_praise_portrait);
                         String headImg = model.getHeadImg();
                         if(TextUtils.isEmpty(headImg)){
                             iv.setImageResource(R.drawable.my_portrait);
                         }else{
-                            x.image().bind(iv,headImg,imageOptions);
+                           // x.image().bind(iv,headImg,imageOptions);
+                            Uri uri =  Uri.parse(headImg);
+                            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                                    .setUri(uri)
+                                    .setAutoPlayAnimations(true)
+                                    .build();
+                            iv.setController(controller);
                         }
 
 
@@ -557,7 +575,13 @@ public class CircleDetailActivity extends BaseActivity {
         tvName.setText(modelInfo.getNickName());
         //不登陆不显示头像
         if(SharedPreferencesManager.isLogin(getApplicationContext())){
-            x.image().bind(ivPortrait,modelInfo.getHeadImg(),imageOptions);
+            //x.image().bind(ivPortrait,modelInfo.getHeadImg(),imageOptions);
+            Uri uri =  Uri.parse(modelInfo.getHeadImg());
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setUri(uri)
+                    .setAutoPlayAnimations(true)
+                    .build();
+            ivPortrait.setController(controller);
         }else {
             ivPortrait.setImageResource(R.drawable.my_portrait);
             tvName.setText("");

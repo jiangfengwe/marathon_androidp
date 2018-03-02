@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -27,7 +26,6 @@ import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
 import com.tdin360.zjw.marathon.model.EventBean;
-import com.tdin360.zjw.marathon.ui.activity.ApplyActivity;
 import com.tdin360.zjw.marathon.ui.activity.WebActivity;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;

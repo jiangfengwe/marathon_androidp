@@ -80,7 +80,6 @@ public class AboutUsActivity extends BaseActivity  {
         imageView.setImageResource(R.drawable.back_black);
         titleTv.setText(R.string.setting_about_us);
         showBack(toolbar,imageView);
-
         String  url ="file:///android_asset/about.html";
         Log.d("orderIdurl", "onCreate: "+url);
         webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页

@@ -25,6 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
@@ -75,7 +78,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     @ViewInject(R.id.my_sign)
     private TextView tvSign;
     @ViewInject(R.id.my_portrait)
-    private ImageView myImageView;
+    //private ImageView myImageView;
+    private SimpleDraweeView myImageView;
     @ViewInject(R.id.my_notice)
     private ImageView myNotice;
     @ViewInject(R.id.my_order)
@@ -166,7 +170,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setRadius(DensityUtil.dip2px(80))
+                .setRadius(DensityUtil.dip2px(30))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
@@ -391,7 +395,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     .setUseMemCache(true)//设置使用缓存
                     .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                     .build();*/
-            x.image().bind(myImageView,model.getHeadImg(),imageOptions);
+           //x.image().bind(myImageView,model.getHeadImg(),imageOptions);
+            Uri uri =  Uri.parse(model.getHeadImg());
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setUri(uri)
+                    .setAutoPlayAnimations(true)
+                    .build();
+            myImageView.setController(controller);
             tvSign.setText(model.getCustomerSign());
         }else {
             myImageView.setImageResource(R.drawable.my_portrait);

@@ -53,14 +53,7 @@ public class EventActivity extends BaseActivity {
     private void initView() {
         //tvDay.setText("距离开赛还有"+"09"+"天");
         //tvHour.setText("16"+"小时");
-        apply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(EventActivity.this,ApplyActivity.class);
-                startActivity(intent);
-            }
-        });
-        ivHotel.setOnClickListener(new View.OnClickListener() {
+       /* ivHotel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(EventActivity.this,HotelActivity.class);
@@ -73,7 +66,7 @@ public class EventActivity extends BaseActivity {
                 Intent intent=new Intent(EventActivity.this,TravelActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     private void initToolbar() {

@@ -32,6 +32,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.luck.picture.lib.PictureSelector;
@@ -112,7 +115,8 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout layoutPhone;
 
     @ViewInject(R.id.iv_modify_headimg)
-    private ImageView ivHeadImg;
+    //private ImageView ivHeadImg;
+    private SimpleDraweeView ivHeadImg;
     @ViewInject(R.id.tv_modify_sign)
     private TextView tvSign;
     @ViewInject(R.id.tv_modify_phone)
@@ -133,7 +137,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setRadius(DensityUtil.dip2px(80))
+                .setRadius(DensityUtil.dip2px(30))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
@@ -232,7 +236,13 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-        x.image().bind(ivHeadImg,loginInfo.getHeadImg(),imageOptions);
+       // x.image().bind(ivHeadImg,loginInfo.getHeadImg(),imageOptions);
+        Uri uri =  Uri.parse(loginInfo.getHeadImg());
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(uri)
+                .setAutoPlayAnimations(true)
+                .build();
+        ivHeadImg.setController(controller);
        /* String login = loginInfo.getLogin();
         if(login.equals("phone")){
             tvPsw.setVisibility(View.VISIBLE);

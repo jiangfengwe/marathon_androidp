@@ -315,9 +315,8 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 Intent intent=new Intent(WebActivity.this,HotelActivity.class);
-
+                intent.putExtra("webclick",""+1);
                 startActivity(intent);
 
             }
@@ -328,7 +327,8 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(WebActivity.this,TravelActivity.class);
+                Intent intent=new Intent(WebActivity.this,HotelActivity.class);
+                intent.putExtra("webclick",""+2);
                 startActivity(intent);
 
             }
@@ -430,6 +430,7 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     share();
                 }else {
                     if (ContextCompat.checkSelfPermission(WebActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
                         ActivityCompat.requestPermissions(WebActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
                     } else {
                         share();

@@ -8,6 +8,64 @@
     android:background="@color/white"
     tools:context="com.tdin360.zjw.marathon.ui.activity.HotelActivity">
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/home_tab_title_color_check">
+            <ImageView
+                android:id="@+id/iv_hotel_tab_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"
+                android:layout_centerVertical="true"/>
+            <RadioGroup
+                android:id="@+id/rg_hotel"
+                android:layout_width="177dp"
+                android:layout_height="31dp"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:padding="1dp"
+                android:background="@drawable/shape_order">
+                <RadioButton
+                    android:id="@+id/rb_hotel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="赛事酒店"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16.7sp"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingRight="1dp"
+                    android:paddingLeft="1dp"/>
+                <RadioButton
+                    android:id="@+id/rb_travel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:button="@null"
+                    android:text="赛事旅游"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16.7sp"/>
+            </RadioGroup>
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/layout_hotel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

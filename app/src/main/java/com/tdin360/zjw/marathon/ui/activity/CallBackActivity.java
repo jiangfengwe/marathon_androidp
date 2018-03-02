@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -84,7 +88,8 @@ public class CallBackActivity extends BaseActivity {
 
     ImageOptions imageOptions;
     @ViewInject(R.id.iv_all_comment_portrait)
-    private ImageView ivPortrait;
+    //private ImageView ivPortrait;
+    private SimpleDraweeView ivPortrait;
     @ViewInject(R.id.tv_all_comment_name)
     private TextView tvName;
     @ViewInject(R.id.tv_all_comment_time)
@@ -122,7 +127,7 @@ public class CallBackActivity extends BaseActivity {
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
                 .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setRadius(DensityUtil.dip2px(80))
+                .setRadius(DensityUtil.dip2px(20))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
@@ -269,7 +274,7 @@ public class CallBackActivity extends BaseActivity {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, CircleDetailAllCommentBean.CommentModelBean.ReplayCommentListBean model) {
                 String str="回复<font color='#ff621a'>@"+nickName+":"+"</font>"+model.getCommentContent();
-                ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_comment_portrait);
+                SimpleDraweeView ivPortrait = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_comment_portrait);
                 holder.setText(R.id.tv_circle_detail_comment_name,model.getNickName());
                 String replayerNickName = model.getReplayerNickName();
                 Log.d("replayerNickName", "onBindNormalViewHolder: "+replayerNickName);
@@ -280,7 +285,13 @@ public class CallBackActivity extends BaseActivity {
                 }
 
                 holder.setText(R.id.tv_circle_detail_comment_time,model.getCreateTimeStr());
-                x.image().bind(ivPortrait,model.getHeadImg(),imageOptions);
+                //x.image().bind(ivPortrait,model.getHeadImg(),imageOptions);
+                Uri uri =  Uri.parse(model.getHeadImg());
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true)
+                        .build();
+                ivPortrait.setController(controller);
             }
         };
         rvComment.setAdapter(adapter);
@@ -358,7 +369,13 @@ public class CallBackActivity extends BaseActivity {
                     tvContent.setText(commentModel.getCommentContent());
                     tvTime.setText(commentModel.getCreateTimeStr());
                     tvName.setText(commentModel.getNickName());
-                    x.image().bind(ivPortrait,commentModel.getHeadImg(),imageOptions);
+                   // x.image().bind(ivPortrait,commentModel.getHeadImg(),imageOptions);
+                    Uri uri =  Uri.parse(commentModel.getHeadImg());
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setUri(uri)
+                            .setAutoPlayAnimations(true)
+                            .build();
+                    ivPortrait.setController(controller);
                     replayCommentList.addAll(commentModel.getReplayCommentList());
                     etComment.setText("");
                     if(replayCommentList.size()<=0){
