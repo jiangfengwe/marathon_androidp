@@ -117,7 +117,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
                 //TextView tvTitle = (TextView) holder.getViewById(R.id.tv_circle_message_title);
                 ImageView imageView = (ImageView) holder.getViewById(R.id.iv_system_pic);
                // x.image().bind(imageView,model.getHeadImg(),imageOptionsCircle);
-                holder.setText(R.id.tv_system_title,model.getMessageIntroduce());
+                holder.setText(R.id.tv_system_title,model.getTitle());
                 holder.setText(R.id.tv_system_content,model.getMessageIntroduce());
                 holder.setText(R.id.tv_system_time,model.getTime());
                 final ImageView imageViewShow = (ImageView) holder.getViewById(R.id.iv_system_notice_detail_show);

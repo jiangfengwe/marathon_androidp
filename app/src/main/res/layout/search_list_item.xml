@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/status"
         android:padding="5dp"
-        android:background="@drawable/text_rect_border_selector"
+
         android:textColor="@drawable/text_rect_color_selector"
         android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"

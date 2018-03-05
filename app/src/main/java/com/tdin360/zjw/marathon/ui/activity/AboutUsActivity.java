@@ -56,25 +56,6 @@ public class AboutUsActivity extends BaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-
-        /*TextView textView = (TextView) this.findViewById(R.id.version1);
-        String versionName = UpdateManager.getVersionName(getApplicationContext());
-        textView.setText("当前版本 V " + versionName);
-        TextView version = (TextView) this.findViewById(R.id.version);
-        version.setText(versionName);
-
-         // 检查更新
-
-        this.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // checkUpdate();
-
-            }
-        });*/
-
-
     }
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);

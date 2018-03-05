@@ -73,6 +73,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    messageIntroduce      VARCHAR,\n" +
                 "    messageType   VARCHAR,\n" +
                 "    time VARCHAR,\n" +
+                "    title VARCHAR,\n" +
                 "    timeNotice   VARCHAR);" ;
 
 //        赛事数据表

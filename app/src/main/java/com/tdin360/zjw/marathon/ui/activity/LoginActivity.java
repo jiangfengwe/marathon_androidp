@@ -82,7 +82,6 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import uk.co.senab.photoview.log.LoggerDefault;
 
-import static com.tdin360.zjw.marathon.R.id.tel;
 
 /**
  * 用户登录

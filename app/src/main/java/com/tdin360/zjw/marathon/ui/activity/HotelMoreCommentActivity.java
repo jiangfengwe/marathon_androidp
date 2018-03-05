@@ -74,6 +74,7 @@ public class HotelMoreCommentActivity extends BaseActivity {
     private int pageIndex=1;
     private int pageSize=10;
     private boolean flag=false;
+    //private List<HotelMoreCommentBean.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
     private List<HotelMoreCommentBean.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
     private ImageOptions imageOptions,imageOptionsCircle;
 

@@ -5,133 +5,135 @@ package com.tdin360.zjw.marathon.utils;
  * Created by Administrator on 2016/7/2.
  */
 public class HttpUrlUtils {
-    private static final String BASE="http://www.baijar.com/";
+    //private static final String BASE="http://www.baijar.com/EventAppApi/";
+    //动态分享看看有没有EventAppApi。测试一下
+    private static final String BASE="http://www.tdin360.com/EventAppApiV2F1/";
     public static final String appKey="BJYDAppV-2";
     //验证手机号
     public static final String REGISTER_ONE=BASE+"EventInfo/RegisterStep1";
 
 
     //用户注册接口
-    public static final String MARATHON_REGISTER= BASE+"EventAppApi/RegisterStep1";
+    public static final String MARATHON_REGISTER= BASE+"RegisterStep1";
     //验证验证码,提交注册信息
-    public static final String VALIDATE_CODE=BASE+"EventAppApi/RegisterStep2";
+    public static final String VALIDATE_CODE=BASE+"RegisterStep2";
     //登录
-    public static final String MARATHON_LOGIN=BASE+"EventAppApi/Login";
+    public static final String MARATHON_LOGIN=BASE+"Login";
     //第三方登录
-    public static final String MARATHON_OTHERLOGIN=BASE+"EventAppApi/OtherLogin";
+    public static final String MARATHON_OTHERLOGIN=BASE+"OtherLogin";
     //第三方绑定手机号验证码
-    public static final String OTHER_PHONE_CODE=BASE+"EventAppApi/BindPhoneStep1";
+    public static final String OTHER_PHONE_CODE=BASE+"BindPhoneStep1";
     //第三方绑定手机号
-    public static final String OTHER_PHONE=BASE+"EventAppApi/BindPhoneStep2";
+    public static final String OTHER_PHONE=BASE+"BindPhoneStep2";
     //找回密码的验证码
-    public static final String FIND_PASSWORD_CODE=BASE+"EventAppApi/ForgetCustomerPasswordStep1";
+    public static final String FIND_PASSWORD_CODE=BASE+"ForgetCustomerPasswordStep1";
     //找回密码的提交
-    public static final String FIND_PASSWORD=BASE+"EventAppApi/ForgetCustomerPasswordStep2";
+    public static final String FIND_PASSWORD=BASE+"ForgetCustomerPasswordStep2";
     //更新用户基本信息
-    public static final String USER_INFO_SEX=BASE+"EventAppApi/UploadCustomerBaseMessage";
+    public static final String USER_INFO_SEX=BASE+"UploadCustomerBaseMessage";
     //更新用户基本信息
-    public static final String CHANGE_HEAD_PIC=BASE+"EventAppApi/UploadCustomerAvatar";
+    public static final String CHANGE_HEAD_PIC=BASE+"UploadCustomerAvatar";
     //更新用户昵称
-    public static final String CHANGE_NICKNAME=BASE+"EventAppApi/UploadCustomerNickName";
+    public static final String CHANGE_NICKNAME=BASE+"UploadCustomerNickName";
     //更新用户签名
-    public static final String CHANGE_SIGN=BASE+"EventAppApi/UploadCustomerSign";
+    public static final String CHANGE_SIGN=BASE+"UploadCustomerSign";
     //更新用户登录密码
-    public static final String CHANGE_PSW=BASE+"EventAppApi/UploadCustomerPasswrod";
+    public static final String CHANGE_PSW=BASE+"UploadCustomerPasswrod";
     //更新用户手机号码:原手机验证码
-    public static final String CHANGE_OLD_PHONE_CODE =BASE+"EventAppApi/UploadCustomerPhoneStep1";
+    public static final String CHANGE_OLD_PHONE_CODE =BASE+"UploadCustomerPhoneStep1";
     //更新用户手机号码
-    public static final String CHANGE_PHONE=BASE+"EventAppApi/UploadCustomerPhoneStep2";
+    public static final String CHANGE_PHONE=BASE+"UploadCustomerPhoneStep2";
     //更新用户手机号码:原手机验证码
-    public static final String CHANGE_NEW_PHONE_CODE =BASE+"EventAppApi/UploadCustomerPhoneStep3";
+    public static final String CHANGE_NEW_PHONE_CODE =BASE+"UploadCustomerPhoneStep3";
     //更新用户手机号码
-    public static final String CHANGE_NEW_PHONE=BASE+"EventAppApi/UploadCustomerPhoneStep4";
+    public static final String CHANGE_NEW_PHONE=BASE+"UploadCustomerPhoneStep4";
     //信息反馈
-    public static final String FEEDBACK=BASE+"EventAppApi/CreateCustomerFeedback";
+    public static final String FEEDBACK=BASE+"CreateCustomerFeedback";
     //用户个人中心动态
-    public static final String MY_CIRCLE=BASE+"EventAppApi/CustomerDynamic";
+    public static final String MY_CIRCLE=BASE+"CustomerDynamic";
     //用户个人中心删除动态
-    public static final String MY_CIRCLE_DELETE=BASE+"EventAppApi/DeleteCustomerDynamic";
+    public static final String MY_CIRCLE_DELETE=BASE+"DeleteCustomerDynamic";
     //用户个人中心动态背景图片
-    public static final String MY_CIRCLE_PICTURE=BASE+"EventAppApi/UploadCustomerDynamicPicture";
+    public static final String MY_CIRCLE_PICTURE=BASE+"UploadCustomerDynamicPicture";
 
 
     //佰家圈首页(动态首页)
-    public static final String CIRCLE=BASE+"EventAppApi/BJDynamicHome";
+    public static final String CIRCLE=BASE+"BJDynamicHome";
     //动态详情
-    public static final String CIRCLE_DETAIL=BASE+"EventAppApi/BJDynamicDetail";
+    public static final String CIRCLE_DETAIL=BASE+"BJDynamicDetail";
     //动态详情评论
-    public static final String CIRCLE_DETAIL_COMMENT=BASE+"EventAppApi/CommentDynamic";
+    public static final String CIRCLE_DETAIL_COMMENT=BASE+"CommentDynamic";
     //动态详情评论回复
-    public static final String CIRCLE_DETAIL_COMMENT_BACK=BASE+"EventAppApi/MoreComment";
+    public static final String CIRCLE_DETAIL_COMMENT_BACK=BASE+"MoreComment";
     //动态点赞
-    public static final String CIRCLE_PRAISE=BASE+"EventAppApi/TagDynamic";
+    public static final String CIRCLE_PRAISE=BASE+"TagDynamic";
     //动态点赞列表
-    public static final String CIRCLE_PRAISE_LIST=BASE+"EventAppApi/BJDynamicTags";
+    public static final String CIRCLE_PRAISE_LIST=BASE+"BJDynamicTags";
     //动态分享页面
-    public static final String CIRCLE_SHARE=BASE+"EventAppApi/ShareDynamic";
+    public static final String CIRCLE_SHARE=BASE+"ShareDynamic";
     //佰家圈发布动态
-    public static final String PUBLISH_CIRCLE=BASE+"EventAppApi/CreateDynamic";
+    public static final String PUBLISH_CIRCLE=BASE+"CreateDynamic";
 
 
 
     //酒店列表
-    public static final String HOTEL=BASE+"EventAppApi/HotelList";
+    public static final String HOTEL=BASE+"HotelList";
     //酒店详情
-    public static final String HOTEL_DETAIL=BASE+"EventAppApi/HotelDetail";
+    public static final String HOTEL_DETAIL=BASE+"HotelDetail";
     //生成入住信息、生成入住订单
-    public static final String HOTEL_DETAIL_ORDER=BASE+"EventAppApi/HotelStayMessage";
+    public static final String HOTEL_DETAIL_ORDER=BASE+"HotelStayMessage";
     //酒店订单详情页面
-    public static final String HOTEL_ORDER_WEBVIEW=BASE+"EventAppApi/AppHotelDetail";
+    public static final String HOTEL_ORDER_WEBVIEW=BASE+"AppHotelDetail";
     //生成旅游订单
-    public static final String TRAVEL_DETAIL_ORDER=BASE+"EventAppApi/TravelStayMessage";
+    public static final String TRAVEL_DETAIL_ORDER=BASE+"TravelStayMessage";
     //酒店更多评论
-    public static final String HOTEL_MORE_COMMENT=BASE+"EventAppApi/HotelEvaluationList";
+    public static final String HOTEL_MORE_COMMENT=BASE+"HotelEvaluationList";
     //旅游路线列表
-    public static final String TRAVEL=BASE+"EventAppApi/TravelList";
+    public static final String TRAVEL=BASE+"TravelList";
     //旅游路线详情
-    public static final String TRAVEL_DETAIL =BASE+"EventAppApi/TravelDetial";
+    public static final String TRAVEL_DETAIL =BASE+"TravelDetial";
     //旅游路线图片列表
-    public static final String TRAVEL_DETAIL_PICTURE =BASE+"EventAppApi/TravelPictureList";
+    public static final String TRAVEL_DETAIL_PICTURE =BASE+"TravelPictureList";
     //旅游路线详情中嵌套的信息页面
-    public static final String TRAVEL_DETAIL_INFO=BASE+"EventAppApi/TravelDetailMessageView";
+    public static final String TRAVEL_DETAIL_INFO=BASE+"TravelDetailMessageView";
     //旅游订单详情页面
-    public static final String TRAVEL_DETAIL_WEBVIEW=BASE+"EventAppApi/AppTravelDetail";
+    public static final String TRAVEL_DETAIL_WEBVIEW=BASE+"AppTravelDetail";
     //酒店更多评论
-    public static final String TRAVEL_MORE_COMMENT=BASE+"EventAppApi/TravelEvaluationList";
+    public static final String TRAVEL_MORE_COMMENT=BASE+"TravelEvaluationList";
     //支付方法
-    public static final String PAY=BASE+"EventAppApi/Pay";
+    public static final String PAY=BASE+"Pay";
     //确认订单是否支付
-    public static final String PAY_SURE=BASE+"EventAppApi/SureOrder";
+    public static final String PAY_SURE=BASE+"SureOrder";
     //个人中心旅游订单
-    public static final String TRAVEL_ORDER=BASE+"EventAppApi/TravelOrderList";
+    public static final String TRAVEL_ORDER=BASE+"TravelOrderList";
     //个人中心旅游订单详情
-    public static final String TRAVEL_ORDER_DETAIL=BASE+"EventAppApi/TravelOrderDetail";
+    public static final String TRAVEL_ORDER_DETAIL=BASE+"TravelOrderDetail";
     //个人中心取消旅游订单
-    public static final String TRAVEL_ORDER_CANCEL=BASE+"EventAppApi/CancelTravelOrder";
+    public static final String TRAVEL_ORDER_CANCEL=BASE+"CancelTravelOrder";
     //个人中心酒店订单评价
-    public static final String Travel_ORDER_COMMENT=BASE+"EventAppApi/EvaluateHotelOrder";
+    public static final String Travel_ORDER_COMMENT=BASE+"EvaluateHotelOrder";
     //个人中心酒店订单
-    public static final String HOTEL_ORDER=BASE+"EventAppApi/HotelOrderList";
+    public static final String HOTEL_ORDER=BASE+"HotelOrderList";
     //个人中心酒店订单
-    public static final String HOTEL_ORDER_DETAIL=BASE+"EventAppApi/HotelOrderDetail";
+    public static final String HOTEL_ORDER_DETAIL=BASE+"HotelOrderDetail";
     //个人中心取消酒店订单
-    public static final String HOTEL_ORDER_CANCEL=BASE+"EventAppApi/CancelHotelOrder";
+    public static final String HOTEL_ORDER_CANCEL=BASE+"CancelHotelOrder";
     //个人中心酒店订单评价
-    public static final String HOTEL_ORDER_COMMENT=BASE+"EventAppApi/EvaluateHotelOrder";
+    public static final String HOTEL_ORDER_COMMENT=BASE+"EvaluateHotelOrder";
     //个人中心酒店订单退款方法
-    public static final String HOTEL_ORDER_BACK_MONEY=BASE+"EventAppApi/Refund";
+    public static final String HOTEL_ORDER_BACK_MONEY=BASE+"Refund";
 
 
     //赛事列表
-    public static final String EVENT=BASE+"EventAppApi/BJEventList";
+    public static final String EVENT=BASE+"BJEventList";
     //检查更新接口
-    public static final String UPDATE_URL=BASE+"EventAppApi/AppUpdate";
+    public static final String UPDATE_URL=BASE+"AppUpdate";
     //App下载页面
-    public static final String DOWNLOAD_URL=BASE+"EventAppApi/AppDownload";
+    public static final String DOWNLOAD_URL=BASE+"AppDownload";
     //系统通知消息详细页面
-    public static final String NOTICE_DETAIL_URL=BASE+"EventAppApi/SystemNotifation";
+    public static final String NOTICE_DETAIL_URL=BASE+"SystemNotifation";
     //系统通知消息详细页面
-    public static final String ZXING_URL=BASE+"EventAppApi/TransitReturn";
+    public static final String ZXING_URL=BASE+"TransitReturn";
 
 
 

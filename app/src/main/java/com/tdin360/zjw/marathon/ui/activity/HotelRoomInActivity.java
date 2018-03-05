@@ -3,6 +3,7 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -26,11 +27,13 @@ import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.PeopleClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.model.AA;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.HotelOrderBean;
 import com.tdin360.zjw.marathon.model.HotelOrderInfoBean;
 import com.tdin360.zjw.marathon.model.LoginBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
+import com.tdin360.zjw.marathon.model.TravelDetailBean;
 import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -53,6 +56,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static com.luck.picture.lib.R.id.time;
 
 /**
  * 酒店预定，入住信息填写
@@ -104,6 +109,14 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     @ViewInject(R.id.tv_hotel_room_money)
     private TextView tvMoney;
 
+    //日期选择
+  /*  @ViewInject(R.id.tv_travel_choose_time)
+    private TextView tvTime;*/
+   /* private ArrayList<String> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<String> options2Itemss = new ArrayList<>();
+    OptionsPickerView pvOptions;*/
+
 
     @ViewInject(R.id.layout_hotel_name)
     private LinearLayout layoutName;
@@ -130,10 +143,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private ArrayList<String> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private ArrayList<String> options2Itemss = new ArrayList<>();
     OptionsPickerView pvOptions;
+    int enterDate;
+    int outDate;
 
 
-    private String today,tomorrow;
+    private String today,tomorrow,year;
 
 
     @Override
@@ -148,13 +164,159 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         tomorrow =formatter.format(c.getTime());
         tvIn.setText(today);
         tvOut.setText(tomorrow);
+
+        SimpleDateFormat formatterYear=new SimpleDateFormat("yyyy");
+        Calendar c1=Calendar.getInstance();
+        //Date curDate=new Date(System.currentTimeMillis());//获取当前时间       
+        year =formatterYear.format(c1.getTime());
+
+        LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
+        String phone = loginInfo.getPhone();
+        etPhone.setText(phone);
         initDateLive();
         initToolbar();
         initView();
+        initDate();
 
     }
+    private void initDate() {
+        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+        if(apiTravelMonthDateList.size()<=0){
+            return;
+        }
+        options1Items.clear();
+        options2Items.clear();
+        options2Itemss.clear();
+        for (int i = 0; i <apiTravelMonthDateList.size() ; i++) {
+            AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
+            String month = apiHotelMonthDateListBean.getMonth()+"";
+            List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+            options1Items.add(month);
+            for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
+                AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                String day = apiHotelDayDateListBean.getDay();
+                options2Itemss.add(day);
+                options2Items.add(options2Itemss);
+            }
+        }
 
+        //条件选择器
+        pvOptions= new  OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                //返回的分别是三个级别的选中位置
+                String tx = options1Items.get(options1)+"-"
+                        + options2Items.get(options1).get(option2);
+                // + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
+                tvIn.setText(year+"-"+tx);
+                today = year + "-" + tx;
+                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                String day = apiHotelDayDateListBean.getDay();
+                enterDate= Integer.parseInt(day);
+                //time= tvTime.getText().toString().trim();
+                Log.d("timeeee2222222222", "initData: "+time);
+                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
+                if(apiTravelMonthDateList1.size()<=0){
+                    return;
+                }
+                options1Items.clear();
+                options2Items.clear();
+                options2Itemss.clear();
+                for (int i = 0; i <apiTravelMonthDateList1.size() ; i++) {
+                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean1 = apiTravelMonthDateList1.get(i);
+                    String month = apiHotelMonthDateListBean.getMonth()+"";
+                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList1 = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    options1Items.add(month);
+                    for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean1 = apiHotelDayDateList.get(j);
+                        String day1 = apiHotelDayDateListBean.getDay();
+                        options2Itemss.add(day1);
+                        options2Items.add(options2Itemss);
+                    }
+                }
+                //条件选择器
+                pvOptions= new  OptionsPickerView.Builder(HotelRoomInActivity.this, new OptionsPickerView.OnOptionsSelectListener() {
+                    @Override
+                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                        //返回的分别是三个级别的选中位置
+                        String tx = options1Items.get(options1)+"-"
+                                + options2Items.get(options1).get(option2);
 
+                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        String day = apiHotelDayDateListBean.getDay();
+                        outDate= Integer.parseInt(day);
+                        int i = outDate - enterDate;
+                        if(i>0){
+                            tomorrow = year + "-" + tx;
+                            tvOut.setText(year+"-"+tx);
+
+                            initDateLive();
+                        }else{
+                            ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
+                        }
+                        return;
+                        //Log.d("timeeee2222222222", "initData: "+time);
+
+                    }
+                })
+                        .setSubmitText("确定")//确定按钮文字
+                        .setCancelText("取消")//取消按钮文字
+                        .setTitleText("离店日期")//标题
+                        .setSubCalSize(18)//确定和取消文字大小
+                        .setTitleSize(20)//标题文字大小
+                        .setTitleColor(Color.parseColor("#ff621a"))//标题文字颜色
+                        .setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                        .setCancelColor(Color.BLACK)//取消按钮文字颜色
+                        .setTitleBgColor(Color.WHITE)//标题背景颜色 Night mode
+                        .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
+                        .setContentTextSize(18)//滚轮文字大小
+                        .setLinkage(false)//设置是否联动，默认true
+                        .setLabels("月", "日", "区")//设置选择的三级单位
+                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                        .setCyclic(false, false, false)//循环与否
+                        .setSelectOptions(1, 1, 1)  //设置默认选中项
+                        .setOutSideCancelable(false)//点击外部dismiss default true
+                        .isDialog(true)//是否显示为对话框样式
+                        .build();
+                pvOptions.setPicker(options1Items,options2Items);
+                pvOptions.show();
+               /* boolean showing = pvOptions.isShowing();
+                if(!showing){
+                    initDate();
+                }*/
+
+            }
+        })
+                .setSubmitText("确定")//确定按钮文字
+                .setCancelText("取消")//取消按钮文字
+                .setTitleText("入住日期")//标题
+                .setSubCalSize(18)//确定和取消文字大小
+                .setTitleSize(20)//标题文字大小
+                .setTitleColor(Color.parseColor("#ff621a"))//标题文字颜色
+                .setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                .setCancelColor(Color.BLACK)//取消按钮文字颜色
+                .setTitleBgColor(Color.WHITE)//标题背景颜色 Night mode
+                .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
+                .setContentTextSize(18)//滚轮文字大小
+                .setLinkage(false)//设置是否联动，默认true
+                .setLabels("月", "日", "区")//设置选择的三级单位
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setCyclic(false, false, false)//循环与否
+                .setSelectOptions(1, 1, 1)  //设置默认选中项
+                .setOutSideCancelable(false)//点击外部dismiss default true
+                .isDialog(true)//是否显示为对话框样式
+                .build();
+
+        pvOptions.setPicker(options1Items,options2Items);
+        pvOptions.show();
+
+    }
     private void initDateLive() {
         try {
             SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
@@ -169,13 +331,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-         /*HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        /* AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
         String instructions = bjHotelRoomListModelBean.getInstructions();
         if(TextUtils.isEmpty(instructions)){
-            String str="<font color='#ff621a'>入住说明：</font>";
+            String str="<font color='#ff621a'>入住说明：</font>暂无说明";
             tvIntro.setText(Html.fromHtml(str));
         }else{
-            String str="<font color='#ff621a'>入住说明：</font>暂无说明"+bjHotelRoomListModelBean.getInstructions();
+            String str="<font color='#ff621a'>入住说明：</font>"+bjHotelRoomListModelBean.getInstructions();
             tvIntro.setText(Html.fromHtml(str));
         }*/
         String str="<font color='#ff621a'>入住说明：</font>暂无说明";
@@ -217,117 +379,142 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         String format1 = format.format(date);
         return format1;
     }
-    private void initDate(final TextView textView) {
-        DatePickDialog dialog = new DatePickDialog(HotelRoomInActivity.this);
-        //设置上下年分限制
-        dialog.setYearLimt(5);
-        //设置标题
-        dialog.setTitle("选择时间");
-        //设置类型
-        dialog.setType(DateType.TYPE_YMD);
-        //设置消息体的显示格式，日期格式
-        //dialog.setMessageFormat("yyyy-MM-dd HH:mm");
-        //设置选择回调
-        dialog.setOnChangeLisener(null);
-        //设置点击确定按钮回调
-        dialog.setOnSureLisener(new OnSureLisener() {
-            @Override
-            public void onSure(Date date) {
-                textView.setText(getTime(date));
-                initDateLive();
-            }
-        });
-        dialog.show();
-    }
     @Override
     public void onClick(View v) {
-        DatePickDialog dialog = new DatePickDialog(HotelRoomInActivity.this);
         switch (v.getId()){
             case R.id.tv_hotel_room_in:
                 //入住时间
-               // initDate(tvIn);
-                //DatePickDialog dialog = new DatePickDialog(HotelRoomInActivity.this);
-                //设置上下年分限制
-                dialog.setYearLimt(5);
-                //设置标题
-                dialog.setTitle("选择时间");
-                //设置类型
-                dialog.setType(DateType.TYPE_YMD);
-                //设置消息体的显示格式，日期格式
-                //dialog.setMessageFormat("yyyy-MM-dd HH:mm");
-                //设置选择回调
-                dialog.setOnChangeLisener(null);
-                //设置点击确定按钮回调
-                dialog.setOnSureLisener(new OnSureLisener() {
+                //initDate();
+                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                if(apiTravelMonthDateList.size()<=0){
+                    return;
+                }
+                options1Items.clear();
+                options2Items.clear();
+                options2Itemss.clear();
+                for (int i = 0; i <apiTravelMonthDateList.size() ; i++) {
+                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
+                    String month = apiHotelMonthDateListBean.getMonth()+"";
+                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    options1Items.add(month);
+                    for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                        String day = apiHotelDayDateListBean.getDay();
+                        options2Itemss.add(day);
+                        options2Items.add(options2Itemss);
+                    }
+                }
+
+                //条件选择器
+                pvOptions= new  OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
                     @Override
-                    public void onSure(Date date) {
-                        String time = getTime(date);
-                        try {
-                            SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
-                            Date todayDate=formatter.parse(today);
-                            Date timeDate=formatter.parse(time);
-                            int i = (int) (timeDate.getTime()-todayDate.getTime()) / (1000 * 3600 * 24);
-                            if(i>=0){
-                                today =time ;
-                                tvEnter.setText(i+"晚");
-                                tvIn.setText(getTime(date));
-                                initDateLive();
-                                Log.d("ddddd", "onCreate: "+i);
-                            }else{
-                                ToastUtils.showCenter(getApplicationContext(),"不能选择今天之前的日期");
-                                tvIn.setText(today);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                        //返回的分别是三个级别的选中位置
+                        String tx = options1Items.get(options1)+"-"
+                                + options2Items.get(options1).get(option2);
+                        // + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
+                        tvIn.setText(year+"-"+tx);
+                        //time= tvTime.getText().toString().trim();
+                        today = year + "-" + tx;
+                        Log.d("timeeee2222222222", "initData: "+time);
+                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        String day = apiHotelDayDateListBean.getDay();
+                        enterDate= Integer.parseInt(day);
 
                     }
-                });
-                dialog.show();
+                })
+                        .setSubmitText("确定")//确定按钮文字
+                        .setCancelText("取消")//取消按钮文字
+                        .setTitleText("入住日期")//标题
+                        .setSubCalSize(18)//确定和取消文字大小
+                        .setTitleSize(20)//标题文字大小
+                        .setTitleColor(Color.parseColor("#ff621a"))//标题文字颜色
+                        .setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                        .setCancelColor(Color.BLACK)//取消按钮文字颜色
+                        .setTitleBgColor(Color.WHITE)//标题背景颜色 Night mode
+                        .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
+                        .setContentTextSize(18)//滚轮文字大小
+                        .setLinkage(false)//设置是否联动，默认true
+                        .setLabels("月", "日", "区")//设置选择的三级单位
+                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                        .setCyclic(false, false, false)//循环与否
+                        .setSelectOptions(1, 1, 1)  //设置默认选中项
+                        .setOutSideCancelable(false)//点击外部dismiss default true
+                        .isDialog(true)//是否显示为对话框样式
+                        .build();
 
+                pvOptions.setPicker(options1Items,options2Items);
+                pvOptions.show();
                 break;
             case R.id.tv_hotel_room_out:
-                //initDate(tvOut);
-
-                //设置上下年分限制
-                dialog.setYearLimt(5);
-                //设置标题
-                dialog.setTitle("选择时间");
-                //设置类型
-                dialog.setType(DateType.TYPE_YMD);
-                //设置消息体的显示格式，日期格式
-                //dialog.setMessageFormat("yyyy-MM-dd HH:mm");
-                //设置选择回调
-                dialog.setOnChangeLisener(null);
-                //设置点击确定按钮回调
-                dialog.setOnSureLisener(new OnSureLisener() {
-                    @Override
-                    public void onSure(Date date) {
-                        String time = getTime(date);
-                        try {
-                            SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
-                            Date todayDate=formatter.parse(tomorrow);
-                            Date timeDate=formatter.parse(time);
-                            int i = (int) (timeDate.getTime()-todayDate.getTime()) / (1000 * 3600 * 24);
-                            if(i>=0){
-                                tomorrow =time ;
-                                tvEnter.setText(i+"晚");
-                                tvOut.setText(getTime(date));
-                                initDateLive();
-                                Log.d("ddddd", "onCreate: "+i);
-                            }else{
-                                ToastUtils.showCenter(getApplicationContext(),"不能选择明天之前的日期");
-                                tvOut.setText(tomorrow);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        /*tomorrow = getTime(date);
-                        tvOut.setText(tomorrow);*/
-                        //initDateLive();
+                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
+                if(apiTravelMonthDateList1.size()<=0){
+                    return;
+                }
+                options1Items.clear();
+                options2Items.clear();
+                options2Itemss.clear();
+                for (int i = 0; i <apiTravelMonthDateList1.size() ; i++) {
+                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList1.get(i);
+                    String month = apiHotelMonthDateListBean.getMonth()+"";
+                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    options1Items.add(month);
+                    for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                        String day = apiHotelDayDateListBean.getDay();
+                        Log.d("timeeee2222222222day", "initData: "+day);
+                        options2Itemss.add(day);
+                        options2Items.add(options2Itemss);
                     }
-                });
-                dialog.show();
+                }
+                //条件选择器
+                pvOptions= new  OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+                    @Override
+                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                        //返回的分别是三个级别的选中位置
+                        String tx = options1Items.get(options1)+"-"
+                                + options2Items.get(options1).get(option2);
+                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        String day = apiHotelDayDateListBean.getDay();
+                        outDate= Integer.parseInt(day);
+                        int i = outDate - enterDate;
+                        if(i>0){
+                            tomorrow = year + "-" + tx;
+                            tvOut.setText(year+"-"+tx);
+                            initDateLive();
+                        }else{
+                            ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
+                        }
+                        Log.d("timeeee2222222222dayi", "initData: "+i);
+                    }
+                })
+                        .setSubmitText("确定")//确定按钮文字
+                        .setCancelText("取消")//取消按钮文字
+                        .setTitleText("离店日期")//标题
+                        .setSubCalSize(18)//确定和取消文字大小
+                        .setTitleSize(20)//标题文字大小
+                        .setTitleColor(Color.parseColor("#ff621a"))//标题文字颜色
+                        .setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                        .setCancelColor(Color.BLACK)//取消按钮文字颜色
+                        .setTitleBgColor(Color.WHITE)//标题背景颜色 Night mode
+                        .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
+                        .setContentTextSize(18)//滚轮文字大小
+                        .setLinkage(false)//设置是否联动，默认true
+                        .setLabels("月", "日", "区")//设置选择的三级单位
+                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                        .setCyclic(false, false, false)//循环与否
+                        .setSelectOptions(1, 1, 1)  //设置默认选中项
+                        .setOutSideCancelable(false)//点击外部dismiss default true
+                        .isDialog(true)//是否显示为对话框样式
+                        .build();
+                pvOptions.setPicker(options1Items,options2Items);
+                pvOptions.show();
                 break;
             case R.id.tv_hotel_room_dec:
                 //入住房间减少
@@ -431,7 +618,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String hotelRoomId = getIntent().getStringExtra("hotelRoomId");
             byte[] mBytes=null;
             final String phone = etPhone.getText().toString().trim();
-
             JSONArray jsonArray=new JSONArray();
             JSONObject jsonObject=new JSONObject();
             JSONObject tmpObj =null;
@@ -486,8 +672,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                     .setDimAmount(0.5f)
                     .show();
             Log.d("222222222222", "initData: "+customerId);
-            String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\",\"userList\":"+userList+"}";
+            //String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\",\"userList\":"+userList+"}";
+            String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"peopleNumber\":"+"\""+countPeople+"\",\"userName\":"+"\""+"ee"+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\""+"}";
             Log.d("----------", "initData: "+string);
+
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
             RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_DETAIL_ORDER);

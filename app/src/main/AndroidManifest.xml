@@ -83,9 +83,6 @@
             android:name=".ui.activity.SettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.RegisterActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <!-- alipay sdk begin -->
@@ -225,9 +222,6 @@
             android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.RestPassWordActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -321,9 +315,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.WebActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.EventActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ZxingActivity"

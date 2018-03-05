@@ -17,6 +17,7 @@ import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
+import com.tdin360.zjw.marathon.model.AA;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelDetailBean;
 import com.tdin360.zjw.marathon.model.TravelPictureBean;
@@ -91,16 +92,16 @@ public class PictureActivity extends BaseActivity {
         String picture = getIntent().getStringExtra("picture");
         final ArrayList<String> image= new ArrayList<>();
         if(picture.equals("hotelPic")){
-            List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
+            List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
             if(bjHotelPictureListModel.size()<=0){
                 mErrorView.show(rvPiv,"暂时没有数据", ErrorView.ViewShowMode.NOT_DATA);
                 return;
             }else{
                 mErrorView.hideErrorView(rvPiv);
-            adapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelPictureListModelBean>(getApplicationContext(),
+            adapter=new RecyclerViewBaseAdapter<AA.ModelBean.BJHotelPictureListModelBean>(getApplicationContext(),
                     bjHotelPictureListModel,R.layout.item_picture) {
                 @Override
-                protected void onBindNormalViewHolder(NormalViewHolder holder, HotelDetailBean.ModelBean.BJHotelPictureListModelBean model) {
+                protected void onBindNormalViewHolder(NormalViewHolder holder, AA.ModelBean.BJHotelPictureListModelBean model) {
                     ImageView ivHotel = (ImageView) holder.getViewById(R.id.iv_hotel_detail_pic);
                     x.image().bind(ivHotel,model.getPictureUrl(),imageOptions);
                 }

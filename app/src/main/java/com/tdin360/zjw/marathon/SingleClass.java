@@ -1,5 +1,6 @@
 package com.tdin360.zjw.marathon;
 
+import com.tdin360.zjw.marathon.model.AA;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 import com.tdin360.zjw.marathon.model.HotelOrderInfoBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
@@ -54,15 +55,28 @@ public class SingleClass {
     }
 
     //酒店图集
-    private List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel;
-    private HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean;
+    private List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel;
+    private AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean;
     //旅游图集
     private List<TravelPictureBean.ModelBean.BJTravelPictureListModelBean> bjTravelPictureListModel;
     //酒店提交订单
     private HotelOrderInfoBean.ModelBean.BJHotelOrderModelBean bjHotelOrderModel;
     private List<HotelOrderInfoBean.ModelBean.BJHotelStayInCustomerListModelBean> bjHotelStayInCustomerListModel;
+    //酒店日期
+    private List<HotelDetailBean.ModelBean.ApiHotelMonthDateList> apiHotelMonthDateList;
+    private List<AA.ModelBean.ApiHotelMonthDateListBean> apiHotelMonthDateList1;
+
+    public List<AA.ModelBean.ApiHotelMonthDateListBean> getApiHotelMonthDateList1() {
+        return apiHotelMonthDateList1;
+    }
+
+    public void setApiHotelMonthDateList1(List<AA.ModelBean.ApiHotelMonthDateListBean> apiHotelMonthDateList1) {
+        this.apiHotelMonthDateList1 = apiHotelMonthDateList1;
+    }
+
     //旅游日期
     private List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList;
+
     //旅游提交订单
     private TravelOrderInfoBean.ModelBean.BJTravelOrderModelBean bjTravelOrderModel;
     private List<TravelOrderInfoBean.ModelBean.BJTravelStayInCustomerListModelBean> bjTravelStayInCustomerListModel;
@@ -72,6 +86,14 @@ public class SingleClass {
     private OrderTravelBean.ModelBean.BJTravelOrderListModelBean bjTravelOrderListModelBean;
 
     private OtherLoginUserInfoBean.UserBean user;
+
+    public List<HotelDetailBean.ModelBean.ApiHotelMonthDateList> getApiHotelMonthDateList() {
+        return apiHotelMonthDateList;
+    }
+
+    public void setApiHotelMonthDateList(List<HotelDetailBean.ModelBean.ApiHotelMonthDateList> apiHotelMonthDateList) {
+        this.apiHotelMonthDateList = apiHotelMonthDateList;
+    }
 
     public OtherLoginUserInfoBean.UserBean getUser() {
         return user;
@@ -153,19 +175,19 @@ public class SingleClass {
         this.bjTravelPictureListModel = bjTravelPictureListModel;
     }*/
 
-    public HotelDetailBean.ModelBean.BJHotelRoomListModelBean getBjHotelRoomListModelBean() {
+    public AA.ModelBean.BJHotelRoomListModelBean getBjHotelRoomListModelBean() {
         return bjHotelRoomListModelBean;
     }
 
-    public void setBjHotelRoomListModelBean(HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean) {
+    public void setBjHotelRoomListModelBean(AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean) {
         this.bjHotelRoomListModelBean = bjHotelRoomListModelBean;
     }
 
-    public List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> getBjHotelPictureListModel() {
+    public List<AA.ModelBean.BJHotelPictureListModelBean> getBjHotelPictureListModel() {
         return bjHotelPictureListModel;
     }
 
-    public void setBjHotelPictureListModel(List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel) {
+    public void setBjHotelPictureListModel(List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel) {
         this.bjHotelPictureListModel = bjHotelPictureListModel;
     }
 }

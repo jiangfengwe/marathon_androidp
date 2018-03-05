@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
+import com.tdin360.zjw.marathon.model.AA;
 import com.tdin360.zjw.marathon.model.HotelDetailBean;
 
 import org.xutils.image.ImageOptions;
@@ -81,7 +82,7 @@ public class HotelRoomActivity extends BaseActivity {
 
     private void initView() {
         String name = getIntent().getStringExtra("name");
-        final HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        final AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
         x.image().bind(ivPic,bjHotelRoomListModelBean.getPictureUrl(),imageOptions);
         tvName.setText(name);
         tvPrice.setText(bjHotelRoomListModelBean.getPrice()+"");

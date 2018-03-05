@@ -77,7 +77,7 @@
             android:background="@color/white"
             android:padding="5dp"
             android:text="正在获取位置信息..."
-            android:drawableLeft="@drawable/red_address"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         </LinearLayout>

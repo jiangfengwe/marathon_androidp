@@ -19,13 +19,23 @@ public class SystemNoticeBean {
     private int messageId;
     private String time;
     private String notice;
+    private String title;
 
-    public SystemNoticeBean(String messageIntroduce, String messageType, int messageId, String time, String notice) {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public SystemNoticeBean(String messageIntroduce, String messageType, int messageId, String time, String notice,String title) {
         this.messageIntroduce = messageIntroduce;
         this.messageType = messageType;
         this.messageId = messageId;
         this.time = time;
         this.notice = notice;
+        this.title = title;
     }
 
     public String getTime() {

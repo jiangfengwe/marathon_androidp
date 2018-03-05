@@ -88,7 +88,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int versionName = UpdateManager.getVersion(getApplicationContext());
+        //int versionName = UpdateManager.getVersion(getApplicationContext());
+        String versionName = UpdateManager.getVersionName(getApplicationContext());
         tvVision.setText("V " + versionName);
       /*  TextView version = (TextView) this.findViewById(R.id.version);
         version.setText(versionName);*/

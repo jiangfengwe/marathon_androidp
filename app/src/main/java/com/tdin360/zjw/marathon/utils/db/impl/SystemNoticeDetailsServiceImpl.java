@@ -66,6 +66,8 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         values.put("messageType",model.getMessageType());
         values.put("time",model.getTime());
         values.put("timeNotice",model.getNotice());
+        values.put("title",model.getTitle());
+
             conn.insert(SQLHelper.SYSTEM_NOTICE_TABLE, null, values);
         Log.d("model.getNickName()", "addCircleNotice: "+model.getMessageIntroduce());
        // }
@@ -87,7 +89,8 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
             String messageType = cursor.getString(cursor.getColumnIndex("messageType"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             String notice = cursor.getString(cursor.getColumnIndex("timeNotice"));
-            list.add(new SystemNoticeBean(DynamicContent,messageType,DynamicId,time,notice));
+            String title = cursor.getString(cursor.getColumnIndex("title"));
+            list.add(new SystemNoticeBean(DynamicContent,messageType,DynamicId,time,notice,title));
         }
         cursor.close();
         conn.close();

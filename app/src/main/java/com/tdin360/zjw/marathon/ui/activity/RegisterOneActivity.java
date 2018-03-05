@@ -51,7 +51,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-import static com.tdin360.zjw.marathon.R.id.phone;
+
 
 
 /**

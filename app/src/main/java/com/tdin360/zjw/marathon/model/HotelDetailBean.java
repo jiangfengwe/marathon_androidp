@@ -51,6 +51,7 @@ public class HotelDetailBean {
          * BJHotelPictureListModel : [{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001052.png","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0001052_320.png","PictureHeight":926,"PictureWidth":1297,"HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001051.png","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0001051_320.png","PictureHeight":926,"PictureWidth":1297,"HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002045.png","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002045_320.png","PictureHeight":102,"PictureWidth":254,"HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002044.png","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002044_320.png","PictureHeight":324,"PictureWidth":533,"HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}}]
          * BJHotelRoomListModel : [{"BJHotelRoomPictureListModel":[],"HotelRoomPictureCount":0,"Name":"豪华单人间","Price":0.01,"Area":50,"IsBooking":true,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001045_160.png","Network":"wifi","Bathroom":"有浴室","Window":"有窗","BedType":"大床","LiveInPerson":2,"Breakfast":"有早餐","HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":2,"CustomProperties":{}},{"BJHotelRoomPictureListModel":[],"HotelRoomPictureCount":0,"Name":"普通单人间","Price":0.01,"Area":30,"IsBooking":false,"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0001044_160.jpeg","Network":"wifi","Bathroom":"有浴室","Window":"有窗","BedType":"大床","LiveInPerson":2,"Breakfast":"无早餐","HotelId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":1,"CustomProperties":{}}]
          * BJHotelEvaluateListModel : [{"BJHotelEvaluatePictureListModel":[{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002100.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002100_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002099.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002099_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002098.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002098_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002097.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002097_160.jpg","PictureHeight":550,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002095.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002095_160.jpg","PictureHeight":1241,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002092.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002092_160.jpg","PictureHeight":550,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002090.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002090_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002089.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002089_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}}],"EvaluationUserModel":{"Id":4099,"HeadImg":"http://www.baijar.com/content/images/thumbs/0002055_120.jpg","Phone":null,"NickName":"用户4099","Gender":null,"Unionid":null,"IsBindPhone":false,"CustomerSign":null},"EvaluateContent":"Jjhv风 vvv 宝贝这样vvgggbbbcdCCTV 次在外面吃饭都吃过最多也有很多事情是这样","ReplayContent":null,"EvaluateTime":"/Date(-62135596800000)/","EvaluateTimeStr":"2017-12-26","Scoring":0,"CustomerId":0,"HotelRoomId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"BJHotelEvaluatePictureListModel":[{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002096.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002096_160.jpg","PictureHeight":550,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002094.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002094_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002093.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002093_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002091.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002091_160.jpg","PictureHeight":1241,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002088.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002088_160.jpg","PictureHeight":550,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002087.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002087_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002086.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002086_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}},{"Picture":0,"PictureUrl":"http://www.baijar.com/content/images/thumbs/0002085.jpg","ThumbPictureUrl":"http://www.baijar.com/content/images/thumbs/0002085_160.jpg","PictureHeight":552,"PictureWidth":828,"EvaluateId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}}],"EvaluationUserModel":{"Id":4099,"HeadImg":"http://www.baijar.com/content/images/thumbs/0002055_120.jpg","Phone":null,"NickName":"用户4099","Gender":null,"Unionid":null,"IsBindPhone":false,"CustomerSign":null},"EvaluateContent":"Jjhv风 vvv 宝贝这样vvgggbbbcdCCTV 次在外面吃饭都吃过最多也有很多事情是这样","ReplayContent":null,"EvaluateTime":"/Date(-62135596800000)/","EvaluateTimeStr":"2017-12-26","Scoring":0,"CustomerId":0,"HotelRoomId":0,"CreateTime":"/Date(-62135596800000)/","Note":null,"Id":0,"CustomProperties":{}}]
+         *ApiHotelMonthDateList: [{Month: "02",ApiHotelDayDateList: [{Day: "21"},{Day: "22"},{Day: "23"}]}],
          * Id : 0
          * CustomProperties : {}
          */
@@ -63,6 +64,15 @@ public class HotelDetailBean {
         private List<BJHotelPictureListModelBean> BJHotelPictureListModel;
         private List<BJHotelRoomListModelBean> BJHotelRoomListModel;
         private List<BJHotelEvaluateListModelBean> BJHotelEvaluateListModel;
+        private List<ApiHotelMonthDateList> apiHotelMonthDateLists;
+
+        public List<ApiHotelMonthDateList> getApiHotelMonthDateLists() {
+            return apiHotelMonthDateLists;
+        }
+
+        public void setApiHotelMonthDateLists(List<ApiHotelMonthDateList> apiHotelMonthDateLists) {
+            this.apiHotelMonthDateLists = apiHotelMonthDateLists;
+        }
 
         public int getPageIndex() {
             return pageIndex;
@@ -956,6 +966,48 @@ public class HotelDetailBean {
                 }
 
                 public static class CustomPropertiesBeanX {
+                }
+            }
+        }
+        public static class ApiHotelMonthDateList{
+
+            /**
+             * Month : 02
+             * ApiHotelDayDateList : [{"Day":"21"},{"Day":"22"},{"Day":"23"}]
+             */
+
+            private String Month;
+            private List<ApiHotelDayDateListBean> ApiHotelDayDateList;
+
+            public String getMonth() {
+                return Month;
+            }
+
+            public void setMonth(String Month) {
+                this.Month = Month;
+            }
+
+            public List<ApiHotelDayDateListBean> getApiHotelDayDateList() {
+                return ApiHotelDayDateList;
+            }
+
+            public void setApiHotelDayDateList(List<ApiHotelDayDateListBean> ApiHotelDayDateList) {
+                this.ApiHotelDayDateList = ApiHotelDayDateList;
+            }
+
+            public static class ApiHotelDayDateListBean {
+                /**
+                 * Day : 21
+                 */
+
+                private String Day;
+
+                public String getDay() {
+                    return Day;
+                }
+
+                public void setDay(String Day) {
+                    this.Day = Day;
                 }
             }
         }

@@ -50,8 +50,6 @@ import java.util.List;
  * 发表圈友动态
  */
 public class AddCircleActivity extends BaseActivity implements FaceFragment.OnEmojiClickListener,View.OnLayoutChangeListener{
-
-
     @ViewInject(R.id.edit)
     private EditText edit;
     @ViewInject(R.id.wordCount)

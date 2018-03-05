@@ -51,10 +51,7 @@ import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.util.List;
 
-import static com.tdin360.zjw.marathon.R.id.orderNumber;
-import static com.tdin360.zjw.marathon.R.id.status;
 
 /**
  * 我的订单中旅游订单详情

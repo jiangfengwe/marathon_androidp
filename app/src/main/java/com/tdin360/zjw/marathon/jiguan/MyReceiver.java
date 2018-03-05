@@ -154,12 +154,15 @@ public class MyReceiver extends BroadcastReceiver {
 					JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));*/
 					//Log.d("circlejson", "printBundle: "+json);
 					String string = bundle.getString(JPushInterface.EXTRA_EXTRA);
-					Log.d("circlestring", "printBundle: "+string);
+		String title = bundle.getString(JPushInterface.EXTRA_ALERT);
+		Log.d("circlestring", "printBundle: "+string);
 					Gson gson=new Gson();
                     //点赞评论通知
         CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
         //系统通知
         SystemNoticeBean systemNoticeBean = gson.fromJson(string, SystemNoticeBean.class);
+		systemNoticeBean.setTitle(title);
+
         String nickName = circlePriseTableModel.getNickName();
         String messageType = circlePriseTableModel.getMessageType();
         Log.d("circlenickName", "onReceive: "+nickName);

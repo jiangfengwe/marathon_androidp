@@ -200,7 +200,7 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
                     ImageView item = new ImageView(getContext());
                     params.leftMargin = 5;
                     item.setLayoutParams(params);
-                    item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+                    //item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
 
                     if (i == 0) {
 
@@ -241,7 +241,7 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
                 ImageView item = new ImageView(getContext());
                 params.leftMargin = 5;
                 item.setLayoutParams(params);
-                item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+               // item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
                 if (i == 0) {
 
                     item.setEnabled(false);
@@ -280,7 +280,7 @@ public void setOnCarouselItemClickListener(OnCarouselItemClickListener listener)
                 ImageView item = new ImageView(getContext());
                 params.leftMargin = 5;
                 item.setLayoutParams(params);
-                item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
+               // item.setBackgroundResource(R.drawable.carousel_checkbox_selector);
                 if (i == 0) {
 
                     item.setEnabled(false);
