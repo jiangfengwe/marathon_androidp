@@ -67,6 +67,7 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
         values.put("time",model.getTime());
         values.put("timeNotice",model.getNotice());
         values.put("title",model.getTitle());
+        values.put("url",model.getUrl());
 
             conn.insert(SQLHelper.SYSTEM_NOTICE_TABLE, null, values);
         Log.d("model.getNickName()", "addCircleNotice: "+model.getMessageIntroduce());
@@ -85,12 +86,12 @@ public class SystemNoticeDetailsServiceImpl implements SystemNoticeDetailService
 
             int DynamicId = cursor.getInt(cursor.getColumnIndex("messageId"));
             String DynamicContent =  cursor.getString(cursor.getColumnIndex("messageIntroduce")) ;
-
             String messageType = cursor.getString(cursor.getColumnIndex("messageType"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             String notice = cursor.getString(cursor.getColumnIndex("timeNotice"));
             String title = cursor.getString(cursor.getColumnIndex("title"));
-            list.add(new SystemNoticeBean(DynamicContent,messageType,DynamicId,time,notice,title));
+            String url = cursor.getString(cursor.getColumnIndex("url"));
+            list.add(new SystemNoticeBean(DynamicContent,messageType,DynamicId,time,notice,title,url));
         }
         cursor.close();
         conn.close();

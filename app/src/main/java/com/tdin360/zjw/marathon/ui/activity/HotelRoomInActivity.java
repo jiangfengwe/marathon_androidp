@@ -103,6 +103,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout LayoutInfo;
     @ViewInject(R.id.et_hotel_order_phone)
     private EditText etPhone;
+    @ViewInject(R.id.et_hotel_order_name)
+    private EditText etName;
     private int count=1;
     private int countRoom=1;
     private int countPeople=1;
@@ -147,6 +149,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     OptionsPickerView pvOptions;
     int enterDate;
     int outDate;
+    String enterMonth;
 
 
     private String today,tomorrow,year;
@@ -209,12 +212,14 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         + options2Items.get(options1).get(option2);
                 // + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
                 tvIn.setText(year+"-"+tx);
+
                 today = year + "-" + tx;
                 List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
                 AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
                 List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
                 AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
                 String day = apiHotelDayDateListBean.getDay();
+                enterMonth= apiTravelMonthDateList.get(options1).getMonth();
                 enterDate= Integer.parseInt(day);
                 //time= tvTime.getText().toString().trim();
                 Log.d("timeeee2222222222", "initData: "+time);
@@ -228,11 +233,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 for (int i = 0; i <apiTravelMonthDateList1.size() ; i++) {
                     AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean1 = apiTravelMonthDateList1.get(i);
                     String month = apiHotelMonthDateListBean.getMonth()+"";
-                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList1 = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList1 = apiHotelMonthDateListBean1.getApiHotelDayDateList();
                     options1Items.add(month);
                     for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean1 = apiHotelDayDateList.get(j);
-                        String day1 = apiHotelDayDateListBean.getDay();
+                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean1 = apiHotelDayDateList1.get(j);
+                        String day1 = apiHotelDayDateListBean1.getDay();
                         options2Itemss.add(day1);
                         options2Items.add(options2Itemss);
                     }
@@ -255,10 +260,20 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         if(i>0){
                             tomorrow = year + "-" + tx;
                             tvOut.setText(year+"-"+tx);
-
+                            tvOut.setTextSize(15);
                             initDateLive();
-                        }else{
-                            ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
+                        }else if (i==0){
+                            //ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
+                            tvOut.setText("入住时间最短为一天,请再次选择离店日期");
+                            tvOut.setTextSize(8);
+                            tomorrow = null;
+                           /* int i1 = enterDate + 1;
+                            tvOut.setText(year+"-"+enterMonth+i1);*/
+
+                        }else {
+                            tvOut.setText("入住时间最短为一天,请再次选择入住日期或离店日期");
+                            tvOut.setTextSize(8);
+                            tomorrow = null;
                         }
                         return;
                         //Log.d("timeeee2222222222", "initData: "+time);
@@ -487,10 +502,28 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         if(i>0){
                             tomorrow = year + "-" + tx;
                             tvOut.setText(year+"-"+tx);
+                            tvOut.setTextSize(15);
+                            initDateLive();
+                        }else if (i==0){
+                            //ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
+                            tvOut.setText("入住时间最短为一天,请再次选择离店日期");
+                            tvOut.setTextSize(8);
+                            tomorrow = null;
+                           /* int i1 = enterDate + 1;
+                            tvOut.setText(year+"-"+enterMonth+i1);*/
+
+                        }else {
+                            tvOut.setText("入住时间最短为一天,请再次选择入住日期或离店日期");
+                            tvOut.setTextSize(8);
+                            tomorrow = null;
+                        }
+                       /* if(i>0){
+                            tomorrow = year + "-" + tx;
+                            tvOut.setText(year+"-"+tx);
                             initDateLive();
                         }else{
                             ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
-                        }
+                        }*/
                         Log.d("timeeee2222222222dayi", "initData: "+i);
                     }
                 })
@@ -618,6 +651,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String hotelRoomId = getIntent().getStringExtra("hotelRoomId");
             byte[] mBytes=null;
             final String phone = etPhone.getText().toString().trim();
+            String nameOrder= etName.getText().toString().trim();
             JSONArray jsonArray=new JSONArray();
             JSONObject jsonObject=new JSONObject();
             JSONObject tmpObj =null;
@@ -648,7 +682,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 }
 
             }
-
+            if(TextUtils.isEmpty(nameOrder)){
+                ToastUtils.showCenter(getApplicationContext(),"姓名不能为空");
+                return;
+            }
             if(TextUtils.isEmpty(phone)){
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不能为空");
                 return;
@@ -656,6 +693,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String roomNumber = tvSum.getText().toString().trim();
             if(!isMobileNO(phone)){
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
+                return;
+            }
+            if(TextUtils.isEmpty(tomorrow)){
+                ToastUtils.showCenter(getApplicationContext(),"入住日期或离店日期不合法");
                 return;
             }
             String userList = jsonArray.toString();
@@ -673,7 +714,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                     .show();
             Log.d("222222222222", "initData: "+customerId);
             //String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\",\"userList\":"+userList+"}";
-            String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"peopleNumber\":"+"\""+countPeople+"\",\"userName\":"+"\""+"ee"+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\""+"}";
+            String string="{\"enterDate\":"+"\""+today+"\",\"leaveDate\":"+"\""+tomorrow+"\",\"roomNumber\":"+"\""+roomNumber+"\",\"peopleNumber\":"+"\""+countPeople+"\",\"userName\":"+"\""+nameOrder+"\",\"userPhone\":"+"\""+phone+"\",\"hotelRoomId\":"+"\""+hotelRoomId+"\",\"customerId\":"+"\""+customerId+"\",\"appKey\":\"BJYDAppV-2\""+"}";
             Log.d("----------", "initData: "+string);
 
             mBytes=string.getBytes("UTF8");
@@ -701,6 +742,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         Intent intent=new Intent(HotelRoomInActivity.this,HotelRoomSubmitActivity.class);
                         intent.putExtra("orderId",bjHotelOrderModel.getId()+"");
                         startActivity(intent);
+
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),hotelOrderBean.getMessage());
                     }

@@ -8,6 +8,7 @@ public class HttpUrlUtils {
     //private static final String BASE="http://www.baijar.com/EventAppApi/";
     //动态分享看看有没有EventAppApi。测试一下
     private static final String BASE="http://www.tdin360.com/EventAppApiV2F1/";
+    public static final String URL="http://www.tdin360.com";
     public static final String appKey="BJYDAppV-2";
     //验证手机号
     public static final String REGISTER_ONE=BASE+"EventInfo/RegisterStep1";

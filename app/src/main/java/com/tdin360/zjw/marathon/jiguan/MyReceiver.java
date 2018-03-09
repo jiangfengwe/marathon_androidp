@@ -15,6 +15,7 @@ import com.tdin360.zjw.marathon.model.NoticeMessageModel;
 import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.ui.activity.CircleMessageActivity;
 import com.tdin360.zjw.marathon.ui.activity.MainActivity;
+import com.tdin360.zjw.marathon.ui.activity.MyNoticeDetailActivity;
 import com.tdin360.zjw.marathon.ui.activity.MyNoticeMessageActivity;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.SystemUtils;
@@ -92,6 +93,9 @@ public class MyReceiver extends BroadcastReceiver {
 				Log.d("circlestring", "printBundle: "+string);
 				Gson gson=new Gson();
 				CirclePriseTableModel circlePriseTableModel = gson.fromJson(string, CirclePriseTableModel.class);
+				//系统通知
+				SystemNoticeBean systemNoticeBean = gson.fromJson(string, SystemNoticeBean.class);
+
 				String nickName = circlePriseTableModel.getNickName();
 				String messageType = circlePriseTableModel.getMessageType();
 				Log.d("circlenickName", "onReceive: "+nickName);
@@ -103,8 +107,10 @@ public class MyReceiver extends BroadcastReceiver {
 					context.startActivities(new Intent[]{main,notice});
 					//context.startActivity(notice);
 				}else{
-					Intent notice = new Intent(context,MyNoticeMessageActivity.class);
+					Intent notice = new Intent(context,MyNoticeDetailActivity.class);
+					String url = systemNoticeBean.getUrl();
 					Intent main = new Intent(context,MainActivity.class);
+					notice.putExtra("url",url);
 					main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					// notice.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivities(new Intent[]{main,notice});

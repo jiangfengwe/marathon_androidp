@@ -26,6 +26,7 @@ import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.CirclePraiseDatabaseImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +60,9 @@ public class CircleMessageActivity extends BaseActivity {
     private RecyclerView rvCircle;
     private RecyclerViewBaseAdapter adapter;
     private List<String> list=new ArrayList<>();
+
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
 
     private ImageOptions imageOptions,imageOptionsCircle;
     @Subscribe
@@ -108,9 +112,15 @@ public class CircleMessageActivity extends BaseActivity {
         circlePraiseDatabase=new CircleNoticeDetailsServiceImpl(getApplicationContext());
         final List<CirclePriseTableModel> allCircleNotice = circlePraiseDatabase.getAllCircleNotice();
         if(allCircleNotice.size()<=0){
+            //ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
+            mErrorView.show(rvCircle,"暂时还没有星人来访问", ErrorView.ViewShowMode.NOT_DATA);
+        }else{
+            mErrorView.hideErrorView(rvCircle);
+        }
+       /* if(allCircleNotice.size()<=0){
             ToastUtils.showCenter(getApplicationContext(),"暂时还没有星人来访问");
             return;
-        }
+        }*/
         Log.d("allcircle", "initView: "+allCircleNotice.size());
         adapter=new RecyclerViewBaseAdapter<CirclePriseTableModel>(getApplicationContext(),allCircleNotice,R.layout.item_circle_message) {
             @Override

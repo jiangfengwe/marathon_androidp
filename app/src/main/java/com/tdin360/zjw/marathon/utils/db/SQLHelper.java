@@ -71,6 +71,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 "    messageId            INTEGER PRIMARY KEY\n" +
                 "                          NOT NULL,\n" +
                 "    messageIntroduce      VARCHAR,\n" +
+                "    url      VARCHAR,\n" +
                 "    messageType   VARCHAR,\n" +
                 "    time VARCHAR,\n" +
                 "    title VARCHAR,\n" +

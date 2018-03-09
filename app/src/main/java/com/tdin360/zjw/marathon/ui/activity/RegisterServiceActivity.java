@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
@@ -28,10 +29,17 @@ public class RegisterServiceActivity extends BaseActivity {
     private TextView tvTitle;
     @ViewInject(R.id.tv_server_back)
     private TextView tvBack;
+    KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hud= KProgressHUD.create(this);
+        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(true)
+                .setAnimationSpeed(1)
+                .setDimAmount(0.5f)
+                .show();
         //setContentView(R.layout.activity_register_service);
         String  url ="file:///android_asset/serverAgreement.html";
         Log.d("orderIdurl", "onCreate: "+url);
@@ -60,10 +68,11 @@ public class RegisterServiceActivity extends BaseActivity {
         @Override
         public void onProgressChanged(WebView webView, int i) {
             super.onProgressChanged(webView, i);
-           /* progressBar.setProgress(i);
+            //progressBar.setProgress(i);
             if(i==100){
-                more.clearAnimation();
-            }*/
+                hud.dismiss();
+                //more.clearAnimation();
+            }
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import org.xutils.view.annotation.ViewInject;
+
+import java.net.URL;
 
 public class MyNoticeDetailActivity extends BaseActivity {
 
@@ -44,9 +47,13 @@ public class MyNoticeDetailActivity extends BaseActivity {
     }
 
     private void initWebView() {
-
-        int Id = getIntent().getIntExtra("Id", -1);
-        String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?Id=" + Id;
+        Intent intent=getIntent();
+        String url1 = intent.getStringExtra("url");
+        //http://www.tdin360.com/
+        Log.d("url1", "initWebView: "+url1);
+        String url=HttpUrlUtils.URL+ url1;
+        //int Id = getIntent().getIntExtra("Id", -1);
+        //String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?Id=" + Id;
         Log.d("noticeurl", "initWebView: "+url);
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);

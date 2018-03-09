@@ -26,6 +26,7 @@ import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.utils.db.impl.CircleNoticeDetailsServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.NoticeMessageServiceImpl;
 import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
+import com.tdin360.zjw.marathon.weight.ErrorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.util.DensityUtil;
@@ -52,12 +53,13 @@ public class MyNoticeMessageActivity extends BaseActivity {
     private TextView titleTv;
 
    // private List<NoticeMessageModel> list = new ArrayList<>();
-    @ViewInject(R.id.tip)
-    private LinearLayout layoutTip;
     @ViewInject(R.id.rv_notice)
     private RecyclerView rvNotice;
     private List<String> list=new ArrayList<>();
     private RecyclerViewBaseAdapter adapter;
+
+    @ViewInject(R.id.errorView)
+    private ErrorView mErrorView;
 
     private ImageOptions imageOptionsCircle;
 
@@ -108,8 +110,10 @@ public class MyNoticeMessageActivity extends BaseActivity {
         SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
         final List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
         if(allCircleNotice.size()<=0){
-            ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
-            return;
+            //ToastUtils.showCenter(getApplicationContext(),"暂时还没有通知");
+                mErrorView.show(rvNotice,"暂时没有通知",ErrorView.ViewShowMode.NOT_DATA);
+        }else{
+            mErrorView.hideErrorView(rvNotice);
         }
         adapter=new RecyclerViewBaseAdapter<SystemNoticeBean>(getApplicationContext(),allCircleNotice,R.layout.my_notice_mesage_list_item) {
             @Override
@@ -142,7 +146,8 @@ public class MyNoticeMessageActivity extends BaseActivity {
                         Intent intent=new Intent(MyNoticeMessageActivity.this,MyNoticeDetailActivity.class);
                         int dynamicId = model.getMessageId();
                         Log.d("notice1dynamicId", "onItemClick: "+dynamicId);
-                        intent.putExtra("Id",dynamicId);
+                        //intent.putExtra("Id",dynamicId);
+                        intent.putExtra("url",model.getUrl());
                         startActivity(intent);
                     }
                 });
@@ -192,20 +197,6 @@ public class MyNoticeMessageActivity extends BaseActivity {
                 normalDialog.show();
             }
         });
-    }
-    //从数据中获取所以通知消息
-    private void loadData() {
-        //list = service.getAllNotice();
-        checkIsNoMessage();
-    }
-    //判断是否有消息
-    private void checkIsNoMessage(){
-        if(list.size()==0){
-        layoutTip.setVisibility(View.VISIBLE);
-        }else {
-        layoutTip.setVisibility(View.GONE);
-            //adapter.notifyDataSetChanged();
-        }
     }
     /**
      * 通知消息列表适配器
@@ -294,11 +285,6 @@ public class MyNoticeMessageActivity extends BaseActivity {
                 });
             }
         }
-
-
-
     }*/
-
-
 
 }

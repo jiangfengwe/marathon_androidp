@@ -43,8 +43,9 @@
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_hotel_room_in"
-            android:layout_width="wrap_content"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="2017-09-12"
             android:textSize="15.3sp"
             android:textColor="@color/theme_text"/>
@@ -77,8 +78,9 @@
 
         <TextView
             android:id="@+id/tv_hotel_room_out"
-            android:layout_width="wrap_content"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="2017-09-13"
             android:textSize="15.3sp"
             android:layout_alignParentRight="true"
@@ -274,14 +276,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/theme_division"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="35dp"
             android:text="姓名"/>
         <EditText
             android:id="@+id/et_hotel_order_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
-            android:inputType="phone"
             android:textSize="14.7sp"
             android:maxLength="11"
             android:hint="请输入真实姓名"

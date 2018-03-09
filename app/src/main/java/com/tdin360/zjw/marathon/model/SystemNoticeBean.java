@@ -10,6 +10,7 @@ public class SystemNoticeBean {
      * messageIntroduce : 测试消息
      * messageType : systemnotification
      * messageId : 19
+     * url
      *  private String time;
      private String notice;
      */
@@ -20,6 +21,15 @@ public class SystemNoticeBean {
     private String time;
     private String notice;
     private String title;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getTitle() {
         return title;
@@ -29,13 +39,14 @@ public class SystemNoticeBean {
         this.title = title;
     }
 
-    public SystemNoticeBean(String messageIntroduce, String messageType, int messageId, String time, String notice,String title) {
+    public SystemNoticeBean(String messageIntroduce, String messageType, int messageId, String time, String notice,String title,String url) {
         this.messageIntroduce = messageIntroduce;
         this.messageType = messageType;
         this.messageId = messageId;
         this.time = time;
         this.notice = notice;
         this.title = title;
+        this.url=url;
     }
 
     public String getTime() {
