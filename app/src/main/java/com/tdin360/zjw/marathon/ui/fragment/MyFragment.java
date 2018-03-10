@@ -402,11 +402,17 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     .setAutoPlayAnimations(true)
                     .build();
             myImageView.setController(controller);
-            tvSign.setText(model.getCustomerSign());
+            String customerSign = model.getCustomerSign();
+            if(TextUtils.isEmpty(customerSign)){
+                tvSign.setText("暂无签名");
+            }else{
+                tvSign.setText(model.getCustomerSign());
+            }
         }else {
             myImageView.setImageResource(R.drawable.my_portrait);
             userName.setText("点击登录");
             tvSign.setText("");
+            tvSign.setText("暂无签名");
         }
     }
     /**

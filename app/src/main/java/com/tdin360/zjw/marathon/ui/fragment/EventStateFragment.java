@@ -90,7 +90,7 @@ public class EventStateFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(getUserVisibleHint()){
+        if(getUserVisibleHint()&& isVisible){
             isVisible = true;
             onVisible();
         }else{

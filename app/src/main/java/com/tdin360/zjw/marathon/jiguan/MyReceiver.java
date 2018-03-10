@@ -109,8 +109,10 @@ public class MyReceiver extends BroadcastReceiver {
 				}else{
 					Intent notice = new Intent(context,MyNoticeDetailActivity.class);
 					String url = systemNoticeBean.getUrl();
-					Intent main = new Intent(context,MainActivity.class);
+                    String messageId = ""+systemNoticeBean.getMessageId();
+                    Intent main = new Intent(context,MainActivity.class);
 					notice.putExtra("url",url);
+					notice.putExtra("messageId",messageId);
 					main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					// notice.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivities(new Intent[]{main,notice});

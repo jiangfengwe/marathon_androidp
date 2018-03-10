@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -23,6 +23,14 @@
             android:layout_gravity="center"
             android:layout_marginRight="6dp"
             android:scaleType="centerCrop"/>
+      <!--  <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_circle_detail_head_portrait"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="6dp"
+            android:scaleType="centerCrop"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@drawable/my_portrait"/>-->
         <TextView
             android:id="@+id/tv_circle_detail_head_name"
             android:layout_width="wrap_content"
@@ -40,7 +48,6 @@
             android:textSize="12sp"
             android:layout_gravity="center"
             android:textColor="@color/circle_head_time"/>
-
     </LinearLayout>
     <TextView
         android:id="@+id/tv_circle_detail_head_content"

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
@@ -62,6 +63,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
     private ErrorView mErrorView;
 
     private ImageOptions imageOptionsCircle;
+
 
     //private   NoticeMessageListAdapter adapter;
     private NoticeMessageServiceImpl service;
@@ -198,93 +200,5 @@ public class MyNoticeMessageActivity extends BaseActivity {
             }
         });
     }
-    /**
-     * 通知消息列表适配器
-     */
-
-   /* private class NoticeMessageListAdapter extends RecyclerView.Adapter<NoticeMessageListAdapter.MyHolderView>{
-
-
-        @Override
-        public MyHolderView onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyHolderView(LayoutInflater.from(MyNoticeMessageActivity.this).inflate(R.layout.my_notice_mesage_list_item,parent,false));
-        }
-
-        @Override
-        public void onBindViewHolder(MyHolderView holder, int position) {
-
-            NoticeMessageModel messageItem = list.get(position);
-            holder.time.setText(messageItem.getForTime());
-            holder.name.setText("");
-            holder.message.setText(messageItem.getMessage());
-
-        }
-
-
-
-
-
-        @Override
-        public int getItemCount() {
-            return list==null?0:list.size();
-        }
-
-
-        public class MyHolderView extends RecyclerView.ViewHolder {
-
-            private TextView time;
-            private TextView name;
-            private TextView message;
-            public MyHolderView(final View itemView) {
-                super(itemView);
-
-                this.time=(TextView)itemView.findViewById(R.id.time);
-                this.name = (TextView) itemView.findViewById(R.id.name);
-                this.message = (TextView) itemView.findViewById(R.id.message);
-
-                //通知消息长按
-                itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        AlertDialog.Builder alert = new AlertDialog.Builder(MyNoticeMessageActivity.this);
-                        alert.setTitle("操作");
-                        alert.setMessage("确定删除这条消息吗?");
-                         alert.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 NoticeMessageModel model = list.get(getAdapterPosition());
-                                boolean success = service.deleteNotice(model.getId());
-                                 if(success) {
-                                     list.remove(model);
-                                     notifyDataSetChanged();
-                                     Toast.makeText(MyNoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
-                                 }else {
-                                     Toast.makeText(MyNoticeMessageActivity.this,"删除失败!"+model.getId(),Toast.LENGTH_SHORT).show();
-                                 }
-                             }
-                         });
-                        alert.setNegativeButton("全部删除", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                               boolean success = service.deleteAllNotice();
-                                if(success) {
-                                    list.clear();
-                                    notifyDataSetChanged();
-                                    Toast.makeText(MyNoticeMessageActivity.this,"删除成功!",Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(MyNoticeMessageActivity.this,"删除失败!",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                        alert.show();
-                        return false;
-                    }
-                });
-            }
-        }
-    }*/
 
 }

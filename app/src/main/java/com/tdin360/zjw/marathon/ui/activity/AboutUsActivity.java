@@ -76,7 +76,6 @@ public class AboutUsActivity extends BaseActivity  {
         this.webView.setWebChromeClient(new WebChromeClient());
         this.webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
-
     }
 
     @Override

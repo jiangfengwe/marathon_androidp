@@ -141,7 +141,7 @@ public class CircleDetailActivity extends BaseActivity {
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 .setRadius(DensityUtil.dip2px(20))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
-                .setUseMemCache(true)//设置使用缓存
+                .setUseMemCache(false)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                 .build();
         initAnim();
@@ -306,6 +306,7 @@ public class CircleDetailActivity extends BaseActivity {
                      bjDynamicsCommentListModel.addAll(model.getBJDynamicsCommentListModel()) ;
                      bjDynamicsPictureListModel = model.getBJDynamicsPictureListModel();
                      userModel= model.getUserModel();
+                    Log.d("userModel.getHeadImg()", "onSuccess: "+userModel.getHeadImg());
                      tagUserListModel= model.getTagUserListModel();
                     List<?> commentUserListModel = model.getCommentUserListModel();
                 }else{
@@ -379,7 +380,6 @@ public class CircleDetailActivity extends BaseActivity {
             @Override
             public void onBindHeaderViewHolder(HeaderViewHolder holder) {
                 super.onBindHeaderViewHolder(holder);
-
                 boolean isRecommend = getIntent().getBooleanExtra("isRecommend",false);
                 LinearLayout linearLayout = (LinearLayout) holder.getViewById(R.id.layout_circle_detail);
                 WebView webView = (WebView) holder.getViewById(R.id.wb_circle_detail);
@@ -402,18 +402,27 @@ public class CircleDetailActivity extends BaseActivity {
                         linearLayout.setVisibility(View.VISIBLE);
                     }
                 }
-
+                //CircleDetailBean.ModelBean.UserModelBean userModel1 = model.getUserModel();
+                //Log.d("model.getId()222", "onBindHeaderViewHolder: "+userModel1.getId());
                 holder.setText(R.id.tv_circle_detail_head_content,model.getDynamicsContent());
-                holder.setText(R.id.tv_circle_detail_head_name,userModel.getNickName());
+                holder.setText(R.id.tv_circle_detail_head_name, CircleDetailActivity.this.userModel.getNickName());
+
+
                 ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
                 x.image().bind(headPortrait,userModel.getHeadImg(),imageOptions);
+               /* String headImg = userModel1.getHeadImg();
+                SimpleDraweeView headPortrait = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
+                Uri uri =  Uri.parse(headImg);
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true)
+                        .build();
+                headPortrait.setController(controller);*/
                 holder.setText(R.id.tv_circle_detail_head_praise,model.getTagsNumber()+"人赞过");
-                //holder.setText(R.id.tv_circle_detail_head_time,userModel.get);
-
-                //holder.setText(R.id.tv_circle_detail_head_name,userModel.getHeadImg());
-
                 Log.d("model.getId()", "onBindHeaderViewHolder: "+model.getId());
-                //动态图片
+
+
+                //社交详情头部动态图片
                 NineGridView nineGridView = (NineGridView) holder.getViewById(R.id.circle_detail_nineGrid);
                 ArrayList<ImageInfo> imageInfo= new ArrayList<>();
                 for(int i=0;i<bjDynamicsPictureListModel.size();i++){
@@ -441,7 +450,7 @@ public class CircleDetailActivity extends BaseActivity {
                     }
                 });
 
-                //社交详情头部
+                //社交详情头部点赞人头
                 RecyclerView rvHead = (RecyclerView) holder.getViewById(R.id.rv_circle_detail_head_portrait);
                 rvHead.setAdapter(new RecyclerViewBaseAdapter<CircleDetailBean.ModelBean.TagUserListModelBean>(getApplicationContext(),
                         tagUserListModel,R.layout.item_circle_detail_head_praise) {

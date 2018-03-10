@@ -40,7 +40,7 @@ public class HotelOrderFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vpHotel.setAdapter(new HotelOrderTabLayoutAdapter(getChildFragmentManager()));
-        vpHotel.setOffscreenPageLimit(4);
+        vpHotel.setOffscreenPageLimit(1);
         tabHotel.setupWithViewPager(vpHotel);
     }
 }
