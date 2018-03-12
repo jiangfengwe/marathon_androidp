@@ -235,29 +235,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         adapter=new RecyclerViewBaseAdapter<SearchBean.ModelBean.BJEventSystemListModelBean>(getApplicationContext(),bjEventSystemListModel,R.layout.item_search) {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, SearchBean.ModelBean.BJEventSystemListModelBean model) {
-                /*ImageView ivPic = (ImageView) holder.getViewById(R.id.iv_event);
-                x.image().bind(ivPic,model.getEventAppCoverPictureUrl(),imageOptions);
-                holder.setText(R.id.tv_event_time_competition,model.getApplyEndTimeStr());
-                holder.setText(R.id.tv_event_time_apply,model.getApplyStartTimeStr());*/
                 holder.setText(R.id.tv_search_name,model.getName());
-               /* TextView apply = (TextView) holder.getViewById(R.id.tv_apply);
-                boolean isRegister = model.isIsRegister();
-
-                if(isRegister){
-                    apply.setText("正在报名>>");
-                    apply.setTextColor(Color.parseColor("#ff621a"));
-                    apply.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent=new Intent(SearchActivity.this,ApplyActivity.class);
-                            startActivity(intent);
-
-                        }
-                    });
-                }else {
-                    apply.setText("报名截止>>");
-                    apply.setTextColor(Color.parseColor("#9b9b9b"));
-                }*/
             }
         };
         rvSearche.setAdapter(adapter);

@@ -156,7 +156,6 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
                 .setUseMemCache(true)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                 .build();
-        //initData();
         initNet();
         initView();
         initInfo();

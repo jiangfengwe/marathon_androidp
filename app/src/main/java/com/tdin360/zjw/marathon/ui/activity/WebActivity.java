@@ -131,11 +131,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         this.api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         initView();
-       /* Intent intent = getIntent();
-        if(intent!=null){
-            url = intent.getStringExtra("url");
-            this.imageUrl=intent.getStringExtra("imageUrl");
-        }*/
         initWeb();
     }
   private void initWeb() {
@@ -418,8 +413,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             case R.id.close:
                 //关闭
                 finish();
-               /* Intent intent=new Intent(WebActivity.this,ApplyActivity.class);
-                startActivity(intent);*/
                 break;
             case R.id.more:
                 //分享

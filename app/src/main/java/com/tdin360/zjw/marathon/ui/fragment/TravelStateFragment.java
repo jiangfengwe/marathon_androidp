@@ -141,29 +141,13 @@ public class TravelStateFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         imageOptions= new ImageOptions.Builder().setFadeIn(true)//淡入效果
-                //ImageOptions.Builder()的一些其他属性：
-                //.setCircular(true) //设置图片显示为圆形
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                //.setSquare(true) //设置图片显示为正方形
-                //.setCrop(true).setSize(130,130) //设置大小
-                //.setAnimation(animation) //设置动画
                 .setFailureDrawableId(R.drawable.add_lose_square) //设置加载失败的动画
-                // .setFailureDrawableId(int failureDrawable) //以资源id设置加载失败的动画
-                //.setLoadingDrawable(Drawable loadingDrawable) //设置加载中的动画
                 .setLoadingDrawableId(R.drawable.add_lose_square) //以资源id设置加载中的动画
                 .setIgnoreGif(false) //忽略Gif图片
-                //.setRadius(10)
                 .setUseMemCache(true).build();
         isPrepared = true;
         onVisible();
-        /*layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();
-        initNet();
-        initView();*/
-
-
     }
 
     private void initNet() {
@@ -212,7 +196,6 @@ public class TravelStateFragment extends BaseFragment {
                 }
             });
             alert.show();
-
         }
     }
 

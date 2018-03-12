@@ -95,7 +95,6 @@ public class CircleDetailPraiseActivity extends BaseActivity {
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         initToolbar();
-        //initData();
         initNet();
         initView();
 
@@ -145,13 +144,6 @@ public class CircleDetailPraiseActivity extends BaseActivity {
     }
     private void initData() {
         //tagUserListModel.clear();
-       /* final KProgressHUD hud = KProgressHUD.create(this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();*/
-
         Intent intent=getIntent();
         String dynamicId= intent.getStringExtra("dynamicId");
         RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE_PRAISE_LIST);

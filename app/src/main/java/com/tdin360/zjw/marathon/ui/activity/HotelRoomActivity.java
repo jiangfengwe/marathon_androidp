@@ -77,9 +77,7 @@ public class HotelRoomActivity extends BaseActivity {
                 .setUseMemCache(true).build();
         initToolbar();
         initView();
-
     }
-
     private void initView() {
         String name = getIntent().getStringExtra("name");
         final AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
@@ -113,7 +111,6 @@ public class HotelRoomActivity extends BaseActivity {
 
 
     }
-
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
         imageView.setOnClickListener(new View.OnClickListener() {

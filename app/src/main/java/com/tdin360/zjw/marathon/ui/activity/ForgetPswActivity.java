@@ -109,7 +109,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
         tvCode.setOnClickListener(this);
         btnSure.setOnClickListener(this);
         ivCancel.setOnClickListener(this);
-
         //取消图片的显示与隐藏
         etPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -234,7 +233,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initSure() {
-
         try {
             byte[] mBytes=null;
             String phone = etPhone.getText().toString().trim();
@@ -335,7 +333,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
 
     }
     private void initCode() {
-
         try {
             byte[] mBytes=null;
             String phone = etPhone.getText().toString().trim();
@@ -348,10 +345,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
                 return;
             }
             startTaskTimer();
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             String string="{'userPhone':'"+phone+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);

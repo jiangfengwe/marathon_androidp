@@ -225,7 +225,6 @@ public class HotelCommentActivity extends BaseActivity {
         }
         context.startActivity(localIntent);
     }
-
     private void initView() {
 
         btnSure.setOnClickListener(new View.OnClickListener() {
@@ -374,7 +373,6 @@ public class HotelCommentActivity extends BaseActivity {
         showBack(toolbar,imageView);
 
     }
-
     @Override
     public int getLayout() {
         return R.layout.activity_comment;

@@ -141,27 +141,24 @@ public class CircleDetailActivity extends BaseActivity {
                 .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 .setRadius(DensityUtil.dip2px(20))
                 .setLoadingDrawableId(R.drawable.my_portrait)//加载中默认显示图片
-                .setUseMemCache(false)//设置使用缓存
                 .setFailureDrawableId(R.drawable.my_portrait)//加载失败后默认显示图片
                 .build();
         initAnim();
         Intent intent=getIntent();
         dynamicId= intent.getStringExtra("dynamicId");
-        initToolbar();
-        showInfo();
+        showInfo();//toolbar的头像和图片的展示
         //initData();
-        initNet();
-        initView();
-        initComment();
+        initNet();//网络请求
+        initView();//数据展示
+        initComment();//评论
 
 
     }
     @Subscribe
     public void onEvent(EventBusClass event){
-
+        //回复评论的通知
         if(event.getEnumEventBus()==EnumEventBus.CIRCLEDETAILCOMMENT){
             initData(1);
-
         }
     }
     private void initAnim() {
@@ -364,17 +361,6 @@ public class CircleDetailActivity extends BaseActivity {
                 holder.setText(R.id.tv_circle_detail_comment_time,model.getCreateTimeStr());
                 //回复
                 tvCallback.setText(model.getCommentCount()+" 回复");
-               /* tvCallback.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(CircleDetailActivity.this,CallBackActivity.class);
-                        intent.putExtra("commentId",model.getId()+"");
-                        intent.putExtra("dynamicId",dynamicId);
-                        startActivity(intent);
-
-                    }
-                });*/
-
             }
 
             @Override
@@ -407,7 +393,7 @@ public class CircleDetailActivity extends BaseActivity {
                 holder.setText(R.id.tv_circle_detail_head_content,model.getDynamicsContent());
                 holder.setText(R.id.tv_circle_detail_head_name, CircleDetailActivity.this.userModel.getNickName());
 
-
+                //社交详情头部动态头像
                 ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
                 x.image().bind(headPortrait,userModel.getHeadImg(),imageOptions);
                /* String headImg = userModel1.getHeadImg();
@@ -506,7 +492,6 @@ public class CircleDetailActivity extends BaseActivity {
                 });
                 rvHead.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
                 //社交详情头部由网页展示
-
                 String url = "http://www.baijar.com/EventAppApi/BJDynamicRecommendDetail?dynamicId=27";
                 com.tencent.smtt.sdk.WebSettings settings = webView.getSettings();
                 settings.setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -530,11 +515,8 @@ public class CircleDetailActivity extends BaseActivity {
                     }
                 });*/
         });
-
-
             }
         };
-
         adapter.addHeaderView(R.layout.item_circle_detail_head);
         rvCircle.setAdapter(adapter);
         rvCircle.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
@@ -580,6 +562,7 @@ public class CircleDetailActivity extends BaseActivity {
      * 显示个人信息
      */
     private void showInfo(){
+        showBack(toolbarBack,ivBack);
        LoginUserInfoBean.UserBean modelInfo=SharedPreferencesManager.getLoginInfo(getApplicationContext());
         tvName.setText(modelInfo.getNickName());
         //不登陆不显示头像
@@ -596,12 +579,6 @@ public class CircleDetailActivity extends BaseActivity {
             tvName.setText("");
         }
     }
-
-    private void initToolbar() {
-        showBack(toolbarBack,ivBack);
-        LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

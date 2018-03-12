@@ -25,7 +25,7 @@ public class HotelOrderFragment extends BaseFragment {
 
 
     public HotelOrderFragment() {
-        // Required empty public constructor
+
     }
 
 

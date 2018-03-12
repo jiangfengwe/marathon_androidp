@@ -291,10 +291,7 @@ public class TravelCommentActivity extends BaseActivity {
             ToastUtils.showCenter(getApplicationContext(),"评论内容不能为空");
             return;
         }
-        /*layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
+
         //显示提示框
         final KProgressHUD hud = KProgressHUD.create(this);
         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)

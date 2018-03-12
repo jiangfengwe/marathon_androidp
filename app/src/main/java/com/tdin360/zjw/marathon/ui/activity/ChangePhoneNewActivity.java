@@ -106,6 +106,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
         tvCode.setOnClickListener(this);
         ivCancel.setOnClickListener(this);
         btnSure.setOnClickListener(this);
+        //取消键的显示与隐藏
         etNew.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -191,7 +192,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
                 etNew.setText("");
                 break;
             case R.id.btn_change_new_phone_sure:
-                //确认更改
+                //确认更改手机号
                 if(NetWorkUtils.isNetworkAvailable(this)){
                     //加载网络数据
                     initData();
@@ -247,10 +248,6 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
                     .setAnimationSpeed(1)
                     .setDimAmount(0.5f)
                     .show();
-          /*  layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
             String customerId = loginInfo.getId()+"";
             String string="{'userNewPhone':'"+phone+"','validCode':'"+validCode+"','customerId':'"+customerId+"','appKey': 'BJYDAppV-2'}";
@@ -297,7 +294,6 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
 
                 @Override
                 public void onFinished() {
-                    //layoutLoading.setVisibility(View.GONE);
                     hud.dismiss();
 
                 }
@@ -337,10 +333,6 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
                 return;
             }
             startTaskTimer();
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             String string="{'userNewPhone':'"+phone+"','customerId':'"+customerId+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);

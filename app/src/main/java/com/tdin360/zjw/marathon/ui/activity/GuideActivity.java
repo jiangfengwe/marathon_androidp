@@ -112,18 +112,15 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
      * 引导页图片适配器
      */
    private class GuideAdapter extends PagerAdapter{
-
-
+        
     @Override
     public int getCount() {
         return imageViews.size();
     }
-
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view==object;
     }
-
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 

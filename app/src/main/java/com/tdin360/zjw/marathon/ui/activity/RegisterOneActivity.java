@@ -183,10 +183,6 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
 
     }
     private void initCode() {
-      /*  layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         //获取验证码
         try{
             byte[] mBytes=null;
@@ -259,23 +255,6 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
             }
             @Override
             public void afterTextChanged(Editable s) {
-
-                /*if(s.toString().trim().length()>0){
-
-                    ivCancel.setVisibility(View.VISIBLE);
-                }else {
-
-                    ivCancel.setVisibility(View.GONE);
-                }
-
-                if(s.toString().length()==11){
-
-                    btnSure.setEnabled(true);
-                }else {
-
-                    btnSure.setEnabled(false);
-                }*/
-
             }
         });
         //密码的显示和隐藏

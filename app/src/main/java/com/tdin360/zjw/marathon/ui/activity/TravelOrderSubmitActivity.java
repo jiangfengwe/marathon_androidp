@@ -79,6 +79,10 @@ public class TravelOrderSubmitActivity extends BaseActivity {
                 .setUseMemCache(true).build();
         initToolbar();
         initData();
+        initWeb();
+    }
+
+    private void initWeb() {
         Intent intent=getIntent();
         String orderId = intent.getStringExtra("orderId");
         String  url = HttpUrlUtils.TRAVEL_DETAIL_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
@@ -96,9 +100,6 @@ public class TravelOrderSubmitActivity extends BaseActivity {
         this.webView.setWebChromeClient(new WebChromeClient());
         this.webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
-
-
-
     }
 
     private void initData() {
@@ -109,11 +110,6 @@ public class TravelOrderSubmitActivity extends BaseActivity {
             String name = bjTravelStayInCustomerListModel.get(i).getName();
             String idNumber = bjTravelStayInCustomerListModel.get(i).getIDNumber();
             Log.d("6666666666name", "initData: "+name);
-           // String content=tvWeb.getText().toString();
-           /* SpannableString spanString= new SpannableString(name);
-            String html= Html.toHtml(spanString);
-            Spanned spanned = Html.fromHtml(name);*/
-            //String html_string=parseUnicodeToStr(html);
             Spanned text = Html.fromHtml(name);
             TextView textView=new TextView(getApplicationContext());
             textView.setText(Html.fromHtml("<p>"+text+"</p>"+"<p>"+text+"</p>"));

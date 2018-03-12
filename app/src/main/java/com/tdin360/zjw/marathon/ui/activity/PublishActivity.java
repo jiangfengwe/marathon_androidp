@@ -271,10 +271,6 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();
-        /*layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         RequestParams params=new RequestParams(HttpUrlUtils.PUBLISH_CIRCLE);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("dynamicContent",dynamicContent);
@@ -308,20 +304,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     tvPublish.setClickable(true);
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
-                   // finish();
                     finish();
-                    //layoutRefresh.setVisibility(View.GONE);
-                  /* new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1500);
-                            finish();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();*/
             }else{
                 ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
                     flag=true;

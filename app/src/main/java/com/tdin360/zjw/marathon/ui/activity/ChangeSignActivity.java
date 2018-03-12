@@ -65,12 +65,9 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initToolbar();
         initView();
-
     }
-
     private void initData() {
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerId = loginInfo.getId()+"";
@@ -86,10 +83,6 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();
-       /* layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_SIGN);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("customerId",customerId);
@@ -135,14 +128,12 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFinished() {
-               // layoutLoading.setVisibility(View.GONE);
                 hud.dismiss();
 
             }
         });
 
     }
-
     private void initView() {
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerSign = loginInfo.getCustomerSign();
@@ -150,7 +141,6 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
         etSign.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         btnSure.setOnClickListener(this);
     }
-
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +157,12 @@ public class ChangeSignActivity extends BaseActivity implements View.OnClickList
     public int getLayout() {
         return R.layout.activity_change_sign;
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_change_sign_sure:
                 //ToastUtils.show(getApplicationContext(),"sure");
+                //确定修改签名
                 if(NetWorkUtils.isNetworkAvailable(this)){
                     //加载网络数据
                     initData();

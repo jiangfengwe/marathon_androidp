@@ -59,7 +59,7 @@ import java.util.List;
  * 我的订单中酒店订单详情
  */
 
-public class HotelOrderDetailActivity extends BaseActivity implements View.OnClickListener {
+public class HotelOrderDetailActivity extends BaseActivity{
     @ViewInject(R.id.layout_lading)
     private RelativeLayout layoutLoading;
     @ViewInject(R.id.iv_loading)
@@ -120,8 +120,11 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-        initView();
         initNet();
+        initWeb();
+    }
+
+    private void initWeb() {
         Intent intent=getIntent();
         String orderId = intent.getStringExtra("orderId");
         String  url = HttpUrlUtils.HOTEL_ORDER_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
@@ -141,6 +144,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
         this.webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
     }
+
     private void initNet() {
         //加载失败点击重试
         mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
@@ -185,8 +189,6 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
 
         }
     }
-
-
     private void initDetailData() {
         layoutLoading.setVisibility(View.VISIBLE);
         ivLoading.setBackgroundResource(R.drawable.loading_before);
@@ -347,12 +349,8 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                                                 if(payOrder.equals("hotelorder")){
                                                     finish();
                                                 }
-                                                //intent.putExtra("payOrder","hotelpay");
                                                 if(payOrder.equals("hotelpay")){
                                                     Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
-                                                    Intent intent2=getIntent();
-                                                    String hotelId = getIntent().getStringExtra("hotelId");
-                                                    //intent.putExtra("orderId",hotelId);
                                                     startActivity(intent);
                                                     finish();
                                                 }
@@ -434,6 +432,7 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
                 startActivity(intent);
             }
         });
+        //取消预订
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -487,14 +486,6 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
             }
         });
     }
-
-    private void initView() {
-        //tvPay.setOnClickListener(this);
-       /* String str="订单已完成，<font color='#ff621a'>再次预定</font>";
-        tvOrderText.setText(Html.fromHtml(str));*/
-
-    }
-
     private void initToolbar() {
         imageView.setImageResource(R.drawable.back_black);
         Intent intent1=getIntent();
@@ -526,19 +517,6 @@ public class HotelOrderDetailActivity extends BaseActivity implements View.OnCli
     public int getLayout() {
         return R.layout.activity_hotel_order_detail;
     }
-
-    @Override
-    public void onClick(View v) {
-        /*Intent intent;
-        switch (v.getId()){
-            case R.id.tv_hotel_pay:
-                intent=new Intent(HotelOrderDetailActivity.this,PayActivity.class);
-                startActivity(intent);
-                break;
-        }*/
-
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

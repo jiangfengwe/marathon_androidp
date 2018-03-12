@@ -110,7 +110,6 @@ public class HotelStateFragment extends BaseFragment {
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
         initNet();
-        //initData();
         initView();
     }
 
@@ -132,19 +131,15 @@ public class HotelStateFragment extends BaseFragment {
     public void onEvent(EventBusClass event){
         if(event.getEnumEventBus()== EnumEventBus.ORDERHOTELCANCEL){
             //取消预约成功
-            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
-            bjHotelOrderListModel.clear();
             initData();
         }
         if(event.getEnumEventBus()== EnumEventBus.HOTELREFUND){
             //申请退款成功
-            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
             bjHotelOrderListModel.clear();
             initData();
         }
         if(event.getEnumEventBus()== EnumEventBus.PAYHOTEL){
             //支付成功
-            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
             bjHotelOrderListModel.clear();
             initData();
         }
@@ -155,7 +150,6 @@ public class HotelStateFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
     private void initData() {
-        //bjHotelOrderListModel.clear();
         Bundle arguments = this.getArguments();
         String Status = (String) arguments.get("Status");
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
@@ -216,13 +210,6 @@ public class HotelStateFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         isPrepared = true;
         onVisible();
-      /*  layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();
-        initNet();
-        //initData();
-        initView();*/
     }
     private void initNet() {
         //加载失败点击重试

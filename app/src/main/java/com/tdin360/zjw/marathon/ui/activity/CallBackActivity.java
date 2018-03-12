@@ -88,7 +88,6 @@ public class CallBackActivity extends BaseActivity {
 
     ImageOptions imageOptions;
     @ViewInject(R.id.iv_all_comment_portrait)
-    //private ImageView ivPortrait;
     private SimpleDraweeView ivPortrait;
     @ViewInject(R.id.tv_all_comment_name)
     private TextView tvName;
@@ -134,7 +133,6 @@ public class CallBackActivity extends BaseActivity {
                 .build();
         initAnim();
         initToolbar();
-        //initData();
         initNet();
         initComment();
         initView();
@@ -191,6 +189,7 @@ public class CallBackActivity extends BaseActivity {
         }
     }
     private void initComment() {
+        //评论提交
         btnSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -348,11 +347,6 @@ public class CallBackActivity extends BaseActivity {
         RequestParams params=new RequestParams(HttpUrlUtils.CIRCLE_DETAIL_COMMENT_BACK);
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("commentId",commentId+"");
-      /*  if(commentId==index){
-            params.addBodyParameter("commentId",commentId+"");
-        }else{
-            params.addBodyParameter("commentId",index+"");
-        }*/
         params.addBodyParameter("pageSize",""+pageSize);
         params.addBodyParameter("pageIndex",""+pageIndex);
         params.setConnectTimeout(5000);

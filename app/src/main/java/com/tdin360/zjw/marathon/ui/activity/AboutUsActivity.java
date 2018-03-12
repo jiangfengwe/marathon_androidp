@@ -36,7 +36,6 @@ import org.xutils.view.annotation.ViewInject;
  * 关于我们
  */
 public class AboutUsActivity extends BaseActivity  {
-//implements UpdateManager.UpdateListener
     private String url;
 
     @ViewInject(R.id.navRightItemImage)

@@ -60,19 +60,11 @@ import static com.umeng.socialize.utils.ContextUtil.getPackageName;
  * Created by Administrator on 2016/8/9.
  */
 public class EventFragment extends BaseFragment implements View.OnClickListener {
-    //implements PullToRefreshLayout.OnRefreshListener,AdapterView.OnItemClickListener,UpdateManager.UpdateListener
 
-    private List<EventModel> list = new ArrayList<>();
-  /*  @ViewInject(R.id.listView)
-    private ListView listView;*/
+
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
-    //private EventAdapter marathonListViewAdapter;
-    private int pageNumber=1;
-    private int pageCount;
     private EventServiceImpl impl;
-    /*@ViewInject(R.id.pull_Layout)
-    private PullToRefreshLayout pullToRefreshLayout;*/
     @ViewInject(R.id.navRightItemImage)
     private ImageView rightImage;
     @ViewInject(R.id.mToolBar)

@@ -52,7 +52,8 @@ import java.util.regex.Pattern;
  * 旅游立即预定
  */
 
-public class TravelOrderActivity extends BaseActivity implements View.OnClickListener {
+public class
+TravelOrderActivity extends BaseActivity implements View.OnClickListener {
     @ViewInject(R.id.layout_lading)
     private RelativeLayout layoutLoading;
     @ViewInject(R.id.iv_loading)
@@ -226,43 +227,20 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 layoutName.removeViewAt(count);
                 layoutIC.removeViewAt(count);
                 name.remove(count);
-                //ic.remove(count);
-               /* for (int i = count; i < count; i--) {
-                    addView();
-                }*/
                 setSum();
-
-                //setContentView(layoutName);
                 break;
             case R.id.tv_travel_order_add:
                 //数量增加
-
-               /* name.clear();
-                ic.clear();*/
                 if(count>99){
                     return;
                 }
                 count++;
                 addView();
-                /*layoutName.removeViewAt(count+1);
-                layoutIC.removeViewAt(count+1);*/
-               /* layoutName.removeAllViews();
-                layoutIC.removeAllViews();*/
-               /* name.remove(count-1);
-                ic.remove(count-1);*/
-                //layout.removeViewAt(count-1);
-              /*  for (int i =0; i < count; i++) {
-                    addView();
-                }*/
                 setSum();
                 break;
             case R.id.layout_choose_time:
-               /* List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList =
-                        SingleClass.getInstance().getApiTravelMonthDateList();
-                apiTravelMonthDateList.clear();*/
                 //日期选择
                 initDate();
-                //countDte++;
                 break;
             case R.id.tv_travel_choose_submit:
                 //提交订单
@@ -357,10 +335,6 @@ public class TravelOrderActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showCenter(getApplicationContext(),"电话号码不符合规则");
                 return;
             }
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             //显示提示框
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)

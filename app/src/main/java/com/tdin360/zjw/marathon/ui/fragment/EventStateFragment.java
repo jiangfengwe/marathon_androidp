@@ -63,15 +63,9 @@ public class EventStateFragment extends BaseFragment {
 
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
-
     ImageOptions imageOptions;
-
     private boolean isVisible;
     private boolean isPrepared;
-    private boolean isLazyLoad=true;//默认状态需要懒加载
-    public static final String INTENT_BOOLEAN_LAZYLOAD="intent_boolean_lazyLoad";
-
-
 
     private List<EventBean.ModelBean.BJEventSystemListModelBean> bjEventSystemListModel=new ArrayList<>();
 
@@ -144,9 +138,6 @@ public class EventStateFragment extends BaseFragment {
 
     }
     private void initNet() {
-        /*mErrorView.setBackgroundResource(R.drawable.loading_error);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         //加载失败点击重试
         mErrorView.setErrorListener(new ErrorView.ErrorOnClickListener() {
             @Override
@@ -262,8 +253,6 @@ public class EventStateFragment extends BaseFragment {
                 holder.setText(R.id.tv_event_name,model.getName());
                 TextView apply = (TextView) holder.getViewById(R.id.tv_apply);
                 boolean isRegister = model.isIsRegister();
-                //ToastUtils.showCenter(getContext(),statue);
-                //Log.d("statue", "onBindNormalViewHolder: "+statue);
                 if(isRegister){
                     apply.setText("正在报名>>");
                     apply.setTextColor(Color.parseColor("#ff621a"));
@@ -271,18 +260,6 @@ public class EventStateFragment extends BaseFragment {
                     apply.setText("报名截止>>");
                     apply.setTextColor(Color.parseColor("#9b9b9b"));
                 }
-               /* switch (statue){
-                    case "null":
-                        apply.setText("正在报名>>");
-                        break;
-                    case "true":
-                        apply.setText("进行中>>");
-                        break;
-                    case "false":
-                        apply.setText("已结束>>");
-                        break;*/
-                //}
-
             }
         };
         rvEventState.setAdapter(adapter);

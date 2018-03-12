@@ -231,10 +231,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();
-       /* layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
         try{
             String type = getIntent().getStringExtra("type");
             String orderNumber = getIntent().getStringExtra("orderNumber");
@@ -527,7 +523,6 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_pay_sure:
-                //initData();
                 //判断网络是否处于可用状态
                 if(NetWorkUtils.isNetworkAvailable(this)){
                     //加载网络数据

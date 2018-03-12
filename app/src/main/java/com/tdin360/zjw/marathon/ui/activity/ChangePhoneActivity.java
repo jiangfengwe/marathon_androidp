@@ -180,7 +180,7 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
 
                 break;
             case R.id.btn_change_phone_sure:
-                //确定更改
+                //确定更改手机号
                 //判断网络是否处于可用状态
                 if(NetWorkUtils.isNetworkAvailable(this)){
                     //加载网络数据
@@ -277,7 +277,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onFinished() {
-                    //layoutLoading.setVisibility(View.GONE);
                     hud.dismiss();
 
                 }
@@ -310,9 +309,9 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         handler.sendEmptyMessage(CODE);
 
     }
-    //原手机验证码
-    private void initOldCode() {
 
+    private void initOldCode() {
+        //原手机验证码
         try{
             byte[] mBytes=null;
             String oldPhone = etOld.getText().toString().trim();
@@ -327,10 +326,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
                 return;
             }
             startTaskTimer();
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -343,8 +338,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_OLD_PHONE_CODE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);
-            /*params.setConnectTimeout(5*1000);
-            params.setMaxRetryCount(0);*/
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -372,7 +365,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onFinished() {
-                    //layoutLoading.setVisibility(View.GONE);
                     hud.dismiss();
 
                 }

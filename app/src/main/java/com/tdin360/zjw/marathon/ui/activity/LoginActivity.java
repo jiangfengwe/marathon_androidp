@@ -121,11 +121,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private String gender ;
 
      KProgressHUD hud;
-
-    private static final int MSG_SUCCESS = 0;// 获取图片成功的标识
-    private static final int MSG_FAILURE = 1;// 获取图片失败的标识
-
-
     private static final int MSG_SET_ALIAS = 1002;
     private final Handler mHandler = new Handler() {
         @Override
@@ -252,7 +247,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         super.onSaveInstanceState(outState);
         UMShareAPI.get(this).onSaveInstanceState(outState);
     }
-
     @Override
     public void onClick(View view) {
         Intent intent;
@@ -342,7 +336,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
-
     private void initOtherLogin() {
         //第三方登录
         mShareAPI= UMShareAPI.get(LoginActivity.this);
@@ -455,12 +448,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     }
     private void headImg(byte[] data) {
-       /* final KProgressHUD hud = KProgressHUD.create(LoginActivity.this);
-        hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f)
-                .show();*/
         Log.d("ttttttttt", "headImg: "+data.length);
         RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_OTHERLOGIN);
         params.addBodyParameter("uId",uid);

@@ -2,6 +2,7 @@ package com.tdin360.zjw.marathon.utils.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
@@ -10,6 +11,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class SQLHelper extends SQLiteOpenHelper {
+    public static final String TAG="DatabaseDemo";
+    public static final int VERSION=2;
+    private boolean mUpgradeResult=true;
+    private Context mContext;
+    private int mVersion;
 
     //数据库名称
     public static final String DB_NAME="marathonTwo.db";
@@ -38,13 +44,17 @@ public class SQLHelper extends SQLiteOpenHelper {
 
 
     public SQLHelper(Context context){
+        //super(context,DB_NAME,null,2);
+        super(context,DB_NAME,null,VERSION);
+        mContext=context;
+        mVersion=VERSION;
 
-        super(context,DB_NAME,null,2);
 
     }
 
     public SQLHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+
     }
 
     @Override
@@ -150,15 +160,42 @@ public class SQLHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+PRAISE_COMMENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+SYSTEM_NOTICE_TABLE);
 
-        db.execSQL("DROP TABLE IF EXISTS "+EVENT_TABLE);
+      /*  db.execSQL("DROP TABLE IF EXISTS "+EVENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+EVENT_DETAIL_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+NOTICE_MESSAGE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+NEWS_INFO);
         db.execSQL("DROP TABLE IF EXISTS "+NOTICE_INFO);
-        db.execSQL("DROP TABLE IF EXISTS "+MY_INFO_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+MY_INFO_TABLE);*/
+        int version = db.getVersion();
+        if(version!=mVersion){
+            if(db.isReadOnly()){
+                throw new SQLiteException("Can't uagrade read-only database from version"+
+                        db.getVersion()+"to"+mVersion);
+            }
+            db.beginTransaction();
+            try {
+                if(version==0){
+                    onCreate(db);
+                }else {
+                    if(version>mVersion){
+                        onDowngrade(db,version,mVersion);
+                    }else{
+                        onUpgrade(db,version,mVersion);
+                    }
+                }
+                db.setVersion(mVersion);
+                db.setTransactionSuccessful();
+            }finally {
+                db.endTransaction();
+            }
+
+
+        }
 
 
         onCreate(db);
+
+        
     }
 
 }

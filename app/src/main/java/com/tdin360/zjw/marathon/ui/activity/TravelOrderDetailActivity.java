@@ -136,8 +136,11 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
         Intent intent=getIntent();
         String payOrder = intent.getStringExtra("payOrder");
+        initWeb();
+    }
 
-
+    private void initWeb() {
+        Intent intent=getIntent();
         String orderId = intent.getStringExtra("orderId");
         String  url = HttpUrlUtils.TRAVEL_DETAIL_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
         Log.d("orderIdurl", "onCreate: "+url);

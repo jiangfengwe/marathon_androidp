@@ -111,12 +111,9 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
     ImageOptions imageOptions;
 
-    int firstPosition;
-    boolean isDragging;//判断scroll是否是用户主动拖拽
-    boolean isScrolling;//判断scroll是否处于滑动中
-
     @Subscribe
     public void onEvent(EventBusClass event){
+        //发布动态通知更新
         if(event.getEnumEventBus()== EnumEventBus.CIRCLEPUBLISH){
             initData(1);
         }
@@ -141,8 +138,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
         background.start();
         initView();
         initNet();
-        //initData();
-        //initNet();
     }
     private void initNet() {
         //加载失败点击重试
@@ -274,7 +269,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             }
         });
     }
-
     private void initView() {
         ivBack.setOnClickListener(this);
         final LoginUserInfoBean.UserBean model = SharedPreferencesManager.getLoginInfo(getApplicationContext());
@@ -283,8 +277,9 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             if(customerId.equals(customerId1)){
                 ivPic.setOnClickListener(this);
             }else{
-              ivPic.setClickable(false);
                 //ToastUtils.showCenter(getApplicationContext(),"不可以修改别人的背景图哦");
+              ivPic.setClickable(false);
+
             }
 
         adapter=new RecyclerViewBaseAdapter<MyCircleBean.ModelBean.BJDynamicListModelBean>(getApplicationContext(),
@@ -328,10 +323,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
 
                     }
                     private void initDelete() {
-                        /*layoutLoading.setVisibility(View.VISIBLE);
-                        ivLoading.setBackgroundResource(R.drawable.loading_before);
-                        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                        background.start();*/
                         final KProgressHUD hud = KProgressHUD.create(MyCircleActivity.this);
                         hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                                 .setCancellable(true)
@@ -619,10 +610,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                             .setAnimationSpeed(1)
                             .setDimAmount(0.5f)
                             .show();
-                  /*  layoutLoading.setVisibility(View.VISIBLE);
-                    ivLoading.setBackgroundResource(R.drawable.loading_before);
-                    AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-                    background.start();*/
                     LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
                     String customerId = loginInfo.getId()+"";
                     final File file = new File(cutPath);//新建一个file文件

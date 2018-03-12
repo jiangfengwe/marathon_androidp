@@ -119,7 +119,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 case 6002:
                     logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
                     // Log.i(TAG, logs);
-                    // 延迟 60 秒来调用 Handler 设置别名
+                    // 延迟 60 秒来调用 Handler 通知设置别名
                     mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
                     break;
                 default:
@@ -177,15 +177,16 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         });
         viewline.setVisibility(View.GONE);
         titleTv.setText("绑定手机号");
+        //手机号文字出现的监听
         etPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String name = etPhone.getEditableText() + "";
+                //取消键的显示与隐藏
                 if(!TextUtils.isEmpty(name)){
                     ivCancel.setVisibility(View.VISIBLE);
                 }else{
@@ -245,7 +246,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 etPhone.setText("");
                 break;
             case R.id.btn_bind_phone_sure:
-                //绑定
+                //绑定手机号
                 if(NetWorkUtils.isNetworkAvailable(this)){
                     //加载网络数据
                    initData();
@@ -407,10 +408,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             Log.d("error", "initData: "+e.getMessage());
         }
     }
-    /**
-     * 开的倒计时
-     */
     private void startTaskTimer(){
+        //开的倒计时
         time=60;
         tvCode.setEnabled(false);
         handler.sendEmptyMessage(CODE);

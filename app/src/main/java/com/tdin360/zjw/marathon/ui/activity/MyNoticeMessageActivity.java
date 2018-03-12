@@ -53,7 +53,6 @@ public class MyNoticeMessageActivity extends BaseActivity {
     @ViewInject(R.id.toolbar_title)
     private TextView titleTv;
 
-   // private List<NoticeMessageModel> list = new ArrayList<>();
     @ViewInject(R.id.rv_notice)
     private RecyclerView rvNotice;
     private List<String> list=new ArrayList<>();
@@ -64,8 +63,6 @@ public class MyNoticeMessageActivity extends BaseActivity {
 
     private ImageOptions imageOptionsCircle;
 
-
-    //private   NoticeMessageListAdapter adapter;
     private NoticeMessageServiceImpl service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,13 +150,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 });
-              /*  layout.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
 
-                        return false;
-                    }
-                });*/
             }
         };
         rvNotice.setAdapter(adapter);

@@ -702,10 +702,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             String userList = jsonArray.toString();
             Log.d("wwwwname2", "initToolbar: "+userList);
 
-            /*layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -819,14 +815,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         layoutIC.addView(etIC2);
 
         name.add(new PeopleClass(etName2,etIC2));
-
-
         layout.addView(layout1);
         layout.addView(layout2);
-       /* layoutInfo=new LinearLayout(this);
-        layoutInfo.setOrientation(LinearLayout.VERTICAL);
-        LayoutInfo.addView(layout);*/
-        //layout.addView(layout1);
     }
     private void setSum() {
         //订单金额

@@ -84,6 +84,9 @@ public class HotelRoomSubmitActivity extends BaseActivity {
                 .setUseMemCache(true).build();
         initToolbar();
         initData();
+        initWeb();
+    }
+    private void initWeb() {
         Intent intent=getIntent();
         String orderId = intent.getStringExtra("orderId");
         String  url = HttpUrlUtils.HOTEL_ORDER_WEBVIEW+"?appKey="+HttpUrlUtils.appKey+"&orderId="+orderId;
@@ -102,7 +105,6 @@ public class HotelRoomSubmitActivity extends BaseActivity {
         this.webView.setWebChromeClient(new WebChromeClient());
         this.webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
-
     }
 
     private void initData() {

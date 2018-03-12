@@ -118,15 +118,9 @@ public class HotelFragment extends BaseFragment {
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
-        //initData();
         initNet();
-        //initToolbar();
         initView();
         initTop();
-
-       /* this.viewPager.setAdapter(new HotelTabAdapter(getChildFragmentManager()));
-        this.tabLayout.setupWithViewPager(viewPager);*/
-
 
     }
 
@@ -134,13 +128,7 @@ public class HotelFragment extends BaseFragment {
         checkBoxHot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // checkBoxHot.setClickable(false);
                 if(isChecked){
-                   /* viewBg.setVisibility(View.VISIBLE);
-                    //rvHotel.setClickable(false);
-                    imageViewBack.setImageResource(R.drawable.back_black);
-                    toolbarBack.setBackgroundColor(Color.WHITE);
-                    tvTitle.setTextColor(Color.BLACK);*/
                     final View popupView = getActivity().getLayoutInflater().inflate(R.layout.item_hotel_mydialog, null);
                     final PopupWindow window = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     LinearLayout layout = (LinearLayout) popupView.findViewById(R.id.layout_choose_room);
@@ -182,12 +170,7 @@ public class HotelFragment extends BaseFragment {
                         public void onClick(View v) {
                             window.dismiss();
                             initData(1);
-                            //checkBoxHot.setClickable(true);
                             checkBoxHot.setChecked(false);
-                           /* viewBg.setVisibility(View.GONE);
-                            imageViewBack.setImageResource(R.drawable.back);
-                            toolbarBack.setBackgroundColor(Color.parseColor("#ff621a"));
-                            tvTitle.setTextColor(Color.WHITE);*/
                         }
                     });
 
@@ -202,21 +185,12 @@ public class HotelFragment extends BaseFragment {
                         tvClass.setGravity(Gravity.CENTER);
                         tvClass.setTextSize(14);
                         layout.addView(tvClass);
-                        // addView(layout, tvClass, i);
                     }
 
                     // TODO: 2016/5/17 设置动画
                     // window.setAnimationStyle(R.style.popup_window_anim);
                     // TODO: 2016/5/17 设置背景颜色
                     window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F8F8F8")));
-               /* if(window.isShowing()){
-                    checkBoxHot.setChecked(false);
-                    checkBoxHot.setClickable(false);
-                }else{
-                    checkBoxHot.setChecked(true);
-
-
-                }*/
                     // TODO: 2016/5/17 设置可以获取焦点
                     // window.setFocusable(true);
                     // TODO: 2016/5/17 设置可以触摸弹出框以外的区域

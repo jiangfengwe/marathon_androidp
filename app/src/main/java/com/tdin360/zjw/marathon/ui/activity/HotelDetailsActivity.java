@@ -185,6 +185,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         params.addBodyParameter("appKey",HttpUrlUtils.appKey);
         params.addBodyParameter("eventId",eventId);
         params.addBodyParameter("hotelId",hotelId);
+
         params.setConnectTimeout(5000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
