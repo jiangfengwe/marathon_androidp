@@ -89,7 +89,7 @@ public class HotelStateFragment extends BaseFragment {
         hotelStateFragment.setArguments(bundle);
         return hotelStateFragment;
     }
-    @Override
+  /*  @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()){
@@ -115,7 +115,7 @@ public class HotelStateFragment extends BaseFragment {
 
     private void onInvisible() {
         bjHotelOrderListModel.clear();
-    }
+    }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -131,17 +131,22 @@ public class HotelStateFragment extends BaseFragment {
     public void onEvent(EventBusClass event){
         if(event.getEnumEventBus()== EnumEventBus.ORDERHOTELCANCEL){
             //取消预约成功
-            initData();
+            initData(1);
         }
         if(event.getEnumEventBus()== EnumEventBus.HOTELREFUND){
             //申请退款成功
             bjHotelOrderListModel.clear();
-            initData();
+            initData(1);
         }
         if(event.getEnumEventBus()== EnumEventBus.PAYHOTEL){
             //支付成功
             bjHotelOrderListModel.clear();
-            initData();
+            initData(1);
+        }
+        if(event.getEnumEventBus()== EnumEventBus.HOTELCOMMENTORDER){
+            //支付成功
+            bjHotelOrderListModel.clear();
+            initData(1);
         }
     }
     @Override
@@ -149,7 +154,11 @@ public class HotelStateFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    private void initData() {
+    private void initData(int i) {
+        //bjHotelOrderListModel.clear();
+        if(i==1){
+            bjHotelOrderListModel.clear();
+        }
         Bundle arguments = this.getArguments();
         String Status = (String) arguments.get("Status");
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
@@ -208,8 +217,14 @@ public class HotelStateFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        isPrepared = true;
-        onVisible();
+       /* isPrepared = true;
+        onVisible();*/
+        layoutLoading.setVisibility(View.VISIBLE);
+        ivLoading.setBackgroundResource(R.drawable.loading_before);
+        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+        background.start();
+        initNet();
+        initView();
     }
     private void initNet() {
         //加载失败点击重试
@@ -218,7 +233,7 @@ public class HotelStateFragment extends BaseFragment {
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData();
+                        initData(1);
                         break;
 
                 }
@@ -227,7 +242,7 @@ public class HotelStateFragment extends BaseFragment {
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(getContext())){
             //加载网络数据
-            initData();
+            initData(1);
         }else {
 
             layoutLoading.setVisibility(View.GONE);
@@ -330,7 +345,7 @@ public class HotelStateFragment extends BaseFragment {
                 springView.onFinishFreshAndLoad();
                 bjHotelOrderListModel.clear();
                 pageIndex=1;
-                initData();
+                initData(1);
             }
 
             @Override
@@ -341,7 +356,7 @@ public class HotelStateFragment extends BaseFragment {
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData();
+                    initData(0);
                 }
 
             }

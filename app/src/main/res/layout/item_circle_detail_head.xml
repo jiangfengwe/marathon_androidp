@@ -15,22 +15,30 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="horizontal">
-        <ImageView
+      <!--  <ImageView
             android:id="@+id/iv_circle_detail_head_portrait"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/circle_portrait"
             android:layout_gravity="center"
             android:layout_marginRight="6dp"
-            android:scaleType="centerCrop"/>
-      <!--  <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="centerCrop"
+            />-->
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_circle_detail_head_portrait_iv"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:scaleType="centerCrop"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@drawable/my_portrait"/>
+
+       <!-- <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_circle_detail_head_portrait"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="6dp"
-            android:scaleType="centerCrop"
-            fresco:roundAsCircle="true"
-            fresco:placeholderImage="@drawable/my_portrait"/>-->
+            android:layout_marginRight="6dp"、/>-->
         <TextView
             android:id="@+id/tv_circle_detail_head_name"
             android:layout_width="wrap_content"

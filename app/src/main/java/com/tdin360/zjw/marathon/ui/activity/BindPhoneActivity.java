@@ -298,10 +298,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 ToastUtils.showCenter(getApplicationContext(),"验证码不能为空");
                 return;
             }
-           /* layoutLoading.setVisibility(View.VISIBLE);
-            ivLoading.setBackgroundResource(R.drawable.loading_before);
-            AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-            background.start();*/
+
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -367,19 +364,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         //通知社交
                         EnumEventBus circlePraise = EnumEventBus.CIRCLE;
                         EventBus.getDefault().post(new EventBusClass(circlePraise));
-                      /*  //通知webActivity修改登录状态
-                        Intent intent1 = getIntent();
-                        String webview = intent1.getStringExtra("webview");
-                        switch (webview) {
-                            case "1":
-                                EnumEventBus web = EnumEventBus.WEBVIEW;
-                                EventBus.getDefault().post(new EventBusClass(web));
-                                break;
-                            case "2":
-                                EnumEventBus circle = EnumEventBus.CIRCLE;
-                                EventBus.getDefault().post(new EventBusClass(circle));
-                                break;
-                        }*/
                         finish();
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),bindPhoneSureBean.getMessage());

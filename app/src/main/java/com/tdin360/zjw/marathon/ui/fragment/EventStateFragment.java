@@ -81,7 +81,7 @@ public class EventStateFragment extends BaseFragment {
         return eventStateFragment;
     }
 
-    @Override
+  /*  @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()&& isVisible){
@@ -100,9 +100,13 @@ public class EventStateFragment extends BaseFragment {
         if(!isPrepared || !isVisible) {
             return;
         }
+        layoutLoading.setVisibility(View.VISIBLE);
+        ivLoading.setBackgroundResource(R.drawable.loading_before);
+        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+        background.start();
         initNet();
         initView();
-    }
+    }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -129,12 +133,15 @@ public class EventStateFragment extends BaseFragment {
                 .setIgnoreGif(false) //忽略Gif图片
                 //.setRadius(10)
                 .setUseMemCache(true).build();
+       /* isPrepared = true;
+        onVisible();*/
         layoutLoading.setVisibility(View.VISIBLE);
         ivLoading.setBackgroundResource(R.drawable.loading_before);
         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
         background.start();
-        isPrepared = true;
-        onVisible();
+        initNet();
+        initView();
+
 
     }
     private void initNet() {
@@ -144,7 +151,7 @@ public class EventStateFragment extends BaseFragment {
             public void onErrorClick(ErrorView.ViewShowMode mode) {
                 switch (mode){
                     case NOT_NETWORK:
-                        initData(0);
+                        initData(1);
                         break;
 
                 }
@@ -153,7 +160,7 @@ public class EventStateFragment extends BaseFragment {
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(getContext())){
             //加载网络数据
-            initData(0);
+            initData(1);
         }else {
             layoutLoading.setVisibility(View.GONE);
             //如果缓存数据不存在则需要用户打开网络设置
@@ -181,9 +188,10 @@ public class EventStateFragment extends BaseFragment {
         }
     }
     private void initData(int i) {
-       if(i==1){
+      /* if(i==1){
            bjEventSystemListModel.clear();
-       }
+       }*/
+        bjEventSystemListModel.clear();
         Bundle arguments = this.getArguments();
         String Status = (String) arguments.get("Status");
         RequestParams params=new RequestParams(HttpUrlUtils.EVENT);

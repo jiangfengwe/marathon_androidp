@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -156,6 +157,20 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                 }
             }
         }
+        if(event.getEnumEventBus()==EnumEventBus.SYSTEDETAILMNOTICE){
+            SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getActivity());
+            final List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
+            for (int i = 0; i <allCircleNotice.size() ; i++) {
+                String notice = allCircleNotice.get(i).getNotice();
+                Log.d("55555notice", "onEvent: "+notice);
+                if(notice.equals("0")){
+                    ivShow.setVisibility(View.VISIBLE);
+                    break;
+                }else{
+                    ivShow.setVisibility(View.GONE);
+                }
+            }
+        }
 
 
     }
@@ -182,7 +197,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //CirclePriseTableModel circlePriseTableModel=new CirclePriseTableModel("aa",null,null,null,3,"ttttttttttt","rrrrrrrr","2017-9-2",null);
-
         //显示信息
        showInfo();
         //注册广播

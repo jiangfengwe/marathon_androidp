@@ -190,6 +190,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 ivShow.setVisibility(View.GONE);
             }
         }
+        if(event.getEnumEventBus()==EnumEventBus.CIECLEDETAILMNOTICE){
+            boolean open = SharedPreferencesManager.getNotice(getContext());
+            if(open){
+                ivShow.setVisibility(View.VISIBLE);
+            }else{
+                ivShow.setVisibility(View.GONE);
+            }
+        }
         if(event.getEnumEventBus()==EnumEventBus.CIRCLENOTICE){
             boolean open = SharedPreferencesManager.getNotice(getContext());
             if(open){
@@ -303,7 +311,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         }
     }
-    public void initData(int i) {
+    public void
+    initData(int i) {
         if(i==1){
             bjDynamicListModel.clear();
         }
@@ -322,10 +331,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 Gson gson=new Gson();
                 Bean bean = gson.fromJson(result, Bean.class);
                 boolean state = bean.isState();
-                if(state){
+               if(state){
                     bjDynamicListModel.addAll(bean.getModel().getBJDynamicListModel()) ;
                     totalPage=bean.getModel().getTotalPages();
-                    for (int i = 0; i <bjDynamicListModel.size() ; i++) {
+                    /* for (int i = 0; i <bjDynamicListModel.size() ; i++) {
                         String dynamicsContent = bjDynamicListModel.get(i).getReleaseTimeStr();
                         Log.d("dynamicsContent", "onSuccess: "+dynamicsContent);
                         Bean.ModelBean.BJDynamicListModelBean.UserModelBean userModel = bjDynamicListModel.get(i).getUserModel();
@@ -333,7 +342,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         Log.d("nickName", "onSuccess: "+nickName);
                         boolean isChecked = bjDynamicListModel.get(i).getIsChecked();
                         Log.d("ischecked", "onSuccess: "+isChecked);
-                    }
+                    }*/
                     //Log.d("wwwwwww22222", "onBindHeaderViewHolder: "+bjDynamicListModelBean.getDynamicsTitle());
                     if(bjDynamicListModel.size()<=0){
                         mErrorView.show(rvCircle,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
@@ -550,7 +559,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                         //index=model.getId();
                        // String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
-                        final String url = "http://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
+                       // final String url = "https://www.baijar.com/EventAppApi/DynamicSharePage?dynamicId=" +dynamicId;
+                        final String url=HttpUrlUtils.BASE+"DynamicSharePage?dynamicId=" +dynamicId;
                         urlWeb=url;
                         modelWeb=model;
                         textViewWeb=tvShare;

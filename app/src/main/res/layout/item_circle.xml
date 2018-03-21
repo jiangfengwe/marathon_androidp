@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:orientation="vertical">
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="7dp"
@@ -43,7 +42,7 @@
                     android:layout_marginRight="6dp"
                     android:scaleType="centerCrop"
                     fresco:roundAsCircle="true"
-                    fresco:placeholderImage="@drawable/circle_portrait"/>
+                    fresco:placeholderImage="@drawable/my_portrait"/>
 
                 <TextView
                     android:id="@+id/tv_circle_name"

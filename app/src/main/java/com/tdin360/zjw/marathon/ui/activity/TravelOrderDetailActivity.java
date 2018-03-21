@@ -3,8 +3,10 @@ package com.tdin360.zjw.marathon.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.text.TextUtils;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -38,6 +41,7 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -104,10 +108,22 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
     @ViewInject(R.id.order_travel_detail_webview)
     private WebView webView;
+    @ViewInject(R.id.progressBar)
+    private ProgressBar progressBar;
 
     private String stringLike;
     private int highPrice;
     private int index;
+    @Subscribe
+    public void onEvent(EventBusClass event){
+        if(event.getEnumEventBus()== EnumEventBus.TRAVELCOMMENT){
+            initNet();
+            initWeb();
+            EnumEventBus cancelTravel = EnumEventBus.TRAVELCOMMENTORDER;
+            EventBus.getDefault().post(new EventBusClass(cancelTravel));
+        }
+
+    }
 
 
     @Override
@@ -133,9 +149,6 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         background.start();
         initToolbar();
         initNet();
-
-        Intent intent=getIntent();
-        String payOrder = intent.getStringExtra("payOrder");
         initWeb();
     }
 
@@ -154,9 +167,68 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.getSettings().setBuiltInZoomControls(false);
         this.webView.getSettings().setDomStorageEnabled(true);
-        this.webView.setWebChromeClient(new WebChromeClient());
-        this.webView.setWebViewClient(new WebViewClient());
+        this.webView.setWebChromeClient(new MyWebChromeClient());
+        this.webView.setWebViewClient(new MyWebViewClient());
         webView.loadUrl(url);
+    }
+    private class MyWebChromeClient extends WebChromeClient{
+        @Override
+        public void onProgressChanged(WebView webView, int i) {
+            super.onProgressChanged(webView, i);
+            progressBar.setProgress(i);
+            if(i==100){
+                progressBar.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onReceivedTitle(WebView webView, String s) {
+            super.onReceivedTitle(webView, s);
+            // titleTv.setText(s);
+        }
+        // For Android < 3.0
+        public void openFileChooser(ValueCallback<Uri> valueCallback) {
+
+        }
+
+        // For Android  >= 3.0
+        public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+
+        }
+
+        //For Android  >= 4.1
+        public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
+
+        }
+
+        // For Android >= 5.0
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+
+            return true;
+        }
+
+
+    }
+    private class MyWebViewClient extends WebViewClient{
+        @Override
+        public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
+            super.onPageStarted(webView, s, bitmap);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        @Override
+        public void onPageFinished(WebView webView, String s) {
+            super.onPageFinished(webView, s);
+            progressBar.setVisibility(View.GONE);
+        }
+        @Override
+        public void onReceivedError(WebView webView, int i, String s, String s1) {
+            super.onReceivedError(webView, i, s, s1);
+        }
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String s) {
+            return  false;
+        }
     }
 
     private void iniData() {
@@ -421,10 +493,25 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
             btn.setVisibility(View.GONE);
         }else if(status.equals("7")){
             btn.setVisibility(View.GONE);
-        } else{
+        } else if(status.equals("5")){
+            layoutShow.setVisibility(View.GONE);
+            btn.setVisibility(View.GONE);
+        }else{
             layoutShow.setVisibility(View.VISIBLE);
         }
         tvNumber.setText(orderNo);
+        //去评价
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1=getIntent();
+                String orderId =intent1.getStringExtra("orderId");
+                Intent intent=new Intent(TravelOrderDetailActivity.this,TravelCommentActivity.class);
+                intent.putExtra("orderId",orderId);
+                startActivity(intent);
+            }
+        });
+        //去支付
         tvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -438,18 +525,13 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
 
             }
         });
+        //取消订单
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initCancel();
             }
             private void initCancel() {
-                /*final KProgressHUD hud = KProgressHUD.create(TravelOrderDetailActivity.this);
-                hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                        .setCancellable(true)
-                        .setAnimationSpeed(1)
-                        .setDimAmount(0.5f)
-                        .show();*/
                 if(NetWorkUtils.isNetworkAvailable(TravelOrderDetailActivity.this)) {
                     //加载网络数据
                     layoutLoading.setVisibility(View.VISIBLE);

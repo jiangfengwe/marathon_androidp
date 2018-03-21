@@ -2,10 +2,12 @@ package com.tdin360.zjw.marathon.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.MainThread;
 import android.support.multidex.MultiDexApplication;
 import android.widget.ImageView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.lzy.ninegrid.NineGridView;
 import com.tdin360.zjw.marathon.CrashHander;
 import com.tdin360.zjw.marathon.R;
@@ -63,7 +65,10 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fresco.initialize(this);
+        ImagePipelineConfig config=ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .build();
+        Fresco.initialize(this,config);
         //全局异常捕捉
         //CrashHander crashHandler= CrashHander.getInstance();
        // crashHandler.init(getApplicationContext());
@@ -91,7 +96,7 @@ public class App extends MultiDexApplication {
 
         //创建数据库
         DbManager.init(this);
-
+        //初始化X5内核,WebView
         if(QbSdk.canLoadX5(this)) {
             //加载❤x5内核
             QbSdk.initX5Environment(this, null);

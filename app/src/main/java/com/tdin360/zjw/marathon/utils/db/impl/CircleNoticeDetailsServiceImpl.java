@@ -86,6 +86,7 @@ public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService
         model.setTime(format);
 
         SQLiteDatabase conn = this.sqlHelper.getWritableDatabase();
+       // conn.beginTransaction();
         //判断数据库中不存在才插入
        // Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,"NickName=?",new String[]{model.getNickName()}, null, null, null);
         //Cursor cursor = conn.query(SQLHelper.PRAISE_COMMENT_TABLE, null,null,null, null, null, null);
@@ -102,7 +103,9 @@ public class CircleNoticeDetailsServiceImpl implements CircleNoticeDetailService
             conn.insert(SQLHelper.PRAISE_COMMENT_TABLE, null, values);
         Log.d("model.getNickName()", "addCircleNotice: "+model.getNickName());
        // }
+        //conn.setTransactionSuccessful();
         conn.close();
+        //conn.setTransactionSuccessful();
 
     }
 

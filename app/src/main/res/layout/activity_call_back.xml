@@ -45,42 +45,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="10dp"
                     android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_all_comment_name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginBottom="11dp">
-                        <TextView
-                            android:id="@+id/tv_all_comment_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="荐客家"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="18dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/home_tab_title_color_check"/>
-                        <TextView
-                            android:id="@+id/tv_all_comment_time"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="12-12"
-                            android:textSize="12sp"
-                            android:layout_gravity="center"
-                            android:textColor="@color/circle_head_time"/>
-                        <TextView
-                            android:id="@+id/tv_all_callback"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/comment_back"
-                            android:textSize="12sp"
-                            android:visibility="gone"
-                            android:layout_gravity="center"
-                            android:textColor="@color/circle_head_time"/>
-                    </LinearLayout>
+                        android:text="荐客家"
+                        android:textSize="12sp"
+                        android:textColor="@color/home_tab_title_color_check"/>
+                    <TextView
+                        android:id="@+id/tv_all_comment_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12-12"
+                        android:textSize="12sp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/circle_head_time"/>
                     <TextView
                         android:id="@+id/tv_all_comment_content"
                         android:layout_width="match_parent"

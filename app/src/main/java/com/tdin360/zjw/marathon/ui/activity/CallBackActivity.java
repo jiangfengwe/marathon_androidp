@@ -199,6 +199,7 @@ public class CallBackActivity extends BaseActivity {
                 LoginUserInfoBean.UserBean modelInfo= SharedPreferencesManager.getLoginInfo(getApplicationContext());
                 String commentContent = etComment.getText().toString().trim();
                 String customerId = modelInfo.getId() + "";
+                try {
                 if (customerId == null || customerId.equals("")) {
                     Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent1);
@@ -215,7 +216,6 @@ public class CallBackActivity extends BaseActivity {
                     params.addBodyParameter("appKey",HttpUrlUtils.appKey);
                     params.addBodyParameter("customerId",customerId);
                     params.addBodyParameter("dynamicId",dynamicId);
-
                     //params.addBodyParameter("commentId",commentId+"");
                     if(index==0){
                         params.addBodyParameter("commentId",commentId+"");
@@ -224,7 +224,7 @@ public class CallBackActivity extends BaseActivity {
                     }
                     params.addBodyParameter("commentContent",commentContent);
                     params.addBodyParameter("platform","android");
-                    params.setConnectTimeout(5000);
+                    //params.setConnectTimeout(5000);
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -238,7 +238,6 @@ public class CallBackActivity extends BaseActivity {
                                 etComment.setText("");
                                 EnumEventBus em = EnumEventBus.CIRCLEDETAILCOMMENT;
                                 EventBus.getDefault().post(new EventBusClass(em));
-
                             }else{
                                 ToastUtils.showCenter(getApplicationContext(),circleDetailAllCommentBean.getMessage());
                             }
@@ -264,6 +263,11 @@ public class CallBackActivity extends BaseActivity {
                         }
                     });
                 }
+
+                }catch (Exception e){
+                    Log.d("error3333333333", "initData: "+e.getMessage());
+                }
+
             }
         });
     }

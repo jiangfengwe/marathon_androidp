@@ -8,19 +8,25 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
+import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.SystemNoticeBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.view.annotation.ViewInject;
 
 import java.net.URL;
@@ -46,11 +52,11 @@ public class MyNoticeDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     /*   SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
-        List<SystemNoticeBean> allCircleNotice = systemNoticeDetailsService.getAllSystemNotice();
-        SystemNoticeBean model=new SystemNoticeBean();
-        model.setNotice("1");*/
 
+      /*  SharedPreferencesManager.isNotice(getApplicationContext(),false);
+        EnumEventBus notice = EnumEventBus.SYSTEMNOTICE;
+        EventBus.getDefault().post(new EventBusClass(notice));
+        finish();*/
         //setContentView(R.layout.activity_my_notice_detail);
         initToolbar();
         initWebView();
@@ -69,12 +75,16 @@ public class MyNoticeDetailActivity extends BaseActivity {
         String messageId = intent.getStringExtra("messageId");
         SystemNoticeDetailsServiceImpl systemNoticeDetailsService = new SystemNoticeDetailsServiceImpl(getApplicationContext());
         systemNoticeDetailsService.update("1",messageId);
+        EnumEventBus notice = EnumEventBus.SYSTEDETAILMNOTICE;
+        EventBus.getDefault().post(new EventBusClass(notice));
         //http://www.tdin360.com/
         Log.d("url1", "initWebView: "+url1);
         String url=HttpUrlUtils.URL+ url1;
         //int Id = getIntent().getIntExtra("Id", -1);
         //String url = HttpUrlUtils.NOTICE_DETAIL_URL + "?Id=" + Id;
         Log.d("noticeurl", "initWebView: "+url);
+        webView.getSettings().setUseWideViewPort(true);//内容适配，设置自适应任意大小的pc网页
+        webView.getSettings().setLoadWithOverviewMode(true);
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
@@ -86,6 +96,36 @@ public class MyNoticeDetailActivity extends BaseActivity {
         this.webView.setWebChromeClient(new MyWebChromeClient());
         this.webView.setWebViewClient(new MyWebViewClient());
         webView.loadUrl(url);
+        webView.addJavascriptInterface(MyNoticeDetailActivity.this,"android");
+    }
+    //给js调用的方法
+    @JavascriptInterface
+    public void toHotel(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(MyNoticeDetailActivity.this,HotelActivity.class);
+                intent.putExtra("webclick",""+1);
+                String eventId = SingleClass.getInstance().getEventId();
+                SingleClass.getInstance().setEventId(eventId);
+                startActivity(intent);
+
+            }
+        });
+    }
+    @JavascriptInterface
+    public void toTravel(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(MyNoticeDetailActivity.this,HotelActivity.class);
+                intent.putExtra("webclick",""+2);
+                String eventId = SingleClass.getInstance().getEventId();
+                SingleClass.getInstance().setEventId(eventId);
+                startActivity(intent);
+
+            }
+        });
     }
     private class MyWebChromeClient extends WebChromeClient{
         @Override
@@ -125,6 +165,25 @@ public class MyNoticeDetailActivity extends BaseActivity {
             return  false;
         }
     }
+
+
+
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
+    }
+    @Override
+    public void onBackPressed() {
+        if(webView.canGoBack()){
+            webView.goBack();
+        }else {
+            overridePendingTransition(R.anim.anim_in_activity,R.anim.anim_out_activity);
+            finish();
+        }
+
+    }
     private void initToolbar() {
         toolbar.setBackgroundResource(R.color.home_tab_title_color_check);
         viewline.setBackgroundResource(R.color.home_tab_title_color_check);
@@ -132,10 +191,7 @@ public class MyNoticeDetailActivity extends BaseActivity {
         titleTv.setText("系统详情");
         titleTv.setTextColor(Color.WHITE);
         showBack(toolbar,imageView);
-        /*SharedPreferencesManager.isNotice(getApplicationContext(),false);
-        EnumEventBus notice = EnumEventBus.SYSTEMNOTICE;
-        EventBus.getDefault().post(new EventBusClass(notice));
-        finish();*/
+
     }
     @Override
     public int getLayout() {

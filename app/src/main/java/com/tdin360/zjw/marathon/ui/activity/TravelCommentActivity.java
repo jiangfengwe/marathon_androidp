@@ -35,6 +35,8 @@ import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.GridImageAdapter;
 import com.tdin360.zjw.marathon.model.HotelCommentBean;
@@ -46,6 +48,7 @@ import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
@@ -283,7 +286,8 @@ public class TravelCommentActivity extends BaseActivity {
     }
     private void initData() {
         String evaluateContent = etContent.getText().toString().trim();
-        if(TextUtils.isEmpty(rating)){
+        float ratingCount = ratingBar.getRating();
+        if(ratingCount==0.0){
             ToastUtils.showCenter(getApplicationContext(),"评分不能为空");
             return;
         }
@@ -309,7 +313,7 @@ public class TravelCommentActivity extends BaseActivity {
         params.addBodyParameter("orderId",orderId);
         params.addBodyParameter("customerId",customerId);
         params.addBodyParameter("evaluateContent",evaluateContent);
-        params.addBodyParameter("scoring",rating);
+        params.addBodyParameter("scoring", ratingCount+"");
         for(int i=0;i<localMedias.size();i++ ){
             params.addBodyParameter("file"+i,new File(localMedias.get(i).getCompressPath()),"image/jpeg",i+".jpg");
         }
@@ -334,7 +338,7 @@ public class TravelCommentActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                // mErrorView.show(etContent,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.show(TravelCommentActivity.this,"网络不给力,连接服务器异常!");
+                //ToastUtils.show(TravelCommentActivity.this,"网络不给力,连接服务器异常!");
             }
 
             @Override
@@ -359,6 +363,9 @@ public class TravelCommentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                EnumEventBus cancelTravel = EnumEventBus.TRAVELCOMMENT;
+                EventBus.getDefault().post(new EventBusClass(cancelTravel));
+                finish();
             }
         });
         dialog.show();

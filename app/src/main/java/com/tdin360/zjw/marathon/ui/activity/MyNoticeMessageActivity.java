@@ -30,6 +30,7 @@ import com.tdin360.zjw.marathon.utils.db.impl.SystemNoticeDetailsServiceImpl;
 import com.tdin360.zjw.marathon.weight.ErrorView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
@@ -64,6 +65,7 @@ public class MyNoticeMessageActivity extends BaseActivity {
     private ImageOptions imageOptionsCircle;
 
     private NoticeMessageServiceImpl service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

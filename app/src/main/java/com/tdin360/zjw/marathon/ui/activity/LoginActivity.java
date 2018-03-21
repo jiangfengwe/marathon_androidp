@@ -606,11 +606,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     .setAnimationSpeed(1)
                     .setDimAmount(0.5f)
                     .show();
-            String string="{'userPhone':'"+phone+"','password':'"+psw+"','platform': 'android','appKey': 'BJYDAppV-2'}";
+            String string="{\"userPhone\":"+"\""+phone+"\",\"password\":"+"\""+psw+"\",\"platform\":"+"\""+"android"+"\",\"appKey\":\"BJYDAppV-2\"}";
+           // String string="{'userPhone':'"+phone+"','password':'"+psw+",'platform': 'android','appKey': 'BJYDAppV-2'}";mBytes=string.getBytes("UTF8");
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
+            String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.MARATHON_LOGIN);
-            params.addBodyParameter("secretMessage",enString);
+            params.addBodyParameter("secretMessage",replace);
             params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
@@ -669,7 +671,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     }else{
                         ToastUtils.showCenter(getApplicationContext(),loginBean.getMessage());
                     }
-
                 }
 
                 @Override

@@ -96,7 +96,7 @@ public class TravelStateFragment extends BaseFragment {
         return travelStateFragment;
     }
 
-    @Override
+   /* @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()){
@@ -123,7 +123,7 @@ public class TravelStateFragment extends BaseFragment {
     private void onInvisible() {
         bjTravelOrderListModel.clear();
 
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -146,8 +146,14 @@ public class TravelStateFragment extends BaseFragment {
                 .setLoadingDrawableId(R.drawable.add_lose_square) //以资源id设置加载中的动画
                 .setIgnoreGif(false) //忽略Gif图片
                 .setUseMemCache(true).build();
-        isPrepared = true;
-        onVisible();
+        /*isPrepared = true;
+        onVisible();*/
+        layoutLoading.setVisibility(View.VISIBLE);
+        ivLoading.setBackgroundResource(R.drawable.loading_before);
+        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
+        background.start();
+        initNet();
+        initView();
     }
 
     private void initNet() {
@@ -162,7 +168,7 @@ public class TravelStateFragment extends BaseFragment {
                         ivLoading.setBackgroundResource(R.drawable.loading_before);
                         AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
                         background.start();
-                       initData();
+                       initData(1);
                         break;
 
                 }
@@ -171,7 +177,7 @@ public class TravelStateFragment extends BaseFragment {
         //判断网络是否处于可用状态
         if(NetWorkUtils.isNetworkAvailable(getContext())){
             //加载网络数据
-            initData();
+            initData(1);
         }else {
 
             layoutLoading.setVisibility(View.GONE);
@@ -205,19 +211,25 @@ public class TravelStateFragment extends BaseFragment {
             //取消预约成功
             //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
             bjTravelOrderListModel.clear();
-            initData();
+            initData(1);
         }
         if(event.getEnumEventBus()== EnumEventBus.TRAVELREFUND){
             //申请退款成功
             //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
             bjTravelOrderListModel.clear();
-            initData();
+            initData(1);
         }
         if(event.getEnumEventBus()== EnumEventBus.PAYTRAVEL){
             //支付成功
             //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
             bjTravelOrderListModel.clear();
-            initData();
+            initData(1);
+        }
+        if(event.getEnumEventBus()== EnumEventBus.TRAVELCOMMENTORDER){
+            //支付成功
+            //Toast.makeText(getContext(),"school",Toast.LENGTH_LONG).show();
+            bjTravelOrderListModel.clear();
+            initData(1);
         }
     }
     @Override
@@ -226,8 +238,10 @@ public class TravelStateFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    private void initData() {
-        //bjTravelOrderListModel.clear();
+    private void initData(int i) {
+        if(i==1){
+            bjTravelOrderListModel.clear();
+        }
         Bundle arguments = this.getArguments();
         String Status = (String) arguments.get("Status");
         LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getContext());
@@ -363,7 +377,7 @@ public class TravelStateFragment extends BaseFragment {
                 springView.onFinishFreshAndLoad();
                 bjTravelOrderListModel.clear();
                 pageIndex=1;
-                initData();
+                initData(1);
             }
 
             @Override
@@ -374,7 +388,7 @@ public class TravelStateFragment extends BaseFragment {
                 }
                 if(totalPage>pageIndex){
                     pageIndex++;
-                    initData();
+                    initData(0);
                 }
 
             }

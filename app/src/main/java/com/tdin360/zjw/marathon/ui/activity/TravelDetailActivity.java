@@ -321,7 +321,8 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
         this.webView.setWebViewClient(new WebViewClient());
         String travelId = SingleClass.getInstance().getTravelId();
        // String url = HttpUrlUtils.TRAVEL_DETAIL_INFO + "?" + "appKey" + "=" + "BJYDAppV-2" + "&" + "travelId" + travelId;
-        String url="http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
+        //String url="http://www.baijar.com/EventAppApi/TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
+        String url= HttpUrlUtils.BASE+"TravelDetailMessageView?appKey=BJYDAppV-2&travelId="+travelId;
         webView.loadUrl(url);
         webView.addJavascriptInterface(TravelDetailActivity.this,"android");
     }

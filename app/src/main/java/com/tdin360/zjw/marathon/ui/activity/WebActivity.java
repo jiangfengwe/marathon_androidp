@@ -144,8 +144,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
       }
       LinearInterpolator lin = new LinearInterpolator();
       animation.setInterpolator(lin);
-
-
         this.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setAllowFileAccess(true);
@@ -668,7 +666,6 @@ public class WebActivity extends BaseActivity implements WXPayEntryActivity.WXPA
         }
 
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

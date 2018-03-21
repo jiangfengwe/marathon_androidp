@@ -2,6 +2,7 @@ package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.tdin360.zjw.marathon.EnumEventBus;
 import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
@@ -126,9 +130,17 @@ public class CircleMessageActivity extends BaseActivity {
             @Override
             protected void onBindNormalViewHolder(NormalViewHolder holder, CirclePriseTableModel model) {
                 String commentContent = model.getCommentContent();
-                ImageView imageViewHead = (ImageView) holder.getViewById(R.id.iv_circle_message);
+                //ImageView imageViewHead = (ImageView) holder.getViewById(R.id.iv_circle_message);
                 ImageView imageViewCircle = (ImageView) holder.getViewById(R.id.ic_circle_message_pic);
-                x.image().bind(imageViewHead,model.getHeadImg(),imageOptionsCircle);
+                //x.image().bind(imageViewHead,model.getHeadImg(),imageOptionsCircle);
+                //用户头像设置
+                Uri uri =  Uri.parse(model.getHeadImg());
+                SimpleDraweeView imageViewHead = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_message);
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true)
+                        .build();
+                imageViewHead.setController(controller);
                 String dynamicPictureUrl = model.getDynamicPictureUrl();
                if(TextUtils.isEmpty(commentContent)){
                    String str="<font color='#ff621a'>"+model.getNickName()+"</font>赞了你：";
@@ -144,7 +156,7 @@ public class CircleMessageActivity extends BaseActivity {
                        x.image().bind(imageViewCircle,model.getDynamicPictureUrl(),imageOptions);
                    }
                 }else{
-                   String str="<font color='#ff621a'>"+model.getNickName()+"</font>评论了你：";
+                   String str="<font color='#ff621a'>"+model.getNickName()+"</font> 评论了你：";
                    holder.setText(R.id.tv_circle_message_title,Html.fromHtml(str));
                    holder.setText(R.id.tv_circle_message_comment,model.getCommentContent());
                    holder.setText(R.id.tv_circle_message_content,model.getDynamicContent());
@@ -167,6 +179,10 @@ public class CircleMessageActivity extends BaseActivity {
                 CirclePriseTableModel circlePriseTableModel = allCircleNotice.get(position);
                 int dynamicId = circlePriseTableModel.getDynamicId();
                 intent.putExtra("dynamicId",dynamicId+"");
+                SharedPreferencesManager.isNotice(getApplicationContext(),false);
+                EnumEventBus notice = EnumEventBus.CIECLEDETAILMNOTICE;
+                EventBus.getDefault().post(new EventBusClass(notice));
+
                 startActivity(intent);
             }
         });

@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.jiguan.ExampleUtil;
 import com.tdin360.zjw.marathon.ui.fragment.CircleFragment;

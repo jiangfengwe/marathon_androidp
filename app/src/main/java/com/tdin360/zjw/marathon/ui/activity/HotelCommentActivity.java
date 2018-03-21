@@ -36,6 +36,8 @@ import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.tdin360.zjw.marathon.EnumEventBus;
+import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.adapter.GridImageAdapter;
 import com.tdin360.zjw.marathon.model.HotelCommentBean;
@@ -45,6 +47,7 @@ import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ViewInject;
@@ -57,7 +60,7 @@ import java.util.List;
 import static com.umeng.socialize.utils.ContextUtil.getContext;
 
 /**
- * 评价
+ * 酒店评价
  */
 
 public class HotelCommentActivity extends BaseActivity {
@@ -267,7 +270,8 @@ public class HotelCommentActivity extends BaseActivity {
     }
     private void initData() {
         String evaluateContent = etContent.getText().toString().trim();
-        if(TextUtils.isEmpty(rating)){
+        float ratingCount = ratingBar.getRating();
+        if(ratingCount==0.0){
             ToastUtils.showCenter(getApplicationContext(),"评分不能为空");
             return;
         }
@@ -281,11 +285,8 @@ public class HotelCommentActivity extends BaseActivity {
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f)
                 .show();
-       /* layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();*/
-        String orderId = getIntent().getStringExtra("orderId");
+       Intent intent=getIntent();
+        String orderId = intent.getStringExtra("orderId");
         LoginUserInfoBean.UserBean loginInfo =
                 SharedPreferencesManager.getLoginInfo(getApplicationContext());
         String customerId = loginInfo.getId();
@@ -294,7 +295,7 @@ public class HotelCommentActivity extends BaseActivity {
         params.addBodyParameter("orderId",orderId);
         params.addBodyParameter("customerId",customerId);
         params.addBodyParameter("evaluateContent",evaluateContent);
-        params.addBodyParameter("scoring",rating);
+        params.addBodyParameter("scoring",ratingCount+"");
         for(int i=0;i<localMedias.size();i++ ){
             params.addBodyParameter("file"+i,new File(localMedias.get(i).getCompressPath()),"image/jpeg",i+".jpg");
         }
@@ -309,6 +310,7 @@ public class HotelCommentActivity extends BaseActivity {
                 if(state){
                     //ToastUtils.showCenter(getApplicationContext(),hotelCommentBean.getMessage());
                     showDialog();
+
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),hotelCommentBean.getMessage());
                 }
@@ -317,7 +319,7 @@ public class HotelCommentActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                ToastUtils.showCenter(getBaseContext(),"网络不给力,连接服务器异常!");
+                //ToastUtils.showCenter(getBaseContext(),"网络不给力,连接服务器异常!");
 
             }
 
@@ -343,6 +345,9 @@ public class HotelCommentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                EnumEventBus cancelTravel = EnumEventBus.HOTELCOMMENT;
+                EventBus.getDefault().post(new EventBusClass(cancelTravel));
+                finish();
             }
         });
         dialog.show();

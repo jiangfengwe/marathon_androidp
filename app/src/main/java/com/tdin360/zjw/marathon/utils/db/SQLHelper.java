@@ -160,6 +160,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+PRAISE_COMMENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+SYSTEM_NOTICE_TABLE);
 
+
       /*  db.execSQL("DROP TABLE IF EXISTS "+EVENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+EVENT_DETAIL_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+NOTICE_MESSAGE_TABLE);
@@ -188,11 +189,7 @@ public class SQLHelper extends SQLiteOpenHelper {
             }finally {
                 db.endTransaction();
             }
-
-
         }
-
-
         onCreate(db);
 
         

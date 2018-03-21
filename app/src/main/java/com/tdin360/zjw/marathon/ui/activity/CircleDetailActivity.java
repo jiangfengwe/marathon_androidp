@@ -28,6 +28,9 @@ import android.widget.Toast;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -134,6 +137,7 @@ public class CircleDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EventBus.getDefault().register(this);
         imageOptions = new ImageOptions.Builder()
 //                     .setSize(DensityUtil.dip2px(80), DensityUtil.dip2px(80))//图片大小
@@ -304,7 +308,7 @@ public class CircleDetailActivity extends BaseActivity {
                      bjDynamicsPictureListModel = model.getBJDynamicsPictureListModel();
                      userModel= model.getUserModel();
                     Log.d("userModel.getHeadImg()", "onSuccess: "+userModel.getHeadImg());
-                     tagUserListModel= model.getTagUserListModel();
+                    tagUserListModel= model.getTagUserListModel();
                     List<?> commentUserListModel = model.getCommentUserListModel();
                 }else{
                     ToastUtils.showCenter(getApplicationContext(),circleDetailBean.getMessage());
@@ -366,6 +370,22 @@ public class CircleDetailActivity extends BaseActivity {
             @Override
             public void onBindHeaderViewHolder(HeaderViewHolder holder) {
                 super.onBindHeaderViewHolder(holder);
+                //社交详情头部动态头像
+                SimpleDraweeView portrait1 = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_head_portrait_iv);
+                String headImg1 = userModel.getHeadImg();
+                // x.image().bind(portrait,headImg,imageOptions);
+                //x.image().bind(portrait1,userModel.getHeadImg(),imageOptions);
+                if(TextUtils.isEmpty(headImg1)){
+                    x.image().bind(portrait1,userModel.getHeadImg(),imageOptions);
+                }else{
+                    Uri uri =  Uri.parse(headImg1);
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setUri(uri)
+                            .setAutoPlayAnimations(true)
+                            .build();
+                    portrait1.setController(controller);
+                }
+
                 boolean isRecommend = getIntent().getBooleanExtra("isRecommend",false);
                 LinearLayout linearLayout = (LinearLayout) holder.getViewById(R.id.layout_circle_detail);
                 WebView webView = (WebView) holder.getViewById(R.id.wb_circle_detail);
@@ -388,22 +408,13 @@ public class CircleDetailActivity extends BaseActivity {
                         linearLayout.setVisibility(View.VISIBLE);
                     }
                 }
-                //CircleDetailBean.ModelBean.UserModelBean userModel1 = model.getUserModel();
-                //Log.d("model.getId()222", "onBindHeaderViewHolder: "+userModel1.getId());
                 holder.setText(R.id.tv_circle_detail_head_content,model.getDynamicsContent());
                 holder.setText(R.id.tv_circle_detail_head_name, CircleDetailActivity.this.userModel.getNickName());
 
                 //社交详情头部动态头像
-                ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
-                x.image().bind(headPortrait,userModel.getHeadImg(),imageOptions);
-               /* String headImg = userModel1.getHeadImg();
-                SimpleDraweeView headPortrait = (SimpleDraweeView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
-                Uri uri =  Uri.parse(headImg);
-                DraweeController controller = Fresco.newDraweeControllerBuilder()
-                        .setUri(uri)
-                        .setAutoPlayAnimations(true)
-                        .build();
-                headPortrait.setController(controller);*/
+               /* ImageView headPortrait = (ImageView) holder.getViewById(R.id.iv_circle_detail_head_portrait);
+                x.image().bind(headPortrait,userModel.getHeadImg(),imageOptions);*/
+
                 holder.setText(R.id.tv_circle_detail_head_praise,model.getTagsNumber()+"人赞过");
                 Log.d("model.getId()", "onBindHeaderViewHolder: "+model.getId());
 

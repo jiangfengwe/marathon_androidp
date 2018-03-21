@@ -239,8 +239,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             Log.d("----------", "initData: "+string);
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.PAY);
-            params.addBodyParameter("secretMessage",enString);
+            params.addBodyParameter("secretMessage",replace);
             params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
@@ -463,8 +464,9 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
             Log.d("----------", "initData: "+string);
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.PAY_SURE);
-            params.addBodyParameter("secretMessage",enString);
+            params.addBodyParameter("secretMessage",replace);
             params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override

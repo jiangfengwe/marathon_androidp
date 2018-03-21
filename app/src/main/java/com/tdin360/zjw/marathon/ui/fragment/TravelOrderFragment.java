@@ -39,7 +39,7 @@ public class TravelOrderFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vpTravel.setAdapter(new TravelOrderTabLayoutAdapter(getChildFragmentManager()));
-        vpTravel.setOffscreenPageLimit(4);
+        vpTravel.setOffscreenPageLimit(1);
         tabTravel.setupWithViewPager(vpTravel);
     }
 }
