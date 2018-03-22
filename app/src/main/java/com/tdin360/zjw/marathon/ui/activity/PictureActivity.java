@@ -1,7 +1,5 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,19 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.widget.SpringView;
-import com.lzy.ninegrid.ImageInfo;
-import com.lzy.ninegrid.NineGridView;
-import com.lzy.ninegrid.NineGridViewAdapter;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
-import com.tdin360.zjw.marathon.model.AA;
-import com.tdin360.zjw.marathon.model.HotelDetailBean;
-import com.tdin360.zjw.marathon.model.TravelDetailBean;
+import com.tdin360.zjw.marathon.model.HHDetail;
 import com.tdin360.zjw.marathon.model.TravelPictureBean;
-import com.tdin360.zjw.marathon.utils.ToastUtils;
 import com.tdin360.zjw.marathon.weight.ErrorView;
 
 import org.xutils.image.ImageOptions;
@@ -92,16 +83,16 @@ public class PictureActivity extends BaseActivity {
         String picture = getIntent().getStringExtra("picture");
         final ArrayList<String> image= new ArrayList<>();
         if(picture.equals("hotelPic")){
-            List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
+            List<HHDetail.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel = SingleClass.getInstance().getBjHotelPictureListModel();
             if(bjHotelPictureListModel.size()<=0){
                 mErrorView.show(rvPiv,"暂时没有数据", ErrorView.ViewShowMode.NOT_DATA);
                 return;
             }else{
                 mErrorView.hideErrorView(rvPiv);
-            adapter=new RecyclerViewBaseAdapter<AA.ModelBean.BJHotelPictureListModelBean>(getApplicationContext(),
+            adapter=new RecyclerViewBaseAdapter<HHDetail.ModelBean.BJHotelPictureListModelBean>(getApplicationContext(),
                     bjHotelPictureListModel,R.layout.item_picture) {
                 @Override
-                protected void onBindNormalViewHolder(NormalViewHolder holder, AA.ModelBean.BJHotelPictureListModelBean model) {
+                protected void onBindNormalViewHolder(NormalViewHolder holder, HHDetail.ModelBean.BJHotelPictureListModelBean model) {
                     ImageView ivHotel = (ImageView) holder.getViewById(R.id.iv_hotel_detail_pic);
                     x.image().bind(ivHotel,model.getPictureUrl(),imageOptions);
                 }

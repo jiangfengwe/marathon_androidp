@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
@@ -228,8 +232,17 @@ public class HotelMoreCommentActivity extends BaseActivity {
             protected void onBindNormalViewHolder(NormalViewHolder holder, HotelMoreCommentBean.ModelBean.BJHotelEvaluateListModelBean model) {
                 RecyclerView rvComment = (RecyclerView) holder.getViewById(R.id.rv_hotel_comment_pic);
                 HotelMoreCommentBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel = model.getEvaluationUserModel();
-                ImageView ivPortrait = (ImageView) holder.getViewById(R.id.iv_all_hotel_comment_pic);
-                x.image().bind(ivPortrait,evaluationUserModel.getHeadImg(),imageOptionsCircle);
+                SimpleDraweeView ivPortrait = (SimpleDraweeView) holder.getViewById(R.id.iv_all_hotel_comment_pic);
+                //x.image().bind(ivPortrait,evaluationUserModel.getHeadImg(),imageOptionsCircle);
+                Uri uri =  Uri.parse(evaluationUserModel.getHeadImg());
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true)
+                        .build();
+
+                ivPortrait.setController(controller);
+
+
                 holder.setText(R.id.tv_all_hotel_comment_name,evaluationUserModel.getNickName());
                 holder.setText(R.id.tv_all_hotel_comment_time,model.getEvaluateTimeStr());
                 holder.setText(R.id.tv_all_hotel_comment_content,model.getEvaluateContent());

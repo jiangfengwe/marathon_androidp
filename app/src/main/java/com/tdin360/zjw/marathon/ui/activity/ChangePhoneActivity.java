@@ -245,6 +245,7 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
             String string="{'userOldPhone':'"+oldPhone+"','validCode':'"+validCode+"','appKey':'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_PHONE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);
@@ -335,6 +336,7 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
             String string="{'userOldPhone':"+oldPhone+",'customerId':"+customerId+",'appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_OLD_PHONE_CODE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

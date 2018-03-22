@@ -1,7 +1,6 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -11,8 +10,7 @@ import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
-import com.tdin360.zjw.marathon.model.AA;
-import com.tdin360.zjw.marathon.model.HotelDetailBean;
+import com.tdin360.zjw.marathon.model.HHDetail;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
@@ -80,7 +78,7 @@ public class HotelRoomActivity extends BaseActivity {
     }
     private void initView() {
         String name = getIntent().getStringExtra("name");
-        final AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
+        final HHDetail.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = SingleClass.getInstance().getBjHotelRoomListModelBean();
         x.image().bind(ivPic,bjHotelRoomListModelBean.getPictureUrl(),imageOptions);
         tvName.setText(name);
         tvPrice.setText(bjHotelRoomListModelBean.getPrice()+"");

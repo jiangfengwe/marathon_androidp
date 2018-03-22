@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/white"
@@ -8,14 +8,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_height="wrap_content">
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/iv_all_hotel_comment_pic"
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/hotel_portrait"/>
+            android:src="@drawable/hotel_portrait"/>-->
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_all_hotel_comment_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@drawable/my_portrait"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,8 +44,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2017-06-08"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
                 android:textColor="@color/hotel_date"/>
             <TextView
                 android:id="@+id/tv_all_hotel_comment_content"
@@ -50,6 +63,6 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_height="wrap_content"/>
 </LinearLayout>

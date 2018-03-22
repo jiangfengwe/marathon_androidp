@@ -97,11 +97,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
     private ImageView ivShow;
     private boolean flag;
 
-
-
-
-
-
     private ShareAction action;
     private String noticeView;
 
@@ -415,6 +410,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener{
                     .setUri(uri)
                     .setAutoPlayAnimations(true)
                     .build();
+
             myImageView.setController(controller);
             String customerSign = model.getCustomerSign();
             if(TextUtils.isEmpty(customerSign)){

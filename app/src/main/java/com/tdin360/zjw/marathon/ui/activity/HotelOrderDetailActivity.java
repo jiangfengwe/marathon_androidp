@@ -406,8 +406,9 @@ public class HotelOrderDetailActivity extends BaseActivity{
                                     Log.d("loginfund22222222222", "onSuccess: "+string);
                                     mBytes=string.getBytes("UTF8");
                                     String enString= AES.encrypt(mBytes);
+                                    String replace = enString.replace("\n", "");
                                     RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_BACK_MONEY);
-                                    params.addBodyParameter("secretMessage",enString);
+                                    params.addBodyParameter("secretMessage",replace);
                                     x.http().post(params, new Callback.CommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String result) {
@@ -423,14 +424,22 @@ public class HotelOrderDetailActivity extends BaseActivity{
                                                 Intent intent1=getIntent();
                                                 String payOrder = intent1.getStringExtra("payOrder");
                                                 if(payOrder.equals("hotelorder")){
+                                                    initDetailData();
+                                                    finish();
+                                                }else {
+                                                    initDetailData();
                                                     finish();
                                                 }
                                                 if(payOrder.equals("hotelpay")){
                                                     Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
                                                     startActivity(intent);
+                                                    initDetailData();
+                                                    finish();
+                                                }else {
+                                                    initDetailData();
                                                     finish();
                                                 }
-                                                finish();
+
                                             }else{
                                                 ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
                                             }
@@ -486,6 +495,18 @@ public class HotelOrderDetailActivity extends BaseActivity{
         }else if(status.equals("4")){
             btn.setVisibility(View.VISIBLE);
             btn.setText("去评价");
+            //去评价
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(HotelOrderDetailActivity.this,HotelCommentActivity.class);
+                    Intent intent1=getIntent();
+                    String orderId = intent1.getStringExtra("orderId");
+                    intent.putExtra("orderId",orderId);
+                    startActivity(intent);
+
+                }
+            });
         }else if(status.equals("6")){
         btn.setVisibility(View.GONE);
        }else if(status.equals("7")){
@@ -498,18 +519,7 @@ public class HotelOrderDetailActivity extends BaseActivity{
             layoutShow.setVisibility(View.VISIBLE);
         }
         tvOrder.setText(bjHotelOrderModel.getOrderTimeStr());
-        //去评价
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(HotelOrderDetailActivity.this,HotelCommentActivity.class);
-                Intent intent1=getIntent();
-                String orderId = intent1.getStringExtra("orderId");
-                intent.putExtra("orderId",orderId);
-                startActivity(intent);
 
-            }
-        });
         //去支付
         tvPay.setOnClickListener(new View.OnClickListener() {
             @Override

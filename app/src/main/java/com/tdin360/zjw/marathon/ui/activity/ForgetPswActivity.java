@@ -267,6 +267,7 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
             String string="{'userPhone':'"+phone+"','validCode':'"+code+"','newPassword':'"+psw+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.FIND_PASSWORD);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);
@@ -348,6 +349,7 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
             String string="{'userPhone':'"+phone+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.FIND_PASSWORD_CODE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

@@ -1,6 +1,8 @@
 package com.tdin360.zjw.marathon.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -9,12 +11,14 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.model.TravelOrderInfoBean;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -57,6 +61,8 @@ public class TravelOrderSubmitActivity extends BaseActivity {
 
     @ViewInject(R.id.travel_order_webview)
     private WebView webView;
+    @ViewInject(R.id.progressBar)
+    private ProgressBar progressBar;
 
     ImageOptions imageOptions;
 
@@ -97,9 +103,68 @@ public class TravelOrderSubmitActivity extends BaseActivity {
         this.webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.webView.getSettings().setBuiltInZoomControls(false);
         this.webView.getSettings().setDomStorageEnabled(true);
-        this.webView.setWebChromeClient(new WebChromeClient());
-        this.webView.setWebViewClient(new WebViewClient());
+        this.webView.setWebChromeClient(new MyWebChromeClient());
+        this.webView.setWebViewClient(new MyWebViewClient());
         webView.loadUrl(url);
+    }
+    private class MyWebChromeClient extends WebChromeClient{
+        @Override
+        public void onProgressChanged(WebView webView, int i) {
+            super.onProgressChanged(webView, i);
+            progressBar.setProgress(i);
+            if(i==100){
+                progressBar.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onReceivedTitle(WebView webView, String s) {
+            super.onReceivedTitle(webView, s);
+            // titleTv.setText(s);
+        }
+        // For Android < 3.0
+        public void openFileChooser(ValueCallback<Uri> valueCallback) {
+
+        }
+
+        // For Android  >= 3.0
+        public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+
+        }
+
+        //For Android  >= 4.1
+        public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
+
+        }
+
+        // For Android >= 5.0
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+
+            return true;
+        }
+
+
+    }
+    private class MyWebViewClient extends WebViewClient{
+        @Override
+        public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
+            super.onPageStarted(webView, s, bitmap);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        @Override
+        public void onPageFinished(WebView webView, String s) {
+            super.onPageFinished(webView, s);
+            progressBar.setVisibility(View.GONE);
+        }
+        @Override
+        public void onReceivedError(WebView webView, int i, String s, String s1) {
+            super.onReceivedError(webView, i, s, s1);
+        }
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String s) {
+            return  false;
+        }
     }
 
     private void initData() {

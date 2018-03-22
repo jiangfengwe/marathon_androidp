@@ -309,6 +309,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             String string="{'userPhone':'"+phone1+"','appKey': 'BJYDAppV-2','validCode':'"+code+"','uId':'"+uId+"'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.OTHER_PHONE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);
@@ -431,8 +432,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             String string="{'userPhone':'"+phone+"','uId':'"+uId+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.OTHER_PHONE_CODE);
-            params.addBodyParameter("secretMessage",enString);
+            params.addBodyParameter("secretMessage",replace);
             params.setConnectTimeout(5000);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override

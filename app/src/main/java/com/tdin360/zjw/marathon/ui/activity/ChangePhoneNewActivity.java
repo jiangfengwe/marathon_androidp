@@ -253,6 +253,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
             String string="{'userNewPhone':'"+phone+"','validCode':'"+validCode+"','customerId':'"+customerId+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_NEW_PHONE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);
@@ -336,6 +337,7 @@ public class ChangePhoneNewActivity extends BaseActivity implements View.OnClick
             String string="{'userNewPhone':'"+phone+"','customerId':'"+customerId+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_NEW_PHONE_CODE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

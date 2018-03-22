@@ -12,34 +12,29 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
-import com.tdin360.zjw.marathon.EventBusClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
 import com.tdin360.zjw.marathon.WrapContentLinearLayoutManager;
 import com.tdin360.zjw.marathon.adapter.RecyclerViewBaseAdapter;
-import com.tdin360.zjw.marathon.model.AA;
-import com.tdin360.zjw.marathon.model.HotelDetailBean;
+import com.tdin360.zjw.marathon.model.HHDetail;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
-import com.tdin360.zjw.marathon.utils.CommonUtils;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
@@ -92,10 +87,15 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
     private HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel=new HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean();*/
     private ImageOptions imageOptions,imageOptionsCircle;
     private String phone1;
-    List<AA.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
-    AA.ModelBean.BJHotelModelBean bjHotelModel=new AA.ModelBean.BJHotelModelBean();
-    List<AA.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
-    List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
+    //List<AA.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
+    //AA.ModelBean.BJHotelModelBean bjHotelModel=new AA.ModelBean.BJHotelModelBean();
+    //List<AA.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
+   // List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
+
+    List<HHDetail.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
+    HHDetail.ModelBean.BJHotelModelBean bjHotelModel=new HHDetail.ModelBean.BJHotelModelBean();
+    List<HHDetail.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
+    List<HHDetail.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
 
 
     @Override
@@ -192,22 +192,19 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
             public void onSuccess(String result) {
                 Log.d("hoteldetail", "onSuccess: "+result);
                Gson gson=new Gson();
-                AA aa = gson.fromJson(result, AA.class);
-                boolean state = aa.isState();
-                if(state){
+                HHDetail aa = gson.fromJson(result, HHDetail.class);
+                 boolean state = aa.isState();
+                    if(state){
                    // ToastUtils.showCenter(getApplicationContext(),hotelDetailBean.getMessage());
-                    AA.ModelBean model = aa.getModel();
-                    bjHotelEvaluateListModel= model.getBJHotelEvaluateListModel();
-                    bjHotelModel= model.getBJHotelModel();
-                    phone1 =bjHotelModel.getPhone1();
-                    bjHotelPictureListModel= model.getBJHotelPictureListModel();
-                    SingleClass.getInstance().setBjHotelPictureListModel(bjHotelPictureListModel);
-                    bjHotelRoomListModel= model.getBJHotelRoomListModel();
-                    List<AA.ModelBean.ApiHotelMonthDateListBean> apiHotelMonthDateList = model.getApiHotelMonthDateList();
-                    SingleClass.getInstance().setApiHotelMonthDateList1(apiHotelMonthDateList);
-                    String month = apiHotelMonthDateList.get(0).getMonth();
-                    Log.d("apiHotelMonthDateLists", "onSuccess: "+apiHotelMonthDateList.size());
-
+                        HHDetail.ModelBean model = aa.getModel();
+                        bjHotelEvaluateListModel= model.getBJHotelEvaluateListModel();
+                        bjHotelModel = model.getBJHotelModel();
+                        phone1 = bjHotelModel.getPhone1();
+                        bjHotelPictureListModel = model.getBJHotelPictureListModel();
+                        SingleClass.getInstance().setBjHotelPictureListModel(bjHotelPictureListModel);
+                        bjHotelRoomListModel= model.getBJHotelRoomListModel();
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiHotelMonthDateList = model.getApiHotelMonthDateList();
+                        SingleClass.getInstance().setApiHotelMonthDateList1(apiHotelMonthDateList);
                 }else {
                     ToastUtils.showCenter(getApplicationContext(),aa.getMessage());
                 }
@@ -235,10 +232,10 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
     }
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-        adapter=new RecyclerViewBaseAdapter<AA.ModelBean.BJHotelRoomListModelBean>(getApplicationContext(),
+        adapter=new RecyclerViewBaseAdapter<HHDetail.ModelBean.BJHotelRoomListModelBean>(getApplicationContext(),
                 bjHotelRoomListModel,R.layout.item_hotel_detail_rv) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, final AA.ModelBean.BJHotelRoomListModelBean model) {
+            protected void onBindNormalViewHolder(NormalViewHolder holder, final HHDetail.ModelBean.BJHotelRoomListModelBean model) {
                 ImageView roomPic = (ImageView) holder.getViewById(R.id.iv_room_pic);
                 x.image().bind(roomPic,model.getPictureUrl(),imageOptions);
 
@@ -324,25 +321,32 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
                     return;
                 }else{
                     layout.setVisibility(View.VISIBLE);
-                    AA.ModelBean.BJHotelEvaluateListModelBean bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
-                    AA.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel = bjHotelEvaluateListModelBean.getEvaluationUserModel();
-                    ImageView ivHeadPic = (ImageView) holder.getViewById(R.id.iv_comment_head_pic);
-                    x.image().bind(ivHeadPic,evaluationUserModel.getHeadImg(),imageOptionsCircle);
+                    HHDetail.ModelBean.BJHotelEvaluateListModelBean bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
+                    HHDetail.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel = bjHotelEvaluateListModelBean.getEvaluationUserModel();
+                    SimpleDraweeView ivHeadPic = (SimpleDraweeView) holder.getViewById(R.id.iv_comment_head_pic);
+                    //x.image().bind(ivHeadPic,evaluationUserModel.getHeadImg(),imageOptionsCircle);
+                    Uri uri =  Uri.parse(evaluationUserModel.getHeadImg());
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setUri(uri)
+                            .setAutoPlayAnimations(true)
+                            .build();
+
+                    ivHeadPic.setController(controller);
                     holder.setText(R.id.tv_comment_name,evaluationUserModel.getNickName());
                     holder.setText(R.id.tv_comment_content,bjHotelEvaluateListModelBean.getEvaluateContent());
                     holder.setText(R.id.tv_comment_time,bjHotelEvaluateListModelBean.getEvaluateTimeStr());
                     //图片展示
-                    List<AA.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean> bjHotelEvaluatePictureListModel =
+                    List<HHDetail.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean> bjHotelEvaluatePictureListModel =
                             bjHotelEvaluateListModelBean.getBJHotelEvaluatePictureListModel();
                     final ArrayList<String> image= new ArrayList<>();
                     for(int i = 0; i< bjHotelEvaluatePictureListModel.size(); i++){
                         image.add(bjHotelEvaluatePictureListModel.get(i).getPictureUrl());
                     }
                     RecyclerView rvDetail = (RecyclerView) holder.getViewById(R.id.rv_hotel_detail_foot);
-                    rvAdapter=new RecyclerViewBaseAdapter<AA.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean>(getApplicationContext(),
+                    rvAdapter=new RecyclerViewBaseAdapter<HHDetail.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean>(getApplicationContext(),
                             bjHotelEvaluatePictureListModel,R.layout.item_hotel_detail_pic) {
                         @Override
-                        protected void onBindNormalViewHolder(NormalViewHolder holder,AA.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean model) {
+                        protected void onBindNormalViewHolder(NormalViewHolder holder,HHDetail.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean model) {
                             ImageView imageView = (ImageView) holder.getViewById(R.id.iv_comment_pic);
                             x.image().bind(imageView,model.getThumbPictureUrl(),imageOptions);
                         }
@@ -376,7 +380,7 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                AA.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = bjHotelRoomListModel.get(position);
+                HHDetail.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = bjHotelRoomListModel.get(position);
                 SingleClass.getInstance().setBjHotelRoomListModelBean(bjHotelRoomListModelBean);
                 Intent intent=new Intent(HotelDetailsActivity.this,HotelRoomActivity.class);
                 intent.putExtra("name",bjHotelModel.getName());
@@ -386,228 +390,6 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
 
 
     }
-   /* private void initData() {
-        bjHotelRoomListModel.clear();
-        layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();
-        String eventId= SingleClass.getInstance().getEventId();
-       // String hotelId = getIntent().getStringExtra("hotelId");
-        String hotelId = SingleClass.getInstance().getHotelId();
-        RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_DETAIL);
-        params.addBodyParameter("appKey",HttpUrlUtils.appKey);
-        params.addBodyParameter("eventId",eventId);
-        params.addBodyParameter("hotelId",hotelId);
-        params.setConnectTimeout(5000);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d("hoteldetail", "onSuccess: "+result);
-             *//*  Gson gson=new Gson();
-                HotelDetailBean hotelDetailBean = gson.fromJson(result, HotelDetailBean.class);
-                boolean state = hotelDetailBean.isState();
-                if(state){
-                   // ToastUtils.showCenter(getApplicationContext(),hotelDetailBean.getMessage());
-                    HotelDetailBean.ModelBean model = hotelDetailBean.getModel();
-                    bjHotelEvaluateListModel= model.getBJHotelEvaluateListModel();
-                    bjHotelModel= model.getBJHotelModel();
-                    phone1 = bjHotelModel.getPhone1();
-                    bjHotelPictureListModel = model.getBJHotelPictureListModel();
-                    SingleClass.getInstance().setBjHotelPictureListModel(bjHotelPictureListModel);
-                    bjHotelRoomListModel= model.getBJHotelRoomListModel();
-                    List<HotelDetailBean.ModelBean.ApiHotelMonthDateList> apiHotelMonthDateLists = model.getApiHotelMonthDateLists();
-                    SingleClass.getInstance().setApiHotelMonthDateList(apiHotelMonthDateLists);
-                    //String month = apiHotelMonthDateLists.get(0).getMonth();
-                    Log.d("apiHotelMonthDateLists", "onSuccess: "+apiHotelMonthDateLists.size());
-                   *//**//* bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
-                   evaluationUserModel= bjHotelEvaluateListModelBean.getEvaluationUserModel();
-                     if(bjHotelRoomListModel.size()<=0){
-                        mErrorView.show(recyclerView,"暂时没有数据",ErrorView.ViewShowMode.NOT_DATA);
-                    }else {
-                        mErrorView.hideErrorView(recyclerView);
-                    }*//**//*
-
-                }else {
-                    ToastUtils.showCenter(getApplicationContext(),hotelDetailBean.getMessage());
-                }
-*//*
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                mErrorView.show(recyclerView,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
-                ToastUtils.showCenter(HotelDetailsActivity.this,"网络不给力,连接服务器异常!");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                adapter.update(bjHotelRoomListModel);
-                layoutLoading.setVisibility(View.GONE);
-                //hud.dismiss();
-
-            }
-        });
-    }*/
-    /*private void initRecyclerView() {
-        recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-        adapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelRoomListModelBean>(getApplicationContext(),
-                bjHotelRoomListModel,R.layout.item_hotel_detail_rv) {
-            @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, final HotelDetailBean.ModelBean.BJHotelRoomListModelBean model) {
-                ImageView roomPic = (ImageView) holder.getViewById(R.id.iv_room_pic);
-                x.image().bind(roomPic,model.getPictureUrl(),imageOptions);
-
-                TextView tvOrder = (TextView) holder.getViewById(R.id.tv_room_order);
-                holder.setText(R.id.tv_room_name,model.getName());
-                holder.setText(R.id.tv_room_area,model.getArea()+"㎡");
-                holder.setText(R.id.tv_room_free,model.getWindow());
-                holder.setText(R.id.tv_room_price,model.getPrice()+"");
-
-                tvOrder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        LoginUserInfoBean.UserBean loginInfo = SharedPreferencesManager.getLoginInfo(getApplicationContext());
-                        String customerId = loginInfo.getId();
-                        if(TextUtils.isEmpty(customerId)){
-                            Intent intent=new Intent(HotelDetailsActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                        }else{
-                        Intent intent=new Intent(HotelDetailsActivity.this,HotelRoomInActivity.class);
-                        String hotelRoomId = model.getId() + "";
-                        intent.putExtra("hotelRoomId",hotelRoomId);
-                        intent.putExtra("hotelprice",model.getPrice());
-                        startActivity(intent);
-                        }
-                    }
-                });
-
-
-            }
-
-            @Override
-            public void onBindHeaderViewHolder(HeaderViewHolder holder) {
-                super.onBindHeaderViewHolder(holder);
-                ImageView headPic = (ImageView) holder.getViewById(R.id.iv_hotel_head_pic);
-                x.image().bind(headPic,bjHotelModel.getPictureUrl(),imageOptions);
-                ImageView headPhone = (ImageView) holder.getViewById(R.id.iv_hotel_head_phone);
-                holder.setText(R.id.hotel_pic_count,bjHotelPictureListModel.size()+"");
-                holder.setText(R.id.tv_hotel_head_name,bjHotelModel.getName());
-                holder.setText(R.id.tv_hotel_head_address,bjHotelModel.getAddress());
-                holder.setText(R.id.tv_hotel_head_info,bjHotelModel.getDescription());
-
-                RelativeLayout layout = (RelativeLayout) holder.getViewById(R.id.layout_hotel_detail_head);
-                //拨打电话
-                headPhone.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(ContextCompat.checkSelfPermission(HotelDetailsActivity.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-                            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},20);
-                            //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},1);
-                        }else{
-                            showTelDialog();
-                        }
-                       *//* if(ContextCompat.checkSelfPermission(HotelDetailsActivity.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-                            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE},3);
-                            //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},1);
-                        }else{
-                            showTelDialog();
-                        }*//*
-                    }
-                });
-                //查看图片
-                layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(HotelDetailsActivity.this,PictureActivity.class);
-                        intent.putExtra("picture","hotelPic");
-                        startActivity(intent);
-
-                    }
-                });
-            }
-
-            @Override
-            public void onBindFooterViewHolder(FooterViewHolder holder) {
-                super.onBindFooterViewHolder(holder);
-                holder.setText(R.id.tv_travel_comment_level,bjHotelModel.getScoring()+"");
-                holder.setText(R.id.tv_travel_comment_count,"一共有"+bjHotelModel.getEvaluationCount()+"条评论");
-                TextView tvMore = (TextView) holder.getViewById(R.id.tv_check_more_comment);
-                Log.d("si", "onBindFooterViewHolder: "+bjHotelRoomListModel.size());
-                LinearLayout layout = (LinearLayout) holder.getViewById(R.id.layout_hotel_detail);
-                if(bjHotelEvaluateListModel.size()<=0){
-                    layout.setVisibility(View.GONE);
-                    return;
-                }else{
-                    layout.setVisibility(View.VISIBLE);
-                    HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean bjHotelEvaluateListModelBean = bjHotelEvaluateListModel.get(0);
-                    HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel =
-                            bjHotelEvaluateListModelBean.getEvaluationUserModel();
-                    ImageView ivHeadPic = (ImageView) holder.getViewById(R.id.iv_comment_head_pic);
-                    x.image().bind(ivHeadPic,evaluationUserModel.getHeadImg(),imageOptionsCircle);
-                    holder.setText(R.id.tv_comment_name,evaluationUserModel.getNickName());
-                    holder.setText(R.id.tv_comment_content,bjHotelEvaluateListModelBean.getEvaluateContent());
-                    holder.setText(R.id.tv_comment_time,bjHotelEvaluateListModelBean.getEvaluateTimeStr());
-                    //图片展示
-                    List<HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean> bjHotelEvaluatePictureListModel =
-                            bjHotelEvaluateListModelBean.getBJHotelEvaluatePictureListModel();
-                    final ArrayList<String> image= new ArrayList<>();
-                    for(int i = 0; i< bjHotelEvaluatePictureListModel.size(); i++){
-                        image.add(bjHotelEvaluatePictureListModel.get(i).getPictureUrl());
-                    }
-                    RecyclerView rvDetail = (RecyclerView) holder.getViewById(R.id.rv_hotel_detail_foot);
-                    rvAdapter=new RecyclerViewBaseAdapter<HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean>(getApplicationContext(),
-                           bjHotelEvaluatePictureListModel,R.layout.item_hotel_detail_pic) {
-                        @Override
-                        protected void onBindNormalViewHolder(NormalViewHolder holder, HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean model) {
-                            ImageView imageView = (ImageView) holder.getViewById(R.id.iv_comment_pic);
-                            x.image().bind(imageView,model.getThumbPictureUrl(),imageOptions);
-                        }
-                    };
-                    rvDetail.setAdapter(rvAdapter);
-                    rvDetail.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
-                    rvAdapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            ImageView imageView1=new ImageView(HotelDetailsActivity.this);
-                            MNImageBrowser.showImageBrowser(HotelDetailsActivity.this,imageView1,position, image);
-                        }
-                    });
-                }
-                //查看更多评价
-                tvMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String hotelId = getIntent().getStringExtra("hotelId");
-                        Intent intent=new Intent(HotelDetailsActivity.this,HotelMoreCommentActivity.class);
-                        intent.putExtra("hotelId",hotelId);
-                        startActivity(intent);
-
-                    }
-                });
-            }
-        };
-        recyclerView.setAdapter(adapter);
-        adapter.addHeaderView(R.layout.item_hotel_detail_head);
-        adapter.addFooterView(R.layout.item_hotel_detail_foot);
-        adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                HotelDetailBean.ModelBean.BJHotelRoomListModelBean bjHotelRoomListModelBean = bjHotelRoomListModel.get(position);
-                SingleClass.getInstance().setBjHotelRoomListModelBean(bjHotelRoomListModelBean);
-                Intent intent=new Intent(HotelDetailsActivity.this,HotelRoomActivity.class);
-                intent.putExtra("name",bjHotelModel.getName());
-                startActivity(intent);
-            }
-        });
-
-        
-    }*/
 
     private void showTelDialog() {
         android.support.v7.app.AlertDialog.Builder normalDialog =new android.support.v7.app.AlertDialog.Builder(HotelDetailsActivity.this);

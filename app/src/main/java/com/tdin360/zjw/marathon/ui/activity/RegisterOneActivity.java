@@ -403,6 +403,7 @@ public class RegisterOneActivity extends BaseActivity implements View.OnClickLis
             String string="{'userPhone':'"+phone+"','password':'"+psw+"','appKey': 'BJYDAppV-2','validCode':'"+code+"'}";
             mBytes=string.getBytes("UTF8");
             String enString=AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.VALIDATE_CODE);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

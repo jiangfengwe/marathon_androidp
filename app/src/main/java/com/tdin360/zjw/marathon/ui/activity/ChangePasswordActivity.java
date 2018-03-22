@@ -205,6 +205,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             String string="{'customerId':'"+customerId+"','newPassword':'"+newPsw+"','oldPassword':'"+oldPsw+"','appKey': 'BJYDAppV-2'}";
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.CHANGE_PSW);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

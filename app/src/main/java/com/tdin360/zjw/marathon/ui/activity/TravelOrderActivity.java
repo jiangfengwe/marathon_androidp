@@ -349,6 +349,7 @@ TravelOrderActivity extends BaseActivity implements View.OnClickListener {
             Log.d("----------", "initData: "+string);
             mBytes=string.getBytes("UTF8");
             String enString= AES.encrypt(mBytes);
+            //String replace = enString.replace("\n", "");
             RequestParams params=new RequestParams(HttpUrlUtils.TRAVEL_DETAIL_ORDER);
             params.addBodyParameter("secretMessage",enString);
             params.setConnectTimeout(5000);

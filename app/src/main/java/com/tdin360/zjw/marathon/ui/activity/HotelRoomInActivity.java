@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,28 +16,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
-import com.codbking.widget.DatePickDialog;
-import com.codbking.widget.OnSureLisener;
-import com.codbking.widget.bean.DateType;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tdin360.zjw.marathon.AESPsw.AES;
 import com.tdin360.zjw.marathon.PeopleClass;
 import com.tdin360.zjw.marathon.R;
 import com.tdin360.zjw.marathon.SingleClass;
-import com.tdin360.zjw.marathon.model.AA;
-import com.tdin360.zjw.marathon.model.HotelDetailBean;
+import com.tdin360.zjw.marathon.model.HHDetail;
 import com.tdin360.zjw.marathon.model.HotelOrderBean;
 import com.tdin360.zjw.marathon.model.HotelOrderInfoBean;
-import com.tdin360.zjw.marathon.model.LoginBean;
 import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
-import com.tdin360.zjw.marathon.model.TravelDetailBean;
-import com.tdin360.zjw.marathon.ui.fragment.MyFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
 import com.tdin360.zjw.marathon.utils.SharedPreferencesManager;
 import com.tdin360.zjw.marathon.utils.ToastUtils;
-import com.tdin360.zjw.marathon.weight.ErrorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.luck.picture.lib.R.id.time;
 
@@ -183,7 +172,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
 
     }
     private void initDate() {
-        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+        List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
         if(apiTravelMonthDateList.size()<=0){
             return;
         }
@@ -191,12 +180,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         options2Items.clear();
         options2Itemss.clear();
         for (int i = 0; i <apiTravelMonthDateList.size() ; i++) {
-            AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
+            HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
             String month = apiHotelMonthDateListBean.getMonth()+"";
-            List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+            List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
             options1Items.add(month);
             for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
-                AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
                 String day = apiHotelDayDateListBean.getDay();
                 options2Itemss.add(day);
                 options2Items.add(options2Itemss);
@@ -214,16 +203,16 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 tvIn.setText(year+"-"+tx);
 
                 today = year + "-" + tx;
-                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
-                AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
-                List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
-                AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
                 String day = apiHotelDayDateListBean.getDay();
                 enterMonth= apiTravelMonthDateList.get(options1).getMonth();
                 enterDate= Integer.parseInt(day);
                 //time= tvTime.getText().toString().trim();
                 Log.d("timeeee2222222222", "initData: "+time);
-                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
+                List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
                 if(apiTravelMonthDateList1.size()<=0){
                     return;
                 }
@@ -231,12 +220,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 options2Items.clear();
                 options2Itemss.clear();
                 for (int i = 0; i <apiTravelMonthDateList1.size() ; i++) {
-                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean1 = apiTravelMonthDateList1.get(i);
+                    HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean1 = apiTravelMonthDateList1.get(i);
                     String month = apiHotelMonthDateListBean.getMonth()+"";
-                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList1 = apiHotelMonthDateListBean1.getApiHotelDayDateList();
+                    List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList1 = apiHotelMonthDateListBean1.getApiHotelDayDateList();
                     options1Items.add(month);
                     for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean1 = apiHotelDayDateList1.get(j);
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean1 = apiHotelDayDateList1.get(j);
                         String day1 = apiHotelDayDateListBean1.getDay();
                         options2Itemss.add(day1);
                         options2Items.add(options2Itemss);
@@ -250,10 +239,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         String tx = options1Items.get(options1)+"-"
                                 + options2Items.get(options1).get(option2);
 
-                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
-                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
-                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
                         String day = apiHotelDayDateListBean.getDay();
                         outDate= Integer.parseInt(day);
                         int i = outDate - enterDate;
@@ -400,7 +389,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             case R.id.tv_hotel_room_in:
                 //入住时间
                 //initDate();
-                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
                 if(apiTravelMonthDateList.size()<=0){
                     return;
                 }
@@ -408,12 +397,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 options2Items.clear();
                 options2Itemss.clear();
                 for (int i = 0; i <apiTravelMonthDateList.size() ; i++) {
-                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
+                    HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(i);
                     String month = apiHotelMonthDateListBean.getMonth()+"";
-                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
                     options1Items.add(month);
                     for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
                         String day = apiHotelDayDateListBean.getDay();
                         options2Itemss.add(day);
                         options2Items.add(options2Itemss);
@@ -432,10 +421,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         //time= tvTime.getText().toString().trim();
                         today = year + "-" + tx;
                         Log.d("timeeee2222222222", "initData: "+time);
-                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
-                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
-                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
                         String day = apiHotelDayDateListBean.getDay();
                         enterDate= Integer.parseInt(day);
 
@@ -465,7 +454,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 pvOptions.show();
                 break;
             case R.id.tv_hotel_room_out:
-                List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
+                List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList1 = SingleClass.getInstance().getApiHotelMonthDateList1();
                 if(apiTravelMonthDateList1.size()<=0){
                     return;
                 }
@@ -473,12 +462,12 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 options2Items.clear();
                 options2Itemss.clear();
                 for (int i = 0; i <apiTravelMonthDateList1.size() ; i++) {
-                    AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList1.get(i);
+                    HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList1.get(i);
                     String month = apiHotelMonthDateListBean.getMonth()+"";
-                    List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                    List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
                     options1Items.add(month);
                     for (int j = 0; j <apiHotelDayDateList.size() ; j++) {
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(j);
                         String day = apiHotelDayDateListBean.getDay();
                         Log.d("timeeee2222222222day", "initData: "+day);
                         options2Itemss.add(day);
@@ -492,10 +481,10 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         //返回的分别是三个级别的选中位置
                         String tx = options1Items.get(options1)+"-"
                                 + options2Items.get(options1).get(option2);
-                        List<AA.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
-                        AA.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
-                        List<AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
-                        AA.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean> apiTravelMonthDateList = SingleClass.getInstance().getApiHotelMonthDateList1();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean apiHotelMonthDateListBean = apiTravelMonthDateList.get(options1);
+                        List<HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean> apiHotelDayDateList = apiHotelMonthDateListBean.getApiHotelDayDateList();
+                        HHDetail.ModelBean.ApiHotelMonthDateListBean.ApiHotelDayDateListBean apiHotelDayDateListBean = apiHotelDayDateList.get(option2);
                         String day = apiHotelDayDateListBean.getDay();
                         outDate= Integer.parseInt(day);
                         int i = outDate - enterDate;

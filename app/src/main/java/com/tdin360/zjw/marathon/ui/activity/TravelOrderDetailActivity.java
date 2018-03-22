@@ -405,8 +405,9 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                                     String string="{\"orderNumber\":"+"\""+orderNo+"\",\"refundDesc\":"+"\""+stringLike+"\",\"payMethod\":"+"\""+payMethod+"\",\"type\":"+"\""+"travel"+"\",\"appKey\":\"BJYDAppV-2\"}";
                                     mBytes=string.getBytes("UTF8");
                                     String enString= AES.encrypt(mBytes);
+                                    String replace = enString.replace("\n", "");
                                     RequestParams params=new RequestParams(HttpUrlUtils.HOTEL_ORDER_BACK_MONEY);
-                                    params.addBodyParameter("secretMessage",enString);
+                                    params.addBodyParameter("secretMessage",replace);
                                     x.http().post(params, new Callback.CommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String result) {
@@ -423,7 +424,11 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                                                 Intent intent=getIntent();
                                                 String payOrder = intent.getStringExtra("payOrder");
                                                 if(payOrder.equals("orderTravel")){
+                                                    iniData();
                                                     //Intent intent1=new Intent(TravelOrderDetailActivity.this,)
+                                                    finish();
+                                                }else {
+                                                    iniData();
                                                     finish();
                                                 }
                                                 if(payOrder.equals("travelpay")){
@@ -432,8 +437,12 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                                                     String orderId = intent2.getStringExtra("orderId");
                                                     intent1.putExtra("orderId",orderId);
                                                     startActivity(intent1);
+                                                    iniData();
+                                                    finish();
+                                                }else {
+                                                    iniData();
+                                                    finish();
                                                 }
-                                                finish();
                                             }else{
                                                 ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
                                             }
@@ -489,6 +498,17 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
         }else if(status.equals("4")){
             btn.setVisibility(View.VISIBLE);
             btn.setText("去评价");
+            //去评价
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent1=getIntent();
+                    String orderId =intent1.getStringExtra("orderId");
+                    Intent intent=new Intent(TravelOrderDetailActivity.this,TravelCommentActivity.class);
+                    intent.putExtra("orderId",orderId);
+                    startActivity(intent);
+                }
+            });
         }else if(status.equals("6")){
             btn.setVisibility(View.GONE);
         }else if(status.equals("7")){
@@ -500,17 +520,7 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
             layoutShow.setVisibility(View.VISIBLE);
         }
         tvNumber.setText(orderNo);
-        //去评价
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1=getIntent();
-                String orderId =intent1.getStringExtra("orderId");
-                Intent intent=new Intent(TravelOrderDetailActivity.this,TravelCommentActivity.class);
-                intent.putExtra("orderId",orderId);
-                startActivity(intent);
-            }
-        });
+
         //去支付
         tvPay.setOnClickListener(new View.OnClickListener() {
             @Override
