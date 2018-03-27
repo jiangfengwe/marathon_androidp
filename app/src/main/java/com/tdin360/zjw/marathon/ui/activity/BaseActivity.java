@@ -122,7 +122,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-
         overridePendingTransition(R.anim.anim_in_back_activity,R.anim.anim_out_back_activity);
 
     }

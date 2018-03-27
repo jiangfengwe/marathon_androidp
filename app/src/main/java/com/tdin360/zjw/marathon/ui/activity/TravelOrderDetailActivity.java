@@ -625,8 +625,13 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(TravelOrderDetailActivity.this,TravelDetailActivity.class);
-                    startActivity(intent);
+                    PayActivity.instance.finishActivity();
+                    TravelOrderSubmitActivity.instance.finishActivity();
+                    TravelOrderActivity.instance.finishActivity();
+                    TravelDetailActivity.instance.finishActivity();
+                    HotelActivity.instance.finishActivity();
+                   /* Intent intent=new Intent(TravelOrderDetailActivity.this,TravelDetailActivity.class);
+                    startActivity(intent);*/
                     finish();
                 }
             });

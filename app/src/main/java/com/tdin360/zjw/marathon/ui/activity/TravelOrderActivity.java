@@ -52,8 +52,7 @@ import java.util.regex.Pattern;
  * 旅游立即预定
  */
 
-public class
-TravelOrderActivity extends BaseActivity implements View.OnClickListener {
+public class TravelOrderActivity extends BaseActivity implements View.OnClickListener {
     @ViewInject(R.id.layout_lading)
     private RelativeLayout layoutLoading;
     @ViewInject(R.id.iv_loading)
@@ -112,7 +111,14 @@ TravelOrderActivity extends BaseActivity implements View.OnClickListener {
 
     //List<TravelDetailBean.ModelBean.ApiTravelMonthDateListBean> apiTravelMonthDateList =new ArrayList<>();
 
-
+    public static TravelOrderActivity instance;
+    public TravelOrderActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+    public void finishActivity(){
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

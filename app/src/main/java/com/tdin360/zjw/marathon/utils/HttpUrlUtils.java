@@ -7,8 +7,10 @@ package com.tdin360.zjw.marathon.utils;
 public class HttpUrlUtils {
     //private static final String BASE="http://www.baijar.com/EventAppApi/";
     //动态分享看看有没有EventAppApi。测试一下
-    public static final String BASE="https://www.tdin360.com/EventAppApiV2F1/";
-    public static final String URL="https://www.tdin360.com";
+    //public static final String BASE="https://www.tdin360.com/EventAppApiV2F1/";
+    //https://www.tdlsport.com
+    public static final String BASE="https://www.tdlsport.com/EventAppApiV2F1/";
+    public static final String URL="https://www.tdlsport.com";
     public static final String appKey="BJYDAppV-2";
     //验证手机号
     public static final String REGISTER_ONE=BASE+"EventInfo/RegisterStep1";

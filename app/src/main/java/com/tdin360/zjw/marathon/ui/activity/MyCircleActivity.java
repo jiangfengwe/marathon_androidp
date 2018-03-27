@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -110,6 +111,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
     private List<MyCircleBean.ModelBean.BJDynamicListModelBean> bjDynamicListModel=new ArrayList<>();
 
     ImageOptions imageOptions;
+    private boolean mIsRefreshing;
 
     @Subscribe
     public void onEvent(EventBusClass event){
@@ -262,6 +264,7 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onFinished() {
                 adapter.update(bjDynamicListModel);
+                mIsRefreshing=false;
                 //adapter.notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
                 //hud.dismiss();
@@ -446,43 +449,6 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {//拖动中
                     layout.setBackgroundColor(Color.parseColor("#ff621a"));
                 }
-                /*switch(newState) {
-                    case RecyclerView.SCROLL_STATE_SETTLING:
-                        if (!isDragging && !isScrolling) {
-                            isScrolling = true; //a scrolling occurs
-                            layout.setBackgroundColor(Color.parseColor("#ff621a"));
-                        }
-                        break;
-                    case RecyclerView.SCROLL_STATE_DRAGGING:
-                        isDragging = true; //如果是用户主动滑动recyclerview，则不触发位置计算。
-                        layout.setBackgroundColor(Color.parseColor("#30ff621a"));
-                        break;
-                    case RecyclerView.SCROLL_STATE_IDLE:
-                        layout.setBackgroundColor(Color.parseColor("#00000000"));
-                      *//*  if (!isDragging && isScrolling){
-                            isDragging = false;
-                            isScrolling = false;
-                            firstPosition = outputPortLayoutMgr.findFirstVisibleItemPosition();
-                            int lastPos = outputPortLayoutMgr.findLastVisibleItemPosition();
-                            //N.B.: firstVisibleItemPosition is not the first child of layoutmanager
-                           View itemView = layoutMgr.getChildAt(position-(int) outputPortLayoutMgr.getChildAt(0).getTag());  //由于滚动事件会多次触发IDLE状态，我们只需要在第一次IDLE被触发时获取ItemView。
-                        }*//*
-                        break;*/
-
-                   /* Log.d("newState", "onScrollStateChanged: " + newState);
-                    if (newState > 0) {
-                        ToastUtils.showCenter(getContext(), "addOnScrollListener");
-                        if (newState == 1) {
-                            layout.setBackgroundColor(Color.parseColor("#30ff621a"));
-                        }
-                        if (newState == 2) {
-                            layout.setBackgroundColor(Color.parseColor("#ff621a"));
-                        }
-                    } else {
-                        layout.setBackgroundColor(Color.parseColor("#00000000"));
-                    }*/
-
-
             }
 
             @Override
@@ -490,10 +456,24 @@ public class MyCircleActivity extends BaseActivity implements View.OnClickListen
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+        rvCircle.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (mIsRefreshing) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+        );
+
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
+                mIsRefreshing=true;
                 springView.onFinishFreshAndLoad();
                 bjDynamicListModel.clear();
                 pageIndex=1;

@@ -596,8 +596,16 @@ public class HotelOrderDetailActivity extends BaseActivity{
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
-                    startActivity(intent);
+                    String orderHotel = SingleClass.getInstance().getOrderHotel();
+                    PayActivity.instance.finishActivity();
+                    HotelRoomInActivity.instance.finishActivity();
+                    HotelRoomSubmitActivity.instance.finishActivity();
+                    if(!TextUtils.isEmpty(orderHotel)){
+                        HotelRoomActivity.instance.finishActivity();
+                    }
+                   // HotelRoomActivity.instance.finishActivity();
+                    HotelDetailsActivity.instance.finishActivity();
+                    HotelActivity.instance.finishActivity();
                     finish();
                 }
             });

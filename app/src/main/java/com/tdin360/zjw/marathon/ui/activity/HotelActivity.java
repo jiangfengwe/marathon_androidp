@@ -83,7 +83,15 @@ public class HotelActivity extends BaseActivity {
     @ViewInject(R.id.rb_travel)
     private RadioButton rbTravelOrder;
 
+    public static HotelActivity instance;
+    public HotelActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
 
+    public void finishActivity(){
+        finish();
+    }
     private HotelFragment hotelFragment;//酒店fragment
     private TravelFragment travelFragment;//旅游fragment
     private String hotelFragmentTag="hotelFragment";

@@ -69,6 +69,15 @@ public class HotelRoomSubmitActivity extends BaseActivity {
     @ViewInject(R.id.progressBar)
     private ProgressBar progressBar;
 
+    public static HotelRoomSubmitActivity instance;
+    public HotelRoomSubmitActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+    public void finishActivity(){
+        finish();
+    }
+
 
 
     @Override

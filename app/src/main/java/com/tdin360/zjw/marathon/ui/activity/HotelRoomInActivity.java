@@ -97,6 +97,7 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private int count=1;
     private int countRoom=1;
     private int countPeople=1;
+    private int countTime;
     @ViewInject(R.id.tv_hotel_room_money)
     private TextView tvMoney;
 
@@ -129,7 +130,15 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout layout;
 
 
+    public static HotelRoomInActivity instance;
+    public HotelRoomInActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
 
+    public void finishActivity(){
+        finish();
+    }
 
     private ArrayList<String> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
@@ -247,11 +256,13 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         outDate= Integer.parseInt(day);
                         int i = outDate - enterDate;
                         if(i>0){
+                            countTime=i;
                             tomorrow = year + "-" + tx;
                             tvOut.setText(year+"-"+tx);
                             tvOut.setTextSize(15);
                             initDateLive();
                         }else if (i==0){
+                            countTime=1;
                             //ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
                             tvOut.setText("入住时间最短为一天,请再次选择离店日期");
                             tvOut.setTextSize(8);
@@ -328,6 +339,8 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             Date tomorrowDate = formatter.parse(tomorrow);
             int i = (int) (tomorrowDate.getTime()-todayDate.getTime()) / (1000 * 3600 * 24);
             tvEnter.setText(i+"晚");
+            countTime=i;
+            setSum();
             Log.d("ddddd", "onCreate: "+i);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -488,12 +501,15 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                         String day = apiHotelDayDateListBean.getDay();
                         outDate= Integer.parseInt(day);
                         int i = outDate - enterDate;
+
                         if(i>0){
+                            countTime=i;
                             tomorrow = year + "-" + tx;
                             tvOut.setText(year+"-"+tx);
                             tvOut.setTextSize(15);
                             initDateLive();
                         }else if (i==0){
+                            countTime=1;
                             //ToastUtils.showCenter(getApplicationContext(),"入住时间最短为一天");
                             tvOut.setText("入住时间最短为一天,请再次选择离店日期");
                             tvOut.setTextSize(8);
@@ -812,9 +828,9 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
         tvSum.setText(""+countRoom);
         tvSumPeople.setText(""+countPeople);
         double price = getIntent().getDoubleExtra("hotelprice", 0.0);
-        double money = count * price;
+        double money = countRoom * price*countTime;
         Log.d("44", "initView: "+money);
-        Log.d("442", "initView: "+count);
+        Log.d("442", "initView: "+countTime);
         tvMoney.setText(money+"");
     }
 }

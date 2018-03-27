@@ -124,6 +124,16 @@ public class TravelDetailActivity extends BaseActivity implements View.OnClickLi
     @ViewInject(R.id.layout_hotel_detail)
     private LinearLayout layout;
 
+    public static TravelDetailActivity instance;
+    public TravelDetailActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+
+    public void finishActivity(){
+        finish();
+    }
+
     private TravelDetailBean.ModelBean.BJTravelModelBean bjTravelModel=new TravelDetailBean.ModelBean.BJTravelModelBean();
     private List<TravelPictureBean.ModelBean.BJTravelPictureListModelBean> bjTravelPictureListModel=new ArrayList<>();
     private List<TravelDetailBean.ModelBean.BJTravelEvaluateListModelBean.BJTravelEvaluatePictureListModelBean>

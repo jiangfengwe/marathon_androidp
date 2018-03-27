@@ -20,6 +20,15 @@ public class SingleClass {
     private String eventId;
     private String hotelId;
     private String travelId;
+    private String orderHotel;
+
+    public String getOrderHotel() {
+        return orderHotel;
+    }
+
+    public void setOrderHotel(String orderHotel) {
+        this.orderHotel = orderHotel;
+    }
 
     public String getTravelId() {
         return travelId;

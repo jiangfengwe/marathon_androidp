@@ -65,6 +65,14 @@ public class TravelOrderSubmitActivity extends BaseActivity {
     private ProgressBar progressBar;
 
     ImageOptions imageOptions;
+    public static TravelOrderSubmitActivity instance;
+    public TravelOrderSubmitActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+    public void finishActivity(){
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,7 +220,6 @@ public class TravelOrderSubmitActivity extends BaseActivity {
         });
         viewline.setVisibility(View.GONE);
         titleTv.setText("预定信息");
-
     }
 
     @Override

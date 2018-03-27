@@ -83,10 +83,10 @@ public class HotelFragment extends BaseFragment {
     private int highPrice;
     private int index;
 
-    //private List<HotelListBean.ModelBean.BJHotelStyleListModelBean> bjHotelStyleListModel=new ArrayList<>();
-    //private List<HotelListBean.ModelBean.BJHotelListModelBean> bjHotelListModel=new ArrayList<>();
-    private List<HH.ModelBean.BJHotelStyleListModelBean> bjHotelStyleListModel=new ArrayList<>();
-    private List<HH.ModelBean.BJHotelListModelBean> bjHotelListModel=new ArrayList<>();
+    private List<HotelListBean.ModelBean.BJHotelStyleListModelBean> bjHotelStyleListModel=new ArrayList<>();
+    private List<HotelListBean.ModelBean.BJHotelListModelBean> bjHotelListModel=new ArrayList<>();
+   /* private List<HH.ModelBean.BJHotelStyleListModelBean> bjHotelStyleListModel=new ArrayList<>();
+    private List<HH.ModelBean.BJHotelListModelBean> bjHotelListModel=new ArrayList<>();*/
     ImageOptions imageOptions;
 
     public static HotelFragment newInstance(){
@@ -271,9 +271,9 @@ public class HotelFragment extends BaseFragment {
         for (int i = 0; i <9 ; i++) {
             list.add(""+i);
         }
-        adapter=new RecyclerViewBaseAdapter<HH.ModelBean.BJHotelListModelBean>(getActivity(),bjHotelListModel,R.layout.item_hotel_rv) {
+        adapter=new RecyclerViewBaseAdapter<HotelListBean.ModelBean.BJHotelListModelBean>(getActivity(),bjHotelListModel,R.layout.item_hotel_rv) {
             @Override
-            protected void onBindNormalViewHolder(NormalViewHolder holder, HH.ModelBean.BJHotelListModelBean model) {
+            protected void onBindNormalViewHolder(NormalViewHolder holder, HotelListBean.ModelBean.BJHotelListModelBean model) {
                 ImageView hotelPic = (ImageView) holder.getViewById(R.id.iv_hotel_pic);
                 holder.setText(R.id.tv_hotel_name,model.getName());
                 holder.setText(R.id.tv_hotel_level,model.getHotelStyle());
@@ -287,7 +287,7 @@ public class HotelFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerViewBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                HH.ModelBean.BJHotelListModelBean bjHotelListModelBean = bjHotelListModel.get(position);
+                HotelListBean.ModelBean.BJHotelListModelBean bjHotelListModelBean = bjHotelListModel.get(position);
                 String hotelId = bjHotelListModelBean.getId() + "";
                 Intent intent=new Intent(getActivity(),HotelDetailsActivity.class);
                 intent.putExtra("hotelId",hotelId);
@@ -459,11 +459,11 @@ public class HotelFragment extends BaseFragment {
             public void onSuccess(String result) {
                 Log.d("hotel", "onSuccess: " + result);
                 Gson gson = new Gson();
-                //HotelListBean hotelListBean = gson.fromJson(result, HotelListBean.class);
-                HH hotelListBean = gson.fromJson(result, HH.class);
+                HotelListBean hotelListBean = gson.fromJson(result, HotelListBean.class);
+                //HH hotelListBean = gson.fromJson(result, HH.class);
                 boolean state = hotelListBean.isState();
                 if(state){
-                    HH.ModelBean model = hotelListBean.getModel();
+                    HotelListBean.ModelBean model = hotelListBean.getModel();
                     totalPage=model.getTotalPages();
                     bjHotelListModel.addAll(model.getBJHotelListModel());
                     bjHotelStyleListModel= model.getBJHotelStyleListModel();

@@ -627,6 +627,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             }
         });
         //rvCircle.setItemAnimator(new DefaultItemAnimator());
+        // 处理刷新和滑动导致崩溃
         rvCircle.setOnTouchListener(
                 new View.OnTouchListener() {
                     @Override

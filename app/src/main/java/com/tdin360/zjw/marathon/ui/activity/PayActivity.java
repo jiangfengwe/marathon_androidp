@@ -40,6 +40,7 @@ import com.tdin360.zjw.marathon.model.LoginUserInfoBean;
 import com.tdin360.zjw.marathon.model.PayBean;
 import com.tdin360.zjw.marathon.model.PayInfoBean;
 import com.tdin360.zjw.marathon.model.PaySureBean;
+import com.tdin360.zjw.marathon.ui.fragment.CircleFragment;
 import com.tdin360.zjw.marathon.utils.HttpUrlUtils;
 import com.tdin360.zjw.marathon.utils.MessageEvent;
 import com.tdin360.zjw.marathon.utils.NetWorkUtils;
@@ -98,7 +99,11 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private RadioButton wXPay;
     @ViewInject(R.id.yinlian)
     private RadioButton yLPay;
-
+    public static PayActivity instance;
+    public PayActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
 
     public static final String PAY_ACTION="PAY_OK";
     private IWXAPI api;
@@ -109,6 +114,10 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
     private boolean isFormDetail;//是否从详情进入支付
     private boolean isHotel;
     //private String url;
+
+    public void finishActivity(){
+        finish();
+    }
      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

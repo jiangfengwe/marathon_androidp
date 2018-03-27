@@ -146,7 +146,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 .compressGrade(Luban.CUSTOM_GEAR)// luban压缩档次，默认3档 Luban.THIRD_GEAR、Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
                 .isCamera(true)// 是否显示拍照按钮 true or false
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-               // .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                 .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
                 .enableCrop(false)// 是否裁剪 true or false
                 .compress(true)// 是否压缩 true or false
@@ -163,7 +163,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 .openClickSound(false)// 是否开启点击声音 true or false
                 //.selectionMedia()// 是否传入已选图片 List<LocalMedia> list
                 .previewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
-                //.cropCompressQuality(90)// 裁剪压缩质量 默认90 int
+               // .cropCompressQuality(90)// 裁剪压缩质量 默认90 int
                 // .compressMaxKB(Luban.CUSTOM_GEAR)//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效 int
                 // .compressWH() // 压缩宽高比 compressGrade()为Luban.CUSTOM_GEAR有效  int
                 // .cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
@@ -287,6 +287,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                 Log.d("publish", "onSuccess: "+result);
                 Gson gson=new Gson();
                 PublishBean publishBean = gson.fromJson(result, PublishBean.class);
+
                 boolean state = publishBean.isState();
                 if(state){
                     Intent intent=getIntent();
@@ -294,6 +295,8 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     if(myCircle==6){
                         EnumEventBus publish = EnumEventBus.CIRCLEPUBLISH;
                         EventBus.getDefault().post(new EventBusClass(publish));
+                        finish();
+                    }else {
                         finish();
                     }
                     // ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
@@ -304,7 +307,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     tvPublish.setClickable(true);
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
                     imm.hideSoftInputFromWindow(tvPublish.getWindowToken(), 0);
-                    finish();
+
             }else{
                 ToastUtils.showCenter(getApplicationContext(),publishBean.getMessage());
                     flag=true;
@@ -314,7 +317,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                ToastUtils.showCenter(getContext(),"onError");
             }
 
             @Override

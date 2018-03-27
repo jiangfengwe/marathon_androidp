@@ -54,6 +54,15 @@ public class HotelRoomActivity extends BaseActivity {
 
     ImageOptions imageOptions;
 
+    public static HotelRoomActivity instance;
+    public HotelRoomActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+    public void finishActivity(){
+        finish();
+    }
+
 
 
     @Override
@@ -94,6 +103,7 @@ public class HotelRoomActivity extends BaseActivity {
                 Intent intent=new Intent(HotelRoomActivity.this,HotelRoomInActivity.class);
                 String hotelRoomId = bjHotelRoomListModelBean.getId() + "";
                 intent.putExtra("hotelRoomId",hotelRoomId);
+                SingleClass.getInstance().setOrderHotel("hotel");
                 intent.putExtra("hotelprice",bjHotelRoomListModelBean.getPrice());
                 startActivity(intent);
             }

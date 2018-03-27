@@ -74,30 +74,26 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
     @ViewInject(R.id.errorView)
     private ErrorView mErrorView;
 
+    public static HotelDetailsActivity instance;
+    public HotelDetailsActivity() {
+        instance=this;
+        // Required empty public constructor
+    }
+
     @ViewInject(R.id.rv_hotel_detail)
     private RecyclerView recyclerView;
     private List<String> list=new ArrayList<>();
     private RecyclerViewBaseAdapter adapter,rvAdapter;
-   /* private HotelDetailBean.ModelBean.BJHotelModelBean bjHotelModel=new HotelDetailBean.ModelBean.BJHotelModelBean();
-    private List<HotelDetailBean.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
-    private List<HotelDetailBean.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
-    private List<HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
-    private  List<HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.BJHotelEvaluatePictureListModelBean> bjHotelEvaluatePictureListModel=new ArrayList<>();
-    private HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean bjHotelEvaluateListModelBean=new HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean();
-    private HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean evaluationUserModel=new HotelDetailBean.ModelBean.BJHotelEvaluateListModelBean.EvaluationUserModelBean();*/
     private ImageOptions imageOptions,imageOptionsCircle;
     private String phone1;
-    //List<AA.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
-    //AA.ModelBean.BJHotelModelBean bjHotelModel=new AA.ModelBean.BJHotelModelBean();
-    //List<AA.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
-   // List<AA.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
-
     List<HHDetail.ModelBean.BJHotelEvaluateListModelBean> bjHotelEvaluateListModel=new ArrayList<>();
     HHDetail.ModelBean.BJHotelModelBean bjHotelModel=new HHDetail.ModelBean.BJHotelModelBean();
     List<HHDetail.ModelBean.BJHotelPictureListModelBean> bjHotelPictureListModel=new ArrayList<>();
     List<HHDetail.ModelBean.BJHotelRoomListModelBean> bjHotelRoomListModel=new ArrayList<>();
 
-
+    public void finishActivity(){
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -466,10 +462,6 @@ public class HotelDetailsActivity extends BaseActivity implements View.OnClickLi
         }
 
     }
-    /**
-     * 设置权限界面
-     * @param context
-     */
     public  void getAppDetailSettingIntent(Context context) {
         Intent localIntent = new Intent();
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
