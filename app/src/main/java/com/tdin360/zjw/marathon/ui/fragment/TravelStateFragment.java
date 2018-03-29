@@ -95,36 +95,6 @@ public class TravelStateFragment extends BaseFragment {
         travelStateFragment.setArguments(bundle);
         return travelStateFragment;
     }
-
-   /* @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(getUserVisibleHint()){
-            isVisible = true;
-            onVisible();
-        }else{
-            isVisible = false;
-            onInvisible();
-        }
-    }
-
-    private void onVisible() {
-        if(!isPrepared || !isVisible) {
-            return;
-        }
-        layoutLoading.setVisibility(View.VISIBLE);
-        ivLoading.setBackgroundResource(R.drawable.loading_before);
-        AnimationDrawable background =(AnimationDrawable) ivLoading.getBackground();
-        background.start();
-        initNet();
-        initView();
-    }
-
-    private void onInvisible() {
-        bjTravelOrderListModel.clear();
-
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment

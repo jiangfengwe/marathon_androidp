@@ -423,22 +423,20 @@ public class HotelOrderDetailActivity extends BaseActivity{
                                                 EventBus.getDefault().post(new EventBusClass(travelrefund));
                                                 Intent intent1=getIntent();
                                                 String payOrder = intent1.getStringExtra("payOrder");
-                                                if(payOrder.equals("hotelorder")){
-                                                    initDetailData();
-                                                    finish();
-                                                }else {
-                                                    initDetailData();
-                                                    finish();
-                                                }
-                                                if(payOrder.equals("hotelpay")){
-                                                    Intent intent=new Intent(HotelOrderDetailActivity.this,HotelDetailsActivity.class);
-                                                    startActivity(intent);
-                                                    initDetailData();
-                                                    finish();
-                                                }else {
-                                                    initDetailData();
-                                                    finish();
-                                                }
+                                                if(!TextUtils.isEmpty(payOrder)&&payOrder.equals("hotelpay")){
+                                                            String orderHotel = SingleClass.getInstance().getOrderHotel();
+                                                            PayActivity.instance.finishActivity();
+                                                            HotelRoomInActivity.instance.finishActivity();
+                                                            HotelRoomSubmitActivity.instance.finishActivity();
+                                                            if(!TextUtils.isEmpty(orderHotel)){
+                                                                HotelRoomActivity.instance.finishActivity();
+                                                            }
+                                                            // HotelRoomActivity.instance.finishActivity();
+                                                           /* HotelDetailsActivity.instance.finishActivity();
+                                                            HotelActivity.instance.finishActivity();*/
+                                                            finish();
+                                                        }
+                                                finish();
 
                                             }else{
                                                 ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
@@ -447,7 +445,7 @@ public class HotelOrderDetailActivity extends BaseActivity{
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
-                                            // mErrorView.show(tvPay,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
+                                             mErrorView.show(tvPay,"加载失败,点击重试",ErrorView.ViewShowMode.NOT_NETWORK);
                                             //ToastUtils.show(TravelOrderDetailActivity.this,"网络不给力,连接服务器异常!");
                                         }
 

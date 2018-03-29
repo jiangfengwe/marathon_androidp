@@ -442,6 +442,7 @@ public class PayActivity extends BaseActivity implements WXPayEntryActivity.WXPA
                     intent=new Intent(PayActivity.this,HotelOrderDetailActivity.class);
                     intent.putExtra("orderId",orderId);
                     intent.putExtra("payOrder",payOrder);
+                    //intent.putExtra("payOrder",hotelorder);
                     if(payOrder.equals("hotelorder")){
                         finish();
                     }

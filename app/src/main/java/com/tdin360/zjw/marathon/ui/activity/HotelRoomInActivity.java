@@ -657,36 +657,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             byte[] mBytes=null;
             final String phone = etPhone.getText().toString().trim();
             String nameOrder= etName.getText().toString().trim();
-            JSONArray jsonArray=new JSONArray();
-            JSONObject jsonObject=new JSONObject();
-            JSONObject tmpObj =null;
-            for (int i = 0; i < name.size(); i++) {
-                try {
-                    tmpObj=new JSONObject();
-                    String nameJson = name.get(i).getNameEt().getText().toString();
-                    String icJson = name.get(i).getNameIc().getText().toString();
-                    for (int j = 0; j < name.size(); j++) {
-                        Log.d("rrrrrrrrr", "initData: "+name.size());
-                        if((j)%2==0){
-                            String stringName = name.get(j).getNameEt().toString();
-                            String stringIc = name.get(j).getNameIc().toString();
-                            if(TextUtils.isEmpty(stringName)&&TextUtils.isEmpty(stringIc)){
-                                ToastUtils.showCenter(getApplicationContext(),"姓名和身份证号不能同时为空！");
-                                return;
-                            }
-                        }
-                    }
-                    if(!TextUtils.isEmpty(nameJson)&&!TextUtils.isEmpty(icJson)){
-                        tmpObj.put("userName",nameJson);
-                        tmpObj.put("userDocument",icJson);
-                        jsonArray.put(tmpObj);
-                        tmpObj=null;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
             if(TextUtils.isEmpty(nameOrder)){
                 ToastUtils.showCenter(getApplicationContext(),"姓名不能为空");
                 return;
@@ -704,9 +674,6 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showCenter(getApplicationContext(),"入住日期或离店日期不合法");
                 return;
             }
-            String userList = jsonArray.toString();
-            Log.d("wwwwname2", "initToolbar: "+userList);
-
             final KProgressHUD hud = KProgressHUD.create(this);
             hud.setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
@@ -775,24 +742,11 @@ public class HotelRoomInActivity extends BaseActivity implements View.OnClickLis
             Log.d("error", "initData: "+e.getMessage());
         }
     }
-    private void addView() {
-        final EditText etName = new EditText(this);
-        etName.setHint("姓名");
-        etName.setTextSize(16);
-        //name.add(etName);
-        layoutName.addView(etName);
-        final EditText etIC = new EditText(this);
-        //ic.add(etIC);
-        etIC.setHint("身份证");
-        etIC.setTextSize(16);
-        layoutIC.addView(etIC);
-    }
     private void addLayout(){
         layout= new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         final LinearLayout layout1 = new LinearLayout(this);
         layout1.setOrientation(LinearLayout.HORIZONTAL);
-
 
         final EditText etName = new EditText(this);
         etName.setHint("姓名");

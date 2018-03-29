@@ -423,26 +423,15 @@ public class TravelOrderDetailActivity extends BaseActivity implements View.OnCl
                                                 //intent.putExtra("payOrder",payOrder);
                                                 Intent intent=getIntent();
                                                 String payOrder = intent.getStringExtra("payOrder");
-                                                if(payOrder.equals("orderTravel")){
-                                                    iniData();
-                                                    //Intent intent1=new Intent(TravelOrderDetailActivity.this,)
-                                                    finish();
-                                                }else {
-                                                    iniData();
-                                                    finish();
-                                                }
-                                                if(payOrder.equals("travelpay")){
-                                                    Intent intent2=getIntent();
-                                                    Intent intent1=new Intent(TravelOrderDetailActivity.this,TravelDetailActivity.class);
-                                                    String orderId = intent2.getStringExtra("orderId");
-                                                    intent1.putExtra("orderId",orderId);
-                                                    startActivity(intent1);
-                                                    iniData();
-                                                    finish();
-                                                }else {
-                                                    iniData();
+                                                if(!TextUtils.isEmpty(payOrder)&&payOrder.equals("travelpay")){
+                                                    PayActivity.instance.finishActivity();
+                                                    TravelOrderSubmitActivity.instance.finishActivity();
+                                                    TravelOrderActivity.instance.finishActivity();
+                                                    //TravelDetailActivity.instance.finishActivity();
+                                                    //HotelActivity.instance.finishActivity();
                                                     finish();
                                                 }
+                                                finish();
                                             }else{
                                                 ToastUtils.show(getApplicationContext(),refundHotelBean.getMessage());
                                             }
